@@ -10,20 +10,23 @@ const t = useTranslations(lang);
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+<header class="fixed top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50">
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->
       <div class="flex items-center">
         <a 
           href={getLocalizedPath('/', lang)} 
-          class="flex items-center space-x-2 text-xl font-bold text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+          class="flex items-center space-x-2 group"
         >
-          <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="14" fill="currentColor" opacity="0.1"/>
-            <path d="M16 8l8 8-8 8-8-8 8-8z" fill="currentColor"/>
-          </svg>
-          <span>AstroBlog</span>
+          <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <span class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            AstroBlog
+          </span>
         </a>
       </div>
 
@@ -31,33 +34,42 @@ const currentPath = Astro.url.pathname;
       <div class="hidden md:flex items-center space-x-8">
         <a 
           href={getLocalizedPath('/', lang)}
-          class={`text-sm font-medium transition-colors duration-200 ${
+          class={`font-medium transition-colors duration-200 relative group ${
             currentPath === getLocalizedPath('/', lang) 
-              ? 'text-primary-600 dark:text-primary-400' 
-              : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+              ? 'text-blue-600 dark:text-blue-400' 
+              : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
           }`}
         >
           {t('nav.home')}
+          <span class={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 ${
+            currentPath === getLocalizedPath('/', lang) ? 'w-full' : 'w-0 group-hover:w-full'
+          }`}></span>
         </a>
         <a 
           href={getLocalizedPath('/blog', lang)}
-          class={`text-sm font-medium transition-colors duration-200 ${
+          class={`font-medium transition-colors duration-200 relative group ${
             currentPath.startsWith(getLocalizedPath('/blog', lang))
-              ? 'text-primary-600 dark:text-primary-400' 
-              : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+              ? 'text-blue-600 dark:text-blue-400' 
+              : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
           }`}
         >
           {t('nav.blog')}
+          <span class={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 ${
+            currentPath.startsWith(getLocalizedPath('/blog', lang)) ? 'w-full' : 'w-0 group-hover:w-full'
+          }`}></span>
         </a>
         <a 
           href={getLocalizedPath('/search', lang)}
-          class={`text-sm font-medium transition-colors duration-200 ${
+          class={`font-medium transition-colors duration-200 relative group ${
             currentPath === getLocalizedPath('/search', lang)
-              ? 'text-primary-600 dark:text-primary-400' 
-              : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+              ? 'text-blue-600 dark:text-blue-400' 
+              : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
           }`}
         >
           {t('nav.search')}
+          <span class={`absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 ${
+            currentPath === getLocalizedPath('/search', lang) ? 'w-full' : 'w-0 group-hover:w-full'
+          }`}></span>
         </a>
       </div>
 
