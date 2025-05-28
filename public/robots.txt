@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://your-blog.com/sitemap-index.xml
+
+# Disallow admin area
+Disallow: /admin/
