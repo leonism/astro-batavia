@@ -185,11 +185,11 @@ html {
 }
 
 .prose pre {
-  @apply overflow-x-auto rounded-lg border border-border bg-muted p-4;
+  @apply overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-4;
 }
 
 .prose code {
-  @apply rounded-sm bg-muted px-1.5 py-0.5 text-sm font-mono;
+  @apply rounded-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 text-sm font-mono;
 }
 
 .prose pre code {
@@ -197,7 +197,7 @@ html {
 }
 
 .prose blockquote {
-  @apply border-l-4 border-primary pl-4 italic text-muted-foreground;
+  @apply border-l-4 border-primary-500 pl-4 italic text-gray-600 dark:text-gray-300;
 }
 
 .prose img {
@@ -215,16 +215,16 @@ html {
 
 /* Table styles */
 .prose table {
-  @apply w-full border-collapse border border-border;
+  @apply w-full border-collapse border border-gray-200 dark:border-gray-700;
 }
 
 .prose th,
 .prose td {
-  @apply border border-border px-4 py-2 text-left;
+  @apply border border-gray-200 dark:border-gray-700 px-4 py-2 text-left;
 }
 
 .prose th {
-  @apply bg-muted font-semibold;
+  @apply bg-gray-50 dark:bg-gray-800 font-semibold;
 }
 
 /* Link hover effects */
@@ -233,7 +233,7 @@ html {
 }
 
 .prose a:hover {
-  @apply decoration-primary;
+  @apply decoration-primary-600;
 }
 
 /* Code syntax highlighting improvements */
@@ -242,12 +242,12 @@ html {
 }
 
 .prose :not(pre) > code[class*="language-"] {
-  @apply rounded bg-muted px-1 py-0.5;
+  @apply rounded bg-gray-100 dark:bg-gray-800 px-1 py-0.5;
 }
 
 /* Skip link for accessibility */
 .skip-link {
-  @apply absolute left-4 top-4 z-50 rounded bg-primary px-4 py-2 text-primary-foreground transition-transform -translate-y-12 focus:translate-y-0;
+  @apply absolute left-4 top-4 z-50 rounded bg-primary-600 px-4 py-2 text-white transition-transform -translate-y-12 focus:translate-y-0;
 }
 
 /* Screen reader only content */
