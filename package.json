@@ -1,9 +1,10 @@
 {
-  "name": "Astro Blaze CMS",
+  "name": "workspace",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "astro dev"
   },
   "keywords": [],
   "author": "",
@@ -13,10 +14,11 @@
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/sitemap": "^3.4.0",
     "@astrojs/tailwind": "^5.1.5",
+    "@tailwindcss/postcss": "^4.1.7",
     "@tailwindcss/typography": "^0.5.16",
     "astro": "^5.8.0",
     "mdast-util-to-string": "^4.0.0",
     "reading-time": "^1.5.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.1.7"
   }
 }
