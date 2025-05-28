@@ -97,15 +97,15 @@ html {
   .no-print {
     display: none !important;
   }
-  
+
   body {
     @apply text-black bg-white;
   }
-  
+
   a {
     text-decoration: underline;
   }
-  
+
   a[href^="http"]:after {
     content: " (" attr(href) ")";
     font-size: 0.8em;
@@ -131,7 +131,7 @@ html {
     --primary: 210 100% 40%;
     --border: 210 50% 50%;
   }
-  
+
   .dark {
     --primary: 210 100% 70%;
     --border: 210 50% 70%;
@@ -292,7 +292,8 @@ html {
 
 /* Pulse animation for loading states */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -306,7 +307,8 @@ html {
 
 /* Bounce animation */
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(-25%);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
