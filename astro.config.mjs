@@ -1,54 +1,59 @@
-import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
-import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap';
-import { remarkReadingTime } from './src/utils/remark-reading-time.mjs';
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
+import tailwind from "@astrojs/tailwind";
+import sitemap from "@astrojs/sitemap";
+import { remarkReadingTime } from "./src/utils/remark-reading-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://your-blog.com',
+  site: "https://your-blog.com",
   integrations: [
     mdx({
-      syntaxHighlight: 'shiki',
+      syntaxHighlight: "shiki",
       shikiConfig: {
-        theme: 'github-dark',
+        theme: "github-dark",
       },
       remarkPlugins: [remarkReadingTime],
     }),
     tailwind({
       applyBaseStyles: false,
+      config: {
+        postcss: {
+          plugins: ["@tailwindcss/postcss"],
+        },
+      },
     }),
     sitemap({
       i18n: {
-        defaultLocale: 'en',
+        defaultLocale: "en",
         locales: {
-          en: 'en-US',
-          es: 'es-ES',
-          ja: 'ja-JP',
+          en: "en-US",
+          es: "es-ES",
+          ja: "ja-JP",
         },
       },
     }),
   ],
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'es', 'ja'],
+    defaultLocale: "en",
+    locales: ["en", "es", "ja"],
     routing: {
       prefixDefaultLocale: false,
     },
   },
   markdown: {
     shikiConfig: {
-      theme: 'github-dark',
+      theme: "github-dark",
       wrap: true,
     },
   },
   vite: {
     optimizeDeps: {
-      include: ['@astrojs/markdown-remark'],
+      include: ["@astrojs/markdown-remark"],
     },
   },
   server: {
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     port: 5000,
   },
 });
