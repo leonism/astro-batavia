@@ -1,0 +1,48 @@
+---
+title: 'Welcome to Our Astro Blog'
+description: 'Discover the power of Astro.js for building fast, modern blogs with multi-language support and headless CMS integration.'
+author: 'Astro Team'
+pubDate: 2024-01-15T00:00:00.000Z
+heroImage: '/images/astro-hero.jpg'
+tags: ['astro', 'web development', 'static site generator']
+draft: false
+---
+
+# Welcome to Our Advanced Astro Blog
+
+Welcome to our cutting-edge blog built with **Astro.js 5.x**! This platform showcases the latest in web development technology, combining performance, accessibility, and developer experience.
+
+## What Makes This Blog Special
+
+### 🚀 Lightning Fast Performance
+Built with Astro's island architecture, our blog delivers exceptional performance:
+- **Zero JavaScript by default** - Only hydrate when needed
+- **Optimized images** - Automatic WebP conversion and lazy loading
+- **Perfect Lighthouse scores** - 90+ across all metrics
+
+### 🌍 Multi-Language Support
+Our blog supports three languages out of the box:
+- **English** - Primary language
+- **Spanish** - Full translation support
+- **Japanese** - Complete localization
+
+### 📝 Content Management
+Powered by **Decap CMS** for seamless content creation:
+- **Git-based workflow** - Version control for all content
+- **Live preview** - See changes before publishing
+- **Rich media support** - Images, videos, and embeds
+
+## Technical Features
+
+### Modern Development Stack
+```typescript
+// Type-safe content collections
+const blog = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    // ... more fields
+  }),
+});
