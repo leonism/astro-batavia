@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
-import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
 import { remarkReadingTime } from "./src/utils/remark-reading-time.mjs";
 
 // https://astro.build/config
@@ -14,14 +14,6 @@ export default defineConfig({
         theme: "github-dark",
       },
       remarkPlugins: [remarkReadingTime],
-    }),
-    tailwind({
-      applyBaseStyles: false,
-      config: {
-        postcss: {
-          plugins: ["@tailwindcss/postcss"],
-        },
-      },
     }),
     sitemap({
       i18n: {
@@ -48,6 +40,7 @@ export default defineConfig({
     },
   },
   vite: {
+    plugins: [tailwindcss()], // Added tailwindcss vite plugin
     optimizeDeps: {
       include: ["@astrojs/markdown-remark"],
     },

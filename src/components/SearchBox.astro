@@ -21,9 +21,9 @@ const t = useTranslations(lang);
       spellcheck="false"
     />
   </div>
-  
+
   <!-- Search Results Dropdown -->
-  <div 
+  <div
     id="search-results"
     class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg z-50 max-h-96 overflow-y-auto hidden"
   >
@@ -35,34 +35,34 @@ const t = useTranslations(lang);
 
 <script>
   import { searchPosts } from '@/utils/search';
-  
+
   document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
     const searchResults = document.getElementById('search-results');
     const searchResultsContent = document.getElementById('search-results-content');
-    
+
     if (!searchInput || !searchResults || !searchResultsContent) return;
-    
+
     let searchTimeout: number;
-    
+
     // Handle search input
     searchInput.addEventListener('input', (e) => {
       const query = (e.target as HTMLInputElement).value.trim();
-      
+
       // Clear previous timeout
       clearTimeout(searchTimeout);
-      
+
       if (query.length < 2) {
         searchResults.classList.add('hidden');
         return;
       }
-      
+
       // Debounce search
       searchTimeout = window.setTimeout(() => {
         performSearch(query);
       }, 300);
     });
-    
+
     // Perform search and display results
     async function performSearch(query: string) {
       try {
@@ -73,17 +73,17 @@ const t = useTranslations(lang);
         displayNoResults();
       }
     }
-    
+
     // Display search results
     function displayResults(results: any[], query: string) {
       if (results.length === 0) {
         displayNoResults();
         return;
       }
-      
+
       const resultHtml = results.map(result => `
-        <a 
-          href="${result.url}" 
+        <a
+          href="${result.url}"
           class="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
         >
           <div class="flex items-start space-x-3">
@@ -108,11 +108,11 @@ const t = useTranslations(lang);
           </div>
         </a>
       `).join('');
-      
+
       searchResultsContent.innerHTML = resultHtml;
       searchResults.classList.remove('hidden');
     }
-    
+
     // Display no results message
     function displayNoResults() {
       const lang = document.documentElement.lang || 'en';
@@ -121,7 +121,7 @@ const t = useTranslations(lang);
         es: 'No se encontraron artículos.',
         ja: '記事が見つかりません。'
       };
-      
+
       searchResultsContent.innerHTML = `
         <div class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
           ${messages[lang as keyof typeof messages] || messages.en}
@@ -129,22 +129,22 @@ const t = useTranslations(lang);
       `;
       searchResults.classList.remove('hidden');
     }
-    
+
     // Highlight search terms in text
     function highlightText(text: string, query: string): string {
       if (!query) return text;
-      
+
       const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
       return text.replace(regex, '<mark class="bg-yellow-200 dark:bg-yellow-800">$1</mark>');
     }
-    
+
     // Hide results when clicking outside
     document.addEventListener('click', (e) => {
       if (!searchInput.contains(e.target as Node) && !searchResults.contains(e.target as Node)) {
         searchResults.classList.add('hidden');
       }
     });
-    
+
     // Handle keyboard navigation
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
