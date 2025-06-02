@@ -1,8 +1,18 @@
 # AstroBlazeCMS
 
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+- [Deployment](#deployment)
+
 A modern blog CMS built with Astro.js featuring:
 
-- Multi-language support (English, Spanish, Japanese)
+- Multi-language support (i18n)
+- Modular component architecture (ThemeInitializer, BackToTopScript)
+- Refined social media button layout
 - Decap CMS integration for content management
 - Tailwind CSS for styling
 - Sitemap generation
@@ -23,6 +33,8 @@ A modern blog CMS built with Astro.js featuring:
 - SEO optimized
 - Reading time calculation
 - Dark/light theme support
+- Modular component architecture (ThemeInitializer, BackToTopScript)
+- Refined social media button layout
 
 ## Getting Started
 
@@ -44,3 +56,16 @@ Configured for Netlify with:
 - Git Gateway backend
 - Branch: main
 - Media folder: public/images
+- Automated deployments via Netlify
+
+### Solar System Exploration, 1950s – 1960s
+
+- [ ] Mercury
+- [x] Venus
+- [x] Earth (Orbit/Moon)
+- [x] Mars
+- [ ] Jupiter
+- [ ] Saturn
+- [ ] Uranus
+- [ ] Neptune
+- [ ] Comet Haley

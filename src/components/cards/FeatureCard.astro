@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  link?: string;
+  iconGradientFrom: string;
+  iconGradientTo: string;
+}
+
+const { title, description, link, iconGradientFrom, iconGradientTo } = Astro.props;
+---
+
+<div class="group relative p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+  <div class={`absolute top-6 right-6 w-12 h-12 bg-gradient-to-br ${iconGradientFrom} ${iconGradientTo} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+    <slot name="icon" />
+  </div>
+
+  <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+    {title}
+  </h3>
+  <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+    {description}
+  </p>
+
+  {link && (
+    <div class="mt-6 flex items-center text-blue-600 dark:text-blue-400 font-medium group-hover:translate-x-2 transition-transform">
+      <span class="text-sm">Learn more</span>
+      <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+      </svg>
+    </div>
+  )}
+</div>
