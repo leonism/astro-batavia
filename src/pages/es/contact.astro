@@ -1,0 +1,381 @@
+---
+import Layout from "@/layouts/Layout.astro";
+const lang = "es";
+---
+
+<Layout
+  title="Contáctenos - Astro Batavia"
+  description="Póngase en contacto con el equipo de Astro Batavia. Nos encantaría saber de usted sobre colaboraciones, preguntas o comentarios."
+  lang={lang}>
+  <!-- TODO: Translate content to Spanish -->
+  <!-- Hero Section -->
+  <section
+    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1
+          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+          Póngase en <span
+            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
+            >Contacto</span
+          >
+        </h1>
+        <p
+          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          Tiene alguna pregunta, sugerencia o desea colaborar? Nos encantaría
+          saber de usted. Póngase en contacto con nuestro equipo y comencemos
+          una conversación.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form Section -->
+  <section class="py-24 bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <!-- Contact Form -->
+        <div>
+          <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">
+            Envíenos un mensaje
+          </h2>
+
+          <form class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label
+                  for="firstName"
+                  class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="lastName"
+                  class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Apellido
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Correo Electrónico
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                for="subject"
+                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Asunto
+              </label>
+              <select
+                id="subject"
+                name="subject"
+                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors"
+                required>
+                <option value="">Seleccione un tema</option>
+                <option value="general">Consulta General</option>
+                <option value="collaboration">Colaboración</option>
+                <option value="guest-post"
+                  >Envío de Publicación de Invitado</option
+                >
+                <option value="technical">Soporte Técnico</option>
+                <option value="feedback">Comentarios</option>
+                <option value="other">Otro</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                for="message"
+                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Mensaje
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="6"
+                class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors resize-vertical"
+                placeholder="Díganos cómo podemos ayudarle..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="newsletter"
+                name="newsletter"
+                class="w-4 h-4 text-blue-600 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-2"
+              />
+              <label
+                for="newsletter"
+                class="ml-3 text-sm text-slate-600 dark:text-slate-400">
+                Suscríbase a nuestro boletín para las últimas novedades
+                tecnológicas
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-4 px-8 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+              Enviar Mensaje
+            </button>
+          </form>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="space-y-8">
+          <div>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">
+              Otras formas de contactarnos
+            </h2>
+
+            <div class="space-y-6">
+              <!-- Email -->
+              <div class="flex items-start space-x-4">
+                <div
+                  class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg
+                    class="w-6 h-6 text-blue-600 dark:text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3
+                    class="text-lg font-semibold text-slate-900 dark:text-white mb-1">
+                    Correo Electrónico
+                  </h3>
+                  <p class="text-slate-600 dark:text-slate-400">
+                    hello@astrobatavia.com
+                  </p>
+                  <p class="text-sm text-slate-500 dark:text-slate-500 mt-1">
+                    Normalmente respondemos en 24 horas
+                  </p>
+                </div>
+              </div>
+
+              <!-- Social Media -->
+              <div class="flex items-start space-x-4">
+                <div
+                  class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg
+                    class="w-6 h-6 text-purple-600 dark:text-purple-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3
+                    class="text-lg font-semibold text-slate-900 dark:text-white mb-1">
+                    Redes Sociales
+                  </h3>
+                  <div class="space-y-1">
+                    <p class="text-slate-600 dark:text-slate-400">
+                      @Astro Batavia en Twitter
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-400">
+                      LinkedIn: /company/Astro Batavia
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-400">
+                      GitHub: @Astro Batavia-team
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Office -->
+              <div class="flex items-start space-x-4">
+                <div
+                  class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg
+                    class="w-6 h-6 text-green-600 dark:text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3
+                    class="text-lg font-semibold text-slate-900 dark:text-white mb-1">
+                    Oficina
+                  </h3>
+                  <p class="text-slate-600 dark:text-slate-400">
+                    San Francisco, CA
+                  </p>
+                  <p class="text-sm text-slate-500 dark:text-slate-500 mt-1">
+                    Equipo remoto primero
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Section -->
+          <div class="bg-slate-50 dark:bg-slate-800 rounded-3xl p-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6">
+              Preguntas Frecuentes
+            </h3>
+
+            <div class="space-y-4">
+              <details class="group">
+                <summary
+                  class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
+                  Cómo puedo contribuir a Astro Batavia?
+                  <svg
+                    class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                  Damos la bienvenida a colaboradores invitados! Envíenos sus
+                  propuestas de artículos y nuestro equipo editorial las
+                  revisará para su publicación.
+                </div>
+              </details>
+
+              <details class="group">
+                <summary
+                  class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
+                  Ofrecen contenido patrocinado?
+                  <svg
+                    class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                  Sí, ofrecemos oportunidades de contenido patrocinado que se
+                  alinean con nuestros estándares editoriales y brindan valor a
+                  nuestros lectores.
+                </div>
+              </details>
+
+              <details class="group">
+                <summary
+                  class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
+                  Puedo solicitar temas específicos?
+                  <svg
+                    class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </summary>
+                <div class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                  Absolutamente! Valoramos la opinión de la comunidad y a menudo
+                  escribimos artículos basados en las solicitudes de los
+                  lectores y los temas de tendencia.
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section
+    class="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
+        Únete a Nuestra Comunidad
+      </h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        No se pierda las últimas novedades tecnológicas y los avances en IA.
+        Únase a nuestra creciente comunidad de entusiastas de la tecnología.
+      </p>
+      <a
+        href="/blog"
+        class="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-2xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+        Explorar Nuestro Blog
+        <svg
+          class="ml-2 w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7l5 5m0 0l-5 5m5-5H6"
+          ></path>
+        </svg>
+      </a>
+    </div>
+  </section>
+</Layout>

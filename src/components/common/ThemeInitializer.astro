@@ -1,0 +1,33 @@
+---
+// This component encapsulates the theme initialization logic.
+---
+
+<script is:inline>
+  (function () {
+    try {
+      const getThemePreference = () => {
+        if (typeof localStorage !== "undefined") {
+          const storedTheme = localStorage.getItem("theme");
+          if (storedTheme) {
+            console.log("ThemeInitializer: Found theme in localStorage:", storedTheme);
+            return storedTheme;
+          }
+        } else {
+          console.warn("ThemeInitializer: localStorage is not available.");
+        }
+
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        console.log("ThemeInitializer: No theme in localStorage. System prefers dark:", prefersDark);
+        return prefersDark ? "dark" : "light";
+      };
+
+      const initialTheme = getThemePreference();
+      const isDark = initialTheme === "dark";
+      console.log("ThemeInitializer: Initial theme determined as:", initialTheme);
+      document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+      console.log("ThemeInitializer: html element classes after initialization:", document.documentElement.classList);
+    } catch (error) {
+      console.error("Error in ThemeInitializer.astro script:", error);
+    }
+  })();
+</script>
