@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  index: number;
+}
+
+const { post, index } = Astro.props;
+---
+
+<p
+  class="text-blue-100 leading-relaxed"
+  class:list={[
+    index === 0 ? "text-base sm:text-lg max-w-2xl" : "text-sm sm:text-base",
+  ]}>
+  {post.data.description}
+</p>
