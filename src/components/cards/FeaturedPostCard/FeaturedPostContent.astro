@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from "astro:content";
+import PostMeta from "./PostMeta.astro";
+import PostTitle from "./PostTitle.astro";
+import PostDescription from "./PostDescription.astro";
+import PostTags from "./PostTags.astro";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  index: number;
+  authorImage: string;
+  authorSlug: string;
+}
+
+const { post, index, authorImage, authorSlug } = Astro.props;
+---
+
+<div
+  class="relative flex h-full flex-col justify-end text-white p-6 sm:p-8 md:p-10 lg:p-12">
+  <div class="z-10 space-y-3">
+    <PostMeta
+      post={post}
+      authorImage={authorImage}
+      authorSlug={authorSlug}
+    />
+    <PostTitle
+      post={post}
+      index={index}
+    />
+    <PostDescription
+      post={post}
+      index={index}
+    />
+    <PostTags tags={post.data.tags} />
+  </div>
+</div>
