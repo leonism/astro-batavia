@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  index: number;
+}
+
+const { post, index } = Astro.props;
+---
+
+<article class={`group relative overflow-hidden rounded-3xl ${
+  index === 0
+    ? 'lg:col-span-2 lg:row-span-2 h-96 lg:h-[600px]'
+    : 'h-80'
+}`}>
+  {/* Background Image */}
+  <img
+    src={post.data.heroImage || '/images/placeholder-hero.svg'}
+    alt={post.data.title || 'Featured story image'}
+    class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+    loading="lazy"
+  />
+  {/* Gradient Overlay */}
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent group-hover:from-black/70 group-hover:via-black/40 transition-all duration-500"></div>
+
+  <div class="relative h-full p-8 lg:p-12 flex flex-col justify-end text-white">
+    <div class="space-y-4 z-10"> {/* Ensure text content is above gradient */}
+      <div class="flex items-center space-x-4 text-blue-200">
+        <span class="text-sm font-medium">{post.data.author}</span>
+        <span class="w-1 h-1 bg-blue-200 rounded-full"></span>
+        <time class="text-sm">
+          {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
+        </time>
+      </div>
+
+      <h3 class={`font-bold leading-tight ${
+        index === 0 ? 'text-3xl lg:text-4xl' : 'text-xl lg:text-2xl'
+      }`}>
+        {post.data.title}
+      </h3>
+
+      <p class={`text-blue-100 leading-relaxed ${
+        index === 0 ? 'text-lg max-w-2xl' : 'text-base'
+      }`}>
+        {post.data.description}
+      </p>
+
+      <div class="flex flex-wrap gap-2 pt-4">
+        {(post.data.tags || []).slice(0, 3).map((tag: string) => (
+          <span class="px-3 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <a
+      href={`/blog/${post.slug}`}
+      class="absolute inset-0 z-10"
+      aria-label={`Read article: ${post.data.title}`}
+    ></a>
+  </div>
+</article>

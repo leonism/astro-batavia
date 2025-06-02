@@ -1,0 +1,53 @@
+---
+import BlogCard from '@/components/blog/BlogCard.astro'; // Assuming BlogCard is in components/blog/
+import type { CollectionEntry } from 'astro:content';
+import type { LanguageKey } from '@/i18n/types';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  lang: LanguageKey;
+  noResultsText: string; // For t('search.no-results')
+  initialStatusText: string; // For initial message
+}
+
+const { posts, lang, noResultsText, initialStatusText } = Astro.props;
+---
+
+<div id="search-results" class="mb-8">
+  <div id="search-status" class="text-center text-gray-500 dark:text-gray-400 mb-6">
+    {initialStatusText}
+  </div>
+
+  <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {posts.map((post) => (
+      <div
+        class="post-item"
+        data-tags={JSON.stringify(post.data.tags || [])}
+        data-title={post.data.title}
+        data-description={post.data.description}
+        data-date={post.data.pubDate.toISOString()}
+      >
+        <BlogCard post={post} lang={lang} />
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- No Results State -->
+<div id="no-results" class="hidden text-center py-12">
+  <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+  </svg>
+  <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+    {noResultsText}
+  </h3>
+  <p class="text-gray-500 dark:text-gray-400 mb-4">
+    Try adjusting your search terms or browse our topics below.
+  </p>
+  <button
+    id="clear-search"
+    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors duration-200"
+  >
+    Clear Search
+  </button>
+</div>

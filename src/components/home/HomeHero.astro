@@ -1,0 +1,132 @@
+---
+import type { ui } from "@/i18n/ui";
+import BaseHero from "@/components/ui/BaseHero.astro";
+
+const { lang, t } = Astro.props as {
+  lang: keyof typeof ui;
+  t: (key: keyof (typeof ui)[keyof typeof ui], params?: any) => string;
+};
+
+const title = `${t("home.hero.title")} <span class="text-primary-600 dark:text-primary-400">${t("home.hero.titleHighlight")}</span> ${t("home.hero.titleSuffix" as any, "")}`;
+const subtitle = t("home.hero.subtitle");
+
+const cta1Text = t("home.hero.exploreButton");
+const cta1Link = `/${lang}/blog`;
+const cta1IconSvg = "M13 7l5 5m0 0l-5 5m5-5H6";
+
+const cta2Text = t("home.hero.searchButton");
+const cta2Link = `/${lang}/search`;
+const cta2IconSvg = "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z";
+
+const featureFastTitle = t("home.features.fast.title");
+const featureFastDesc = t("home.features.fast.description");
+const featureMultiLangTitle = t("home.features.multilang.title");
+const featureMultiLangDesc = t("home.features.multilang.description");
+const featureEasyManageTitle = t("home.features.easyManage.title");
+const featureEasyManageDesc = t("home.features.easyManage.description");
+---
+
+<BaseHero
+  title={title}
+  subtitle={subtitle}
+  cta1Text={cta1Text}
+  cta1Link={cta1Link}
+  cta1IconSvg={cta1IconSvg}
+  cta1Class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200 hover:scale-105"
+  cta2Text={cta2Text}
+  cta2Link={cta2Link}
+  cta2IconSvg={cta2IconSvg}
+  cta2Class="inline-flex items-center px-6 py-3 border-2 border-primary-600 dark:border-primary-400 text-base font-medium rounded-md text-primary-600 dark:text-primary-400 bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200"
+  sectionClass="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-32"
+  titleClass="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6"
+  subtitleClass="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+  <div
+    class="absolute inset-0 opacity-50"
+    style="background-image: url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22%3E%3C%2Fcircle%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E');"
+    aria-hidden="true">
+  </div>
+  {/* <!-- Feature highlights --> */}
+  <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+    {/* Added relative for stacking context if needed */}
+    <div
+      class="text-center p-6 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+      <div
+        class="w-12 h-12 mx-auto mb-4 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+        <svg
+          class="w-6 h-6 text-primary-600 dark:text-primary-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 10V3L4 14h7v7l9-11h-7z"
+          ></path>
+        </svg>
+      </div>
+      <h3
+        class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2"
+        set:html={featureFastTitle}
+      />
+      <p
+        class="text-gray-600 dark:text-gray-300"
+        set:html={featureFastDesc}
+      />
+    </div>
+
+    <div
+      class="text-center p-6 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+      <div
+        class="w-12 h-12 mx-auto mb-4 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+        <svg
+          class="w-6 h-6 text-primary-600 dark:text-primary-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+          ></path>
+        </svg>
+      </div>
+      <h3
+        class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2"
+        set:html={featureMultiLangTitle}
+      />
+      <p
+        class="text-gray-600 dark:text-gray-300"
+        set:html={featureMultiLangDesc}
+      />
+    </div>
+
+    <div
+      class="text-center p-6 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+      <div
+        class="w-12 h-12 mx-auto mb-4 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+        <svg
+          class="w-6 h-6 text-primary-600 dark:text-primary-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+          ></path>
+        </svg>
+      </div>
+      <h3
+        class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2"
+        set:html={featureEasyManageTitle}
+      />
+      <p
+        class="text-gray-600 dark:text-gray-300"
+        set:html={featureEasyManageDesc}
+      />
+    </div>
+  </div>
+</BaseHero>

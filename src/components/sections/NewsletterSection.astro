@@ -1,0 +1,28 @@
+---
+import NewsletterForm from "@/components/ui/NewsletterForm.astro";
+// TODO: Consider internationalizing these strings as well
+const title = "Stay in the Loop";
+const subtitle =
+  "Get the latest articles, tutorials, and insights delivered straight to your inbox. Join our community of developers and creators.";
+const emailPlaceholder = "Enter your email address";
+const buttonText = "Subscribe";
+const privacyNoteText =
+  "No spam, unsubscribe at any time. We respect your privacy.";
+---
+
+<NewsletterForm
+  title={title}
+  subtitle={subtitle}
+  emailPlaceholder={emailPlaceholder}
+  buttonText={buttonText}
+  showPrivacyNote={true}
+  privacyNoteText={privacyNoteText}
+  sectionClass="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700"
+  containerClass="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+  titleClass="text-4xl sm:text-5xl font-bold text-white mb-6"
+  subtitleClass="text-xl text-blue-100 max-w-2xl mx-auto mb-8"
+  formClass="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto"
+  inputClass="flex-1 px-6 py-4 text-lg border-0 rounded-2xl focus:outline-none focus:ring-4 focus:ring-white/50 bg-white/10 backdrop-blur-sm text-white placeholder-blue-100 transition-all duration-300"
+  buttonClass="px-8 py-4 bg-white text-blue-600 font-semibold text-lg rounded-2xl hover:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+  privacyNoteClass="text-sm text-blue-200 mt-8"
+/>
