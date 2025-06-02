@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 import { formatDate, getLangFromUrl, useTranslations } from '@/i18n/utils';
 import { generateStructuredData } from '@/utils/seo';
@@ -14,6 +14,41 @@ const { title, description, pubDate, updatedDate, heroImage, author, tags, slug,
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
+// Fetch all posts for the current language to find next/previous
+const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>) => {
+  return entry.id.startsWith(`${lang}/`) && !entry.data.draft;
+});
+
+// Sort posts by publication date (ascending for easier next/prev indexing)
+const sortedLangPosts = allLangPosts.sort(
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+
+// The 'slug' prop is the clean slug (e.g., 'my-post-title')
+// entry.slug from getCollection is 'en/my-post-title'
+const currentPostCollectionSlug = `${lang}/${slug}`;
+const currentIndex = sortedLangPosts.findIndex((post: CollectionEntry<'blog'>) => post.slug === currentPostCollectionSlug);
+
+let previousPostData: { url: string; title: string } | undefined = undefined;
+let nextPostData: { url: string; title: string } | undefined = undefined;
+
+if (currentIndex !== -1) {
+  if (currentIndex > 0) {
+    const prev = sortedLangPosts[currentIndex - 1];
+    previousPostData = {
+      url: `/${lang}/blog/${prev.slug.substring(lang.length + 1)}`,
+      title: prev.data.title,
+    };
+  }
+  if (currentIndex < sortedLangPosts.length - 1) {
+    const next = sortedLangPosts[currentIndex + 1];
+    nextPostData = {
+      url: `/${lang}/blog/${next.slug.substring(lang.length + 1)}`,
+      title: next.data.title,
+    };
+  }
+}
+
 const structuredData = generateStructuredData({
   title,
   description,
@@ -25,18 +60,18 @@ const structuredData = generateStructuredData({
 });
 ---
 
-<Layout 
+<Layout
   title={title}
   description={description}
   image={heroImage}
   lang={lang}
 >
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  
+
   <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back to blog link -->
     <div class="mb-8">
-      <a 
+      <a
         href={lang === 'en' ? '/blog' : `/${lang}/blog`}
         class="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
       >
@@ -51,8 +86,8 @@ const structuredData = generateStructuredData({
     <header class="mb-8">
       {heroImage && (
         <div class="mb-8 rounded-lg overflow-hidden">
-          <img 
-            src={heroImage} 
+          <img
+            src={heroImage}
             alt={title}
             class="w-full h-64 sm:h-80 lg:h-96 object-cover"
             loading="eager"
@@ -60,15 +95,15 @@ const structuredData = generateStructuredData({
           />
         </div>
       )}
-      
+
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
         {title}
       </h1>
-      
+
       <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-6">
         {description}
       </p>
-      
+
       <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
         <div class="flex items-center">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +111,7 @@ const structuredData = generateStructuredData({
           </svg>
           <span>{author}</span>
         </div>
-        
+
         <div class="flex items-center">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -85,7 +120,7 @@ const structuredData = generateStructuredData({
             {t('blog.published')} {formatDate(pubDate, lang)}
           </time>
         </div>
-        
+
         {updatedDate && (
           <div class="flex items-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +131,7 @@ const structuredData = generateStructuredData({
             </time>
           </div>
         )}
-        
+
         {readingTime && (
           <div class="flex items-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,11 +141,11 @@ const structuredData = generateStructuredData({
           </div>
         )}
       </div>
-      
+
       {tags && tags.length > 0 && (
         <div class="mt-6">
           <div class="flex flex-wrap gap-2">
-            {tags.map((tag) => (
+            {tags.map((tag: string) => (
               <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
                 #{tag}
               </span>
@@ -119,10 +154,32 @@ const structuredData = generateStructuredData({
         </div>
       )}
     </header>
-    
+
     <!-- Article content -->
     <div class="prose prose-lg max-w-none dark:prose-dark prose-headings:font-semibold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-primary-600 hover:prose-a:text-primary-700 dark:prose-a:text-primary-400 dark:hover:prose-a:text-primary-300 prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800">
       <slot />
     </div>
+
+    <!-- Next/Previous Article Navigation -->
+    {(previousPostData || nextPostData) && (
+      <nav class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between gap-8">
+        {previousPostData ? (
+          <a href={previousPostData.url} class="group flex-1 text-left p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+            <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('blog.previousArticle') || 'Previous Article'}</div>
+            <div class="text-lg font-semibold text-primary-600 dark:text-primary-400 group-hover:underline">
+              {previousPostData.title}
+            </div>
+          </a>
+        ) : <div class="flex-1"></div>}
+        {nextPostData ? (
+          <a href={nextPostData.url} class="group flex-1 text-right p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+            <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('blog.nextArticle') || 'Next Article'}</div>
+            <div class="text-lg font-semibold text-primary-600 dark:text-primary-400 group-hover:underline">
+              {nextPostData.title}
+            </div>
+          </a>
+        ) : <div class="flex-1"></div>}
+      </nav>
+    )}
   </article>
 </Layout>

@@ -1,0 +1,48 @@
+---
+interface Props {
+  tags: string[];
+}
+const { tags } = Astro.props;
+---
+<div class="mb-8">
+  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+    <!-- Tags Filter -->
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Filter by topic:
+      </label>
+      <div class="flex flex-wrap gap-2">
+        <button
+          class="tag-filter active px-3 py-1.5 text-sm font-medium rounded-full border border-primary-600 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200"
+          data-tag="all"
+        >
+          All Topics
+        </button>
+        {tags.slice(0, 10).map((tag) => ( // Show up to 10 tags for brevity
+          <button
+            class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+            data-tag={tag}
+          >
+            #{tag}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Sort Options -->
+    <div class="flex flex-col sm:flex-row gap-2">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:sr-only">
+        Sort by:
+      </label>
+      <select
+        id="sort-select"
+        class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+      >
+        <option value="date-desc">Newest First</option>
+        <option value="date-asc">Oldest First</option>
+        <option value="title-asc">Title A-Z</option>
+        <option value="title-desc">Title Z-A</option>
+      </select>
+    </div>
+  </div>
+</div>
