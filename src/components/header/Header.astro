@@ -11,31 +11,34 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header
-  class="fixed top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50"
->
+  class="fixed top-0 z-50 w-full bg-white/50 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50"
+  aria-label="Main navigation">
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <HeaderLogo lang={lang} />
-
-      {/* Desktop Navigation */}
-      <div class="hidden md:flex items-center space-x-8">
-        <HeaderNavLinks lang={lang} currentPath={currentPath} variant="desktop" />
+      <div class="hidden md:flex items-center gap-5">
+        <HeaderNavLinks
+          lang={lang}
+          currentPath={currentPath}
+          variant="desktop"
+        />
       </div>
-
-      {/* Search Box (Desktop) - Placed between nav and utilities for some layouts */}
-      <div class="hidden lg:block">
-        <SearchBox />
-      </div>
-
       <HeaderUtilities />
     </div>
-
-    {/* Mobile Navigation */}
-    <div id="mobile-menu" class="md:hidden hidden pb-4">
-      <div class="flex flex-col space-y-2">
-        <HeaderNavLinks lang={lang} currentPath={currentPath} variant="mobile" />
-        {/* Mobile Search */}
-        <div class="pt-2">
+    <div
+      id="mobile-menu"
+      class="md:hidden hidden pb-4"
+      aria-expanded="false"
+      aria-label="Mobile menu">
+      <div class="flex flex-col gap-2">
+        <HeaderNavLinks
+          lang={lang}
+          currentPath={currentPath}
+          variant="mobile"
+        />
+        <div
+          class="pt-2"
+          aria-label="Mobile search">
           <SearchBox />
         </div>
       </div>
@@ -43,26 +46,50 @@ const currentPath = Astro.url.pathname;
   </nav>
 </header>
 
-<script>
+<script is:inline>
   document.addEventListener("DOMContentLoaded", () => {
     const mobileMenuButton = document.getElementById("mobile-menu-button");
     const mobileMenu = document.getElementById("mobile-menu");
 
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-      });
+    const toggleMobileMenu = () => {
+      if (!mobileMenu) return;
 
-      // Close mobile menu when clicking outside
-      document.addEventListener("click", (e) => {
-        const target = e.target as Node;
-        if (
-          mobileMenuButton && !mobileMenuButton.contains(target) &&
-          mobileMenu && !mobileMenu.contains(target)
-        ) {
-          mobileMenu.classList.add("hidden");
+      const isExpanded = mobileMenu.getAttribute("aria-expanded") === "true";
+      mobileMenu.classList.toggle("hidden");
+      mobileMenu.setAttribute("aria-expanded", String(!isExpanded));
+    };
+
+    const closeMobileMenu = (event) => {
+      if (!mobileMenu || !mobileMenuButton) return;
+
+      const target = event.target;
+      const isClickInside =
+        mobileMenuButton.contains(target) || mobileMenu.contains(target);
+
+      if (!isClickInside) {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute("aria-expanded", "false");
+      }
+    };
+
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener("click", toggleMobileMenu);
+      document.addEventListener("click", closeMobileMenu);
+
+      // Prevent clicks inside the mobile menu from closing it immediately
+      mobileMenu.addEventListener("click", (event) => {
+        if (event.target.tagName === "A") {
+          event.stopPropagation();
         }
       });
     }
+
+    return () => {
+      if (mobileMenuButton) {
+        mobileMenuButton.removeEventListener("click", toggleMobileMenu);
+      }
+      document.removeEventListener("click", closeMobileMenu);
+      // No need to remove the mobileMenu click listener as it's tied to the element's lifecycle
+    };
   });
 </script>
