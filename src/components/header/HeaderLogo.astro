@@ -1,7 +1,6 @@
 ---
-import { getLocalizedPath } from '@/i18n/utils';
-import type { LanguageKey } from '@/i18n/types';
-
+import { getLocalizedPath } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
 interface Props {
   lang: LanguageKey;
 }
@@ -11,17 +10,14 @@ const { lang } = Astro.props;
 <div class="flex items-center">
   <a
     href={getLocalizedPath("/", lang)}
-    class="flex items-center space-x-2 group"
-  >
+    class="flex items-center space-x-2 group">
     <div
-      class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-    >
+      class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
       <svg
         class="w-5 h-5 text-white"
         fill="none"
         stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
+        viewBox="0 0 24 24">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -31,9 +27,8 @@ const { lang } = Astro.props;
       </svg>
     </div>
     <span
-      class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-    >
-      AstroBlog
+      class="sm:text-sm md:text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+      Astro Batavia
     </span>
   </a>
 </div>

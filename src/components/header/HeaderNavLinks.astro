@@ -1,17 +1,23 @@
 ---
-import { getLocalizedPath, useTranslations } from '@/i18n/utils';
-import type { LanguageKey } from '@/i18n/types';
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
 
 interface NavLink {
   href: string;
-  textKey: "nav.home" | "nav.blog" | "nav.search"; // More specific type for text keys
+  textKey:
+    | "nav.home"
+    | "nav.blog"
+    | "nav.services"
+    | "nav.about"
+    | "nav.contact"
+    | "nav.search"; // More specific type for text keys
   checkStartsWith?: boolean; // For /blog to match /blog/*
 }
 
 interface Props {
   lang: LanguageKey;
   currentPath: string;
-  variant: 'desktop' | 'mobile';
+  variant: "desktop" | "mobile";
 }
 
 const { lang, currentPath, variant } = Astro.props;
@@ -20,45 +26,53 @@ const t = useTranslations(lang);
 const navLinks: NavLink[] = [
   { href: "/", textKey: "nav.home" },
   { href: "/blog", textKey: "nav.blog", checkStartsWith: true },
-  { href: "/search", textKey: "nav.search" },
+  { href: "/services", textKey: "nav.services" },
+  { href: "/about", textKey: "nav.about" },
+  { href: "/contact", textKey: "nav.contact" },
 ];
 
-const baseDesktopClass = "font-medium transition-colors duration-200 relative group";
+const underlineBaseClass =
+  "absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300";
+const baseDesktopClass =
+  "font-medium transition-colors duration-200 relative group";
 const activeDesktopClass = "text-blue-600 dark:text-blue-400";
-const inactiveDesktopClass = "text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400";
-const underlineBaseClass = "absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300";
-
-const baseMobileClass = "px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200";
-const activeMobileClass = "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20";
-const inactiveMobileClass = "text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800";
+const inactiveDesktopClass =
+  "text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400";
+const baseMobileClass =
+  "px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200";
+const activeMobileClass =
+  "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20";
+const inactiveMobileClass =
+  "text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800";
 ---
 
-{navLinks.map(link => {
-  const localizedHref = getLocalizedPath(link.href, lang);
-  const isActive = link.checkStartsWith
-    ? currentPath.startsWith(localizedHref)
-    : currentPath === localizedHref;
+{
+  navLinks.map((link) => {
+    const localizedHref = getLocalizedPath(link.href, lang);
+    const isActive = link.checkStartsWith
+      ? currentPath.startsWith(localizedHref)
+      : currentPath === localizedHref;
 
-  if (variant === 'desktop') {
-    return (
-      <a
-        href={localizedHref}
-        class={`${baseDesktopClass} ${isActive ? activeDesktopClass : inactiveDesktopClass}`}
-      >
-        {t(link.textKey)}
-        <span
-          class={`${underlineBaseClass} ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
-        ></span>
-      </a>
-    );
-  } else { // mobile
-    return (
-      <a
-        href={localizedHref}
-        class={`${baseMobileClass} ${isActive ? activeMobileClass : inactiveMobileClass}`}
-      >
-        {t(link.textKey)}
-      </a>
-    );
-  }
-})}
+    if (variant === "desktop") {
+      return (
+        <a
+          href={localizedHref}
+          class={`${baseDesktopClass} ${isActive ? activeDesktopClass : inactiveDesktopClass}`}>
+          {t(link.textKey as keyof typeof t)}
+          <span
+            class={`${underlineBaseClass} ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+          />
+        </a>
+      );
+    } else {
+      // mobile
+      return (
+        <a
+          href={localizedHref}
+          class={`${baseMobileClass} ${isActive ? activeMobileClass : inactiveMobileClass}`}>
+          {t(link.textKey as keyof typeof t)}
+        </a>
+      );
+    }
+  })
+}
