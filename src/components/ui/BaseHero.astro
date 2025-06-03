@@ -6,13 +6,13 @@ interface Props {
   cta1Text?: string;
   cta1Link?: string;
   cta1IconSvg?: string; // SVG path data for the icon, e.g., "M13 7l5 5m0 0l-5 5m5-5H6"
-  cta1IconPosition?: 'before' | 'after';
+  cta1IconPosition?: "before" | "after";
   cta1AriaLabel?: string;
 
   cta2Text?: string;
   cta2Link?: string;
   cta2IconSvg?: string; // SVG path data
-  cta2IconPosition?: 'before' | 'after';
+  cta2IconPosition?: "before" | "after";
   cta2AriaLabel?: string;
 
   showDecorativeElements?: boolean;
@@ -39,12 +39,12 @@ const {
   cta1Text,
   cta1Link,
   cta1IconSvg,
-  cta1IconPosition = 'after',
+  cta1IconPosition = "after",
   cta1AriaLabel,
   cta2Text,
   cta2Link,
   cta2IconSvg,
-  cta2IconPosition = 'before',
+  cta2IconPosition = "before",
   cta2AriaLabel,
   showDecorativeElements = false,
   showScrollIndicator = false,
@@ -52,12 +52,12 @@ const {
   containerClass = "relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center",
   titleClass = "text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6",
   subtitleClass = "text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto",
-  ctaContainerClass = "flex flex-col sm:flex-row gap-4 justify-center items-center pt-8",
+  ctaContainerClass = "flex flex-col sm:flex-row gap-4 justify-center items-center pt-8 md:pt-20",
   cta1Class = "group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-semibold rounded-2xl transition-all duration-300 hover:scale-105",
   cta2Class = "group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-semibold rounded-2xl transition-all duration-300 hover:scale-105",
   decorativeElement1Class = "absolute -top-40 -right-32 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl",
   decorativeElement2Class = "absolute -bottom-32 -left-40 w-80 h-80 bg-gradient-to-tr from-indigo-400/20 to-cyan-400/20 rounded-full blur-3xl",
-  scrollIndicatorContainerClass = "absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce",
+  scrollIndicatorContainerClass = "absolute mt-20 md:-mb-10 -bottom-20 left-1/2 transform -translate-x-1/2 animate-bounce",
   scrollIndicatorOuterClass = "w-6 h-10 border-2 border-slate-400 dark:border-slate-600 rounded-full flex justify-center",
   scrollIndicatorInnerClass = "w-1 h-3 bg-slate-400 dark:bg-slate-600 rounded-full mt-2 animate-pulse",
   ...rest
@@ -66,63 +66,152 @@ const {
 const iconBaseClass = "w-5 h-5 transition-transform";
 ---
 
-<header class:list={[sectionClass]} {...rest}>
-  {showDecorativeElements && (
-    <>
-      <div aria-hidden="true" class:list={[decorativeElement1Class]}></div>
-      <div aria-hidden="true" class:list={[decorativeElement2Class]}></div>
-    </>
-  )}
+<header
+  class:list={[sectionClass]}
+  {...rest}>
+  {
+    showDecorativeElements && (
+      <>
+        <div
+          aria-hidden="true"
+          class:list={[decorativeElement1Class]}
+        />
+        <div
+          aria-hidden="true"
+          class:list={[decorativeElement2Class]}
+        />
+      </>
+    )
+  }
 
   <div class:list={[containerClass]}>
     <hgroup class="space-y-6">
-      {title && <h1 class:list={[titleClass]} set:html={title} />}
-      {subtitle && <p class:list={[subtitleClass]} set:html={subtitle} />}
+      {
+        title && (
+          <h1
+            class:list={[titleClass]}
+            set:html={title}
+          />
+        )
+      }
+      {
+        subtitle && (
+          <p
+            class:list={[subtitleClass]}
+            set:html={subtitle}
+          />
+        )
+      }
     </hgroup>
 
-    {(cta1Text || cta2Text) && (
-      <div class:list={[ctaContainerClass]}>
-        {cta1Text && cta1Link && (
-          <a href={cta1Link} class:list={[cta1Class]} aria-label={cta1AriaLabel}>
-            {cta1IconSvg && cta1IconPosition === 'before' && (
-              <svg class:list={[iconBaseClass, "mr-2"]} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={cta1IconSvg}></path>
-              </svg>
-            )}
-            <span set:html={cta1Text} />
-            {cta1IconSvg && cta1IconPosition === 'after' && (
-              <svg class:list={[iconBaseClass, "ml-2", cta1Class?.includes('group') ? 'group-hover:translate-x-1' : '']} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={cta1IconSvg}></path>
-              </svg>
-            )}
-          </a>
-        )}
-        {cta2Text && cta2Link && (
-          <a href={cta2Link} class:list={[cta2Class]} aria-label={cta2AriaLabel}>
-            {cta2IconSvg && cta2IconPosition === 'before' && (
-              <svg class:list={[iconBaseClass, "mr-2"]} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={cta2IconSvg}></path>
-              </svg>
-            )}
-            <span set:html={cta2Text} />
-            {cta2IconSvg && cta2IconPosition === 'after' && (
-              <svg class:list={[iconBaseClass, "ml-2", cta2Class?.includes('group') ? 'group-hover:translate-x-1' : '']} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={cta2IconSvg}></path>
-              </svg>
-            )}
-          </a>
-        )}
-      </div>
-    )}
-
-    <slot /> {/* For additional content like feature cards */}
-
-    {showScrollIndicator && (
-      <div class:list={[scrollIndicatorContainerClass]}>
-        <div class:list={[scrollIndicatorOuterClass]} aria-hidden="true">
-          <div class:list={[scrollIndicatorInnerClass]}></div>
+    {
+      (cta1Text || cta2Text) && (
+        <div class:list={[ctaContainerClass]}>
+          {cta1Text && cta1Link && (
+            <a
+              href={cta1Link}
+              class:list={[cta1Class]}
+              aria-label={cta1AriaLabel}>
+              {cta1IconSvg && cta1IconPosition === "before" && (
+                <svg
+                  class:list={[iconBaseClass, "mr-2"]}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d={cta1IconSvg}
+                  />
+                </svg>
+              )}
+              <span set:html={cta1Text} />
+              {cta1IconSvg && cta1IconPosition === "after" && (
+                <svg
+                  class:list={[
+                    iconBaseClass,
+                    "ml-2",
+                    cta1Class?.includes("group")
+                      ? "group-hover:translate-x-1"
+                      : "",
+                  ]}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d={cta1IconSvg}
+                  />
+                </svg>
+              )}
+            </a>
+          )}
+          {cta2Text && cta2Link && (
+            <a
+              href={cta2Link}
+              class:list={[cta2Class]}
+              aria-label={cta2AriaLabel}>
+              {cta2IconSvg && cta2IconPosition === "before" && (
+                <svg
+                  class:list={[iconBaseClass, "mr-2"]}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d={cta2IconSvg}
+                  />
+                </svg>
+              )}
+              <span set:html={cta2Text} />
+              {cta2IconSvg && cta2IconPosition === "after" && (
+                <svg
+                  class:list={[
+                    iconBaseClass,
+                    "ml-2",
+                    cta2Class?.includes("group")
+                      ? "group-hover:translate-x-1"
+                      : "",
+                  ]}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d={cta2IconSvg}
+                  />
+                </svg>
+              )}
+            </a>
+          )}
         </div>
-      </div>
-    )}
+      )
+    }
+
+    <slot />
+    {/* For additional content like feature cards */}
+
+    {
+      showScrollIndicator && (
+        <div class:list={[scrollIndicatorContainerClass]}>
+          <div
+            class:list={[scrollIndicatorOuterClass]}
+            aria-hidden="true">
+            <div class:list={[scrollIndicatorInnerClass]} />
+          </div>
+        </div>
+      )
+    }
   </div>
 </header>
