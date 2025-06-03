@@ -1,0 +1,22 @@
+---
+import type { ui } from "@/i18n/ui";
+import NewsletterForm from "@/components/ui/NewsletterForm.astro";
+
+const { t } = Astro.props as {
+  t: (key: keyof (typeof ui)[keyof typeof ui], params?: any) => string;
+};
+---
+
+<NewsletterForm
+  title={t("home.newsletter.title" as any)}
+  subtitle={t("home.newsletter.subtitle" as any)}
+  emailPlaceholder={t("home.newsletter.emailPlaceholder" as any)}
+  buttonText={t("home.newsletter.subscribeButton" as any)}
+  sectionClass="py-16 bg-primary-50 dark:bg-gray-800"
+  containerClass="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+  titleClass="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4"
+  subtitleClass="text-xl text-gray-600 dark:text-gray-300 mb-8"
+  formClass="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+  inputClass="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+  buttonClass="text-center inline-flex items-center gap-1 px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200"
+/>
