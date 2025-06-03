@@ -3,7 +3,7 @@
 ---
 
 <script is:inline>
-  (function () {
+  function initializeTheme() {
     try {
       const getThemePreference = () => {
         if (typeof localStorage !== "undefined") {
@@ -29,5 +29,11 @@
     } catch (error) {
       console.error("Error in ThemeInitializer.astro script:", error);
     }
-  })();
+  }
+
+  // Initialize theme on initial page load
+  initializeTheme();
+
+  // Initialize theme on subsequent page loads (View Transitions)
+  document.addEventListener('astro:page-load', initializeTheme);
 </script>

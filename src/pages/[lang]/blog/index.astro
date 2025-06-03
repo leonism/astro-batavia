@@ -2,7 +2,7 @@ export const prerender = true;
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
-import BlogCard from '@/components/BlogCard.astro';
+import BlogCard from '@/components/blog/BlogCard.astro';
 import { useTranslations, isValidLanguage } from '@/i18n/utils';
 
 export async function getStaticPaths() {
