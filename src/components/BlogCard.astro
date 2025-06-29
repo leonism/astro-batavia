@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { formatDate, useTranslations } from '@/i18n/utils';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -9,7 +9,7 @@ export interface Props {
 }
 
 const { post, lang, showExcerpt = true } = Astro.props;
-const t = useTranslations(lang);
+const t = useTranslations(lang as 'en' | 'es' | 'ja');
 
 // Construct the post URL based on language
 const baseUrl = lang === 'en' ? '/blog' : `/${lang}/blog`;
@@ -23,8 +23,8 @@ const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) +
   <!-- Hero Image -->
   {post.data.heroImage && (
     <div class="aspect-video overflow-hidden">
-      <img 
-        src={post.data.heroImage} 
+      <img
+        src={post.data.heroImage}
         alt={post.data.title}
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         loading="lazy"
@@ -32,13 +32,13 @@ const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) +
       />
     </div>
   )}
-  
+
   <!-- Content -->
   <div class="p-6">
     <!-- Tags -->
     {post.data.tags && post.data.tags.length > 0 && (
       <div class="flex flex-wrap gap-2 mb-3">
-        {post.data.tags.slice(0, 3).map((tag) => (
+        {post.data.tags.slice(0, 3).map((tag: string) => (
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
             #{tag}
           </span>
@@ -50,21 +50,21 @@ const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) +
         )}
       </div>
     )}
-    
+
     <!-- Title -->
     <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
       <a href={postUrl} class="stretched-link">
         {post.data.title}
       </a>
     </h2>
-    
+
     <!-- Excerpt -->
     {showExcerpt && excerpt && (
       <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
         {excerpt}
       </p>
     )}
-    
+
     <!-- Meta Information -->
     <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
       <div class="flex items-center space-x-4">
@@ -75,7 +75,7 @@ const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) +
           </svg>
           <span>{post.data.author}</span>
         </div>
-        
+
         <!-- Reading time -->
         {post.data.readingTime && (
           <div class="flex items-center">
@@ -86,7 +86,7 @@ const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) +
           </div>
         )}
       </div>
-      
+
       <!-- Published date -->
       <time datetime={post.data.pubDate.toISOString()} class="flex items-center">
         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,10 +95,10 @@ const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) +
         {formatDate(post.data.pubDate, lang)}
       </time>
     </div>
-    
+
     <!-- Read more link -->
     <div class="mt-4">
-      <a 
+      <a
         href={postUrl}
         class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm transition-colors duration-200"
       >
@@ -121,7 +121,7 @@ const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) +
     z-index: 1;
     content: "";
   }
-  
+
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;

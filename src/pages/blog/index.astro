@@ -1,171 +1,216 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '@/layouts/Layout.astro';
-import BlogCard from '@/components/BlogCard.astro';
-import { useTranslations } from '@/i18n/utils';
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import BlogCard from "@/components/BlogCard.astro";
+import { useTranslations } from "@/i18n/utils";
 
 // Get all English blog posts
-const allPosts = await getCollection('blog', ({ id, data }) => {
-  return id.startsWith('en/') && !data.draft;
+const allPosts = await getCollection("blog", ({ id, data }: { id: string; data: { draft: boolean } }) => {
+  return id.startsWith("en/") && !data.draft;
 });
 
 // Sort posts by publication date (newest first)
-const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const posts = allPosts.sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 
-const lang = 'en';
+const lang = "en";
 const t = useTranslations(lang);
 
 // Get unique tags
-const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => post.data.tags || []))];
 
 // Pagination setup
 const postsPerPage = 9;
-const totalPages = Math.ceil(posts.length / postsPerPage);
+// Note: totalPages removed as it's not used in the template
 ---
 
-<Layout 
-  title={`${t('nav.blog')} | AstroBlog`}
+<Layout
+  title={`${t("nav.blog")} | Astro Batavia`}
   description="Discover articles about web development, technology, and more"
-  lang={lang}
->
+  lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="text-center mb-12">
-      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        {t('nav.blog')}
+      <h1
+        class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        {t("nav.blog")}
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        Explore our collection of articles covering web development, technology trends, and insights.
+        Explore our collection of articles covering web development, technology
+        trends, and insights.
       </p>
     </div>
 
     <!-- Stats -->
     <div class="flex flex-wrap justify-center gap-6 mb-12">
       <div class="text-center">
-        <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
+        <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
           {posts.length}
         </div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">
-          {posts.length === 1 ? 'Article' : 'Articles'}
-        </div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">Articles</div>
       </div>
       <div class="text-center">
-        <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
+        <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
           {allTags.length}
         </div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">
-          {allTags.length === 1 ? 'Topic' : 'Topics'}
-        </div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">Topics</div>
       </div>
     </div>
 
-    <!-- Tags Filter -->
-    {allTags.length > 0 && (
-      <div class="mb-8">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Browse by Topic
-        </h2>
-        <div class="flex flex-wrap gap-2">
-          <button 
-            class="tag-filter active px-4 py-2 text-sm font-medium rounded-full border border-primary-600 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200"
-            data-tag="all"
-          >
-            All
+    <!-- Filter Tags -->
+    <div class="mb-8">
+      <div class="flex flex-wrap justify-center gap-2">
+        <button
+          class="tag-filter px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-primary-600 text-white border-primary-600"
+          data-tag="all">
+          All Articles
+        </button>
+        {allTags.slice(0, 8).map((tag) => (
+          <button
+            class="tag-filter px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20"
+            data-tag={tag}>
+            {tag}
           </button>
-          {allTags.map((tag) => (
-            <button 
-              class="tag-filter px-4 py-2 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
-              data-tag={tag}
-            >
-              #{tag}
-            </button>
-          ))}
-        </div>
-      </div>
-    )}
-
-    <!-- Posts Grid -->
-    {posts.length > 0 ? (
-      <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        {posts.map((post) => (
-          <div class="post-item animate-fade-in" data-tags={JSON.stringify(post.data.tags || [])}>
-            <BlogCard post={post} lang={lang} />
-          </div>
         ))}
       </div>
-    ) : (
-      <div class="text-center py-12">
-        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-          {t('blog.no-posts')}
-        </h3>
-        <p class="text-gray-500 dark:text-gray-400">
-          Check back soon for new content!
-        </p>
-      </div>
-    )}
+    </div>
+
+    <!-- Posts Grid -->
+    {
+      posts.length > 0 ? (
+        <div
+          id="posts-container"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {posts.map((post: CollectionEntry<"blog">) => (
+            <div
+              class="post-item animate-fade-in"
+              data-tags={JSON.stringify(post.data.tags || [])}>
+              <BlogCard
+                post={post}
+                lang={lang}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <svg
+            class="w-16 h-16 mx-auto text-gray-400 mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+            {t("blog.no-posts")}
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            Check back soon for new content!
+          </p>
+        </div>
+      )
+    }
 
     <!-- Load More Button -->
-    {posts.length > postsPerPage && (
-      <div class="text-center">
-        <button 
-          id="load-more"
-          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200"
-        >
-          Load More Articles
-          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-      </div>
-    )}
+    {
+      posts.length > postsPerPage && (
+        <div class="text-center">
+          <button
+            id="load-more"
+            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all duration-200">
+            Load More Articles
+          </button>
+        </div>
+      )
+    }
   </div>
 </Layout>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const tagFilters = document.querySelectorAll('.tag-filter');
-    const postItems = document.querySelectorAll('.post-item');
-    
-    // Tag filtering
-    tagFilters.forEach(filter => {
-      filter.addEventListener('click', () => {
-        const selectedTag = filter.getAttribute('data-tag');
-        
+  document.addEventListener("DOMContentLoaded", () => {
+    // Tag filtering functionality
+    const tagFilters = document.querySelectorAll(".tag-filter");
+    const postItems = document.querySelectorAll(".post-item");
+
+    tagFilters.forEach((filter) => {
+      filter.addEventListener("click", () => {
+        const selectedTag = filter.getAttribute("data-tag");
+
         // Update active filter
-        tagFilters.forEach(f => {
-          f.classList.remove('active', 'bg-primary-600', 'text-white');
-          f.classList.add('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+        tagFilters.forEach((f) => {
+          f.classList.remove(
+            "bg-primary-600",
+            "text-white",
+            "border-primary-600"
+          );
+          f.classList.add(
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300"
+          );
         });
-        
-        filter.classList.add('active', 'bg-primary-600', 'text-white');
-        filter.classList.remove('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-        
+
+        filter.classList.remove(
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300"
+        );
+        filter.classList.add(
+          "bg-primary-600",
+          "text-white",
+          "border-primary-600"
+        );
+
+        // Reset all other filters
+        tagFilters.forEach((f) => {
+          if (f !== filter) {
+            f.classList.remove(
+              "bg-primary-600",
+              "text-white",
+              "border-primary-600"
+            );
+            f.classList.add(
+              "border-gray-300",
+              "dark:border-gray-600",
+              "text-gray-700",
+              "dark:text-gray-300"
+            );
+          }
+        });
+
         // Filter posts
-        postItems.forEach(item => {
-          const postTags = JSON.parse(item.getAttribute('data-tags') || '[]');
-          const shouldShow = selectedTag === 'all' || postTags.includes(selectedTag);
-          
+        postItems.forEach((item) => {
+          const postTags = JSON.parse(item.getAttribute("data-tags") || "[]");
+          const shouldShow =
+            selectedTag === "all" || postTags.includes(selectedTag);
+
+          const htmlItem = item as HTMLElement;
           if (shouldShow) {
-            item.style.display = 'block';
-            item.classList.add('animate-fade-in');
+            htmlItem.style.display = "block";
+            htmlItem.classList.add("animate-fade-in");
           } else {
-            item.style.display = 'none';
-            item.classList.remove('animate-fade-in');
+            htmlItem.style.display = "none";
+            htmlItem.classList.remove("animate-fade-in");
           }
         });
       });
     });
-    
+
     // Simple load more functionality (for demo)
-    const loadMoreBtn = document.getElementById('load-more');
+    const loadMoreBtn = document.getElementById("load-more") as HTMLButtonElement;
     if (loadMoreBtn) {
-      loadMoreBtn.addEventListener('click', () => {
-        loadMoreBtn.textContent = 'No more articles to load';
+      loadMoreBtn.addEventListener("click", () => {
+        loadMoreBtn.textContent = "No more articles to load";
         loadMoreBtn.disabled = true;
-        loadMoreBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        loadMoreBtn.classList.add("opacity-50", "cursor-not-allowed");
       });
     }
   });
