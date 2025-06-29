@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "astro build"
   },
   "keywords": [],
   "author": "",
@@ -12,17 +13,22 @@
   "description": "",
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",
+<<<<<<< HEAD
     "@astrojs/sitemap": "^3.4.1",
     "@tailwindcss/postcss": "^4.1.7",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.7",
     "astro": "^5.10.1",
+=======
+    "@astrojs/sitemap": "^3.4.0",
+    "@astrojs/tailwind": "^5.1.5",
+    "@sentry/astro": "^9.23.0",
+    "@spotlightjs/astro": "^3.2.3",
+    "@tailwindcss/typography": "^0.5.16",
+    "astro": "^5.8.0",
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
     "mdast-util-to-string": "^4.0.0",
-    "reading-time": "^1.5.0"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.7"
+    "reading-time": "^1.5.0",
+    "tailwindcss": "^3.4.17"
   }
 }

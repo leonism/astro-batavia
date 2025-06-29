@@ -1,0 +1,22 @@
+---
+// This component is purely presentational for the button itself.
+// The script to toggle the menu will be in the main Header.astro
+---
+
+<button
+  id="mobile-menu-button"
+  class="md:hidden p-2 rounded-xl text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+  aria-label="Toggle mobile menu">
+  <svg
+    class="w-6 h-6"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M4 6h16M4 12h16M4 18h16"
+    ></path>
+  </svg>
+</button>

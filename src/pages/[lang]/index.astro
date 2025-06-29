@@ -1,7 +1,16 @@
 ---
+<<<<<<< HEAD
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import BlogCard from "@/components/BlogCard.astro";
+=======
+export const prerender = true;
+import { type CollectionEntry, getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import HomeHero from "@/components/home/HomeHero.astro";
+import HomeLatestPosts from "@/components/home/HomeLatestPosts.astro";
+import HomeNewsletter from "@/components/home/HomeNewsletter.astro";
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 import { useTranslations, isValidLanguage } from "@/i18n/utils";
 
 export async function getStaticPaths() {
@@ -18,9 +27,18 @@ if (!lang || !isValidLanguage(lang)) {
 const t = useTranslations(lang);
 
 // Get latest blog posts for this language
+<<<<<<< HEAD
 const allPosts = await getCollection("blog", (post: CollectionEntry<"blog">) => {
   return post.id.startsWith(`${lang}/`) && !post.data.draft;
 });
+=======
+const allPosts = await getCollection(
+  "blog",
+  ({ id, data }: { id: string; data: CollectionEntry<"blog">["data"] }) => {
+    return id.startsWith(`${lang}/`) && !data.draft;
+  }
+);
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 
 // Sort posts by publication date (newest first)
 const sortedPosts = allPosts.sort(
@@ -31,6 +49,7 @@ const latestPosts = sortedPosts.slice(0, 3);
 ---
 
 <Layout
+<<<<<<< HEAD
   title="Astro Batavia - Modern Multi-Language Blog"
   description={t("meta.description")}
   lang={lang}>
@@ -194,4 +213,22 @@ const latestPosts = sortedPosts.slice(0, 3);
       </form>
     </div>
   </section>
+=======
+  title="AstroBatavia - Modern Multi-Language Blog"
+  description={t("meta.description")}
+  lang={lang}>
+  <HomeHero
+    lang={lang}
+    t={t}
+  />
+  <HomeLatestPosts
+    latestPosts={latestPosts}
+    lang={lang}
+    t={t}
+  />
+  <HomeNewsletter
+    lang={lang}
+    t={t}
+  />
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 </Layout>

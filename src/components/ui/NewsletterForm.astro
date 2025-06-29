@@ -1,0 +1,103 @@
+---
+// src/components/Newsletter.astro
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  emailPlaceholder?: string;
+  buttonText?: string;
+  buttonIconSvg?: string;
+  formAction?: string;
+  formMethod?: string;
+  showPrivacyNote?: boolean;
+  privacyNoteText?: string;
+
+  // Styling props
+  sectionClass?: string;
+  containerClass?: string;
+  titleClass?: string;
+  subtitleClass?: string;
+  formClass?: string;
+  inputClass?: string;
+  buttonClass?: string;
+  privacyNoteClass?: string;
+}
+
+const {
+  title,
+  subtitle,
+  emailPlaceholder = "Enter your email",
+  buttonText = "Subscribe",
+  buttonIconSvg = "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+  formAction = "#",
+  formMethod = "POST",
+  showPrivacyNote = false,
+  privacyNoteText = "We respect your privacy. Unsubscribe at any time.",
+  sectionClass = "py-16 bg-gray-50 dark:bg-gray-800",
+  containerClass = "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center",
+  titleClass = "text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4",
+  subtitleClass = "text-xl text-gray-600 dark:text-gray-300 mb-8",
+  formClass = "flex flex-col sm:flex-row gap-4 max-w-md mx-auto",
+  inputClass = "group text-wrap flex-1 mx-auto px-4 py-3 text-center md:text-left border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100",
+  buttonClass = "w-full group text-wrap text-center sm:text-center mx-auto sm:mx-auto inline-flex justify-center sm:items-center items-center gap-3 px-auto py-4 bg-white text-blue-600 font-semibold text-lg rounded-2xl hover:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl",
+  privacyNoteClass = "text-sm text-gray-500 dark:text-gray-400 mt-4",
+  ...rest
+} = Astro.props;
+---
+
+<section
+  class={sectionClass}
+  {...rest}>
+  <div class={containerClass}>
+    {
+      title && (
+        <h2
+          class={titleClass}
+          set:html={title}
+        />
+      )
+    }
+
+    {
+      subtitle && (
+        <p
+          class={subtitleClass}
+          set:html={subtitle}
+        />
+      )
+    }
+
+    <form
+      action={formAction}
+      method={formMethod}
+      class={formClass}>
+      <input
+        type="email"
+        name="email"
+        placeholder={emailPlaceholder}
+        class={inputClass}
+        required
+      />
+
+      <button
+        type="submit"
+        class={buttonClass}>
+        {buttonText}
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d={buttonIconSvg}>
+          </path>
+        </svg>
+      </button>
+    </form>
+    {showPrivacyNote && <p class={privacyNoteClass}>{privacyNoteText}</p>}
+  </div>
+</section>

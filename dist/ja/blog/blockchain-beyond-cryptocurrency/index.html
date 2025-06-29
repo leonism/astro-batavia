@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="ja" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="description" content="ブロックチェーン技術が、サプライチェーン管理からデジタルID検証まで、暗号通貨以外の産業をどのように革新しているかを発見してください。"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.8.1"><!-- Preconnect to external domains --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><!-- Fonts --><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><!-- SEO Component --><!-- Basic Meta Tags --><title>ブロックチェーンと暗号通貨を超えた実世界での応用 | Astro Batavia</title><meta name="description" content="ブロックチェーン技術が、サプライチェーン管理からデジタルID検証まで、暗号通貨以外の産業をどのように革新しているかを発見してください。"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:title" content="ブロックチェーンと暗号通貨を超えた実世界での応用 | Astro Batavia"><meta property="og:description" content="ブロックチェーン技術が、サプライチェーン管理からデジタルID検証まで、暗号通貨以外の産業をどのように革新しているかを発見してください。"><meta property="og:image" content="https://images.pexels.com/photos/8369648/pexels-photo-8369648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"><meta property="og:url" content="https://your-blog.com/ja/blog/blockchain-beyond-cryptocurrency/"><meta property="og:site_name" content="Astro Batavia"><meta property="og:locale" content="ja-JP"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="ブロックチェーンと暗号通貨を超えた実世界での応用 | Astro Batavia"><meta name="twitter:description" content="ブロックチェーン技術が、サプライチェーン管理からデジタルID検証まで、暗号通貨以外の産業をどのように革新しているかを発見してください。"><meta name="twitter:image" content="https://images.pexels.com/photos/8369648/pexels-photo-8369648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"><!-- Hreflang Tags --><link rel="alternate" hreflang="en-US" href="https://your-blog.com//blog/blockchain-beyond-cryptocurrency/"><link rel="alternate" hreflang="es-ES" href="https://your-blog.com//es/blog/blockchain-beyond-cryptocurrency/"><link rel="alternate" hreflang="ja-JP" href="https://your-blog.com//ja/blog/blockchain-beyond-cryptocurrency/"><link rel="alternate" hreflang="x-default" href="https://your-blog.com//blog/blockchain-beyond-cryptocurrency/"><!-- Additional Meta Tags --><meta name="theme-color" content="#3b82f6"><meta name="msapplication-TileColor" content="#3b82f6"><meta name="" mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><!-- Favicon --><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><script>
+  function initializeTheme() {
+    try {
+      const getThemePreference = () => {
+        if (typeof localStorage !== "undefined") {
+          const storedTheme = localStorage.getItem("theme");
+          if (storedTheme) {
+            console.log("ThemeInitializer: Found theme in localStorage:", storedTheme);
+            return storedTheme;
+          }
+        } else {
+          console.warn("ThemeInitializer: localStorage is not available.");
+        }
+
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        console.log("ThemeInitializer: No theme in localStorage. System prefers dark:", prefersDark);
+        return prefersDark ? "dark" : "light";
+      };
+
+      const initialTheme = getThemePreference();
+      const isDark = initialTheme === "dark";
+      console.log("ThemeInitializer: Initial theme determined as:", initialTheme);
+      document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+      console.log("ThemeInitializer: html element classes after initialization:", document.documentElement.classList);
+    } catch (error) {
+      console.error("Error in ThemeInitializer.astro script:", error);
+    }
+  }
+
+  // Initialize theme on initial page load
+  initializeTheme();
+
+  // Initialize theme on subsequent page loads (View Transitions)
+  document.addEventListener('astro:page-load', initializeTheme);
+</script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Bx3K5vQB.js"></script><link rel="stylesheet" href="/_astro/_slug_.CA03fHZ8.css"><script type="module" src="/_astro/page.C86kKH8x.js"></script></head> <body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300"> <div class="md:min-h-full lg:min-h-screen flex flex-col"> <header class="fixed top-0 z-50 w-full bg-white/50 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50" aria-label="Main navigation"> <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between items-center h-16"> <div class="flex items-center"> <a href="/ja/" class="flex items-center space-x-2 group"> <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300"> <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path> </svg> </div> <span class="leading-tight sm:text-sm md:text-xl block font-semibold text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+Astro Batavia
+</span> </a> </div> <div class="hidden md:flex items-center gap-5"> <a href="/ja/" class="font-medium transition-colors duration-200 relative group text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400">ホーム<span class="absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 w-0 group-hover:w-full"></span></a><a href="/ja/blog" class="font-medium transition-colors duration-200 relative group text-blue-600 dark:text-blue-400">ブログ<span class="absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 w-full"></span></a><a href="/ja/services" class="font-medium transition-colors duration-200 relative group text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400">サービス<span class="absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 w-0 group-hover:w-full"></span></a><a href="/ja/about" class="font-medium transition-colors duration-200 relative group text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400">概要<span class="absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 w-0 group-hover:w-full"></span></a><a href="/ja/contact" class="font-medium transition-colors duration-200 relative group text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400">お問い合わせ<span class="absolute -bottom-1 left-0 h-0.5 bg-blue-600 transition-all duration-300 w-0 group-hover:w-full"></span></a> </div> <div class="flex items-center"> <div class="hidden lg:block" aria-label="Search"> <div class="relative max-w-md w-full" data-astro-cid-feeqkpez> <div class="relative" data-astro-cid-feeqkpez> <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" data-astro-cid-feeqkpez> <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-feeqkpez> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" data-astro-cid-feeqkpez></path> </svg> </div> <input type="search" id="search-input" placeholder="記事を検索..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-colors duration-200" autocomplete="off" spellcheck="false" data-astro-cid-feeqkpez> </div> <!-- Search Results Dropdown --> <div id="search-results" class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg z-50 max-h-96 overflow-y-auto hidden" data-astro-cid-feeqkpez> <div id="search-results-content" class="py-2" data-astro-cid-feeqkpez> <!-- Results will be populated by JavaScript --> </div> </div> </div> <script type="module" src="/_astro/SearchBox.astro_astro_type_script_index_0_lang.CU4nKdOT.js"></script>  </div> <div class="relative" id="language-switcher"> <button id="language-toggle" class="flex items-center space-x-1 md:mx-2 md:mr-3 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200" aria-haspopup="true" aria-expanded="false"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path> </svg> <span>日本語</span> <svg class="w-4 h-4 transition-transform duration-200" id="language-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path> </svg> </button> <div id="language-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-600 z-50 hidden"> <div class="py-1" role="menu" aria-orientation="vertical"> <a href="/blog/blockchain-beyond-cryptocurrency/" class="block px-4 py-2 text-sm transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400" role="menuitem"> <div class="flex items-center justify-between"> <span>English</span>  </div> </a><a href="/es/blog/blockchain-beyond-cryptocurrency/" class="block px-4 py-2 text-sm transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400" role="menuitem"> <div class="flex items-center justify-between"> <span>Español</span>  </div> </a><a href="/ja/blog/blockchain-beyond-cryptocurrency/" class="block px-4 py-2 text-sm transition-colors duration-200 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400" role="menuitem"> <div class="flex items-center justify-between"> <span>日本語</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path> </svg> </div> </a> </div> </div> </div> <script type="module">(function(){try{var e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]="c3c6184e-0220-4bba-87fc-41949f2b5d1e",e._sentryDebugIdIdentifier="sentry-dbid-c3c6184e-0220-4bba-87fc-41949f2b5d1e")}catch{}})();document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("language-toggle"),t=document.getElementById("language-dropdown"),n=document.getElementById("language-chevron");e&&t&&n&&(e.addEventListener("click",d=>{d.preventDefault(),!t.classList.contains("hidden")?(t.classList.add("hidden"),n.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false")):(t.classList.remove("hidden"),n.style.transform="rotate(180deg)",e.setAttribute("aria-expanded","true"))}),document.addEventListener("click",d=>{!e.contains(d.target)&&!t.contains(d.target)&&(t.classList.add("hidden"),n.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false"))}),document.addEventListener("keydown",d=>{d.key==="Escape"&&!t.classList.contains("hidden")&&(t.classList.add("hidden"),n.style.transform="rotate(0deg)",e.setAttribute("aria-expanded","false"),e.focus())}))});</script> <button id="theme-toggle" class="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2" aria-label="テーマの切り替え" title="テーマの切り替え">  <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path> </svg>  <svg id="theme-toggle-dark-icon" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path> </svg> </button> <script type="module">(function(){try{var e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]="6b3422b4-9623-412e-9596-7629fe85ab7b",e._sentryDebugIdIdentifier="sentry-dbid-6b3422b4-9623-412e-9596-7629fe85ab7b")}catch{}})();document.addEventListener("astro:page-load",()=>{const e=document.getElementById("theme-toggle"),t=document.getElementById("theme-toggle-light-icon"),n=document.getElementById("theme-toggle-dark-icon");if(!e||!t||!n)return;function d(){document.documentElement.classList.contains("dark")?(t.classList.remove("hidden"),t.classList.add("block"),n.classList.remove("block"),n.classList.add("hidden")):(t.classList.remove("block"),t.classList.add("hidden"),n.classList.remove("hidden"),n.classList.add("block"))}d(),e.addEventListener("click",()=>{const o=document.documentElement.classList.contains("dark")?"light":"dark";document.documentElement.classList.toggle("dark"),typeof localStorage<"u"&&localStorage.setItem("theme",o),d(),window.dispatchEvent(new CustomEvent("theme-changed",{detail:{theme:o}}))}),window.addEventListener("theme-changed",d),window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",s=>{localStorage.getItem("theme")||(document.documentElement.classList[s.matches?"add":"remove"]("dark"),d())})});</script> <button id="mobile-menu-button" class="md:hidden p-2 rounded-xl text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200" aria-label="Toggle mobile menu"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> </button> </div> </div> <div id="mobile-menu" class="md:hidden hidden pb-4" aria-expanded="false" aria-label="Mobile menu"> <div class="flex flex-col gap-2"> <a href="/ja/" class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">ホーム</a><a href="/ja/blog" class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20">ブログ</a><a href="/ja/services" class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">サービス</a><a href="/ja/about" class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">概要</a><a href="/ja/contact" class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800">お問い合わせ</a> <div class="pt-2" aria-label="Mobile search"> <div class="relative max-w-md w-full" data-astro-cid-feeqkpez> <div class="relative" data-astro-cid-feeqkpez> <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" data-astro-cid-feeqkpez> <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-feeqkpez> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" data-astro-cid-feeqkpez></path> </svg> </div> <input type="search" id="search-input" placeholder="記事を検索..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-colors duration-200" autocomplete="off" spellcheck="false" data-astro-cid-feeqkpez> </div> <!-- Search Results Dropdown --> <div id="search-results" class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg z-50 max-h-96 overflow-y-auto hidden" data-astro-cid-feeqkpez> <div id="search-results-content" class="py-2" data-astro-cid-feeqkpez> <!-- Results will be populated by JavaScript --> </div> </div> </div>   </div> </div> </div> </nav> </header> <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    const toggleMobileMenu = () => {
+      if (!mobileMenu) return;
+
+      const isExpanded = mobileMenu.getAttribute("aria-expanded") === "true";
+      mobileMenu.classList.toggle("hidden");
+      mobileMenu.setAttribute("aria-expanded", String(!isExpanded));
+    };
+
+    const closeMobileMenu = (event) => {
+      if (!mobileMenu || !mobileMenuButton) return;
+
+      const target = event.target;
+      const isClickInside =
+        mobileMenuButton.contains(target) || mobileMenu.contains(target);
+
+      if (!isClickInside) {
+        mobileMenu.classList.add("hidden");
+        mobileMenu.setAttribute("aria-expanded", "false");
+      }
+    };
+
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener("click", toggleMobileMenu);
+      document.addEventListener("click", closeMobileMenu);
+
+      // Prevent clicks inside the mobile menu from closing it immediately
+      mobileMenu.addEventListener("click", (event) => {
+        if (event.target.tagName === "A") {
+          event.stopPropagation();
+        }
+      });
+    }
+
+    return () => {
+      if (mobileMenuButton) {
+        mobileMenuButton.removeEventListener("click", toggleMobileMenu);
+      }
+      document.removeEventListener("click", closeMobileMenu);
+      // No need to remove the mobileMenu click listener as it's tied to the element's lifecycle
+    };
+  });
+</script> <main class="flex-1 pt-16">  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ブロックチェーンと暗号通貨を超えた実世界での応用","description":"ブロックチェーン技術が、サプライチェーン管理からデジタルID検証まで、暗号通貨以外の産業をどのように革新しているかを発見してください。","image":["https://images.pexels.com/photos/8369648/pexels-photo-8369648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1 "],"author":{"@type":"Person","name":"Emma Johnson"},"publisher":{"@type":"Organization","name":"AstroBlog","logo":{"@type":"ImageObject","url":"https://your-blog.com/images/logo.png"}},"datePublished":"2024-01-10T00:00:00.000Z","dateModified":"2024-01-10T00:00:00.000Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://your-blog.com/ja/blog/blockchain-beyond-cryptocurrency/"},"url":"https://your-blog.com/ja/blog/blockchain-beyond-cryptocurrency/"}</script> <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <!-- Back to blog link --> <div class="mb-8"> <a href="/ja/blog" class="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"> <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path> </svg> ブログに戻る </a> </div> <!-- Article header --> <header class="mb-8"> <div class="mb-8 rounded-lg overflow-hidden"> <img src="https://images.pexels.com/photos/8369648/pexels-photo-8369648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1 " alt="ブロックチェーンと暗号通貨を超えた実世界での応用" class="w-full h-64 sm:h-80 lg:h-96 object-cover" loading="eager" decoding="async"> </div> <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100"> ブロックチェーンと暗号通貨を超えた実世界での応用 </h1> <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-6"> ブロックチェーン技術が、サプライチェーン管理からデジタルID検証まで、暗号通貨以外の産業をどのように革新しているかを発見してください。 </p> <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400"> <div class="flex items-center"> <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path> </svg> <span>Emma Johnson</span> </div> <div class="flex items-center"> <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> <time datetime="2024-01-10T00:00:00.000Z"> 公開 2024年1月10日 </time> </div>   </div> <div class="mt-6"> <div class="flex flex-wrap gap-2"> <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+#ブロックチェーン </span><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+#分散システム </span><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+#革新 </span><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+#テクノロジー </span> </div> </div> </header> <!-- Article content --> <div class="prose prose-lg max-w-none dark:prose-dark prose-headings:font-semibold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-primary-600 hover:prose-a:text-primary-700 dark:prose-a:text-primary-400 dark:hover:prose-a:text-primary-300 prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800">  <h1 id="ブロックチェーンと暗号通貨を超えた実世界での応用">ブロックチェーンと暗号通貨を超えた実世界での応用</h1>
+<p>ブロックチェーン技術は最初にビットコインなどの暗号通貨を通じて注目を集めましたが、その可能性はデジタルマネーを超えています。この革新的な技術は、これまで不可能であった方法で透明性、セキュリティ、分散化を提供し、さまざまな産業に変革をもたらしています。</p>
+<h2 id="ブロックチェーン技術の理解">ブロックチェーン技術の理解</h2>
+<p>ブロックチェーンは基本的に、暗号を使用してリンクされ保護された「ブロック」と呼ばれる記録のリストを継続的に成長させる分散型台帳です。各ブロックには前のブロックの暗号化ハッシュ、タイムスタンプ、およびトランザクションデータが含まれています。</p>
+<h3 id="主要な特徴">主要な特徴</h3>
+<ul>
+<li><strong>不変性</strong>: 記録は追加後に変更不可</li>
+<li><strong>透明性</strong>: 全参加者が履歴全体を閲覧可能</li>
+<li><strong>分散化</strong>: 制御や障害の単一ポイントがない</li>
+<li><strong>コンセンサス</strong>: 合意メカニズムがデータの完全性を確保</li>
+</ul>
+<h2 id="サプライチェーン管理の革命">サプライチェーン管理の革命</h2>
+<h3 id="追跡可能性と透明性">追跡可能性と透明性</h3>
+<p>ブロックチェーンは製品を原産地から消費者まで完全に追跡可能にし、サプライチェーンに前例のない可視性を提供します。</p>
+<p><strong>実世界の例:</strong></p>
+<ul>
+<li>Walmart は食品汚染源を迅速に特定するために食品製品を追跡</li>
+<li>De Beers はダイヤモンドの真正性と倫理的調達を検証</li>
+<li>Maersk はグローバル輸送を透明な文書で合理化</li>
+</ul>
+<h3 id="企業への利点">企業への利点</h3>
+<ul>
+<li>詐欺や偽造の削減</li>
+<li>品質管理の向上</li>
+<li>消費者信頼の強化</li>
+<li>コンプライアンス報告の合理化</li>
+</ul>
+<h2 id="デジタル-id-と検証">デジタル ID と検証</h2>
+<h3 id="自己主権型-id">自己主権型 ID</h3>
+<p>ブロックチェーンは、中央集権的な当局に依存せずに個人が自身のデジタル ID を所有し制御できるようにします。</p>
+<p><strong>応用例:</strong></p>
+<ul>
+<li>学術資格の検証</li>
+<li>専門資格の追跡</li>
+<li>安全な選挙のための有権者 ID</li>
+<li>医療記録の管理</li>
+</ul>
+<h3 id="プライバシーとセキュリティ">プライバシーとセキュリティ</h3>
+<ul>
+<li>ユーザーが共有する情報を制御</li>
+<li>暗号証明が真正性を検証</li>
+<li>複数の ID プロバイダーを不要に</li>
+<li>ID 盗難リスクの削減</li>
+</ul>
+<h2 id="医療データ管理">医療データ管理</h2>
+<h3 id="安全な患者記録">安全な患者記録</h3>
+<p>ブロックチェーンは、患者が制御しながら承認された医療提供者が重要な情報をアクセスできる相互運用可能な安全な健康記録を作成できます。</p>
+<p><strong>主要な利点:</strong></p>
+<ul>
+<li>提供者間での患者データの移植性</li>
+<li>緊急時の安全な共有</li>
+<li>データアクセスの監査証跡</li>
+<li>管理コストの削減</li>
+</ul>
+<h3 id="医薬品サプライチェーン">医薬品サプライチェーン</h3>
+<p>製薬会社は、製造から患者への配達までの薬物を追跡し、偽造薬に対抗し安全性を確保するためにブロックチェーンを使用します。</p>
+<h2 id="不動産と財産権">不動産と財産権</h2>
+<h3 id="財産所有記録">財産所有記録</h3>
+<p>ブロックチェーンは不変の所有記録を作成し、取引プロセスを合理化することで不動産取引を革新します。</p>
+<p><strong>利点:</strong></p>
+<ul>
+<li>不動産取引における詐欺の削減</li>
+<li>より迅速な権利検索と移転</li>
+<li>取引コストの削減</li>
+<li>市場流動性の向上</li>
+</ul>
+<h3 id="賃貸契約のスマートコントラクト">賃貸契約のスマートコントラクト</h3>
+<p>自動化された契約は、仲介者なしで賃貸契約、保証金、修繕リクエストを処理します。</p>
+<h2 id="投票とガバナンス">投票とガバナンス</h2>
+<h3 id="安全なデジタル投票">安全なデジタル投票</h3>
+<p>ブロックチェーンベースの投票システムは、透明性と検証可能性を提供しながら有権者のプライバシーを維持します。</p>
+<p><strong>機能:</strong></p>
+<ul>
+<li>改ざん防止の投票記録</li>
+<li>リアルタイムの結果検証</li>
+<li>遠隔有権者へのアクセス性向上</li>
+<li>選挙運営コストの削減</li>
+</ul>
+<h3 id="企業ガバナンス">企業ガバナンス</h3>
+<p>上場企業は株主投票、配当支払い、透明な意思決定プロセスのためにブロックチェーンを使用できます。</p>
+<h2 id="知的財産の保護">知的財産の保護</h2>
+<h3 id="特許と著作権管理">特許と著作権管理</h3>
+<p>ブロックチェーンは知的財産のタイムスタンプ付き不変の証明を提供し、法的保護を強化します。</p>
+<p><strong>使用例:</strong></p>
+<ul>
+<li>ソフトウェアコードの著作権保護</li>
+<li>研究出版の優先順位確立</li>
+<li>クリエイティブ作品の所有権検証</li>
+<li>秘匿情報の文書化</li>
+</ul>
+<h2 id="エネルギーと持続可能性">エネルギーと持続可能性</h2>
+<h3 id="再生可能エネルギー取引">再生可能エネルギー取引</h3>
+<p>ブロックチェーンは、太陽光パネルを持つ個人が余剰エネルギーを直接隣人に販売できるピアツーピアのエネルギー取引を可能にします。</p>
+<p><strong>利点:</strong></p>
+<ul>
+<li>伝統的ユーティリティへの依存の削減</li>
+<li>再生可能エネルギー採用の奨励</li>
+<li>効率的なエネルギー配給</li>
+<li>透明なカーボンクレジット追跡</li>
+</ul>
+<h3 id="環境影響の追跡">環境影響の追跡</h3>
+<p>組織は環境イニシアチブとカーボンフットプリント削減努力を追跡・検証するためにブロックチェーンを使用できます。</p>
+<h2 id="金融サービスの革新">金融サービスの革新</h2>
+<h3 id="貿易金融">貿易金融</h3>
+<p>ブロックチェーンは信用状、船荷証券、その他の貿易文書をデジタル化することで国際貿易を合理化します。</p>
+<p><strong>改善点:</strong></p>
+<ul>
+<li>より迅速な取引処理</li>
+<li>書類作業とエラーの削減</li>
+<li>詐欺防止の強化</li>
+<li>取引コストの削減</li>
+</ul>
+<h3 id="保険請求">保険請求</h3>
+<p>スマートコントラクトは検証可能なデータソースに基づいて保険請求処理を自動化し、詐欺を削減し支払いを加速します。</p>
+<h2 id="チャレンジと考慮事項">チャレンジと考慮事項</h2>
+<h3 id="技術的課題">技術的課題</h3>
+<ul>
+<li>現在の技術のスケーラビリティ制限</li>
+<li>エネルギー消費の懸念</li>
+<li>既存システムとの統合</li>
+<li>ユーザーエクスペリエンスの複雑さ</li>
+</ul>
+<h3 id="規制と法的問題">規制と法的問題</h3>
+<ul>
+<li>多くの管轄区域で不明確な規制枠組み</li>
+<li>プライバシー法遵守要件</li>
+<li>国境を越えた法的複雑さ</li>
+<li>責任とガバナンスの疑問</li>
+</ul>
+<h3 id="採用の障壁">採用の障壁</h3>
+<ul>
+<li>高い導入コスト</li>
+<li>業界全体の標準の必要性</li>
+<li>教育とトレーニングの必要性</li>
+<li>従来の業界における変化への抵抗</li>
+</ul>
+<h2 id="未来展望">未来展望</h2>
+<h3 id="新興トレンド">新興トレンド</h3>
+<ul>
+<li>IoT デバイスとの統合による自動データ収集</li>
+<li>異なるブロックチェーンネットワーク間の相互運用性</li>
+<li>中央銀行デジタル通貨（CBDC）</li>
+<li>持続可能性に焦点を当てたブロックチェーンソリューション</li>
+</ul>
+<h3 id="産業の変革">産業の変革</h3>
+<p>ブロックチェーンは、インターネットが今日のように、アプリケーションを裏で支える目に見えないインフラとなるでしょう。</p>
+<h2 id="実装のベストプラクティス">実装のベストプラクティス</h2>
+<h3 id="ブロックチェーン導入のステップ">ブロックチェーン導入のステップ</h3>
+<ol>
+<li>ブロックチェーン独自の特性が役立つ具体的なユースケースを特定</li>
+<li>実行可能性をテストするためのパイロットプロジェクトを開始</li>
+<li>経験豊富なブロックチェーン開発者と提携</li>
+<li>ユーザーエクスペリエンスと採用にフォーカス</li>
+<li>最初から規制遵守を計画</li>
+</ol>
+<h3 id="適切なプラットフォームの選択">適切なプラットフォームの選択</h3>
+<ul>
+<li>スマートコントラクトアプリケーション向けの Ethereum</li>
+<li>エンタープライズソリューション向けの Hyperledger Fabric</li>
+<li>高性能アプリケーション向けの Solana</li>
+<li>スケーラブルな Ethereum アプリケーション向けの Polygon</li>
+</ul>
+<h2 id="結論">結論</h2>
+<p>ブロックチェーン技術の可能性は暗号通貨を超え、多くの産業における複雑な問題に対する解決策を提供します。課題は残りますが、ブロックチェーンソリューションを理解し戦略的に実装する組織は大きな競争優位性を得るでしょう。</p>
+<p>成功したブロックチェーン採用の鍵は、ブロックチェーンが既存技術よりも優れた解決策を提供できる特定の問題を特定することであり、単にブロックチェーン自体を実装することではありません。技術が成熟し規制枠組みが発展するにつれ、さらに革新的な応用が現れると期待されます。</p>
+<p>未来は、透明性、不変性、分散化というブロックチェーン独自の特性を利用して顧客や利害関係者に価値を提供できる組織に属します。</p>  </div> <!-- Next/Previous Article Navigation -->  </article>  </main> <footer class="bg-gray-50 dark:bg-slate-900/80 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300"> <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8"> <div class="grid grid-cols-1 md:grid-cols-5 justify-around"> <footer class="col-span-1 md:col-span-2"> <div class="flex items-center gap-2 mt-7 mb-4"> <svg class="w-8 h-8 text-primary-600 dark:text-primary-400" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"> <circle cx="16" cy="16" r="14" fill="currentColor" opacity="0.1"></circle> <path d="M16 8l8 8-8 8-8-8 8-8z" fill="currentColor"></path> </svg> <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">
+Astro Batavia
+</h2> </div> <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-md"> Astro.jsで構築されたモダンな多言語ブログ </p> <ul class="flex justify-start mx-auto text-left"> <!-- GitHub --> <li> <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200" aria-label="GitHub"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"> <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path> </svg> </a> </li> <!-- Twitter/X --> <li> <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200" aria-label="Twitter"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"> <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path> </svg> </a> </li> <!-- LinkedIn --> <li> <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200" aria-label="LinkedIn"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"> <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path> </svg> </a> </li> <!-- YouTube --> <li> <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200" aria-label="YouTube"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"> <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd"></path> </svg> </a> </li> <!-- Instagram --> <li> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200" aria-label="Instagram"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"> <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path> </svg> </a> </li> <!-- TikTok --> <li> <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200" aria-label="TikTok"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"> <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path> </svg> </a> </li> </ul> </footer> <div class="my-0"> <h3 class="text-sm mt-7 font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4"> Navigation </h3> <ul class="space-y-2"> <li> <a href="/ja/" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> ホーム </a> </li><li> <a href="/ja/blog" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> ブログ </a> </li><li> <a href="/ja/about" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> 概要 </a> </li><li> <a href="/ja/services" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> サービス </a> </li><li> <a href="/ja/search" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> 検索 </a> </li> </ul> </div> <div class="my-0"> <h3 class="text-sm mt-7 font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4"> Resources </h3> <ul class="space-y-2"> <li> <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> Astro.js </a> </li><li> <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> Tailwind CSS </a> </li><li> <a href="https://decapcms.org" target="_blank" rel="noopener noreferrer" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> Decap CMS </a> </li> </ul> </div> <div class="my-0"> <h3 class="text-sm mt-7 font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4"> Legal </h3> <ul class="space-y-2"> <li> <a href="/ja/cookies" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> クッキーポリシー </a> </li><li> <a href="/ja/privacy" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> プライバシーポリシー </a> </li><li> <a href="/ja/contact" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> お問い合わせ </a> </li><li> <a href="/ja/terms" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"> 利用規約 </a> </li> </ul> </div> </div> <footer class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700"> <div class="flex flex-col md:flex-row justify-between items-center gap-4"> <div class="flex items-center gap-4"> <p class="text-gray-500 dark:text-gray-400 text-sm">
+© 2025 Astro Batavia. すべての権利は保護されています。 </p> <a href="/rss.xml" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200" aria-label="RSS Feed"> <svg class="sm:w-3 sm:h-3 w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"> <path fill-rule="evenodd" d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415a3.3 3.3 0 013.293 3.295A3.303 3.303 0 013.283 24C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z" clip-rule="evenodd"></path> </svg> </a> </div> <p class="text-gray-500 dark:text-gray-400 text-sm"> 構築 <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200 ml-1" aria-label="Astro">
+Astro
+</a> </p> </div> </footer> </div> </footer> </div> <!-- Back to Top Button --><button id="back-to-top" aria-label="Back to top" title="Back to top" class="fixed bottom-6 right-6 p-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-opacity duration-300 opacity-0 pointer-events-none z-50"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path> </svg> </button> <script>
+  const backToTopButton = document.getElementById("back-to-top");
+
+  if (backToTopButton) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 200) {
+        backToTopButton.classList.remove("opacity-0", "pointer-events-none");
+        backToTopButton.classList.add("opacity-100", "pointer-events-auto");
+      } else {
+        backToTopButton.classList.remove("opacity-100", "pointer-events-auto");
+        backToTopButton.classList.add("opacity-0", "pointer-events-none");
+      }
+    });
+
+    backToTopButton.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+  }
+</script> </body></html>

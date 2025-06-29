@@ -1,0 +1,37 @@
+---
+import BaseHero from "@/components/ui/BaseHero.astro";
+
+const title = `Beautiful <span class="block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight">Multi-language</span> Blog`;
+const subtitle =
+  "Experience the future of blogging with our lightning-fast, beautifully designed platform built with Astro.js";
+
+const cta1Text = "Start Reading";
+const cta1Link = "/en/blog";
+const cta1IconSvg = "M13 7l5 5m0 0l-5 5m5-5H6";
+const cta1AriaLabel = "Start reading blog articles";
+
+const cta2Text = "Explore Content";
+const cta2Link = "/en/search";
+const cta2IconSvg = "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z";
+const cta2AriaLabel = "Explore blog content";
+---
+
+<BaseHero
+  title={title}
+  subtitle={subtitle}
+  cta1Text={cta1Text}
+  cta1Link={cta1Link}
+  cta1IconSvg={cta1IconSvg}
+  cta1AriaLabel={cta1AriaLabel}
+  cta1Class="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+  cta2Text={cta2Text}
+  cta2Link={cta2Link}
+  cta2IconSvg={cta2IconSvg}
+  cta2AriaLabel={cta2AriaLabel}
+  cta2Class="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-semibold text-slate-700 dark:text-slate-300 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-slate-200 dark:border-slate-700 rounded-2xl hover:bg-white dark:hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-500/50 transition-all duration-300 hover:scale-105"
+  showDecorativeElements={true}
+  showScrollIndicator={true}
+  sectionClass="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden"
+  titleClass="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-slate-900 dark:text-white"
+  subtitleClass="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed"
+/>

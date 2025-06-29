@@ -1,0 +1,17 @@
+---
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher.astro";
+import ThemeToggle from "@/components/ui/ThemeToggle.astro";
+import HeaderMobileMenuToggle from "./HeaderMobileMenuToggle.astro";
+import SearchBox from "@/components/ui/SearchBox.astro";
+---
+
+<div class="flex items-center">
+  <div
+    class="hidden lg:block"
+    aria-label="Search">
+    <SearchBox />
+  </div>
+  <LanguageSwitcher />
+  <ThemeToggle />
+  <HeaderMobileMenuToggle />
+</div>

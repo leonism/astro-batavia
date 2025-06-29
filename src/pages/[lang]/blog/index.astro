@@ -1,7 +1,11 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
+<<<<<<< HEAD
 import BlogCard from "@/components/BlogCard.astro";
+=======
+import BlogCard from "@/components/blog/BlogCard.astro";
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 import { useTranslations, isValidLanguage } from "@/i18n/utils";
 
 export async function getStaticPaths() {
@@ -18,6 +22,7 @@ if (!lang || !isValidLanguage(lang)) {
 const t = useTranslations(lang);
 
 // Get blog posts for this language
+<<<<<<< HEAD
 const allPosts = await getCollection(
   "blog",
   ({ id, data }: { id: string; data: { pubDate: Date; tags?: string[]; draft: boolean; }; }) => {
@@ -40,6 +45,52 @@ const postsPerPage = 9;
 
 <Layout
   title={`${t("nav.blog")} | Astro Batavia`}
+=======
+const allPostsUnsorted = await getCollection(
+  "blog",
+  ({ id, data }: CollectionEntry<"blog">) => {
+    return id.startsWith(`${lang}/`) && !data.draft;
+  }
+);
+
+// Get unique tags from all posts for the current language
+const allTags = [
+  ...new Set(
+    allPostsUnsorted.flatMap(
+      (post: CollectionEntry<"blog">) => post.data.tags || []
+    )
+  ),
+].sort();
+
+// Get current tag from URL
+const currentTag = Astro.url.searchParams.get("tag");
+
+// Filter posts by current tag
+const filteredPostsUnsorted = currentTag
+  ? allPostsUnsorted.filter(
+      (post: CollectionEntry<"blog">) =>
+        post.data.tags && post.data.tags.includes(currentTag)
+    )
+  : allPostsUnsorted;
+
+// Sort posts by publication date (newest first)
+const sortedPosts = filteredPostsUnsorted.sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const featuredPost = sortedPosts.length > 0 ? sortedPosts[0] : null;
+const otherPosts = sortedPosts.length > 0 ? sortedPosts.slice(1) : [];
+
+// Pagination setup for otherPosts
+const postsPerPage = featuredPost ? 8 : 9; // Adjust if featured post takes one slot
+const totalPages = Math.ceil(otherPosts.length / postsPerPage);
+const postsToDisplay = otherPosts; // For pagination and load more, we use otherPosts
+---
+
+<Layout
+  title={`${t("nav.blog")}${currentTag ? ` | #${currentTag}` : ""} | AstroBatavia`}
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
   description={t("meta.description")}
   lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -47,6 +98,7 @@ const postsPerPage = 9;
     <div class="text-center mb-12">
       <h1
         class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+<<<<<<< HEAD
         {t("nav.blog")}
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -56,6 +108,23 @@ const postsPerPage = 9;
             : lang === "ja"
               ? "ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。"
               : "Explore our collection of articles covering web development, technology trends, and insights."
+=======
+        {currentTag ? `#${currentTag}` : t("nav.blog")}
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+        {
+          currentTag
+            ? lang === "es"
+              ? `Artículos etiquetados con #${currentTag}`
+              : lang === "ja"
+                ? `#${currentTag} のタグが付いた記事`
+                : `Articles tagged with #${currentTag}`
+            : lang === "es"
+              ? "Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas."
+              : lang === "ja"
+                ? "ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。"
+                : "Explore our collection of articles covering web development, technology trends, and insights."
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
         }
       </p>
     </div>
@@ -64,19 +133,37 @@ const postsPerPage = 9;
     <div class="flex flex-wrap justify-center gap-6 mb-12">
       <div class="text-center">
         <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
-          {posts.length}
+          {sortedPosts.length}
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
           {
             lang === "es"
+<<<<<<< HEAD
               ? posts.length === 1
+=======
+              ? sortedPosts.length === 1
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
                 ? "Artículo"
                 : "Artículos"
               : lang === "ja"
                 ? "記事"
+<<<<<<< HEAD
                 : posts.length === 1
                   ? "Article"
                   : "Articles"
+=======
+                : sortedPosts.length === 1
+                  ? "Article"
+                  : "Articles"
+          }
+          {
+            currentTag &&
+              (lang === "es"
+                ? ` con #${currentTag}`
+                : lang === "ja"
+                  ? ` (#${currentTag})`
+                  : ` with #${currentTag}`)
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
           }
         </div>
       </div>
@@ -112,6 +199,7 @@ const postsPerPage = 9;
                 : "Browse by Topic"}
           </h2>
           <div class="flex flex-wrap gap-2">
+<<<<<<< HEAD
             <button
               class="tag-filter active px-4 py-2 text-sm font-medium rounded-full border border-primary-600 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200"
               data-tag="all">
@@ -123,11 +211,33 @@ const postsPerPage = 9;
                 data-tag={tag}>
                 #{tag}
               </button>
+=======
+            <a
+              href={`/${lang}/blog`}
+              class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
+                !currentTag
+                  ? "border-primary-600 bg-primary-600 text-white hover:bg-primary-700"
+                  : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400"
+              }`}>
+              {lang === "es" ? "Todos" : lang === "ja" ? "すべて" : "All"}
+            </a>
+            {allTags.map((tag) => (
+              <a
+                href={`/${lang}/blog?tag=${tag}`}
+                class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
+                  currentTag === tag
+                    ? "border-primary-600 bg-primary-600 text-white hover:bg-primary-700"
+                    : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400"
+                }`}>
+                #{tag}
+              </a>
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
             ))}
           </div>
         </div>
       )
     }
+<<<<<<< HEAD
 
     <!-- Posts Grid -->
     {
@@ -139,6 +249,40 @@ const postsPerPage = 9;
           {posts.map((post: CollectionEntry<"blog">) => (
             <div class="post-item animate-fade-in" data-tags={JSON.stringify(post.data.tags || [])}>
               <BlogCard post={post} lang={lang} />
+=======
+
+    <!-- Featured Post Section -->
+    {
+      featuredPost &&
+        !currentTag && ( // Only show featured post if no tag is selected
+          <section class="mb-16 animate-fade-in">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center sm:text-left">
+              {t("blog.featuredArticle") || "Featured Article"}
+            </h2>
+            <div class="featured-post-card">
+              <BlogCard
+                post={featuredPost}
+                lang={lang}
+                isFeatured={true}
+              />
+            </div>
+          </section>
+        )
+    }
+
+    <!-- Posts Grid -->
+    {
+      postsToDisplay.length > 0 ? (
+        <div
+          id="posts-container"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {postsToDisplay.map((post: CollectionEntry<"blog">) => (
+            <div class="post-item animate-fade-in">
+              <BlogCard
+                post={post}
+                lang={lang}
+              />
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
             </div>
           ))}
         </div>
@@ -157,6 +301,7 @@ const postsPerPage = 9;
             />
           </svg>
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+<<<<<<< HEAD
             {t("blog.no-posts")}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
@@ -165,6 +310,24 @@ const postsPerPage = 9;
               : lang === "ja"
                 ? "新しいコンテンツをお楽しみに！"
                 : "Check back soon for new content!"}
+=======
+            {currentTag
+              ? t("blog.noPostsForTag").replace("{tag}", currentTag)
+              : t("blog.no-posts")}
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            {currentTag
+              ? lang === "es"
+                ? `Intenta con otra etiqueta o revisa todos los artículos.`
+                : lang === "ja"
+                  ? `別のタグを試すか、すべての記事を確認してください。`
+                  : `Try a different tag or check all articles.`
+              : lang === "es"
+                ? "¡Vuelve pronto para nuevo contenido!"
+                : lang === "ja"
+                  ? "新しいコンテンツをお楽しみに！"
+                  : "Check back soon for new content!"}
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
           </p>
         </div>
       )
@@ -172,7 +335,11 @@ const postsPerPage = 9;
 
     <!-- Load More Button -->
     {
+<<<<<<< HEAD
       posts.length > postsPerPage && (
+=======
+      postsToDisplay.length > postsPerPage && (
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
         <div class="text-center">
           <button
             id="load-more"
@@ -201,6 +368,7 @@ const postsPerPage = 9;
   </div>
 </Layout>
 
+<<<<<<< HEAD
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const tagFilters = document.querySelectorAll(".tag-filter");
@@ -260,6 +428,62 @@ const postsPerPage = 9;
         (loadMoreBtn as HTMLButtonElement).disabled = true;
         loadMoreBtn.classList.add("opacity-50", "cursor-not-allowed");
       });
+=======
+<script define:vars={{ postsPerPage, totalPages }}>
+  document.addEventListener("DOMContentLoaded", () => {
+    const loadMoreBtn = document.getElementById("load-more");
+    const postsContainer = document.getElementById("posts-container");
+
+    if (!(loadMoreBtn instanceof HTMLButtonElement) || !postsContainer) {
+      if (loadMoreBtn && postItems.length <= postsPerPage) {
+        // if button exists but not needed
+        loadMoreBtn.style.display = "none";
+      }
+      return;
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
     }
+
+    const postItems = Array.from(postsContainer.children);
+    let currentPage = 1;
+
+    // Initially hide posts beyond the first page if not all are displayed
+    if (postItems.length > postsPerPage) {
+      for (let i = postsPerPage; i < postItems.length; i++) {
+        const item = postItems[i];
+        if (item instanceof HTMLElement) {
+          item.style.display = "none";
+        }
+      }
+    } else {
+      // If all posts are already shown, hide the button
+      loadMoreBtn.style.display = "none";
+    }
+
+    loadMoreBtn.addEventListener("click", () => {
+      currentPage++;
+      const startIndex = (currentPage - 1) * postsPerPage;
+      const endIndex = Math.min(currentPage * postsPerPage, postItems.length);
+
+      for (let i = startIndex; i < endIndex; i++) {
+        const item = postItems[i];
+        if (item instanceof HTMLElement) {
+          item.style.display = "block"; // Or 'grid' or 'flex' depending on item's display type
+          item.classList.add("animate-fade-in");
+        }
+      }
+
+      if (currentPage >= totalPages || endIndex >= postItems.length) {
+        const currentDocumentLang = document.documentElement.lang;
+        const messages = {
+          en: "No more articles to load",
+          es: "No hay más artículos para cargar",
+          ja: "読み込む記事がありません",
+        };
+
+        loadMoreBtn.textContent = messages[currentDocumentLang] || messages.en;
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.classList.add("opacity-50", "cursor-not-allowed");
+      }
+    });
   });
 </script>
