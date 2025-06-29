@@ -1,45 +1,54 @@
-export const prerender = true;
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import Layout from '@/layouts/Layout.astro';
-import BlogCard from '@/components/blog/BlogCard.astro';
-import { useTranslations, isValidLanguage } from '@/i18n/utils';
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import BlogCard from "@/components/blog/BlogCard.astro";
+import { useTranslations, isValidLanguage } from "@/i18n/utils";
 
 export async function getStaticPaths() {
-  return [
-    { params: { lang: 'es' } },
-    { params: { lang: 'ja' } },
-  ];
+  return [{ params: { lang: "es" } }, { params: { lang: "ja" } }];
 }
 
 const { lang } = Astro.params;
 
 // Validate language
 if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 const t = useTranslations(lang);
 
 // Get blog posts for this language
-const allPostsUnsorted = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
-  return id.startsWith(`${lang}/`) && !data.draft;
-});
+const allPostsUnsorted = await getCollection(
+  "blog",
+  ({ id, data }: CollectionEntry<"blog">) => {
+    return id.startsWith(`${lang}/`) && !data.draft;
+  }
+);
 
 // Get unique tags from all posts for the current language
-const allTags = [...new Set(allPostsUnsorted.flatMap((post: CollectionEntry<'blog'>) => post.data.tags || []))].sort();
+const allTags = [
+  ...new Set(
+    allPostsUnsorted.flatMap(
+      (post: CollectionEntry<"blog">) => post.data.tags || []
+    )
+  ),
+].sort();
 
 // Get current tag from URL
-const currentTag = Astro.url.searchParams.get('tag');
+const currentTag = Astro.url.searchParams.get("tag");
 
 // Filter posts by current tag
 const filteredPostsUnsorted = currentTag
-  ? allPostsUnsorted.filter((post: CollectionEntry<'blog'>) => post.data.tags && post.data.tags.includes(currentTag))
+  ? allPostsUnsorted.filter(
+      (post: CollectionEntry<"blog">) =>
+        post.data.tags && post.data.tags.includes(currentTag)
+    )
   : allPostsUnsorted;
 
 // Sort posts by publication date (newest first)
 const sortedPosts = filteredPostsUnsorted.sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
 const featuredPost = sortedPosts.length > 0 ? sortedPosts[0] : null;
@@ -52,25 +61,29 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
 ---
 
 <Layout
-  title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''} | AstroBlog`}
-  description={t('meta.description')}
-  lang={lang}
->
+  title={`${t("nav.blog")}${currentTag ? ` | #${currentTag}` : ""} | AstroBatavia`}
+  description={t("meta.description")}
+  lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="text-center mb-12">
-      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        {currentTag ? `#${currentTag}` : t('nav.blog')}
+      <h1
+        class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        {currentTag ? `#${currentTag}` : t("nav.blog")}
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        {currentTag
-          ? (lang === 'es' ? `Artículos etiquetados con #${currentTag}` : lang === 'ja' ? `#${currentTag} のタグが付いた記事` : `Articles tagged with #${currentTag}`)
-          : (lang === 'es'
-            ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
-            : lang === 'ja'
-            ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-            : 'Explore our collection of articles covering web development, technology trends, and insights.'
-          )
+        {
+          currentTag
+            ? lang === "es"
+              ? `Artículos etiquetados con #${currentTag}`
+              : lang === "ja"
+                ? `#${currentTag} のタグが付いた記事`
+                : `Articles tagged with #${currentTag}`
+            : lang === "es"
+              ? "Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas."
+              : lang === "ja"
+                ? "ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。"
+                : "Explore our collection of articles covering web development, technology trends, and insights."
         }
       </p>
     </div>
@@ -82,13 +95,25 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
           {sortedPosts.length}
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
-          {lang === 'es'
-            ? (sortedPosts.length === 1 ? 'Artículo' : 'Artículos')
-            : lang === 'ja'
-            ? '記事'
-            : (sortedPosts.length === 1 ? 'Article' : 'Articles')
+          {
+            lang === "es"
+              ? sortedPosts.length === 1
+                ? "Artículo"
+                : "Artículos"
+              : lang === "ja"
+                ? "記事"
+                : sortedPosts.length === 1
+                  ? "Article"
+                  : "Articles"
           }
-          {currentTag && (lang === 'es' ? ` con #${currentTag}` : lang === 'ja' ? ` (#${currentTag})` : ` with #${currentTag}`)}
+          {
+            currentTag &&
+              (lang === "es"
+                ? ` con #${currentTag}`
+                : lang === "ja"
+                  ? ` (#${currentTag})`
+                  : ` with #${currentTag}`)
+          }
         </div>
       </div>
       <div class="text-center">
@@ -96,122 +121,168 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
           {allTags.length}
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
-          {lang === 'es'
-            ? (allTags.length === 1 ? 'Tema' : 'Temas')
-            : lang === 'ja'
-            ? 'トピック'
-            : (allTags.length === 1 ? 'Topic' : 'Topics')
+          {
+            lang === "es"
+              ? allTags.length === 1
+                ? "Tema"
+                : "Temas"
+              : lang === "ja"
+                ? "トピック"
+                : allTags.length === 1
+                  ? "Topic"
+                  : "Topics"
           }
         </div>
       </div>
     </div>
 
     <!-- Tags Filter -->
-    {allTags.length > 0 && (
-      <div class="mb-8">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          {lang === 'es'
-            ? 'Explorar por Tema'
-            : lang === 'ja'
-            ? 'トピック別に閲覧'
-            : 'Browse by Topic'
-          }
-        </h2>
-        <div class="flex flex-wrap gap-2">
-          <a
-            href={`/${lang}/blog`}
-            class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
-              !currentTag
-                ? 'border-primary-600 bg-primary-600 text-white hover:bg-primary-700'
-                : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400'
-            }`}
-          >
-            {lang === 'es' ? 'Todos' : lang === 'ja' ? 'すべて' : 'All'}
-          </a>
-          {allTags.map((tag) => (
+    {
+      allTags.length > 0 && (
+        <div class="mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            {lang === "es"
+              ? "Explorar por Tema"
+              : lang === "ja"
+                ? "トピック別に閲覧"
+                : "Browse by Topic"}
+          </h2>
+          <div class="flex flex-wrap gap-2">
             <a
-              href={`/${lang}/blog?tag=${tag}`}
+              href={`/${lang}/blog`}
               class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
-                currentTag === tag
-                  ? 'border-primary-600 bg-primary-600 text-white hover:bg-primary-700'
-                  : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400'
-              }`}
-            >
-              #{tag}
+                !currentTag
+                  ? "border-primary-600 bg-primary-600 text-white hover:bg-primary-700"
+                  : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400"
+              }`}>
+              {lang === "es" ? "Todos" : lang === "ja" ? "すべて" : "All"}
             </a>
-          ))}
+            {allTags.map((tag) => (
+              <a
+                href={`/${lang}/blog?tag=${tag}`}
+                class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
+                  currentTag === tag
+                    ? "border-primary-600 bg-primary-600 text-white hover:bg-primary-700"
+                    : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400"
+                }`}>
+                #{tag}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    )}
+      )
+    }
 
     <!-- Featured Post Section -->
-    {featuredPost && !currentTag && ( // Only show featured post if no tag is selected
-      <section class="mb-16 animate-fade-in">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center sm:text-left">
-          {t('blog.featuredArticle') || 'Featured Article'}
-        </h2>
-        <div class="featured-post-card">
-          <BlogCard post={featuredPost} lang={lang} isFeatured={true} />
-        </div>
-      </section>
-    )}
+    {
+      featuredPost &&
+        !currentTag && ( // Only show featured post if no tag is selected
+          <section class="mb-16 animate-fade-in">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center sm:text-left">
+              {t("blog.featuredArticle") || "Featured Article"}
+            </h2>
+            <div class="featured-post-card">
+              <BlogCard
+                post={featuredPost}
+                lang={lang}
+                isFeatured={true}
+              />
+            </div>
+          </section>
+        )
+    }
 
     <!-- Posts Grid -->
-    {postsToDisplay.length > 0 ? (
-      <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
-          <div class="post-item animate-fade-in">
-            <BlogCard post={post} lang={lang} />
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div class="text-center py-12">
-        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-          {currentTag ? t('blog.noPostsForTag').replace('{tag}', currentTag) : t('blog.no-posts')}
-        </h3>
-        <p class="text-gray-500 dark:text-gray-400">
-          {currentTag
-            ? (lang === 'es' ? `Intenta con otra etiqueta o revisa todos los artículos.` : lang === 'ja' ? `別のタグを試すか、すべての記事を確認してください。` : `Try a different tag or check all articles.`)
-            : (lang === 'es' ? '¡Vuelve pronto para nuevo contenido!' : lang === 'ja' ? '新しいコンテンツをお楽しみに！' : 'Check back soon for new content!')
-          }
-        </p>
-      </div>
-    )}
+    {
+      postsToDisplay.length > 0 ? (
+        <div
+          id="posts-container"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {postsToDisplay.map((post: CollectionEntry<"blog">) => (
+            <div class="post-item animate-fade-in">
+              <BlogCard
+                post={post}
+                lang={lang}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <svg
+            class="w-16 h-16 mx-auto text-gray-400 mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+            {currentTag
+              ? t("blog.noPostsForTag").replace("{tag}", currentTag)
+              : t("blog.no-posts")}
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            {currentTag
+              ? lang === "es"
+                ? `Intenta con otra etiqueta o revisa todos los artículos.`
+                : lang === "ja"
+                  ? `別のタグを試すか、すべての記事を確認してください。`
+                  : `Try a different tag or check all articles.`
+              : lang === "es"
+                ? "¡Vuelve pronto para nuevo contenido!"
+                : lang === "ja"
+                  ? "新しいコンテンツをお楽しみに！"
+                  : "Check back soon for new content!"}
+          </p>
+        </div>
+      )
+    }
 
     <!-- Load More Button -->
-    {postsToDisplay.length > postsPerPage && (
-      <div class="text-center">
-        <button
-          id="load-more"
-          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200"
-        >
-          {lang === 'es'
-            ? 'Cargar Más Artículos'
-            : lang === 'ja'
-            ? 'もっと記事を読む'
-            : 'Load More Articles'
-          }
-          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-      </div>
-    )}
+    {
+      postsToDisplay.length > postsPerPage && (
+        <div class="text-center">
+          <button
+            id="load-more"
+            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
+            {lang === "es"
+              ? "Cargar Más Artículos"
+              : lang === "ja"
+                ? "もっと記事を読む"
+                : "Load More Articles"}
+            <svg
+              class="ml-2 w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+        </div>
+      )
+    }
   </div>
 </Layout>
 
 <script define:vars={{ postsPerPage, totalPages }}>
-  document.addEventListener('DOMContentLoaded', () => {
-    const loadMoreBtn = document.getElementById('load-more');
-    const postsContainer = document.getElementById('posts-container');
+  document.addEventListener("DOMContentLoaded", () => {
+    const loadMoreBtn = document.getElementById("load-more");
+    const postsContainer = document.getElementById("posts-container");
 
     if (!(loadMoreBtn instanceof HTMLButtonElement) || !postsContainer) {
-      if (loadMoreBtn && postItems.length <= postsPerPage) { // if button exists but not needed
-        loadMoreBtn.style.display = 'none';
+      if (loadMoreBtn && postItems.length <= postsPerPage) {
+        // if button exists but not needed
+        loadMoreBtn.style.display = "none";
       }
       return;
     }
@@ -224,15 +295,15 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
       for (let i = postsPerPage; i < postItems.length; i++) {
         const item = postItems[i];
         if (item instanceof HTMLElement) {
-          item.style.display = 'none';
+          item.style.display = "none";
         }
       }
     } else {
       // If all posts are already shown, hide the button
-      loadMoreBtn.style.display = 'none';
+      loadMoreBtn.style.display = "none";
     }
 
-    loadMoreBtn.addEventListener('click', () => {
+    loadMoreBtn.addEventListener("click", () => {
       currentPage++;
       const startIndex = (currentPage - 1) * postsPerPage;
       const endIndex = Math.min(currentPage * postsPerPage, postItems.length);
@@ -240,22 +311,22 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
       for (let i = startIndex; i < endIndex; i++) {
         const item = postItems[i];
         if (item instanceof HTMLElement) {
-          item.style.display = 'block'; // Or 'grid' or 'flex' depending on item's display type
-          item.classList.add('animate-fade-in');
+          item.style.display = "block"; // Or 'grid' or 'flex' depending on item's display type
+          item.classList.add("animate-fade-in");
         }
       }
 
       if (currentPage >= totalPages || endIndex >= postItems.length) {
         const currentDocumentLang = document.documentElement.lang;
         const messages = {
-          en: 'No more articles to load',
-          es: 'No hay más artículos para cargar',
-          ja: '読み込む記事がありません'
+          en: "No more articles to load",
+          es: "No hay más artículos para cargar",
+          ja: "読み込む記事がありません",
         };
 
         loadMoreBtn.textContent = messages[currentDocumentLang] || messages.en;
         loadMoreBtn.disabled = true;
-        loadMoreBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        loadMoreBtn.classList.add("opacity-50", "cursor-not-allowed");
       }
     });
   });

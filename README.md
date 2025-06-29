@@ -1,4 +1,4 @@
-# AstroBlazeCMS
+# Astro Batavia
 
 ## Table of Contents
 
