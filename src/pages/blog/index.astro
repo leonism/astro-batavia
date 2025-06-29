@@ -21,22 +21,32 @@ const t = useTranslations(lang);
 const posts: Post[] = await getSortedEnglishPosts();
 const allTags: string[] = getAllUniqueTags(posts);
 
-const pageTitle = `${t("nav.blog")} | AstroBlog`;
-const pageDescription = "Discover articles about web development, technology, and more";
+const pageTitle = `${t("nav.blog")} | AstroBatavia`;
+const pageDescription =
+  "Discover articles about web development, technology, and more";
 ---
 
-<Layout title={pageTitle} description={pageDescription} lang={lang}>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <BlogPageHeader
       title={t("nav.blog")}
       description="Explore our collection of articles covering web development, technology trends, and insights."
     />
 
-    <BlogStats postCount={posts.length} tagCount={allTags.length} />
+    <BlogStats
+      postCount={posts.length}
+      tagCount={allTags.length}
+    />
 
     <TagFilter tags={allTags} />
 
-    <PostGrid posts={posts} lang={lang} />
+    <PostGrid
+      posts={posts}
+      lang={lang}
+    />
 
     <LoadMoreButton show={posts.length > POSTS_PER_PAGE} />
   </div>
