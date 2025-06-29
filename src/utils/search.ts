@@ -13,8 +13,8 @@ export interface SearchablePost {
 export interface SearchResult extends SearchablePost {
   url: string;
   formattedPubDate: string;
-  relevanceScore?: number;
-  excerpt?: string;
+  relevanceScore: number;
+  excerpt: string;
 }
 
 export interface SearchMetrics {
@@ -25,29 +25,19 @@ export interface SearchMetrics {
 }
 
 // Enhanced search function with fuzzy matching and relevance scoring
-export function searchPosts(
-  posts: SearchablePost[],
-  query: string,
-  lang: string = "en"
-): SearchResult[] {
+export function searchPosts(posts: SearchablePost[], query: string, lang: string = 'en'): SearchResult[] {
   if (!query || query.trim().length === 0) {
     return [];
   }
 
   const startTime = performance.now();
   const normalizedQuery = normalizeSearchQuery(query);
-  const queryTerms = normalizedQuery
-    .split(/\s+/)
-    .filter((term) => term.length > 1);
+  const queryTerms = normalizedQuery.split(/\s+/).filter(term => term.length > 1);
 
   const results = posts
-    .filter((post) => post.lang === lang)
-    .map((post) => {
-      const relevanceScore = calculateRelevanceScore(
-        post,
-        queryTerms,
-        normalizedQuery
-      );
+    .filter(post => post.lang === lang)
+    .map(post => {
+      const relevanceScore = calculateRelevanceScore(post, queryTerms, normalizedQuery);
       if (relevanceScore === 0) return null;
 
       return {
@@ -55,27 +45,23 @@ export function searchPosts(
         url: generatePostUrl(post.slug, lang),
         formattedPubDate: formatSearchDate(post.pubDate),
         relevanceScore,
-        excerpt: generateExcerpt(post.description, queryTerms),
-      };
+        excerpt: generateExcerpt(post.description, queryTerms)
+      } as SearchResult;
     })
     .filter((result): result is SearchResult => result !== null)
-    .sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
+    .sort((a, b) => b.relevanceScore - a.relevanceScore);
 
   const searchTime = performance.now() - startTime;
-  console.debug(
-    `Search completed in ${searchTime.toFixed(2)}ms, found ${
-      results.length
-    } results`
-  );
+  console.debug(`Search completed in ${searchTime.toFixed(2)}ms, found ${results.length} results`);
 
   return results;
 }
 
 function formatSearchDate(date: Date): string {
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   }).format(date);
 }
 
@@ -84,43 +70,38 @@ function normalizeSearchQuery(query: string): string {
   return query
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, " ")
-    .replace(/\s+/g, " ");
+    .replace(/[^\w\s-]/g, ' ')
+    .replace(/\s+/g, ' ');
 }
 
-function calculateRelevanceScore(
-  post: SearchablePost,
-  queryTerms: string[],
-  fullQuery: string
-): number {
+function calculateRelevanceScore(post: SearchablePost, queryTerms: string[], fullQuery: string): number {
   let score = 0;
   const title = post.title.toLowerCase();
   const description = post.description.toLowerCase();
-  const tags = (post.tags || []).map((tag) => tag.toLowerCase());
-  const author = (post.author || "").toLowerCase();
+  const tags = (post.tags || []).map(tag => tag.toLowerCase());
+  const author = (post.author || '').toLowerCase();
 
   // Exact phrase match (highest priority)
   if (title.includes(fullQuery)) score += 100;
   if (description.includes(fullQuery)) score += 50;
-  if (tags.some((tag) => tag.includes(fullQuery))) score += 75;
+  if (tags.some(tag => tag.includes(fullQuery))) score += 75;
 
   // Individual term matches
-  queryTerms.forEach((term) => {
+  queryTerms.forEach(term => {
     if (title.includes(term)) score += 20;
     if (description.includes(term)) score += 10;
-    if (tags.some((tag) => tag.includes(term))) score += 15;
+    if (tags.some(tag => tag.includes(term))) score += 15;
     if (author.includes(term)) score += 5;
   });
 
   // Boost for title word boundaries
-  queryTerms.forEach((term) => {
+  queryTerms.forEach(term => {
     const titleWords = title.split(/\s+/);
-    if (titleWords.some((word) => word.startsWith(term))) score += 10;
+    if (titleWords.some(word => word.startsWith(term))) score += 10;
   });
 
   // Recency boost (newer posts get slight advantage)
-  const daysSincePublished =
-    (Date.now() - post.pubDate.getTime()) / (1000 * 60 * 60 * 24);
+  const daysSincePublished = (Date.now() - post.pubDate.getTime()) / (1000 * 60 * 60 * 24);
   if (daysSincePublished < 30) score += 5;
   else if (daysSincePublished < 90) score += 2;
 
@@ -128,29 +109,25 @@ function calculateRelevanceScore(
 }
 
 function generatePostUrl(slug: string, lang: string): string {
-  const cleanSlug = slug.replace(new RegExp(`^${lang}/`), "");
-  return lang === "en" ? `/blog/${cleanSlug}` : `/${lang}/blog/${cleanSlug}`;
+  const cleanSlug = slug.replace(new RegExp(`^${lang}/`), '');
+  return lang === 'en' ? `/blog/${cleanSlug}` : `/${lang}/blog/${cleanSlug}`;
 }
 
-function generateExcerpt(
-  description: string,
-  queryTerms: string[],
-  maxLength: number = 150
-): string {
+function generateExcerpt(description: string, queryTerms: string[], maxLength: number = 150): string {
   if (description.length <= maxLength) return description;
 
   // Try to find a sentence containing query terms
   const sentences = description.split(/[.!?]+/);
-  const relevantSentence = sentences.find((sentence) =>
-    queryTerms.some((term) => sentence.toLowerCase().includes(term))
+  const relevantSentence = sentences.find(sentence => 
+    queryTerms.some(term => sentence.toLowerCase().includes(term))
   );
 
   if (relevantSentence && relevantSentence.length <= maxLength) {
-    return relevantSentence.trim() + ".";
+    return relevantSentence.trim() + '.';
   }
 
   // Fallback to truncated description
-  return description.substring(0, maxLength - 3).trim() + "...";
+  return description.substring(0, maxLength - 3).trim() + '...';
 }
 
 // Advanced search with filters
@@ -159,8 +136,8 @@ export interface SearchFilters {
   dateFrom?: Date;
   dateTo?: Date;
   author?: string;
-  sortBy?: "date" | "title" | "relevance";
-  sortOrder?: "asc" | "desc";
+  sortBy?: 'date' | 'title' | 'relevance';
+  sortOrder?: 'asc' | 'desc';
 }
 
 // Client-side advanced search with pre-fetched data
@@ -168,17 +145,15 @@ export function advancedSearchClient(
   posts: SearchablePost[],
   query: string,
   filters: SearchFilters = {},
-  lang: string = "en"
+  lang: string = 'en'
 ): SearchResult[] {
   try {
-    let filteredPosts = posts.filter((post) => post.lang === lang);
+    let filteredPosts = posts.filter(post => post.lang === lang);
 
     // Apply text search
     if (query.trim()) {
       filteredPosts = filteredPosts.filter((post: SearchablePost) => {
-        const searchText = `${post.title} ${post.description} ${(
-          post.tags || []
-        ).join(" ")}`.toLowerCase();
+        const searchText = `${post.title} ${post.description} ${(post.tags || []).join(' ')}`.toLowerCase();
         return searchText.includes(query.toLowerCase());
       });
     }
@@ -186,79 +161,68 @@ export function advancedSearchClient(
     // Apply tag filter
     if (filters.tags && filters.tags.length > 0) {
       filteredPosts = filteredPosts.filter((post: SearchablePost) => {
-        return filters.tags!.some((tag) => (post.tags || []).includes(tag));
+        return filters.tags!.some(tag => (post.tags || []).includes(tag));
       });
     }
 
     // Apply date range filter
     if (filters.dateFrom) {
-      filteredPosts = filteredPosts.filter(
-        (post: SearchablePost) => post.pubDate >= filters.dateFrom!
-      );
+      filteredPosts = filteredPosts.filter((post: SearchablePost) => post.pubDate >= filters.dateFrom!);
     }
 
     if (filters.dateTo) {
-      filteredPosts = filteredPosts.filter(
-        (post: SearchablePost) => post.pubDate <= filters.dateTo!
-      );
+      filteredPosts = filteredPosts.filter((post: SearchablePost) => post.pubDate <= filters.dateTo!);
     }
 
     // Sort results
-    const sortBy = filters.sortBy || "date";
-    const sortOrder = filters.sortOrder || "desc";
+    const sortBy = filters.sortBy || 'date';
+    const sortOrder = filters.sortOrder || 'desc';
 
     filteredPosts.sort((a: SearchablePost, b: SearchablePost) => {
       let comparison = 0;
 
       switch (sortBy) {
-        case "title":
+        case 'title':
           comparison = a.title.localeCompare(b.title);
           break;
-        case "date":
+        case 'date':
           comparison = a.pubDate.getTime() - b.pubDate.getTime();
           break;
-        case "relevance":
+        case 'relevance':
           // Simple relevance scoring based on query matches in title vs description
           const aTitle = a.title.toLowerCase();
           const bTitle = b.title.toLowerCase();
           const queryLower = query.toLowerCase();
 
-          const aScore =
-            (aTitle.includes(queryLower) ? 2 : 0) +
-            (a.description.toLowerCase().includes(queryLower) ? 1 : 0);
-          const bScore =
-            (bTitle.includes(queryLower) ? 2 : 0) +
-            (b.description.toLowerCase().includes(queryLower) ? 1 : 0);
+          const aScore = (aTitle.includes(queryLower) ? 2 : 0) +
+                        (a.description.toLowerCase().includes(queryLower) ? 1 : 0);
+          const bScore = (bTitle.includes(queryLower) ? 2 : 0) +
+                        (b.description.toLowerCase().includes(queryLower) ? 1 : 0);
 
           comparison = bScore - aScore;
           break;
       }
 
-      return sortOrder === "desc" ? -comparison : comparison;
+      return sortOrder === 'desc' ? -comparison : comparison;
     });
 
     return filteredPosts.map((post: SearchablePost) => ({
       ...post,
-      url:
-        lang === "en"
-          ? `/blog/${post.slug.replace("en/", "")}`
-          : `/${lang}/blog/${post.slug.replace(`${lang}/`, "")}`,
+      url: lang === 'en' ? `/blog/${post.slug.replace('en/', '')}` : `/${lang}/blog/${post.slug.replace(`${lang}/`, '')}`,
       formattedPubDate: formatSearchDate(post.pubDate),
+      relevanceScore: 0,
+      excerpt: post.description.substring(0, 150) + (post.description.length > 150 ? '...' : ''),
     }));
   } catch (error) {
-    console.error("Advanced search error:", error);
+    console.error('Advanced search error:', error);
     return [];
   }
 }
 
 // Client-side function to get popular tags from pre-fetched data
-export function getPopularTagsClient(
-  posts: SearchablePost[],
-  lang: string = "en",
-  limit: number = 10
-): { tag: string; count: number }[] {
+export function getPopularTagsClient(posts: SearchablePost[], lang: string = 'en', limit: number = 10): { tag: string; count: number }[] {
   try {
-    const filteredPosts = posts.filter((post) => post.lang === lang);
+    const filteredPosts = posts.filter(post => post.lang === lang);
     const tagCounts = new Map<string, number>();
 
     filteredPosts.forEach((post: SearchablePost) => {
@@ -272,22 +236,17 @@ export function getPopularTagsClient(
       .sort((a, b) => b.count - a.count)
       .slice(0, limit);
   } catch (error) {
-    console.error("Error getting popular tags:", error);
+    console.error('Error getting popular tags:', error);
     return [];
   }
 }
 
 // Client-side search suggestions from pre-fetched data
-export function getSearchSuggestionsClient(
-  posts: SearchablePost[],
-  partialQuery: string,
-  lang: string = "en",
-  limit: number = 5
-): string[] {
+export function getSearchSuggestionsClient(posts: SearchablePost[], partialQuery: string, lang: string = 'en', limit: number = 5): string[] {
   try {
     if (partialQuery.length < 2) return [];
 
-    const filteredPosts = posts.filter((post) => post.lang === lang);
+    const filteredPosts = posts.filter(post => post.lang === lang);
     const suggestions = new Set<string>();
     const queryLower = partialQuery.toLowerCase();
 
@@ -306,10 +265,7 @@ export function getSearchSuggestionsClient(
 
       // Add matching tags
       (post.tags || []).forEach((tag: string) => {
-        if (
-          tag.toLowerCase().includes(queryLower) &&
-          suggestions.size < limit * 3
-        ) {
+        if (tag.toLowerCase().includes(queryLower) && suggestions.size < limit * 3) {
           suggestions.add(tag);
         }
       });
@@ -325,7 +281,7 @@ export function getSearchSuggestionsClient(
       })
       .slice(0, limit);
   } catch (error) {
-    console.error("Error getting search suggestions:", error);
+    console.error('Error getting search suggestions:', error);
     return [];
   }
 }
