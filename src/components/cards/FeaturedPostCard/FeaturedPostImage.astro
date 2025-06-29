@@ -1,0 +1,16 @@
+---
+interface Props {
+  heroImage: string;
+  index: number;
+}
+
+const { heroImage, index } = Astro.props;
+---
+
+<img
+  src={heroImage || "/images/placeholder-hero.svg"}
+  alt=""
+  class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  loading={index > 1 ? "lazy" : "eager"}
+  decoding="async"
+/>

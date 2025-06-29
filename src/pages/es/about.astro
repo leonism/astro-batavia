@@ -1,0 +1,383 @@
+---
+import Layout from "@/layouts/Layout.astro";
+const lang = "es";
+---
+
+<Layout
+  title="Sobre Nosotros - Astro Batavia"
+  description="Conozca nuestra misión de compartir conocimientos tecnológicos de vanguardia e innovaciones de IA con desarrolladores y entusiastas de la tecnología en todo el mundo."
+  lang={lang}>
+  <!-- TODO: Translate content to Spanish -->
+  <!-- Hero Section -->
+  <section
+    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1
+          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+          Sobre <span
+            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
+            >Astro Batavia</span
+          >
+        </h1>
+        <p
+          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          Nos apasiona compartir los últimos conocimientos en tecnología,
+          inteligencia artificial y desarrollo de software con una comunidad
+          global de innovadores y estudiantes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Section -->
+  <section class="py-24 bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2
+            class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
+            Nuestra Misión
+          </h2>
+          <p
+            class="text-lg text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+            Astro Batavia fue fundado con una misión simple pero poderosa:
+            democratizar el acceso al conocimiento tecnológico de vanguardia y
+            hacer que los conceptos tecnológicos complejos sean accesibles para
+            todos, independientemente de su experiencia o nivel de conocimiento.
+          </p>
+          <p
+            class="text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+            Creemos que la tecnología tiene el poder de resolver los mayores
+            desafíos de la humanidad, y al compartir conocimientos, podemos
+            acelerar la innovación y crear un futuro mejor para todos.
+          </p>
+
+          <div class="space-y-4">
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <svg
+                  class="w-4 h-4 text-blue-600 dark:text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-slate-700 dark:text-slate-300"
+                >Perspectivas de expertos de líderes de la industria</span
+              >
+            </div>
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <svg
+                  class="w-4 h-4 text-blue-600 dark:text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-slate-700 dark:text-slate-300"
+                >Tutoriales prácticos y guías prácticas</span
+              >
+            </div>
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <svg
+                  class="w-4 h-4 text-blue-600 dark:text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-slate-700 dark:text-slate-300"
+                >Contenido y debates impulsados por la comunidad</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div
+            class="aspect-w-4 aspect-h-3 rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1"
+              alt="Team collaboration"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <!-- Decorative elements -->
+          <div
+            class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-2xl opacity-20 transform rotate-12">
+          </div>
+          <div
+            class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-tr from-purple-400 to-pink-600 rounded-full opacity-20">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="py-24 bg-slate-50 dark:bg-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2
+          class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
+          Conoce a Nuestro <span
+            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
+            >Equipo de Expertos</span
+          >
+        </h2>
+        <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          Nuestro diverso equipo de tecnólogos, investigadores y escritores
+          aporta décadas de experiencia combinada en IA, desarrollo de software
+          y tecnologías emergentes.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Team Member 1 -->
+        <div
+          class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+          <div class="text-center">
+            <div
+              class="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+              <span class="text-2xl font-bold text-white">SC</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+              Sarah Chen
+            </h3>
+            <p class="text-blue-600 dark:text-blue-400 font-medium mb-4">
+              Líder de Investigación de IA
+            </p>
+            <p
+              class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+              Doctora en Aprendizaje Automático de Stanford. Ex investigadora de
+              Google AI con más de 10 años en aprendizaje profundo y redes
+              neuronales.
+            </p>
+          </div>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div
+          class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+          <div class="text-center">
+            <div
+              class="w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+              <span class="text-2xl font-bold text-white">MR</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+              Dr. Michael Rodriguez
+            </h3>
+            <p class="text-purple-600 dark:text-purple-400 font-medium mb-4">
+              Escritor Senior de Tecnología
+            </p>
+            <p
+              class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+              Ex CTO convertido en periodista tecnológico. Se especializa en
+              hacer que las tecnologías complejas sean accesibles a través de
+              contenido claro y atractivo.
+            </p>
+          </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div
+          class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+          <div class="text-center">
+            <div
+              class="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+              <span class="text-2xl font-bold text-white">EJ</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+              Emma Johnson
+            </h3>
+            <p class="text-green-600 dark:text-green-400 font-medium mb-4">
+              Especialista en Blockchain
+            </p>
+            <p
+              class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+              Arquitecta y consultora de Blockchain. Experta en sistemas
+              distribuidos, contratos inteligentes y tecnologías de
+              criptomonedas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="py-24 bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2
+          class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
+          Nuestros Valores Fundamentales
+        </h2>
+        <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          Estos principios guían todo lo que hacemos, desde la creación de
+          contenido hasta la construcción de la comunidad.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+            <svg
+              class="w-8 h-8 text-blue-600 dark:text-blue-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Innovación
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">
+            Exploramos continuamente tecnologías emergentes y compartimos las
+            últimas innovaciones con nuestra comunidad.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+            <svg
+              class="w-8 h-8 text-green-600 dark:text-green-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Educación
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">
+            Creemos en el poder de la educación para transformar vidas e
+            impulsar el progreso tecnológico.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+            <svg
+              class="w-8 h-8 text-purple-600 dark:text-purple-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Comunidad
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">
+            Fomentamos una comunidad inclusiva donde el intercambio de
+            conocimientos y la colaboración prosperan.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+            <svg
+              class="w-8 h-8 text-orange-600 dark:text-orange-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Integridad
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">
+            Mantenemos los más altos estándares de precisión y responsabilidad
+            ética en todo nuestro contenido.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section
+    class="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
+        Únete a Nuestra Comunidad Tecnológica
+      </h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        Mantente actualizado con los últimos conocimientos tecnológicos,
+        desarrollos de IA y tendencias de la industria. Únete a miles de
+        desarrolladores y entusiastas de la tecnología que confían en Astro
+        Batavia.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/blog"
+          class="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-2xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+          Explorar Artículos
+          <svg
+            class="ml-2 w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            ></path>
+          </svg>
+        </a>
+        <a
+          href="/contact"
+          class="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-2xl hover:bg-white/20 transition-all duration-300 border-2 border-white/20">
+          Ponte en Contacto
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

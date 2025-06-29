@@ -1,0 +1,69 @@
+---
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
+import FooterBrand from "@/components/footer/FooterBrand.astro";
+import FooterLinks, { type Link } from "@/components/footer/FooterLinks.astro";
+import FooterBottomBar from "@/components/footer/FooterBottomBar.astro";
+
+const lang = getLangFromUrl(Astro.url) as LanguageKey;
+const t = useTranslations(lang);
+const currentYear = new Date().getFullYear();
+const navigationLinks: Link[] = [
+  { href: `/`, text: t("nav.home"), isLocalized: true }, // Assuming home should be localized
+  { href: `/blog`, text: t("nav.blog"), isLocalized: true }, // Assuming blog should be localized
+  { href: `/about`, text: t("nav.about"), isLocalized: true }, // Assuming about should be localized
+  { href: `/services`, text: t("nav.services"), isLocalized: true }, // Assuming services should be localized
+  { href: `/search`, text: t("nav.search"), isLocalized: true }, // Assuming search should be localized
+];
+const legalLinks: Link[] = [
+  {
+    href: `/cookies`,
+    text: t("legal.cookiesPolicy"),
+    isLocalized: true,
+  },
+  {
+    href: `/privacy`,
+    text: t("legal.privacyPolicy"),
+    isLocalized: true,
+  },
+  { href: `/contact`, text: t("nav.contact"), isLocalized: true },
+  {
+    href: `/terms`,
+    text: t("legal.termsOfService"),
+    isLocalized: true,
+  },
+];
+const resourceLinks: Link[] = [
+  { href: "https://astro.build", text: "Astro.js", isExternal: true },
+  { href: "https://tailwindcss.com", text: "Tailwind CSS", isExternal: true },
+  { href: "https://decapcms.org", text: "Decap CMS", isExternal: true },
+];
+---
+
+<footer
+  class="bg-gray-50 dark:bg-slate-900/80 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-5 justify-around">
+      <FooterBrand lang={lang} />
+      <FooterLinks
+        title="Navigation"
+        links={navigationLinks}
+        lang={lang}
+      />
+      <FooterLinks
+        title="Resources"
+        links={resourceLinks}
+        lang={lang}
+      />
+      <FooterLinks
+        title="Legal"
+        links={legalLinks}
+        lang={lang}
+      />
+    </div>
+    <FooterBottomBar
+      lang={lang}
+      currentYear={currentYear}
+    />
+  </div>
+</footer>

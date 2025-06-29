@@ -1,37 +1,52 @@
+export const prerender = true;
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '@/layouts/BlogPost.astro';
 import { isValidLanguage } from '@/i18n/utils';
 
+interface PathParams {
+  lang: string;
+  slug: string;
+}
+
+interface StaticPath {
+  params: PathParams;
+  props: CollectionEntry<'blog'>;
+}
+
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-  
-  const paths = [];
-  
-  // Generate paths for Spanish posts
-  const esPosts = allPosts.filter(post => post.id.startsWith('es/'));
-  esPosts.forEach(post => {
+  const allPosts = await getCollection('blog', ({ data }: { data: CollectionEntry<'blog'>['data'] }) => !data.draft);
+
+  const paths: StaticPath[] = [];
+
+  // Generate paths for all languages
+  allPosts.forEach((post: CollectionEntry<'blog'>) => {
+    const parts = post.id.split('/');
+    let lang = 'en'; // Default language
+    let slugPart = post.id; // Initialize with full ID
+
+    // Determine if the first part is a language code
+    if (parts.length > 1 && (parts[0] === 'es' || parts[0] === 'ja' || parts[0] === 'en')) {
+      lang = parts[0];
+      slugPart = parts.slice(1).join('/'); // Get the part after the language prefix
+    } else {
+      // If no language prefix, assume English and the whole ID is the slug part
+      lang = 'en';
+      slugPart = post.id;
+    }
+
+    // Remove the file extension (.mdx or .md) from the slug part
+    const finalSlug = slugPart.replace(/\.(mdx?)$/, '');
+
     paths.push({
-      params: { 
-        lang: 'es',
-        slug: post.slug.replace('es/', '')
+      params: {
+        lang: lang,
+        slug: finalSlug // Use the carefully constructed slug
       },
       props: post,
     });
   });
-  
-  // Generate paths for Japanese posts
-  const jaPosts = allPosts.filter(post => post.id.startsWith('ja/'));
-  jaPosts.forEach(post => {
-    paths.push({
-      params: { 
-        lang: 'ja',
-        slug: post.slug.replace('ja/', '')
-      },
-      props: post,
-    });
-  });
-  
+
   return paths;
 }
 
