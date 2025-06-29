@@ -10,6 +10,9 @@
         "description": {
           "type": "string"
         },
+        "slug": {
+          "type": "string"
+        },
         "author": {
           "type": "string",
           "default": "Admin"

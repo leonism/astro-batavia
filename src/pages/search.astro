@@ -1,301 +1,68 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '@/layouts/Layout.astro';
-import BlogCard from '@/components/BlogCard.astro';
-import { useTranslations } from '@/i18n/utils';
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import { useTranslations } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
+
+import SearchPageHeader from "@/components/search/SearchPageHeader.astro";
+import SearchInputForm from "@/components/search/SearchInputForm.astro";
+import SearchFilters from "@/components/search/SearchFilters.astro";
+import SearchResults from "@/components/search/SearchResults.astro";
 
 // Get all English blog posts for search
-const allPosts = await getCollection('blog', ({ id, data }) => {
-  return id.startsWith('en/') && !data.draft;
-});
+const allPostsUnsorted = await getCollection(
+  "blog",
+  ({ id, data }: CollectionEntry<"blog">) => {
+    return id.startsWith("en/") && !data.draft;
+  }
+);
 
-const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+// This initial sort might be overridden by client-side sort, but good for no-JS/initial display
+const posts = allPostsUnsorted.sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 
-const lang = 'en';
+const lang = "en" as LanguageKey; // Hardcoded for this non-localized search page
 const t = useTranslations(lang);
 
-// Get all unique tags
-const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+const allTags: string[] = [
+  ...new Set(
+    posts.flatMap((post: CollectionEntry<"blog">) => post.data.tags || [])
+  ),
+].sort() as string[];
+
+const pageTitle = `${t("nav.search")} | AstroBatavia`;
+const pageDescription =
+  "Search through our collection of articles and find exactly what you're looking for";
+const searchPageDescription =
+  "Find articles, topics, and insights across our entire blog collection.";
+const initialStatusText = `Enter a search term to find articles, or browse all ${posts.length} articles below.`;
 ---
 
-<Layout 
-  title={`${t('nav.search')} | AstroBlog`}
-  description="Search through our collection of articles and find exactly what you're looking for"
-  lang={lang}
->
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header -->
-    <div class="text-center mb-12">
-      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        {t('nav.search')}
-      </h1>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        Find articles, topics, and insights across our entire blog collection.
-      </p>
-    </div>
-
-    <!-- Enhanced Search Box -->
-    <div class="max-w-2xl mx-auto mb-12">
-      <div class="relative">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </div>
-        <input
-          type="search"
-          id="main-search-input"
-          placeholder={t('search.placeholder')}
-          class="block w-full pl-10 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-colors duration-200 shadow-sm"
-          autocomplete="off"
-          spellcheck="false"
-        />
-        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-          <kbd class="hidden sm:inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs font-medium text-gray-500 dark:text-gray-400">
-            ⌘K
-          </kbd>
-        </div>
-      </div>
-    </div>
-
-    <!-- Search Filters -->
-    <div class="mb-8">
-      <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <!-- Tags Filter -->
-        <div class="flex-1">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Filter by topic:
-          </label>
-          <div class="flex flex-wrap gap-2">
-            <button 
-              class="tag-filter active px-3 py-1.5 text-sm font-medium rounded-full border border-primary-600 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200"
-              data-tag="all"
-            >
-              All Topics
-            </button>
-            {allTags.slice(0, 10).map((tag) => (
-              <button 
-                class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
-                data-tag={tag}
-              >
-                #{tag}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <!-- Sort Options -->
-        <div class="flex flex-col sm:flex-row gap-2">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:sr-only">
-            Sort by:
-          </label>
-          <select 
-            id="sort-select"
-            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          >
-            <option value="date-desc">Newest First</option>
-            <option value="date-asc">Oldest First</option>
-            <option value="title-asc">Title A-Z</option>
-            <option value="title-desc">Title Z-A</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <!-- Search Results -->
-    <div id="search-results" class="mb-8">
-      <div id="search-status" class="text-center text-gray-500 dark:text-gray-400 mb-6">
-        Enter a search term to find articles, or browse all {posts.length} articles below.
-      </div>
-      
-      <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.map((post) => (
-          <div class="post-item" data-tags={JSON.stringify(post.data.tags || [])} data-title={post.data.title} data-description={post.data.description} data-date={post.data.pubDate.toISOString()}>
-            <BlogCard post={post} lang={lang} />
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- No Results State -->
-    <div id="no-results" class="hidden text-center py-12">
-      <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-      </svg>
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-        {t('search.no-results')}
-      </h3>
-      <p class="text-gray-500 dark:text-gray-400 mb-4">
-        Try adjusting your search terms or browse our topics below.
-      </p>
-      <button 
-        id="clear-search"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors duration-200"
-      >
-        Clear Search
-      </button>
-    </div>
+    <SearchPageHeader
+      title={t("nav.search")}
+      description={searchPageDescription}
+    />
+    <SearchInputForm placeholder={t("search.placeholder")} />
+    <SearchFilters tags={allTags} />
+    <SearchResults
+      posts={posts}
+      lang={lang}
+      noResultsText={t("search.no-results")}
+      initialStatusText={initialStatusText}
+    />
   </div>
 </Layout>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('main-search-input') as HTMLInputElement;
-    const tagFilters = document.querySelectorAll('.tag-filter');
-    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
-    const postItems = document.querySelectorAll('.post-item');
-    const resultsContainer = document.getElementById('results-container');
-    const searchStatus = document.getElementById('search-status');
-    const noResults = document.getElementById('no-results');
-    const clearSearch = document.getElementById('clear-search');
-
-    if (!searchInput || !resultsContainer || !searchStatus || !noResults) return;
-
-    let currentQuery = '';
-    let currentTag = 'all';
-    let currentSort = 'date-desc';
-
-    // Keyboard shortcut for search
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInput.focus();
-      }
-    });
-
-    // Search functionality
-    function performSearch() {
-      const query = searchInput.value.toLowerCase().trim();
-      const filteredItems: Element[] = [];
-
-      postItems.forEach(item => {
-        const title = item.getAttribute('data-title')?.toLowerCase() || '';
-        const description = item.getAttribute('data-description')?.toLowerCase() || '';
-        const tags = JSON.parse(item.getAttribute('data-tags') || '[]');
-        
-        // Check if matches search query
-        const matchesQuery = !query || title.includes(query) || description.includes(query) || 
-                            tags.some((tag: string) => tag.toLowerCase().includes(query));
-        
-        // Check if matches selected tag
-        const matchesTag = currentTag === 'all' || tags.includes(currentTag);
-        
-        if (matchesQuery && matchesTag) {
-          filteredItems.push(item);
-          (item as HTMLElement).style.display = 'block';
-        } else {
-          (item as HTMLElement).style.display = 'none';
-        }
-      });
-
-      // Sort results
-      sortResults(filteredItems);
-
-      // Update status
-      updateSearchStatus(filteredItems.length, query);
-    }
-
-    // Sort results
-    function sortResults(items: Element[]) {
-      const sortedItems = Array.from(items).sort((a, b) => {
-        const aTitle = a.getAttribute('data-title') || '';
-        const bTitle = b.getAttribute('data-title') || '';
-        const aDate = new Date(a.getAttribute('data-date') || '');
-        const bDate = new Date(b.getAttribute('data-date') || '');
-
-        switch (currentSort) {
-          case 'date-asc':
-            return aDate.getTime() - bDate.getTime();
-          case 'title-asc':
-            return aTitle.localeCompare(bTitle);
-          case 'title-desc':
-            return bTitle.localeCompare(aTitle);
-          case 'date-desc':
-          default:
-            return bDate.getTime() - aDate.getTime();
-        }
-      });
-
-      // Reorder DOM elements
-      sortedItems.forEach(item => {
-        resultsContainer?.appendChild(item);
-      });
-    }
-
-    // Update search status
-    function updateSearchStatus(count: number, query: string) {
-      if (query) {
-        if (count === 0) {
-          searchStatus!.style.display = 'none';
-          noResults!.style.display = 'block';
-        } else {
-          searchStatus!.style.display = 'block';
-          noResults!.style.display = 'none';
-          searchStatus!.textContent = `Found ${count} article${count === 1 ? '' : 's'} matching "${query}"`;
-        }
-      } else {
-        searchStatus!.style.display = 'block';
-        noResults!.style.display = 'none';
-        if (currentTag === 'all') {
-          searchStatus!.textContent = `Showing all ${count} articles`;
-        } else {
-          searchStatus!.textContent = `Showing ${count} article${count === 1 ? '' : 's'} tagged with "${currentTag}"`;
-        }
-      }
-    }
-
-    // Search input event
-    searchInput.addEventListener('input', (e) => {
-      currentQuery = (e.target as HTMLInputElement).value;
-      performSearch();
-    });
-
-    // Tag filter events
-    tagFilters.forEach(filter => {
-      filter.addEventListener('click', () => {
-        // Update active filter
-        tagFilters.forEach(f => {
-          f.classList.remove('active', 'bg-primary-600', 'text-white');
-          f.classList.add('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-        });
-        
-        filter.classList.add('active', 'bg-primary-600', 'text-white');
-        filter.classList.remove('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-        
-        currentTag = filter.getAttribute('data-tag') || 'all';
-        performSearch();
-      });
-    });
-
-    // Sort change event
-    sortSelect.addEventListener('change', () => {
-      currentSort = sortSelect.value;
-      performSearch();
-    });
-
-    // Clear search
-    clearSearch?.addEventListener('click', () => {
-      searchInput.value = '';
-      currentQuery = '';
-      currentTag = 'all';
-      
-      // Reset tag filters
-      tagFilters.forEach(f => {
-        f.classList.remove('active', 'bg-primary-600', 'text-white');
-        f.classList.add('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-      });
-      
-      const allFilter = document.querySelector('[data-tag="all"]');
-      if (allFilter) {
-        allFilter.classList.add('active', 'bg-primary-600', 'text-white');
-        allFilter.classList.remove('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-      }
-      
-      performSearch();
-      searchInput.focus();
-    });
-
-    // Initial load
-    performSearch();
+  import { initializeSearchPage } from "@/features/search/searchClient";
+  document.addEventListener("DOMContentLoaded", () => {
+    initializeSearchPage();
   });
 </script>
