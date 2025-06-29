@@ -1,53 +1,59 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '@/layouts/Layout.astro';
-import BlogCard from '@/components/BlogCard.astro';
-import { getLangFromUrl, useTranslations, isValidLanguage } from '@/i18n/utils';
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import { useTranslations, isValidLanguage } from "@/i18n/utils"; // Removed getLangFromUrl
 
 export async function getStaticPaths() {
-  return [
-    { params: { lang: 'es' } },
-    { params: { lang: 'ja' } },
-  ];
+  return [{ params: { lang: "es" } }, { params: { lang: "ja" } }];
 }
 
 const { lang } = Astro.params;
 
 // Validate language
 if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 const t = useTranslations(lang);
 
-// Get blog posts for this language
-const allPosts = await getCollection('blog', ({ id, data }) => {
-  return id.startsWith(`${lang}/`) && !data.draft;
-});
+// Get all unique tags for the current language to display filter buttons
+// This still loads all posts for the language just to get tags.
+// A more optimized approach might be a separate API endpoint for tags or pre-building a tag list.
+const allPostsForTags = await getCollection(
+  "blog",
+  ({ id, data }: CollectionEntry<"blog">) => {
+    return id.startsWith(`${lang}/`) && !data.draft;
+  }
+);
+const allTags = [
+  ...new Set(
+    allPostsForTags.flatMap(
+      (post: CollectionEntry<"blog">) => post.data.tags || []
+    )
+  ),
+].sort();
 
-const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-// Get all unique tags
-const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+// Initial posts list will be empty, fetched via API on client side.
 ---
 
-<Layout 
-  title={`${t('nav.search')} | AstroBlog`}
-  description={t('meta.description')}
-  lang={lang}
->
+<Layout
+  title={`${t("nav.search")} | AstroBatavia`}
+  description={t("meta.description")}
+  lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="text-center mb-12">
-      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        {t('nav.search')}
+      <h1
+        class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        {t("nav.search")}
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        {lang === 'es' 
-          ? 'Encuentra artículos, temas e ideas en toda nuestra colección de blog.'
-          : lang === 'ja'
-          ? 'ブログ全体から記事、トピック、洞察を見つけてください。'
-          : 'Find articles, topics, and insights across our entire blog collection.'
+        {
+          lang === "es"
+            ? "Encuentra artículos, temas e ideas en toda nuestra colección de blog."
+            : lang === "ja"
+              ? "ブログ全体から記事、トピック、洞察を見つけてください。"
+              : "Find articles, topics, and insights across our entire blog collection."
         }
       </p>
     </div>
@@ -55,21 +61,32 @@ const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
     <!-- Enhanced Search Box -->
     <div class="max-w-2xl mx-auto mb-12">
       <div class="relative">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg
+            class="h-6 w-6 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
           </svg>
         </div>
         <input
           type="search"
           id="main-search-input"
-          placeholder={t('search.placeholder')}
+          placeholder={t("search.placeholder")}
           class="block w-full pl-10 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-colors duration-200 shadow-sm"
           autocomplete="off"
           spellcheck="false"
         />
         <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-          <kbd class="hidden sm:inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs font-medium text-gray-500 dark:text-gray-400">
+          <kbd
+            class="hidden sm:inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs font-medium text-gray-500 dark:text-gray-400">
             ⌘K
           </kbd>
         </div>
@@ -78,65 +95,94 @@ const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 
     <!-- Search Filters -->
     <div class="mb-8">
-      <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <div
+        class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <!-- Tags Filter -->
         <div class="flex-1">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {lang === 'es' 
-              ? 'Filtrar por tema:'
-              : lang === 'ja'
-              ? 'トピック別にフィルター:'
-              : 'Filter by topic:'
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {
+              lang === "es"
+                ? "Filtrar por tema:"
+                : lang === "ja"
+                  ? "トピック別にフィルター:"
+                  : "Filter by topic:"
             }
           </label>
           <div class="flex flex-wrap gap-2">
-            <button 
+            <button
               class="tag-filter active px-3 py-1.5 text-sm font-medium rounded-full border border-primary-600 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200"
-              data-tag="all"
-            >
-              {lang === 'es' 
-                ? 'Todos los Temas'
-                : lang === 'ja'
-                ? 'すべてのトピック'
-                : 'All Topics'
+              data-tag="all">
+              {
+                lang === "es"
+                  ? "Todos los Temas"
+                  : lang === "ja"
+                    ? "すべてのトピック"
+                    : "All Topics"
               }
             </button>
-            {allTags.slice(0, 10).map((tag) => (
-              <button 
-                class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
-                data-tag={tag}
-              >
-                #{tag}
-              </button>
-            ))}
+            {
+              allTags.slice(0, 10).map((tag) => (
+                <button
+                  class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+                  data-tag={tag}>
+                  #{tag}
+                </button>
+              ))
+            }
           </div>
         </div>
 
         <!-- Sort Options -->
         <div class="flex flex-col sm:flex-row gap-2">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:sr-only">
-            {lang === 'es' 
-              ? 'Ordenar por:'
-              : lang === 'ja'
-              ? '並び替え:'
-              : 'Sort by:'
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:sr-only">
+            {
+              lang === "es"
+                ? "Ordenar por:"
+                : lang === "ja"
+                  ? "並び替え:"
+                  : "Sort by:"
             }
           </label>
-          <select 
+          <select
             id="sort-select"
-            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          >
+            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
             <option value="date-desc">
-              {lang === 'es' ? 'Más Recientes' : lang === 'ja' ? '最新順' : 'Newest First'}
+              {
+                lang === "es"
+                  ? "Más Recientes"
+                  : lang === "ja"
+                    ? "最新順"
+                    : "Newest First"
+              }
             </option>
             <option value="date-asc">
-              {lang === 'es' ? 'Más Antiguos' : lang === 'ja' ? '古い順' : 'Oldest First'}
+              {
+                lang === "es"
+                  ? "Más Antiguos"
+                  : lang === "ja"
+                    ? "古い順"
+                    : "Oldest First"
+              }
             </option>
             <option value="title-asc">
-              {lang === 'es' ? 'Título A-Z' : lang === 'ja' ? 'タイトル A-Z' : 'Title A-Z'}
+              {
+                lang === "es"
+                  ? "Título A-Z"
+                  : lang === "ja"
+                    ? "タイトル A-Z"
+                    : "Title A-Z"
+              }
             </option>
             <option value="title-desc">
-              {lang === 'es' ? 'Título Z-A' : lang === 'ja' ? 'タイトル Z-A' : 'Title Z-A'}
+              {
+                lang === "es"
+                  ? "Título Z-A"
+                  : lang === "ja"
+                    ? "タイトル Z-A"
+                    : "Title Z-A"
+              }
             </option>
           </select>
         </div>
@@ -144,171 +190,284 @@ const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
     </div>
 
     <!-- Search Results -->
-    <div id="search-results" class="mb-8">
-      <div id="search-status" class="text-center text-gray-500 dark:text-gray-400 mb-6">
-        {lang === 'es' 
-          ? `Ingresa un término de búsqueda para encontrar artículos, o explora todos los ${posts.length} artículos a continuación.`
-          : lang === 'ja'
-          ? `記事を検索するには検索語を入力するか、以下の${posts.length}記事をすべて閲覧してください。`
-          : `Enter a search term to find articles, or browse all ${posts.length} articles below.`
-        }
+    <div
+      id="search-results"
+      class="mb-8">
+      <div
+        id="search-status"
+        class="text-center text-gray-500 dark:text-gray-400 mb-6">
+        {/* This message will be updated by JS */}
+        Please enter a search term to begin.
       </div>
-      
-      <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.map((post) => (
-          <div class="post-item" data-tags={JSON.stringify(post.data.tags || [])} data-title={post.data.title} data-description={post.data.description} data-date={post.data.pubDate.toISOString()}>
-            <BlogCard post={post} lang={lang} />
-          </div>
-        ))}
+
+      <div
+        id="results-container"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Results will be rendered here by client-side JavaScript */}
       </div>
     </div>
 
     <!-- No Results State -->
-    <div id="no-results" class="hidden text-center py-12">
-      <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+    <div
+      id="no-results"
+      class="hidden text-center py-12">
+      <svg
+        class="w-16 h-16 mx-auto text-gray-400 mb-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        ></path>
       </svg>
       <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-        {t('search.no-results')}
+        {t("search.no-results")}
       </h3>
       <p class="text-gray-500 dark:text-gray-400 mb-4">
-        {lang === 'es' 
-          ? 'Intenta ajustar tus términos de búsqueda o explora nuestros temas a continuación.'
-          : lang === 'ja'
-          ? '検索語を調整するか、以下のトピックを閲覧してください。'
-          : 'Try adjusting your search terms or browse our topics below.'
+        {
+          lang === "es"
+            ? "Intenta ajustar tus términos de búsqueda o explora nuestros temas a continuación."
+            : lang === "ja"
+              ? "検索語を調整するか、以下のトピックを閲覧してください。"
+              : "Try adjusting your search terms or browse our topics below."
         }
       </p>
-      <button 
+      <button
         id="clear-search"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors duration-200"
-      >
-        {lang === 'es' ? 'Limpiar Búsqueda' : lang === 'ja' ? '検索をクリア' : 'Clear Search'}
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors duration-200">
+        {
+          lang === "es"
+            ? "Limpiar Búsqueda"
+            : lang === "ja"
+              ? "検索をクリア"
+              : "Clear Search"
+        }
       </button>
     </div>
   </div>
 </Layout>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('main-search-input') as HTMLInputElement;
-    const tagFilters = document.querySelectorAll('.tag-filter');
-    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
-    const postItems = document.querySelectorAll('.post-item');
-    const resultsContainer = document.getElementById('results-container');
-    const searchStatus = document.getElementById('search-status');
-    const noResults = document.getElementById('no-results');
-    const clearSearch = document.getElementById('clear-search');
+  document.addEventListener("astro:page-load", () => {
+    const searchInput = document.getElementById(
+      "main-search-input"
+    ) as HTMLInputElement;
+    const tagFilters = document.querySelectorAll(".tag-filter");
+    const sortSelect = document.getElementById(
+      "sort-select"
+    ) as HTMLSelectElement;
+    const resultsContainer = document.getElementById("results-container")!;
+    const searchStatus = document.getElementById("search-status")!;
+    const noResults = document.getElementById("no-results")!;
+    const clearSearch = document.getElementById("clear-search");
+    const currentLang = document.documentElement.lang;
 
-    if (!searchInput || !resultsContainer || !searchStatus || !noResults) return;
+    if (!searchInput) return;
 
-    let currentQuery = '';
-    let currentTag = 'all';
-    let currentSort = 'date-desc';
+    let currentApiResults: any[] = []; // To store results from API
+    let displayedItems: any[] = []; // To store items currently displayed (after client-side tag/sort)
+
+    // let currentQuery = ''; // Not needed, use searchInput.value
+    let currentTag = "all";
+    let currentSort = "date-desc";
+    let isLoading = false;
 
     // Keyboard shortcut for search
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         searchInput.focus();
       }
     });
 
-    // Search functionality
-    function performSearch() {
-      const query = searchInput.value.toLowerCase().trim();
-      const filteredItems: Element[] = [];
-
-      postItems.forEach(item => {
-        const title = item.getAttribute('data-title')?.toLowerCase() || '';
-        const description = item.getAttribute('data-description')?.toLowerCase() || '';
-        const tags = JSON.parse(item.getAttribute('data-tags') || '[]');
-        
-        // Check if matches search query
-        const matchesQuery = !query || title.includes(query) || description.includes(query) || 
-                            tags.some((tag: string) => tag.toLowerCase().includes(query));
-        
-        // Check if matches selected tag
-        const matchesTag = currentTag === 'all' || tags.includes(currentTag);
-        
-        if (matchesQuery && matchesTag) {
-          filteredItems.push(item);
-          (item as HTMLElement).style.display = 'block';
-        } else {
-          (item as HTMLElement).style.display = 'none';
-        }
-      });
-
-      // Sort results
-      sortResults(filteredItems);
-
-      // Update status
-      updateSearchStatus(filteredItems.length, query);
+    // Debounce function
+    function debounce(func: Function, delay: number) {
+      let timeoutId: number;
+      return function (this: any, ...args: any[]) {
+        clearTimeout(timeoutId);
+        timeoutId = window.setTimeout(() => func.apply(this, args), delay);
+      };
     }
 
-    // Sort results
-    function sortResults(items: Element[]) {
-      const sortedItems = Array.from(items).sort((a, b) => {
-        const aTitle = a.getAttribute('data-title') || '';
-        const bTitle = b.getAttribute('data-title') || '';
-        const aDate = new Date(a.getAttribute('data-date') || '');
-        const bDate = new Date(b.getAttribute('data-date') || '');
+    async function fetchAndDisplayResults() {
+      const query = searchInput.value.toLowerCase().trim();
+
+      if (!query) {
+        currentApiResults = [];
+        applyClientFiltersAndRender();
+        updateSearchStatus(0, query);
+        return;
+      }
+
+      if (isLoading) return;
+      isLoading = true;
+      searchStatus.innerHTML = `
+        <div class="flex items-center justify-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-primary-600 dark:text-primary-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Searching...
+        </div>
+      `;
+      noResults.style.display = "none";
+      resultsContainer.innerHTML = "";
+
+      try {
+        const response = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}&lang=${currentLang}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        currentApiResults = await response.json();
+        // applyClientFiltersAndRender() is called, which calls updateSearchStatus, which will clear the spinner.
+      } catch (error) {
+        console.error("Search API fetch error:", error);
+        searchStatus.textContent = "Search failed. Please try again."; // This will clear the spinner
+        currentApiResults = [];
+        applyClientFiltersAndRender(); // Clear results on error
+      } finally {
+        isLoading = false;
+        // If searchStatus still contains the spinner (e.g. if applyClientFiltersAndRender didn't update it due to no query),
+        // ensure it's cleared or set to a default message if needed.
+        // However, updateSearchStatus should handle this.
+      }
+    }
+
+    function applyClientFiltersAndRender() {
+      let itemsToDisplay = [...currentApiResults];
+
+      // Client-side tag filtering
+      if (currentTag !== "all") {
+        itemsToDisplay = itemsToDisplay.filter(
+          (item) => item.tags && item.tags.includes(currentTag)
+        );
+      }
+
+      // Client-side sorting
+      itemsToDisplay.sort((a, b) => {
+        const aTitle = a.title || "";
+        const bTitle = b.title || "";
+        // API returns formatted date string, parse them back for sorting
+        const aDate = new Date(a.pubDate);
+        const bDate = new Date(b.pubDate);
 
         switch (currentSort) {
-          case 'date-asc':
+          case "date-asc":
             return aDate.getTime() - bDate.getTime();
-          case 'title-asc':
+          case "title-asc":
             return aTitle.localeCompare(bTitle);
-          case 'title-desc':
+          case "title-desc":
             return bTitle.localeCompare(aTitle);
-          case 'date-desc':
+          case "date-desc":
           default:
             return bDate.getTime() - aDate.getTime();
         }
       });
 
-      // Reorder DOM elements
-      sortedItems.forEach(item => {
-        resultsContainer?.appendChild(item);
+      displayedItems = itemsToDisplay;
+      renderResultsDOM(displayedItems);
+      updateSearchStatus(
+        displayedItems.length,
+        searchInput.value.toLowerCase().trim()
+      );
+    }
+
+    function renderResultsDOM(items: any[]) {
+      resultsContainer.innerHTML = ""; // Clear previous results
+      if (items.length === 0 && searchInput.value.toLowerCase().trim()) {
+        noResults.style.display = "block";
+        searchStatus.style.display = "none";
+      } else {
+        noResults.style.display = "none";
+        searchStatus.style.display = "block"; // Ensure status is visible if there are results or initial prompt
+      }
+
+      items.forEach((item) => {
+        // Simplified card structure - for full BlogCard features, this would be more complex
+        // or require a different rendering strategy (e.g., Astro islands if possible for client-side render)
+        const card = document.createElement("div");
+        card.className =
+          "post-item p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300";
+        // This is a very basic representation. Real BlogCard has more structure.
+        // Using BlogCard.astro structure as a reference for key elements.
+        // This will NOT have the exact same styling or functionality as BlogCard.astro without replicating all its CSS and JS.
+
+        let tagsHTML = "";
+        if (item.tags && item.tags.length > 0) {
+          tagsHTML = item.tags
+            .slice(0, 3)
+            .map(
+              (tag: string) =>
+                `<span class="inline-block bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">${tag}</span>`
+            )
+            .join("");
+        }
+
+        card.innerHTML = `
+          ${item.heroImage ? `<img src="${item.heroImage}" alt="${item.title}" class="w-full h-40 object-cover rounded-t-lg mb-4">` : ""}
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+            <a href="${item.url}" class="hover:underline">${item.title}</a>
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">${item.description.substring(0, 100)}${item.description.length > 100 ? "..." : ""}</p>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+            <span>${item.pubDate}</span>
+            ${item.readingTime ? `<span> · ${item.readingTime}</span>` : ""}
+          </div>
+          <div class="mb-3">${tagsHTML}</div>
+          <a href="${item.url}" class="text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline">Read more &rarr;</a>
+        `;
+        resultsContainer.appendChild(card);
       });
     }
 
-    // Update search status
+    // Update search status (localized messages)
     function updateSearchStatus(count: number, query: string) {
       const lang = document.documentElement.lang;
       const messages = {
         en: {
-          found: (count: number, query: string) => `Found ${count} article${count === 1 ? '' : 's'} matching "${query}"`,
+          found: (count: number, query: string) =>
+            `Found ${count} article${count === 1 ? "" : "s"} matching "${query}"`,
           showing: (count: number) => `Showing all ${count} articles`,
-          tagged: (count: number, tag: string) => `Showing ${count} article${count === 1 ? '' : 's'} tagged with "${tag}"`
+          tagged: (count: number, tag: string) =>
+            `Showing ${count} article${count === 1 ? "" : "s"} tagged with "${tag}"`,
         },
         es: {
-          found: (count: number, query: string) => `Se encontraron ${count} artículo${count === 1 ? '' : 's'} que coinciden con "${query}"`,
+          found: (count: number, query: string) =>
+            `Se encontraron ${count} artículo${count === 1 ? "" : "s"} que coinciden con "${query}"`,
           showing: (count: number) => `Mostrando todos los ${count} artículos`,
-          tagged: (count: number, tag: string) => `Mostrando ${count} artículo${count === 1 ? '' : 's'} etiquetado${count === 1 ? '' : 's'} con "${tag}"`
+          tagged: (count: number, tag: string) =>
+            `Mostrando ${count} artículo${count === 1 ? "" : "s"} etiquetado${count === 1 ? "" : "s"} con "${tag}"`,
         },
         ja: {
-          found: (count: number, query: string) => `"${query}"に一致する${count}件の記事が見つかりました`,
+          found: (count: number, query: string) =>
+            `"${query}"に一致する${count}件の記事が見つかりました`,
           showing: (count: number) => `${count}件の記事をすべて表示`,
-          tagged: (count: number, tag: string) => `"${tag}"でタグ付けされた${count}件の記事を表示`
-        }
+          tagged: (count: number, tag: string) =>
+            `"${tag}"でタグ付けされた${count}件の記事を表示`,
+        },
       };
 
-      const langMessages = messages[lang as keyof typeof messages] || messages.en;
+      const langMessages =
+        messages[lang as keyof typeof messages] || messages.en;
 
       if (query) {
         if (count === 0) {
-          searchStatus!.style.display = 'none';
-          noResults!.style.display = 'block';
+          searchStatus!.style.display = "none";
+          noResults!.style.display = "block";
         } else {
-          searchStatus!.style.display = 'block';
-          noResults!.style.display = 'none';
+          searchStatus!.style.display = "block";
+          noResults!.style.display = "none";
           searchStatus!.textContent = langMessages.found(count, query);
         }
       } else {
-        searchStatus!.style.display = 'block';
-        noResults!.style.display = 'none';
-        if (currentTag === 'all') {
+        searchStatus!.style.display = "block";
+        noResults!.style.display = "none";
+        if (currentTag === "all") {
           searchStatus!.textContent = langMessages.showing(count);
         } else {
           searchStatus!.textContent = langMessages.tagged(count, currentTag);
@@ -316,58 +475,95 @@ const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
       }
     }
 
+    const debouncedFetchAndDisplayResults = debounce(
+      fetchAndDisplayResults,
+      300
+    );
+
     // Search input event
-    searchInput.addEventListener('input', (e) => {
-      currentQuery = (e.target as HTMLInputElement).value;
-      performSearch();
+    searchInput.addEventListener("input", () => {
+      debouncedFetchAndDisplayResults();
     });
 
     // Tag filter events
-    tagFilters.forEach(filter => {
-      filter.addEventListener('click', () => {
+    tagFilters.forEach((filter) => {
+      filter.addEventListener("click", () => {
         // Update active filter
-        tagFilters.forEach(f => {
-          f.classList.remove('active', 'bg-primary-600', 'text-white');
-          f.classList.add('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+        tagFilters.forEach((f) => {
+          f.classList.remove("active", "bg-primary-600", "text-white");
+          f.classList.add(
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300"
+          );
         });
-        
-        filter.classList.add('active', 'bg-primary-600', 'text-white');
-        filter.classList.remove('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
-        
-        currentTag = filter.getAttribute('data-tag') || 'all';
-        performSearch();
+
+        filter.classList.add("active", "bg-primary-600", "text-white");
+        filter.classList.remove(
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300"
+        );
+
+        currentTag = filter.getAttribute("data-tag") || "all";
+        applyClientFiltersAndRender(); // Re-filter and render existing API results
       });
     });
 
     // Sort change event
-    sortSelect.addEventListener('change', () => {
+    sortSelect.addEventListener("change", () => {
       currentSort = sortSelect.value;
-      performSearch();
+      applyClientFiltersAndRender(); // Re-sort and render existing API results
     });
 
     // Clear search
-    clearSearch?.addEventListener('click', () => {
-      searchInput.value = '';
-      currentQuery = '';
-      currentTag = 'all';
-      
-      // Reset tag filters
-      tagFilters.forEach(f => {
-        f.classList.remove('active', 'bg-primary-600', 'text-white');
-        f.classList.add('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+    clearSearch?.addEventListener("click", () => {
+      searchInput.value = "";
+      currentTag = "all";
+      currentApiResults = []; // Clear API results
+
+      // Reset tag filters UI
+      tagFilters.forEach((f) => {
+        f.classList.remove("active", "bg-primary-600", "text-white");
+        f.classList.add(
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300"
+        );
       });
-      
-      const allFilter = document.querySelector('[data-tag="all"]');
-      if (allFilter) {
-        allFilter.classList.add('active', 'bg-primary-600', 'text-white');
-        allFilter.classList.remove('border-gray-300', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+      const allTopicsFilter = document.querySelector(
+        '.tag-filter[data-tag="all"]'
+      );
+      if (allTopicsFilter) {
+        allTopicsFilter.classList.add("active", "bg-primary-600", "text-white");
+        allTopicsFilter.classList.remove(
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300"
+        );
       }
-      
-      performSearch();
+
+      applyClientFiltersAndRender(); // This will clear the DOM and update status
       searchInput.focus();
     });
 
-    // Initial load
-    performSearch();
+    // Initial load - update status to prompt for search
+    // updateSearchStatus(0, ''); // Will be handled by initial fetch or lack thereof
+
+    // Check for query parameter on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryFromUrl = urlParams.get("q");
+
+    if (queryFromUrl) {
+      searchInput.value = queryFromUrl;
+      fetchAndDisplayResults(); // Perform initial search if query is in URL
+    } else {
+      // If no query in URL, then set initial status
+      updateSearchStatus(0, "");
+    }
   });
 </script>

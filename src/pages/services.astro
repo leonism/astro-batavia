@@ -1,25 +1,31 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import { useTranslations } from '@/i18n/utils';
+import Layout from "@/layouts/Layout.astro";
+// import { useTranslations } from "@/i18n/utils";
 
-const lang = 'en';
-const t = useTranslations(lang);
+const lang = "en";
+// const t = useTranslations(lang);
 ---
 
-<Layout 
-  title="Our Services - AstroBlog"
+<Layout
+  title="Our Services - Astro Batavia"
   description="Discover our comprehensive technology services including content creation, technical consulting, and educational resources for businesses and developers."
-  lang={lang}
->
+  lang={lang}>
   <!-- Hero Section -->
-  <section class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+  <section
+    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
-          Our <span class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text">Services</span>
+        <h1
+          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+          Our <span
+            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
+            >Services</span
+          >
         </h1>
-        <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-          We offer comprehensive technology services to help businesses and developers stay ahead in the rapidly evolving digital landscape.
+        <p
+          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          We offer comprehensive technology services to help businesses and
+          developers stay ahead in the rapidly evolving digital landscape.
         </p>
       </div>
     </div>
@@ -29,190 +35,404 @@ const t = useTranslations(lang);
   <section class="py-24 bg-white dark:bg-slate-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
-        
         <!-- Content Creation Service -->
-        <div class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 p-8 hover:shadow-2xl transition-all duration-500">
+        <div
+          class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 p-8 hover:shadow-2xl transition-all duration-500">
           <div class="relative z-10">
-            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
               </svg>
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Technical Content Creation</h3>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              Technical Content Creation
+            </h3>
             <p class="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-              Professional technical writing services for blogs, documentation, tutorials, and educational content that engages and educates your audience.
+              Professional technical writing services for blogs, documentation,
+              tutorials, and educational content that engages and educates your
+              audience.
             </p>
             <ul class="space-y-2 mb-8">
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Blog articles and tutorials
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Technical documentation
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 White papers and case studies
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-blue-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 API documentation
               </li>
             </ul>
-            <a href="/contact" class="inline-flex items-center text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+            <a
+              href="/en/contact"
+              class="inline-flex items-center text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
               Learn More
-              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              <svg
+                class="ml-2 w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                ></path>
               </svg>
             </a>
           </div>
         </div>
 
         <!-- Technical Consulting Service -->
-        <div class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 p-8 hover:shadow-2xl transition-all duration-500">
+        <div
+          class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 p-8 hover:shadow-2xl transition-all duration-500">
           <div class="relative z-10">
-            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                ></path>
               </svg>
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Technology Consulting</h3>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              Technology Consulting
+            </h3>
             <p class="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-              Strategic technology guidance to help your organization make informed decisions about emerging technologies and digital transformation.
+              Strategic technology guidance to help your organization make
+              informed decisions about emerging technologies and digital
+              transformation.
             </p>
             <ul class="space-y-2 mb-8">
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 AI strategy and implementation
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Technology architecture review
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Digital transformation planning
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-purple-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Cloud migration strategies
               </li>
             </ul>
-            <a href="/contact" class="inline-flex items-center text-purple-600 dark:text-purple-400 font-semibold hover:text-purple-700 dark:hover:text-purple-300 transition-colors">
+            <a
+              href="/en/contact"
+              class="inline-flex items-center text-purple-600 dark:text-purple-400 font-semibold hover:text-purple-700 dark:hover:text-purple-300 transition-colors">
               Learn More
-              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              <svg
+                class="ml-2 w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                ></path>
               </svg>
             </a>
           </div>
         </div>
 
         <!-- Education & Training Service -->
-        <div class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 p-8 hover:shadow-2xl transition-all duration-500">
+        <div
+          class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 p-8 hover:shadow-2xl transition-all duration-500">
           <div class="relative z-10">
-            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                ></path>
               </svg>
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Education & Training</h3>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              Education & Training
+            </h3>
             <p class="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-              Comprehensive training programs and educational resources to upskill your team in the latest technologies and development practices.
+              Comprehensive training programs and educational resources to
+              upskill your team in the latest technologies and development
+              practices.
             </p>
             <ul class="space-y-2 mb-8">
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-green-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-green-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Custom training workshops
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-green-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-green-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Online course development
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-green-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-green-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Team skill assessments
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-green-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-green-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Certification programs
               </li>
             </ul>
-            <a href="/contact" class="inline-flex items-center text-green-600 dark:text-green-400 font-semibold hover:text-green-700 dark:hover:text-green-300 transition-colors">
+            <a
+              href="/en/contact"
+              class="inline-flex items-center text-green-600 dark:text-green-400 font-semibold hover:text-green-700 dark:hover:text-green-300 transition-colors">
               Learn More
-              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              <svg
+                class="ml-2 w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                ></path>
               </svg>
             </a>
           </div>
         </div>
 
         <!-- Research & Analysis Service -->
-        <div class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-50 to-red-100 dark:from-orange-900/20 dark:to-red-900/20 p-8 hover:shadow-2xl transition-all duration-500">
+        <div
+          class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-50 to-red-100 dark:from-orange-900/20 dark:to-red-900/20 p-8 hover:shadow-2xl transition-all duration-500">
           <div class="relative z-10">
-            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg
+                class="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                ></path>
               </svg>
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Technology Research</h3>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              Technology Research
+            </h3>
             <p class="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-              In-depth technology research and market analysis to help you stay ahead of trends and make data-driven technology decisions.
+              In-depth technology research and market analysis to help you stay
+              ahead of trends and make data-driven technology decisions.
             </p>
             <ul class="space-y-2 mb-8">
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Technology trend analysis
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Market research reports
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Competitive analysis
               </li>
               <li class="flex items-center text-slate-700 dark:text-slate-300">
-                <svg class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                <svg
+                  class="w-5 h-5 text-orange-600 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
                 </svg>
                 Technology roadmaps
               </li>
             </ul>
-            <a href="/contact" class="inline-flex items-center text-orange-600 dark:text-orange-400 font-semibold hover:text-orange-700 dark:hover:text-orange-300 transition-colors">
+            <a
+              href="/en/contact"
+              class="inline-flex items-center text-orange-600 dark:text-orange-400 font-semibold hover:text-orange-700 dark:hover:text-orange-300 transition-colors">
               Learn More
-              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              <svg
+                class="ml-2 w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                ></path>
               </svg>
             </a>
           </div>
@@ -225,52 +445,80 @@ const t = useTranslations(lang);
   <section class="py-24 bg-slate-50 dark:bg-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
+        <h2
+          class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
           Our Process
         </h2>
         <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          We follow a proven methodology to deliver exceptional results for every project.
+          We follow a proven methodology to deliver exceptional results for
+          every project.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div class="text-center">
-          <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
-            <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
+          <div
+            class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
+            <span class="text-2xl font-bold text-blue-600 dark:text-blue-400"
+              >1</span
+            >
           </div>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">Discovery</h3>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Discovery
+          </h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm">
-            We understand your goals, challenges, and requirements through detailed consultation.
+            We understand your goals, challenges, and requirements through
+            detailed consultation.
           </p>
         </div>
 
         <div class="text-center">
-          <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
-            <span class="text-2xl font-bold text-purple-600 dark:text-purple-400">2</span>
+          <div
+            class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
+            <span
+              class="text-2xl font-bold text-purple-600 dark:text-purple-400"
+              >2</span
+            >
           </div>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">Strategy</h3>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Strategy
+          </h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm">
-            We develop a customized strategy and roadmap tailored to your specific needs.
+            We develop a customized strategy and roadmap tailored to your
+            specific needs.
           </p>
         </div>
 
         <div class="text-center">
-          <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
-            <span class="text-2xl font-bold text-green-600 dark:text-green-400">3</span>
+          <div
+            class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
+            <span class="text-2xl font-bold text-green-600 dark:text-green-400"
+              >3</span
+            >
           </div>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">Execution</h3>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Execution
+          </h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm">
-            Our expert team implements the solution with regular updates and collaboration.
+            Our expert team implements the solution with regular updates and
+            collaboration.
           </p>
         </div>
 
         <div class="text-center">
-          <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
-            <span class="text-2xl font-bold text-orange-600 dark:text-orange-400">4</span>
+          <div
+            class="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full mx-auto mb-6 flex items-center justify-center">
+            <span
+              class="text-2xl font-bold text-orange-600 dark:text-orange-400"
+              >4</span
+            >
           </div>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">Support</h3>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Support
+          </h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm">
-            We provide ongoing support and optimization to ensure long-term success.
+            We provide ongoing support and optimization to ensure long-term
+            success.
           </p>
         </div>
       </div>
@@ -278,28 +526,37 @@ const t = useTranslations(lang);
   </section>
 
   <!-- CTA Section -->
-  <section class="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
+  <section
+    class="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
         Ready to Get Started?
       </h2>
       <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-        Let's discuss how our services can help accelerate your technology initiatives and drive business growth.
+        Let's discuss how our services can help accelerate your technology
+        initiatives and drive business growth.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a 
-          href="/contact"
-          class="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-2xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-        >
+        <a
+          href="/en/contact"
+          class="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-2xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
           Start a Project
-          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          <svg
+            class="ml-2 w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            ></path>
           </svg>
         </a>
-        <a 
+        <a
           href="/about"
-          class="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-2xl hover:bg-white/20 transition-all duration-300 border-2 border-white/20"
-        >
+          class="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-2xl hover:bg-white/20 transition-all duration-300 border-2 border-white/20">
           Learn About Our Team
         </a>
       </div>

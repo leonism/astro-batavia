@@ -1,25 +1,31 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import { useTranslations } from '@/i18n/utils';
+import Layout from "@/layouts/Layout.astro";
+// import { useTranslations } from "@/i18n/utils";
 
-const lang = 'en';
-const t = useTranslations(lang);
+const lang = "en";
+// const t = useTranslations(lang);
 ---
 
-<Layout 
-  title="Contact Us - AstroBlog"
-  description="Get in touch with the AstroBlog team. We'd love to hear from you about collaborations, questions, or feedback."
-  lang={lang}
->
+<Layout
+  title="Contact Us - Astro Batavia"
+  description="Get in touch with the Astro Batavia team. We'd love to hear from you about collaborations, questions, or feedback."
+  lang={lang}>
   <!-- Hero Section -->
-  <section class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+  <section
+    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
-          Get In <span class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text">Touch</span>
+        <h1
+          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+          Get In <span
+            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
+            >Touch</span
+          >
         </h1>
-        <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-          Have a question, suggestion, or want to collaborate? We'd love to hear from you. Reach out to our team and let's start a conversation.
+        <p
+          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          Have a question, suggestion, or want to collaborate? We'd love to hear
+          from you. Reach out to our team and let's start a conversation.
         </p>
       </div>
     </div>
@@ -34,11 +40,13 @@ const t = useTranslations(lang);
           <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">
             Send us a message
           </h2>
-          
+
           <form class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label for="firstName" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label
+                  for="firstName"
+                  class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   First Name
                 </label>
                 <input
@@ -50,7 +58,9 @@ const t = useTranslations(lang);
                 />
               </div>
               <div>
-                <label for="lastName" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label
+                  for="lastName"
+                  class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Last Name
                 </label>
                 <input
@@ -62,9 +72,11 @@ const t = useTranslations(lang);
                 />
               </div>
             </div>
-            
+
             <div>
-              <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label
+                for="email"
+                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Email Address
               </label>
               <input
@@ -75,17 +87,18 @@ const t = useTranslations(lang);
                 required
               />
             </div>
-            
+
             <div>
-              <label for="subject" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label
+                for="subject"
+                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Subject
               </label>
               <select
                 id="subject"
                 name="subject"
                 class="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors"
-                required
-              >
+                required>
                 <option value="">Select a topic</option>
                 <option value="general">General Inquiry</option>
                 <option value="collaboration">Collaboration</option>
@@ -95,9 +108,11 @@ const t = useTranslations(lang);
                 <option value="other">Other</option>
               </select>
             </div>
-            
+
             <div>
-              <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label
+                for="message"
+                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Message
               </label>
               <textarea
@@ -109,7 +124,7 @@ const t = useTranslations(lang);
                 required
               ></textarea>
             </div>
-            
+
             <div class="flex items-center">
               <input
                 type="checkbox"
@@ -117,15 +132,16 @@ const t = useTranslations(lang);
                 name="newsletter"
                 class="w-4 h-4 text-blue-600 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-2"
               />
-              <label for="newsletter" class="ml-3 text-sm text-slate-600 dark:text-slate-400">
+              <label
+                for="newsletter"
+                class="ml-3 text-sm text-slate-600 dark:text-slate-400">
                 Subscribe to our newsletter for the latest tech insights
               </label>
             </div>
-            
+
             <button
               type="submit"
-              class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-4 px-8 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 hover:scale-105 hover:shadow-xl"
-            >
+              class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-4 px-8 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 hover:scale-105 hover:shadow-xl">
               Send Message
             </button>
           </form>
@@ -137,51 +153,109 @@ const t = useTranslations(lang);
             <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">
               Other ways to reach us
             </h2>
-            
+
             <div class="space-y-6">
               <!-- Email -->
               <div class="flex items-start space-x-4">
-                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                <div
+                  class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg
+                    class="w-6 h-6 text-blue-600 dark:text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    ></path>
                   </svg>
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-1">Email</h3>
-                  <p class="text-slate-600 dark:text-slate-400">hello@astroblog.com</p>
-                  <p class="text-sm text-slate-500 dark:text-slate-500 mt-1">We typically respond within 24 hours</p>
+                  <h3
+                    class="text-lg font-semibold text-slate-900 dark:text-white mb-1">
+                    Email
+                  </h3>
+                  <p class="text-slate-600 dark:text-slate-400">
+                    hello@astrobatavia.com
+                  </p>
+                  <p class="text-sm text-slate-500 dark:text-slate-500 mt-1">
+                    We typically respond within 24 hours
+                  </p>
                 </div>
               </div>
 
               <!-- Social Media -->
               <div class="flex items-start space-x-4">
-                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                <div
+                  class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg
+                    class="w-6 h-6 text-purple-600 dark:text-purple-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                    ></path>
                   </svg>
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-1">Social Media</h3>
+                  <h3
+                    class="text-lg font-semibold text-slate-900 dark:text-white mb-1">
+                    Social Media
+                  </h3>
                   <div class="space-y-1">
-                    <p class="text-slate-600 dark:text-slate-400">@AstroBlog on Twitter</p>
-                    <p class="text-slate-600 dark:text-slate-400">LinkedIn: /company/astroblog</p>
-                    <p class="text-slate-600 dark:text-slate-400">GitHub: @astroblog-team</p>
+                    <p class="text-slate-600 dark:text-slate-400">
+                      @AstroBatavia on Twitter
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-400">
+                      LinkedIn: /company/Astro Batavia
+                    </p>
+                    <p class="text-slate-600 dark:text-slate-400">
+                      GitHub: @AstroBatavia
+                    </p>
                   </div>
                 </div>
               </div>
 
               <!-- Office -->
               <div class="flex items-start space-x-4">
-                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <div
+                  class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg
+                    class="w-6 h-6 text-green-600 dark:text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
                   </svg>
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-1">Office</h3>
-                  <p class="text-slate-600 dark:text-slate-400">San Francisco, CA</p>
-                  <p class="text-sm text-slate-500 dark:text-slate-500 mt-1">Remote-first team</p>
+                  <h3
+                    class="text-lg font-semibold text-slate-900 dark:text-white mb-1">
+                    Office
+                  </h3>
+                  <p class="text-slate-600 dark:text-slate-400">
+                    San Francisco, CA
+                  </p>
+                  <p class="text-sm text-slate-500 dark:text-slate-500 mt-1">
+                    Remote-first team
+                  </p>
                 </div>
               </div>
             </div>
@@ -192,41 +266,74 @@ const t = useTranslations(lang);
             <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6">
               Frequently Asked Questions
             </h3>
-            
+
             <div class="space-y-4">
               <details class="group">
-                <summary class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
-                  How can I contribute to AstroBlog?
-                  <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                <summary
+                  class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
+                  How can I contribute to Astro Batavia?
+                  <svg
+                    class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
                   </svg>
                 </summary>
                 <div class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-                  We welcome guest contributors! Send us your article proposals, and our editorial team will review them for publication.
+                  We welcome guest contributors! Send us your article proposals,
+                  and our editorial team will review them for publication.
                 </div>
               </details>
-              
+
               <details class="group">
-                <summary class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
+                <summary
+                  class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
                   Do you offer sponsored content?
-                  <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  <svg
+                    class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
                   </svg>
                 </summary>
                 <div class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-                  Yes, we offer sponsored content opportunities that align with our editorial standards and provide value to our readers.
+                  Yes, we offer sponsored content opportunities that align with
+                  our editorial standards and provide value to our readers.
                 </div>
               </details>
-              
+
               <details class="group">
-                <summary class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
+                <summary
+                  class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
                   Can I request specific topics?
-                  <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  <svg
+                    class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
                   </svg>
                 </summary>
                 <div class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-                  Absolutely! We value community input and often write articles based on reader requests and trending topics.
+                  Absolutely! We value community input and often write articles
+                  based on reader requests and trending topics.
                 </div>
               </details>
             </div>
@@ -237,21 +344,31 @@ const t = useTranslations(lang);
   </section>
 
   <!-- CTA Section -->
-  <section class="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
+  <section
+    class="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
         Join Our Community
       </h2>
       <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-        Don't miss out on the latest technology insights and AI breakthroughs. Join our growing community of tech enthusiasts.
+        Don't miss out on the latest technology insights and AI breakthroughs.
+        Join our growing community of tech enthusiasts.
       </p>
-      <a 
+      <a
         href="/blog"
-        class="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-2xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-      >
+        class="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-2xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
         Explore Our Blog
-        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        <svg
+          class="ml-2 w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7l5 5m0 0l-5 5m5-5H6"
+          ></path>
         </svg>
       </a>
     </div>
