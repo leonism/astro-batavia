@@ -1,0 +1,40 @@
+---
+import { getLocalizedPath } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
+export interface Link {
+  href: string;
+  text: string;
+  isExternal?: boolean;
+  isLocalized?: boolean;
+}
+interface Props {
+  title: string;
+  links: Link[];
+  lang: LanguageKey;
+}
+const { title, links, lang } = Astro.props;
+---
+
+<div class="my-0">
+  <h3
+    class="text-sm mt-7 font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">
+    {title}
+  </h3>
+  <ul class="space-y-2">
+    {
+      links.map((link) => (
+        <li>
+          <a
+            href={
+              link.isLocalized ? getLocalizedPath(link.href, lang) : link.href
+            }
+            target={link.isExternal ? "_blank" : undefined}
+            rel={link.isExternal ? "noopener noreferrer" : undefined}
+            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+            {link.text}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

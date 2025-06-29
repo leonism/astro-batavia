@@ -11,6 +11,7 @@
       "@/i18n/*": ["src/i18n/*"]
     },
     "jsx": "preserve",
+    "types": ["astro/client"],
     "allowJs": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
