@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
+<<<<<<< HEAD
 import { useTranslations } from "@/i18n/utils";
 
 // Get latest blog posts in English
@@ -19,10 +20,34 @@ const sortedPosts = allPosts.sort(
 const latestPosts = sortedPosts.slice(0, 3);
 
 const lang = "en";
+=======
+import HeroSection from "@/components/sections/HeroSection.astro";
+import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
+import FeaturesSection from "@/components/sections/FeaturesSection.astro";
+import NewsletterSection from "@/components/sections/NewsletterSection.astro";
+import { useTranslations } from "@/i18n/utils";
+
+// Get latest blog posts in English
+const allPostsUnsorted = await getCollection(
+  "blog",
+  ({ id, data }: CollectionEntry<"blog">) => {
+    return id.startsWith("en/") && !data.draft;
+  }
+);
+// Sort posts by publication date (newest first)
+const sortedPosts = allPostsUnsorted.sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+// Explicitly type lang as a literal string
+const lang = "en" as const;
+const latestPosts = sortedPosts.slice(0, 3);
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 const t = useTranslations(lang);
 ---
 
 <Layout
+<<<<<<< HEAD
   title="Astro Batavia - Modern Multi-Language Blog"
   description={t("meta.description")}
   lang={lang}>
@@ -413,4 +438,13 @@ const t = useTranslations(lang);
       </div>
     </div>
   </section>
+=======
+  title="AstroBatavia - Modern Multi-Language Blog"
+  description={t("meta.description") as string}
+  lang={lang as string}>
+  <HeroSection />
+  <FeaturesSection />
+  <FeaturedStoriesSection latestPosts={latestPosts} />
+  <NewsletterSection />
+>>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 </Layout>

@@ -1,0 +1,21 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heroGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F172A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="800" height="400" fill="url(#heroGradient)"/>
+  <circle cx="100" cy="100" r="60" fill="white" opacity="0.1"/>
+  <circle cx="700" cy="300" r="80" fill="white" opacity="0.1"/>
+  <circle cx="600" cy="80" r="40" fill="white" opacity="0.15"/>
+  
+  <circle cx="400" cy="200" r="100" fill="white" opacity="0.2"/>
+  <path d="M400 150l50 50-50 50-50-50 50-50z" fill="white" opacity="0.9"/>
+  <circle cx="400" cy="200" r="20" fill="white"/>
+  
+  <rect x="300" y="280" width="200" height="20" fill="white" opacity="0.3" rx="10"/>
+  <rect x="320" y="310" width="160" height="15" fill="white" opacity="0.2" rx="7"/>
+</svg>
