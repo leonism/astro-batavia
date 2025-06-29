@@ -1,9 +1,9 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
-import SEO from '@/components/SEO.astro';
-import '@/styles/global.css';
+import { ViewTransitions } from "astro:transitions";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import SEO from "@/components/SEO.astro";
+import "@/styles/global.css";
 
 export interface Props {
   title: string;
@@ -16,35 +16,52 @@ export interface Props {
 
 const {
   title,
-  description = 'A modern multi-language blog built with Astro.js',
+  description = "A modern multi-language blog built with Astro.js",
   image,
   noindex = false,
-  lang = 'en',
+  lang = "en",
   canonical,
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth">
+<html
+  lang={lang}
+  class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    
+    <meta
+      name="description"
+      content={description}
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="generator"
+      content={Astro.generator}
+    />
+
     <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+
     <!-- Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    
+
     <!-- SEO Component -->
-    <SEO 
+    <SEO
       title={title}
       description={description}
       image={image}
@@ -52,59 +69,74 @@ const {
       canonical={canonical}
       lang={lang}
     />
-    
+
     <!-- Theme Script (load early to prevent flash) -->
     <script is:inline>
       // Theme initialization
       const getThemePreference = () => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
         }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
       };
-      
-      const isDark = getThemePreference() === 'dark';
-      document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
-      
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+      const isDark = getThemePreference() === "dark";
+      document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("theme", isDark ? "dark" : "light");
       }
     </script>
-    
+
     <ViewTransitions />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
   </head>
-  <body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300">
+  <body
+    class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300">
     <div class="min-h-screen flex flex-col">
       <Header />
-      
+
       <main class="flex-1 pt-16">
         <slot />
       </main>
-      
+
       <Footer />
     </div>
-    
+
     <!-- Theme toggle functionality -->
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const themeToggle = document.getElementById('theme-toggle');
-        
+      document.addEventListener("DOMContentLoaded", () => {
+        const themeToggle = document.getElementById("theme-toggle");
+
         if (themeToggle) {
-          themeToggle.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            const newTheme = isDark ? 'light' : 'dark';
-            
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', newTheme);
+          themeToggle.addEventListener("click", () => {
+            const isDark = document.documentElement.classList.contains("dark");
+            const newTheme = isDark ? "light" : "dark";
+
+            document.documentElement.classList.toggle("dark");
+            localStorage.setItem("theme", newTheme);
           });
         }
-        
+
         // System theme preference change listener
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (!localStorage.getItem('theme')) {
-            document.documentElement.classList[e.matches ? 'add' : 'remove']('dark');
-          }
-        });
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => {
+            if (!localStorage.getItem("theme")) {
+              document.documentElement.classList[e.matches ? "add" : "remove"](
+                "dark"
+              );
+            }
+          });
       });
     </script>
   </body>
