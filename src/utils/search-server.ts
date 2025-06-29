@@ -108,6 +108,8 @@ export async function advancedSearchServer(
       formattedPubDate: formatSearchDate(post.data.pubDate),
       tags: post.data.tags,
       lang: lang,
+      relevanceScore: 0,
+      excerpt: post.data.description.substring(0, 150) + (post.data.description.length > 150 ? '...' : ''),
     }));
   } catch (error) {
     console.error('Advanced search error:', error);
