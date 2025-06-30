@@ -1,4 +1,4 @@
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import type { APIRoute } from "astro";
 
 export interface SearchResult {
@@ -35,15 +35,18 @@ export async function advancedSearch(
   lang: string = "en"
 ): Promise<SearchResult[]> {
   try {
-    const allPosts = await getCollection("blog", ({ id, data }) => {
-      return id.startsWith(`${lang}/`) && !data.draft;
-    });
+    const allPosts = await getCollection(
+      "blog",
+      ({ id, data }: { id: string; data: { draft: boolean } }) => {
+        return id.startsWith(`${lang}/`) && !data.draft;
+      }
+    );
 
     let filteredPosts = allPosts;
 
     // Apply text search
     if (query.trim()) {
-      filteredPosts = filteredPosts.filter((post) => {
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<"blog">) => {
         const searchText = `${post.data.title} ${post.data.description} ${(
           post.data.tags || []
         ).join(" ")}`.toLowerCase();
@@ -53,7 +56,7 @@ export async function advancedSearch(
 
     // Apply tag filter
     if (filters.tags && filters.tags.length > 0) {
-      filteredPosts = filteredPosts.filter((post) => {
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<"blog">) => {
         return filters.tags!.some((tag) =>
           (post.data.tags || []).includes(tag)
         );
@@ -63,19 +66,20 @@ export async function advancedSearch(
     // Apply date range filter
     if (filters.dateFrom) {
       filteredPosts = filteredPosts.filter(
-        (post) => post.data.pubDate >= filters.dateFrom!
+        (post: CollectionEntry<"blog">) =>
+          post.data.pubDate >= filters.dateFrom!
       );
     }
 
     if (filters.dateTo) {
       filteredPosts = filteredPosts.filter(
-        (post) => post.data.pubDate <= filters.dateTo!
+        (post: CollectionEntry<"blog">) => post.data.pubDate <= filters.dateTo!
       );
     }
 
     // Apply author filter
     if (filters.author) {
-      filteredPosts = filteredPosts.filter((post) =>
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<"blog">) =>
         post.data.author.toLowerCase().includes(filters.author!.toLowerCase())
       );
     }
@@ -84,37 +88,39 @@ export async function advancedSearch(
     const sortBy = filters.sortBy || "date";
     const sortOrder = filters.sortOrder || "desc";
 
-    filteredPosts.sort((a, b) => {
-      let comparison = 0;
+    filteredPosts.sort(
+      (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => {
+        let comparison = 0;
 
-      switch (sortBy) {
-        case "title":
-          comparison = a.data.title.localeCompare(b.data.title);
-          break;
-        case "date":
-          comparison = a.data.pubDate.getTime() - b.data.pubDate.getTime();
-          break;
-        case "relevance":
-          // Simple relevance scoring based on query matches in title vs description
-          const aTitle = a.data.title.toLowerCase();
-          const bTitle = b.data.title.toLowerCase();
-          const queryLower = query.toLowerCase();
+        switch (sortBy) {
+          case "title":
+            comparison = a.data.title.localeCompare(b.data.title);
+            break;
+          case "date":
+            comparison = a.data.pubDate.getTime() - b.data.pubDate.getTime();
+            break;
+          case "relevance":
+            // Simple relevance scoring based on query matches in title vs description
+            const aTitle = a.data.title.toLowerCase();
+            const bTitle = b.data.title.toLowerCase();
+            const queryLower = query.toLowerCase();
 
-          const aScore =
-            (aTitle.includes(queryLower) ? 2 : 0) +
-            (a.data.description.toLowerCase().includes(queryLower) ? 1 : 0);
-          const bScore =
-            (bTitle.includes(queryLower) ? 2 : 0) +
-            (b.data.description.toLowerCase().includes(queryLower) ? 1 : 0);
+            const aScore =
+              (aTitle.includes(queryLower) ? 2 : 0) +
+              (a.data.description.toLowerCase().includes(queryLower) ? 1 : 0);
+            const bScore =
+              (bTitle.includes(queryLower) ? 2 : 0) +
+              (b.data.description.toLowerCase().includes(queryLower) ? 1 : 0);
 
-          comparison = bScore - aScore;
-          break;
+            comparison = bScore - aScore;
+            break;
+        }
+
+        return sortOrder === "desc" ? -comparison : comparison;
       }
+    );
 
-      return sortOrder === "desc" ? -comparison : comparison;
-    });
-
-    return filteredPosts.map((post) => ({
+    return filteredPosts.map((post: CollectionEntry<"blog">) => ({
       title: post.data.title,
       description: post.data.description,
       url: `/${lang}/blog/${post.slug.replace(`${lang}/`, "")}`, // All URLs now include /lang/ prefix
