@@ -1,0 +1,131 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, useTranslations } from '@/i18n/utils';
+
+export interface Props {
+  post: CollectionEntry<'blog'>;
+  lang: string;
+  showExcerpt?: boolean;
+}
+
+const { post, lang, showExcerpt = true } = Astro.props;
+const t = useTranslations(lang as 'en' | 'es' | 'ja');
+
+// Construct the post URL based on language
+const baseUrl = lang === 'en' ? '/blog' : `/${lang}/blog`;
+const postUrl = `${baseUrl}/${post.slug}`;
+
+// Extract excerpt from content
+const excerpt = showExcerpt ? post.data.description || post.body.slice(0, 150) + '...' : '';
+---
+
+<article class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+  <!-- Hero Image -->
+  {post.data.heroImage && (
+    <div class="aspect-video overflow-hidden">
+      <img
+        src={post.data.heroImage}
+        alt={post.data.title}
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
+
+  <!-- Content -->
+  <div class="p-6">
+    <!-- Tags -->
+    {post.data.tags && post.data.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-3">
+        {post.data.tags.slice(0, 3).map((tag: string) => (
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+            #{tag}
+          </span>
+        ))}
+        {post.data.tags.length > 3 && (
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+            +{post.data.tags.length - 3}
+          </span>
+        )}
+      </div>
+    )}
+
+    <!-- Title -->
+    <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
+      <a href={postUrl} class="stretched-link">
+        {post.data.title}
+      </a>
+    </h2>
+
+    <!-- Excerpt -->
+    {showExcerpt && excerpt && (
+      <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
+        {excerpt}
+      </p>
+    )}
+
+    <!-- Meta Information -->
+    <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+      <div class="flex items-center space-x-4">
+        <!-- Author -->
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
+          <span>{post.data.author}</span>
+        </div>
+
+        <!-- Reading time -->
+        {post.data.readingTime && (
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>{post.data.readingTime}</span>
+          </div>
+        )}
+      </div>
+
+      <!-- Published date -->
+      <time datetime={post.data.pubDate.toISOString()} class="flex items-center">
+        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        {formatDate(post.data.pubDate, lang)}
+      </time>
+    </div>
+
+    <!-- Read more link -->
+    <div class="mt-4">
+      <a
+        href={postUrl}
+        class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm transition-colors duration-200"
+      >
+        {t('blog.read-more')}
+        <svg class="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
