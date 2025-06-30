@@ -4,21 +4,23 @@ const blog = defineCollection({
   type: "content",
   // Type-check frontmatter using a schema
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    slug: z.string().optional(),
-    author: z.string().default("Admin"),
-    // Transform string to Date object
+    title: z.string().trim(),
+    lang: z.string().trim(),
+    categories: z.array(z.string()),
+    description: z.string().trim(),
+    keywords: z.array(z.string()).optional(),
+    author: z.string().trim(),
+    authorImage: z.string().trim().optional(),
+    authorURL: z.string().trim().optional(),
     pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    heroImage: z.string().optional(),
-    draft: z.boolean().default(false),
-    tags: z.array(z.string()).default(["general"]),
-    // Optional fields for SEO
-    canonical: z.string().optional(),
-    noindex: z.boolean().default(false),
-    // Reading time will be injected by remark plugin
-    readingTime: z.string().optional(),
+    editDate: z.coerce.date().optional(),
+    heroImage: z.string().trim().optional(),
+    heroImageAlt: z.string().trim().optional(),
+    tags: z.array(z.string()),
+    draft: z.boolean(),
+    comment: z.boolean().optional(),
+    robots: z.string().trim().optional(),
+    canonicalURL: z.string().trim().optional(),
   }),
 });
 
