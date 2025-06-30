@@ -1,74 +1,36 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import type { SearchablePost, SearchResult, SearchFilters } from './search';
 
-export interface SearchResult {
-  title: string;
-  description: string;
-  url: string;
-  pubDate: string;
-  tags?: string[];
-  lang: string;
-  slug: string;
-}
-
-// Simple client-side search implementation
-export async function searchPosts(query: string, lang: string = 'en'): Promise<SearchResult[]> {
+// Server-side function to get all posts for a language
+export async function getAllPosts(lang: string = 'en'): Promise<SearchablePost[]> {
   try {
-    // In a real implementation, this would be replaced with Algolia or another search service
-    // For now, we'll do a simple client-side search
-
-    const allPosts = await getCollection('blog', ({ id, data }) => {
+    const allPosts = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
       return id.startsWith(`${lang}/`) && !data.draft;
     });
 
-    const results = allPosts
-      .filter(post => {
-        const searchText = `${post.data.title} ${post.data.description} ${(post.data.tags || []).join(' ')}`.toLowerCase();
-        return searchText.includes(query.toLowerCase());
-      })
-      .map(post => ({
-        title: post.data.title,
-        description: post.data.description,
-        url: lang === 'en' ? `/blog/${post.slug.replace('en/', '')}` : `/${lang}/blog/${post.slug.replace(`${lang}/`, '')}`,
-        pubDate: formatSearchDate(post.data.pubDate),
-        tags: post.data.tags,
-        lang: lang,
-        slug: post.slug,
-      }))
-      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
-
-    return results;
+    return allPosts.map((post: CollectionEntry<'blog'>) => ({
+      slug: post.slug,
+      title: post.data.title,
+      description: post.data.description,
+      pubDate: post.data.pubDate,
+      tags: post.data.tags,
+      lang: lang,
+    }));
   } catch (error) {
-    console.error('Search error:', error);
+    console.error('Error getting all posts:', error);
     return [];
   }
 }
 
-function formatSearchDate(date: Date): string {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(date);
-}
-
-// Advanced search with filters
-export interface SearchFilters {
-  tags?: string[];
-  dateFrom?: Date;
-  dateTo?: Date;
-  author?: string;
-  sortBy?: 'date' | 'title' | 'relevance';
-  sortOrder?: 'asc' | 'desc';
-}
-
-export async function advancedSearch(
+// Server-side advanced search with filters
+export async function advancedSearchServer(
   query: string,
   filters: SearchFilters = {},
   lang: string = 'en'
 ): Promise<SearchResult[]> {
   try {
-    const allPosts = await getCollection('blog', ({ id, data }) => {
+    const allPosts = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
       return id.startsWith(`${lang}/`) && !data.draft;
     });
 
@@ -76,7 +38,7 @@ export async function advancedSearch(
 
     // Apply text search
     if (query.trim()) {
-      filteredPosts = filteredPosts.filter(post => {
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<'blog'>) => {
         const searchText = `${post.data.title} ${post.data.description} ${(post.data.tags || []).join(' ')}`.toLowerCase();
         return searchText.includes(query.toLowerCase());
       });
@@ -84,23 +46,23 @@ export async function advancedSearch(
 
     // Apply tag filter
     if (filters.tags && filters.tags.length > 0) {
-      filteredPosts = filteredPosts.filter(post => {
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<'blog'>) => {
         return filters.tags!.some(tag => (post.data.tags || []).includes(tag));
       });
     }
 
     // Apply date range filter
     if (filters.dateFrom) {
-      filteredPosts = filteredPosts.filter(post => post.data.pubDate >= filters.dateFrom!);
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<'blog'>) => post.data.pubDate >= filters.dateFrom!);
     }
 
     if (filters.dateTo) {
-      filteredPosts = filteredPosts.filter(post => post.data.pubDate <= filters.dateTo!);
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<'blog'>) => post.data.pubDate <= filters.dateTo!);
     }
 
     // Apply author filter
     if (filters.author) {
-      filteredPosts = filteredPosts.filter(post =>
+      filteredPosts = filteredPosts.filter((post: CollectionEntry<'blog'>) =>
         post.data.author.toLowerCase().includes(filters.author!.toLowerCase())
       );
     }
@@ -109,7 +71,7 @@ export async function advancedSearch(
     const sortBy = filters.sortBy || 'date';
     const sortOrder = filters.sortOrder || 'desc';
 
-    filteredPosts.sort((a, b) => {
+    filteredPosts.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => {
       let comparison = 0;
 
       switch (sortBy) {
@@ -137,14 +99,17 @@ export async function advancedSearch(
       return sortOrder === 'desc' ? -comparison : comparison;
     });
 
-    return filteredPosts.map(post => ({
+    return filteredPosts.map((post: CollectionEntry<'blog'>) => ({
+      slug: post.slug,
       title: post.data.title,
       description: post.data.description,
       url: lang === 'en' ? `/blog/${post.slug.replace('en/', '')}` : `/${lang}/blog/${post.slug.replace(`${lang}/`, '')}`,
-      pubDate: formatSearchDate(post.data.pubDate),
+      pubDate: post.data.pubDate,
+      formattedPubDate: formatSearchDate(post.data.pubDate),
       tags: post.data.tags,
       lang: lang,
-      slug: post.slug,
+      relevanceScore: 0,
+      excerpt: post.data.description.substring(0, 150) + (post.data.description.length > 150 ? '...' : ''),
     }));
   } catch (error) {
     console.error('Advanced search error:', error);
@@ -152,17 +117,17 @@ export async function advancedSearch(
   }
 }
 
-// Get popular tags for search suggestions
-export async function getPopularTags(lang: string = 'en', limit: number = 10): Promise<{ tag: string; count: number }[]> {
+// Server-side function to get popular tags
+export async function getPopularTagsServer(lang: string = 'en', limit: number = 10): Promise<{ tag: string; count: number }[]> {
   try {
-    const allPosts = await getCollection('blog', ({ id, data }) => {
+    const allPosts = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
       return id.startsWith(`${lang}/`) && !data.draft;
     });
 
     const tagCounts = new Map<string, number>();
 
-    allPosts.forEach(post => {
-      (post.data.tags || []).forEach(tag => {
+    allPosts.forEach((post: CollectionEntry<'blog'>) => {
+      (post.data.tags || []).forEach((tag: string) => {
         tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
       });
     });
@@ -177,33 +142,33 @@ export async function getPopularTags(lang: string = 'en', limit: number = 10): P
   }
 }
 
-// Search suggestions based on partial query
-export async function getSearchSuggestions(partialQuery: string, lang: string = 'en', limit: number = 5): Promise<string[]> {
+// Server-side function to get search suggestions
+export async function getSearchSuggestionsServer(partialQuery: string, lang: string = 'en', limit: number = 5): Promise<string[]> {
   try {
     if (partialQuery.length < 2) return [];
 
-    const allPosts = await getCollection('blog', ({ id, data }) => {
+    const allPosts = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
       return id.startsWith(`${lang}/`) && !data.draft;
     });
 
     const suggestions = new Set<string>();
     const queryLower = partialQuery.toLowerCase();
 
-    allPosts.forEach(post => {
+    allPosts.forEach((post: CollectionEntry<'blog'>) => {
       // Extract words from title and description
       const words = `${post.data.title} ${post.data.description}`
         .toLowerCase()
         .split(/\s+/)
-        .filter(word => word.length > 2 && word.includes(queryLower));
+        .filter((word: string) => word.length > 2 && word.includes(queryLower));
 
-      words.forEach(word => {
+      words.forEach((word: string) => {
         if (suggestions.size < limit * 3) {
           suggestions.add(word);
         }
       });
 
       // Add matching tags
-      (post.data.tags || []).forEach(tag => {
+      (post.data.tags || []).forEach((tag: string) => {
         if (tag.toLowerCase().includes(queryLower) && suggestions.size < limit * 3) {
           suggestions.add(tag);
         }
@@ -211,7 +176,7 @@ export async function getSearchSuggestions(partialQuery: string, lang: string = 
     });
 
     return Array.from(suggestions)
-      .sort((a, b) => {
+      .sort((a: string, b: string) => {
         // Prioritize exact matches and shorter words
         const aExact = a.startsWith(queryLower) ? 0 : 1;
         const bExact = b.startsWith(queryLower) ? 0 : 1;
@@ -220,7 +185,15 @@ export async function getSearchSuggestions(partialQuery: string, lang: string = 
       })
       .slice(0, limit);
   } catch (error) {
-    console.error('Failed to fetch search results:', error);
+    console.error('Error getting search suggestions:', error);
     return [];
   }
+}
+
+function formatSearchDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(date);
 }
