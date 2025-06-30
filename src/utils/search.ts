@@ -1,5 +1,4 @@
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
+// Removed astro:content imports as they are server-side only
 
 export interface SearchResult {
   title: string;
@@ -14,29 +13,13 @@ export interface SearchResult {
 // Simple client-side search implementation
 export async function searchPosts(query: string, lang: string = 'en'): Promise<SearchResult[]> {
   try {
-    // In a real implementation, this would be replaced with Algolia or another search service
-    // For now, we'll do a simple client-side search
-
-    const allPosts = await getCollection('blog', ({ id, data }) => {
-      return id.startsWith(`${lang}/`) && !data.draft;
-    });
-
-    const results = allPosts
-      .filter(post => {
-        const searchText = `${post.data.title} ${post.data.description} ${(post.data.tags || []).join(' ')}`.toLowerCase();
-        return searchText.includes(query.toLowerCase());
-      })
-      .map(post => ({
-        title: post.data.title,
-        description: post.data.description,
-        url: lang === 'en' ? `/blog/${post.slug.replace('en/', '')}` : `/${lang}/blog/${post.slug.replace(`${lang}/`, '')}`,
-        pubDate: formatSearchDate(post.data.pubDate),
-        tags: post.data.tags,
-        lang: lang,
-        slug: post.slug,
-      }))
-      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
-
+    // Fetch posts from API endpoint
+    const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&lang=${lang}`);
+    if (!response.ok) {
+      throw new Error('Search API request failed');
+    }
+    
+    const results = await response.json();
     return results;
   } catch (error) {
     console.error('Search error:', error);

@@ -1,5 +1,5 @@
-import { getCollection, type CollectionEntry } from "astro:content";
 import type { APIRoute } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 export interface SearchResult {
   title: string;
