@@ -13,28 +13,7 @@ interface Props {
 
 const { post, index, authorImage, authorSlug } = Astro.props;
 
-// Log the incoming post object details
-console.log("--- FeaturedPostCard Debug ---");
-console.log("Post ID:", post.id);
-console.log("Post Slug (from Astro):", post.slug);
-console.log("Post Frontmatter Lang:", post.data.lang);
-
-// Determine the post's actual language from its frontmatter or post.slug
-const postLanguage = post.data.lang || post.slug.split("/")[0];
-// Extract the base slug (the part after the language directory)
-const baseSlug = post.slug.includes("/")
-  ? post.slug.substring(post.slug.indexOf("/") + 1)
-  : post.slug;
-
-const postUrl =
-  postLanguage === "en"
-    ? `/en/${baseSlug}`
-    : `/${postLanguage}/blog/${baseSlug}`;
-
-console.log("Calculated postLanguage:", postLanguage);
-console.log("Calculated baseSlug:", baseSlug);
-console.log("Generated postUrl:", postUrl);
-console.log("-----------------------------");
+const postUrl = `/${post.slug}`;
 ---
 
 <article
