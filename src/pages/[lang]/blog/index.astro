@@ -58,7 +58,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
 ---
 
 <Layout
-  title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''} | AstroBlog`}
+  title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''} | Astro Batavia`}
   description={t('meta.description')}
   lang={lang}
 >
@@ -222,67 +222,6 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
   </div>
 </Layout>
 
-<<<<<<< HEAD
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const tagFilters = document.querySelectorAll(".tag-filter");
-    const postItems = document.querySelectorAll(".post-item");
-
-    // Tag filtering
-    tagFilters.forEach((filter) => {
-      filter.addEventListener("click", () => {
-        const selectedTag = filter.getAttribute("data-tag");
-
-        // Update active filter
-        tagFilters.forEach((f) => {
-          f.classList.remove("active", "bg-primary-600", "text-white");
-          f.classList.add(
-            "border-gray-300",
-            "dark:border-gray-600",
-            "text-gray-700",
-            "dark:text-gray-300"
-          );
-        });
-
-        filter.classList.add("active", "bg-primary-600", "text-white");
-        filter.classList.remove(
-          "border-gray-300",
-          "dark:border-gray-600",
-          "text-gray-700",
-          "dark:text-gray-300"
-        );
-
-        // Filter posts
-        postItems.forEach((item) => {
-          const postTags = JSON.parse(item.getAttribute("data-tags") || "[]");
-          const shouldShow =
-            selectedTag === "all" || postTags.includes(selectedTag);
-          if (shouldShow) {
-            item.classList.add("block", "animate-fade-in");
-          } else {
-            item.classList.remove("block", "animate-fade-in");
-          }
-        });
-      });
-    });
-
-    // Simple load more functionality
-    const loadMoreBtn = document.getElementById("load-more");
-    if (loadMoreBtn) {
-      loadMoreBtn.addEventListener("click", () => {
-        const lang = document.documentElement.lang;
-        const messages = {
-          en: "No more articles to load",
-          es: "No hay más artículos para cargar",
-          ja: "読み込む記事がありません",
-        };
-
-        loadMoreBtn.textContent =
-          messages[lang as keyof typeof messages] || messages.en;
-        (loadMoreBtn as HTMLButtonElement).disabled = true;
-        loadMoreBtn.classList.add("opacity-50", "cursor-not-allowed");
-      });
-=======
 <script define:vars={{ postsPerPage, totalPages }}>
   document.addEventListener("DOMContentLoaded", () => {
     const loadMoreBtn = document.getElementById("load-more");
@@ -294,7 +233,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
         loadMoreBtn.style.display = "none";
       }
       return;
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+    }
     }
 
     const postItems = Array.from(postsContainer.children);

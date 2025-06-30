@@ -1,7 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-<<<<<<< HEAD
 import BlogCard from "@/components/BlogCard.astro";
 import { useTranslations } from "@/i18n/utils";
 
@@ -88,15 +87,13 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
               data-tag="all">
               All Topics
             </button>
-            {
-              allTags.slice(0, 10).map((tag) => (
-                <button
-                  class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
-                  data-tag={tag}>
-                  #{tag}
-                </button>
-              ))
-            }
+            {allTags.slice(0, 10).map((tag) => (
+              <button
+                class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+                data-tag={tag}>
+                #{tag}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -128,25 +125,19 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
         Enter a search term to find articles, or browse all {posts.length} articles
         below.
       </div>
-
       <div
         id="results-container"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {
-          posts.map((post: CollectionEntry<"blog">) => (
-            <div
-              class="post-item"
-              data-tags={JSON.stringify(post.data.tags || [])}
-              data-title={post.data.title}
-              data-description={post.data.description}
-              data-date={post.data.pubDate.toISOString()}>
-              <BlogCard
-                post={post}
-                lang={lang}
-              />
-            </div>
-          ))
-        }
+        {posts.map((post: CollectionEntry<"blog">) => (
+          <div
+            class="post-item"
+            data-tags={JSON.stringify(post.data.tags || [])}
+            data-title={post.data.title}
+            data-description={post.data.description}
+            data-date={post.data.pubDate.toISOString()}>
+            <BlogCard post={post} lang={lang} />
+          </div>
+        ))}
       </div>
     </div>
 
@@ -178,69 +169,10 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
         Clear Search
       </button>
     </div>
-=======
-import { useTranslations } from "@/i18n/utils";
-import type { LanguageKey } from "@/i18n/types";
-
-import SearchPageHeader from "@/components/search/SearchPageHeader.astro";
-import SearchInputForm from "@/components/search/SearchInputForm.astro";
-import SearchFilters from "@/components/search/SearchFilters.astro";
-import SearchResults from "@/components/search/SearchResults.astro";
-
-// Get all English blog posts for search
-const allPostsUnsorted = await getCollection(
-  "blog",
-  ({ id, data }: CollectionEntry<"blog">) => {
-    return id.startsWith("en/") && !data.draft;
-  }
-);
-
-// This initial sort might be overridden by client-side sort, but good for no-JS/initial display
-const posts = allPostsUnsorted.sort(
-  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
-    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
-const lang = "en" as LanguageKey; // Hardcoded for this non-localized search page
-const t = useTranslations(lang);
-
-const allTags: string[] = [
-  ...new Set(
-    posts.flatMap((post: CollectionEntry<"blog">) => post.data.tags || [])
-  ),
-].sort() as string[];
-
-const pageTitle = `${t("nav.search")} | AstroBlog`;
-const pageDescription =
-  "Search through our collection of articles and find exactly what you're looking for";
-const searchPageDescription =
-  "Find articles, topics, and insights across our entire blog collection.";
-const initialStatusText = `Enter a search term to find articles, or browse all ${posts.length} articles below.`;
----
-
-<Layout
-  title={pageTitle}
-  description={pageDescription}
-  lang={lang}>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <SearchPageHeader
-      title={t("nav.search")}
-      description={searchPageDescription}
-    />
-    <SearchInputForm placeholder={t("search.placeholder")} />
-    <SearchFilters tags={allTags} />
-    <SearchResults
-      posts={posts}
-      lang={lang}
-      noResultsText={t("search.no-results")}
-      initialStatusText={initialStatusText}
-    />
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
   </div>
 </Layout>
 
 <script>
-<<<<<<< HEAD
   document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById(
       "main-search-input"
@@ -258,7 +190,6 @@ const initialStatusText = `Enter a search term to find articles, or browse all $
     if (!searchInput || !resultsContainer || !searchStatus || !noResults)
       return;
 
-    // Remove this line: let currentQuery = "";
     let currentTag = "all";
     let currentSort = "date-desc";
 
@@ -357,7 +288,6 @@ const initialStatusText = `Enter a search term to find articles, or browse all $
 
     // Search input event
     searchInput.addEventListener("input", () => {
-      // Remove this line: currentQuery = (e.target as HTMLInputElement).value;
       performSearch();
     });
 
@@ -397,7 +327,6 @@ const initialStatusText = `Enter a search term to find articles, or browse all $
     // Clear search
     clearSearch?.addEventListener("click", () => {
       searchInput.value = "";
-      // Remove this line: currentQuery = "";
       currentTag = "all";
 
       // Reset tag filters
@@ -428,10 +357,5 @@ const initialStatusText = `Enter a search term to find articles, or browse all $
 
     // Initial load
     performSearch();
-=======
-  import { initializeSearchPage } from "@/features/search/searchClient";
-  document.addEventListener("DOMContentLoaded", () => {
-    initializeSearchPage();
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
   });
 </script>
