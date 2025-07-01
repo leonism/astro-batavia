@@ -3,7 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 import Picture from '@/components/ui/Picture.astro';
 import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
-import { formatDate, getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
 import { generateStructuredData } from '@/utils/seo';
 
 type Props = CollectionEntry<'blog'>['data'] & {
@@ -80,7 +80,7 @@ const structuredData = generateStructuredData({
     <!-- Back to blog link -->
     <div class="mb-8">
       <a
-        href={lang === 'en' ? '/blog' : `/${lang}/blog`}
+        href={getLocalizedPath('/blog', lang)}
         class="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

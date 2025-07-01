@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatDate, useTranslations } from "@/i18n/utils";
+import { formatDate, useTranslations, getLocalizedPath } from "@/i18n/utils";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -14,7 +14,7 @@ const t = useTranslations(lang as "en" | "es" | "ja");
 // Construct the post URL based on language
 const cleanSlug = post.slug.replace(/^(en|es|ja)\//g, "");
 const postUrl =
-  lang === "en" ? `/blog/${cleanSlug}` : `/${lang}/blog/${cleanSlug}`;
+  getLocalizedPath(`/blog/${cleanSlug}`, lang);
 
 // Extract excerpt from content
 const excerpt = showExcerpt
