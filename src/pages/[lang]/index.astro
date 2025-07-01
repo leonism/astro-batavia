@@ -1,9 +1,10 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import HomeHero from "@/components/home/HomeHero.astro";
-import HomeLatestPosts from "@/components/home/HomeLatestPosts.astro";
-import HomeNewsletter from "@/components/home/HomeNewsletter.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import FeaturesSection from "@/components/sections/FeaturesSection.astro";
+import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
+import NewsletterSection from "@/components/sections/NewsletterSection.astro";
 import { useTranslations, isValidLanguage } from "@/i18n/utils";
 
 export async function getStaticPaths() {
@@ -36,17 +37,8 @@ const latestPosts = sortedPosts.slice(0, 3);
   title="AstroBlog - Modern Multi-Language Blog"
   description={t("meta.description")}
   lang={lang}>
-  <HomeHero
-    lang={lang}
-    t={t}
-  />
-  <HomeLatestPosts
-    latestPosts={latestPosts}
-    lang={lang}
-    t={t}
-  />
-  <HomeNewsletter
-    lang={lang}
-    t={t}
-  />
+  <HeroSection />
+  <FeaturesSection />
+  <FeaturedStoriesSection latestPosts={latestPosts} />
+  <NewsletterSection />
 </Layout>

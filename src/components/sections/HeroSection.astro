@@ -1,17 +1,20 @@
 ---
 import BaseHero from "@/components/ui/BaseHero.astro";
+import { getLangFromUrl, useTranslations, getLocalizedPath } from "@/i18n/utils";
 
-const title = `Beautiful <span class="block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight">Multi-language</span> Blog`;
-const subtitle =
-  "Experience the future of blogging with our lightning-fast, beautifully designed platform built with Astro.js";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
-const cta1Text = "Start Reading";
-const cta1Link = "/en/blog";
+const title = `${t("home.hero.mainTitle")}`;
+const subtitle = t("home.hero.description");
+
+const cta1Text = t("home.hero.startReading");
+const cta1Link = getLocalizedPath("/blog", lang);
 const cta1IconSvg = "M13 7l5 5m0 0l-5 5m5-5H6";
 const cta1AriaLabel = "Start reading blog articles";
 
-const cta2Text = "Explore Content";
-const cta2Link = "/search";
+const cta2Text = t("home.hero.exploreContent");
+const cta2Link = getLocalizedPath("/search", lang);
 const cta2IconSvg = "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z";
 const cta2AriaLabel = "Explore blog content";
 ---
