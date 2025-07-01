@@ -14,7 +14,7 @@ const t = useTranslations(lang as "en" | "es" | "ja");
 // Construct the post URL based on language
 const postUrl =
   lang === "en"
-    ? `/blog/${post.slug.replace("en/", "")}`
+    ? `/en/blog/${post.slug.replace("en/", "")}`
     : `/${lang}/blog/${post.slug.replace(`${lang}/`, "")}`;
 
 // Extract excerpt from content
@@ -28,7 +28,7 @@ const excerpt = showExcerpt
   <!-- Hero Image -->
   {
     post.data.heroImage && (
-      <div class="aspect-video overflow-hidden">
+      <div class="h-48 overflow-hidden">
         <img
           src={post.data.heroImage}
           alt={post.data.title}
@@ -144,14 +144,14 @@ const excerpt = showExcerpt
       </time>
     </div>
 
-    <!-- Read more link -->
+    <!-- Read more button -->
     <div class="mt-auto pt-4">
       <a
         href={postUrl}
-        class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm transition-colors duration-200">
+        class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white font-medium text-sm rounded-full transition-all duration-200 hover:shadow-lg hover:scale-105">
         {t("blog.readMore")}
         <svg
-          class="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-200"
+          class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24">
