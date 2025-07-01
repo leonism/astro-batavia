@@ -12,10 +12,9 @@ const { post, lang, showExcerpt = true } = Astro.props;
 const t = useTranslations(lang as "en" | "es" | "ja");
 
 // Construct the post URL based on language
-const postUrl =
-  lang === "en"
-    ? `/en/blog/${post.slug.replace("en/", "")}`
-    : `/${lang}/blog/${post.slug.replace(`${lang}/`, "")}`;
+// Remove the language prefix from slug to avoid duplication
+const cleanSlug = post.slug.replace(/^(en|es|ja)\//g, "");
+const postUrl = `/${lang}/blog/${cleanSlug}`;
 
 // Extract excerpt from content
 const excerpt = showExcerpt
@@ -28,7 +27,7 @@ const excerpt = showExcerpt
   <!-- Hero Image -->
   {
     post.data.heroImage && (
-      <div class="h-48 overflow-hidden">
+      <div class="h-48 overflow-hidden flex-shrink-0">
         <img
           src={post.data.heroImage}
           alt={post.data.title}
