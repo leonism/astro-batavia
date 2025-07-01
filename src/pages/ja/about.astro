@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { getLocalizedPath } from "@/i18n/utils";
 const lang = "ja";
 ---
 
@@ -353,7 +354,7 @@ const lang = "ja";
           </svg>
         </a>
         <a
-          href="/contact"
+          href={getLocalizedPath("/contact", "ja")}
           class="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-2xl hover:bg-white/20 transition-all duration-300 border-2 border-white/20">
           お問い合わせ
         </a>
