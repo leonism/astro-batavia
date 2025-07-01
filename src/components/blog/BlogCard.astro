@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import Picture from "@/components/ui/Picture.astro";
 import { formatDate, useTranslations } from "@/i18n/utils";
 import type { ui } from "@/i18n/ui"; // Import the type of ui
 
@@ -58,12 +59,15 @@ const excerptClasses = [
   {
     post.data.heroImage && (
       <div class={imageContainerClasses}>
-        <img
+        <Picture
           src={post.data.heroImage}
           alt={post.data.title}
+          width={600}
+          height={400}
           class={imageClasses}
           loading={isFeatured ? "eager" : "lazy"}
           decoding={isFeatured ? "auto" : "async"}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
         />
       </div>
     )
