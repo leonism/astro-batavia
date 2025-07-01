@@ -14,7 +14,7 @@ const t = useTranslations(lang as "en" | "es" | "ja");
 // Construct the post URL based on language
 // Remove the language prefix from slug to avoid duplication
 const cleanSlug = post.slug.replace(/^(en|es|ja)\//g, "");
-const postUrl = `/${lang}/blog/${cleanSlug}`;
+const postUrl = lang === 'en' ? `/blog/${cleanSlug}` : `/${lang}/blog/${cleanSlug}`;
 
 // Extract excerpt from content
 const excerpt = showExcerpt
@@ -23,7 +23,7 @@ const excerpt = showExcerpt
 ---
 
 <article
-  class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col h-full min-h-[400px] max-h-[500px]">
+    class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col h-full">
   <!-- Hero Image -->
   {
     post.data.heroImage && (
