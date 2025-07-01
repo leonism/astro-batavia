@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
+import Picture from '@/components/ui/Picture.astro';
 import { formatDate, getLangFromUrl, useTranslations } from '@/i18n/utils';
 import { generateStructuredData } from '@/utils/seo';
 
@@ -86,12 +87,15 @@ const structuredData = generateStructuredData({
     <header class="mb-8">
       {heroImage && (
         <div class="mb-8 rounded-lg overflow-hidden">
-          <img
+          <Picture
             src={heroImage}
             alt={title}
+            width={1200}
+            height={600}
             class="w-full h-64 sm:h-80 lg:h-96 object-cover"
             loading="eager"
             decoding="async"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
           />
         </div>
       )}
