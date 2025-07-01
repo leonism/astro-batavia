@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { getLocalizedPath } from "@/i18n/utils";
 
 const lang = "en";
 ---
@@ -207,7 +208,7 @@ const lang = "en";
           <li><strong>Address:</strong> San Francisco, CA, United States</li>
           <li>
             <strong>Contact Form:</strong>
-            <a href="/contact">Contact Page</a>
+            <a href={getLocalizedPath("/contact", "en")}>Contact Page</a>
           </li>
         </ul>
 
@@ -245,7 +246,7 @@ const lang = "en";
             services.
           </p>
           <a
-            href="/contact"
+            href={getLocalizedPath("/contact", "en")}
             class="inline-flex items-center px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors">
             Contact Legal Team
             <svg

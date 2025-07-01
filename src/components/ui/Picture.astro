@@ -21,8 +21,12 @@ const {
   sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
 } = Astro.props;
 
-// Generate different format URLs
+// Check if the image is external (starts with http/https)
+const isExternalImage = src.startsWith('http');
+
+// Only generate different formats for local images
 const getImageUrl = (originalSrc: string, format: string) => {
+  if (isExternalImage) return null;
   const ext = originalSrc.split('.').pop();
   return originalSrc.replace(`.${ext}`, `.${format}`);
 };
@@ -32,8 +36,8 @@ const webpSrc = getImageUrl(src, 'webp');
 ---
 
 <picture>
-  <source srcset={avifSrc} type="image/avif" sizes={sizes} />
-  <source srcset={webpSrc} type="image/webp" sizes={sizes} />
+  {avifSrc && <source srcset={avifSrc} type="image/avif" sizes={sizes} />}
+  {webpSrc && <source srcset={webpSrc} type="image/webp" sizes={sizes} />}
   <img
     src={src}
     alt={alt}
