@@ -3,6 +3,7 @@
 import type { CollectionEntry } from "astro:content";
 import BlogCard from "@/components/blog/BlogCard.astro";
 import type { ui } from "@/i18n/ui";
+import { getLocalizedPath } from "@/i18n/utils";
 
 interface Props {
   latestPosts: CollectionEntry<"blog">[];
@@ -37,7 +38,7 @@ const { latestPosts, lang, t } = Astro.props;
 
         <div class="text-center mt-12">
           <a
-            href={`/${lang}/blog`}
+            href={getLocalizedPath('/blog', lang)}
             class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all duration-200">
             {t("home.latestPosts.viewAllButton" as any)}
             <svg
