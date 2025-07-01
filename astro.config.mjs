@@ -5,10 +5,10 @@ import mdx from "@astrojs/mdx";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 import { remarkReadingTime } from "./src/utils/remark-reading-time.mjs";
-import viteImagemin from "vite-plugin-imagemin";
-import gzipPlugin from "rollup-plugin-gzip";
-import brotliPlugin from "rollup-plugin-brotli";
 import htmlMinifier from "./src/integrations/html-minifier.mjs";
+// import viteImagemin from "vite-plugin-imagemin";
+// import gzipPlugin from "rollup-plugin-gzip";
+// import brotliPlugin from "rollup-plugin-brotli";
 
 // https://astro.build/config
 export default defineConfig({
@@ -42,7 +42,7 @@ export default defineConfig({
     defaultLocale: "en",
     locales: ["en", "es", "ja"],
     routing: {
-      prefixDefaultLocale: true,
+      prefixDefaultLocale: false,
     },
   },
   markdown: {
@@ -65,23 +65,23 @@ export default defineConfig({
         },
       },
     },
-    plugins: [
-      viteImagemin({
-        gifsicle: { optimizationLevel: 7 },
-        mozjpeg: { quality: 80 },
-        pngquant: { quality: [0.65, 0.8] },
-        svgo: {
-          plugins: [
-            { name: "removeViewBox", active: false },
-            { name: "removeEmptyAttrs", active: false },
-          ],
-        },
-        webp: { quality: 80 },
-        avif: { quality: 60 },
-      }),
-      gzipPlugin(),
-      brotliPlugin(),
-    ],
+    // plugins: [
+    //   viteImagemin({
+    //     gifsicle: { optimizationLevel: 7 },
+    //     mozjpeg: { quality: 80 },
+    //     pngquant: { quality: [0.65, 0.8] },
+    //     svgo: {
+    //       plugins: [
+    //         { name: 'removeViewBox', active: false },
+    //         { name: 'removeEmptyAttrs', active: false },
+    //       ],
+    //     },
+    //     webp: { quality: 80 },
+    //     avif: { quality: 60 },
+    //   }),
+    //   gzipPlugin(),
+    //   brotliPlugin(),
+    // ],
   },
   server: {
     host: "0.0.0.0",

@@ -16,7 +16,7 @@ export const ui = {
     "nav.authors": "Authors",
     "nav.search": "Search",
     "nav.toggle": "Toggle navigation",
-    "footer.copyright": "© 2024 Astro Batavia. All rights reserved.",
+    "footer.copyright": "© 2025 Astro Batavia. All rights reserved.",
     "footer.builtWith": "Built with",
     "footer.poweredBy": "Powered by",
     "footer.designedBy": "Designed by",
@@ -32,7 +32,8 @@ export const ui = {
     "footer.newsletter.placeholder": "Enter your email",
     "footer.newsletter.button": "Subscribe",
     "blog.title": "Blog",
-    "blog.description": "Discover insights, tutorials, and stories from our community of developers and creators.",
+    "blog.description":
+      "Discover insights, tutorials, and stories from our community of developers and creators.",
     "blog.readMore": "Read more",
     "blog.readTime": "min read",
     "blog.publishedOn": "Published on",
@@ -73,10 +74,12 @@ export const ui = {
     "home.hero.exploreContent": "Explore Content",
     "home.hero.exploreButton": "Explore Articles",
     "home.hero.searchButton": "Search Content",
-    "home.hero.mainTitle": "Beautiful <span class=\"block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight\">Multi-Language</span> Blog",
+    "home.hero.mainTitle":
+      'Beautiful <span class="block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight">Multi-Language</span> Blog',
     "home.hero.description":
       "Built with Astro.js, featuring lightning-fast performance, seamless content management, and beautiful design.",
     "home.features.sectionTitle": "Why Choose Our Platform",
+    "home.features.sectionSubtitle": "Discover our key features",
     "home.features.fast.title": "Lightning Fast",
     "home.features.fast.description":
       "Built with Astro's island architecture for exceptional performance. Zero JavaScript by default, hydrate only when needed.",
@@ -129,7 +132,8 @@ export const ui = {
       "We respect your privacy. Unsubscribe at any time.",
     "home.newsletter.emailPlaceholder": "Enter your email",
     "home.newsletter.subscribeButton": "Subscribe",
-    "home.features.sectionSubtitle": "Discover our key features and how they can benefit you.",
+    "home.features.sectionSubtitle":
+      "Discover our key features and how they can benefit you.",
   },
   es: {
     "nav.home": "Inicio",
@@ -156,7 +160,8 @@ export const ui = {
     "footer.newsletter.placeholder": "Ingresa tu email",
     "footer.newsletter.button": "Suscribirse",
     "blog.title": "Blog",
-    "blog.description": "Descubre perspectivas, tutoriales e historias de nuestra comunidad de desarrolladores y creadores.",
+    "blog.description":
+      "Descubre perspectivas, tutoriales e historias de nuestra comunidad de desarrolladores y creadores.",
     "blog.readMore": "Leer más",
     "blog.readTime": "min de lectura",
     "blog.publishedOn": "Publicado el",
@@ -174,7 +179,8 @@ export const ui = {
     "blog.sharePost": "Compartir este artículo",
     "blog.copyLink": "Copiar enlace",
     "blog.no-posts": "No se encontraron artículos del blog.",
-    "blog.noPostsForTag": "No se encontraron artículos del blog para la etiqueta '{tag}'.",
+    "blog.noPostsForTag":
+      "No se encontraron artículos del blog para la etiqueta '{tag}'.",
     "blog.back-to-blog": "Volver al blog",
     "blog.previousArticle": "Artículo Anterior",
     "blog.nextArticle": "Siguiente Artículo",
@@ -199,10 +205,12 @@ export const ui = {
     "home.hero.searchButton": "Buscar Contenido",
     "home.newsletter.emailPlaceholder": "Ingresa tu email",
     "home.newsletter.subscribeButton": "Suscribirse",
-    "home.hero.mainTitle": "Hermoso <span class=\"block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight\">Blog Multiidioma</span>",
+    "home.hero.mainTitle":
+      'Hermoso <span class="block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight">Blog Multiidioma</span>',
     "home.hero.description":
       "Experimenta el futuro del blogging con nuestra plataforma ultrarrápida y bellamente diseñada construida con Astro.js",
     "home.features.sectionTitle": "Por Qué Elegir Nuestra Plataforma",
+    "home.features.sectionSubtitle": "Descubre nuestras características clave",
     "home.features.fast.title": "Ultrarrápido",
     "home.features.fast.description":
       "Construido con la arquitectura de islas de Astro para un rendimiento excepcional. Cero JavaScript por defecto, hidrata solo cuando es necesario.",
@@ -279,7 +287,8 @@ export const ui = {
     "footer.newsletter.placeholder": "メールアドレスを入力",
     "footer.newsletter.button": "購読",
     "blog.title": "ブログ",
-    "blog.description": "開発者とクリエイターのコミュニティからの洞察、チュートリアル、ストーリーを発見。",
+    "blog.description":
+      "開発者とクリエイターのコミュニティからの洞察、チュートリアル、ストーリーを発見。",
     "blog.readMore": "続きを読む",
     "blog.readTime": "分で読める",
     "blog.publishedOn": "公開日",
@@ -322,10 +331,12 @@ export const ui = {
     "home.hero.searchButton": "コンテンツを検索",
     "home.newsletter.emailPlaceholder": "メールアドレスを入力",
     "home.newsletter.subscribeButton": "購読",
-    "home.hero.mainTitle": "美しい<span class=\"block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight\">多言語ブログ</span>",
+    "home.hero.mainTitle":
+      '美しい<span class="block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight">多言語ブログ</span>',
     "home.hero.description":
       "Astro.jsで構築された超高速で美しくデザインされたプラットフォームで、ブログの未来を体験してください",
     "home.features.sectionTitle": "私たちのプラットフォームを選ぶ理由",
+    "home.features.sectionSubtitle": "主要な機能をご覧ください",
     "home.features.fast.title": "超高速",
     "home.features.fast.description":
       "例外的なパフォーマンスのためのAstroのアイランドアーキテクチャで構築。デフォルトでJavaScriptゼロ、必要な時のみハイドレート。",
