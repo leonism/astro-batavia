@@ -65,23 +65,23 @@ export default defineConfig({
         },
       },
     },
-    // plugins: [
-    //   viteImagemin({
-    //     gifsicle: { optimizationLevel: 7 },
-    //     mozjpeg: { quality: 80 },
-    //     pngquant: { quality: [0.65, 0.8] },
-    //     svgo: {
-    //       plugins: [
-    //         { name: 'removeViewBox', active: false },
-    //         { name: 'removeEmptyAttrs', active: false },
-    //       ],
-    //     },
-    //     webp: { quality: 80 },
-    //     avif: { quality: 60 },
-    //   }),
-    //   gzipPlugin(),
-    //   brotliPlugin(),
-    // ],
+    plugins: [
+      viteImagemin({
+        gifsicle: { optimizationLevel: 7 },
+        mozjpeg: { quality: 80 },
+        pngquant: { quality: [0.65, 0.8] },
+        svgo: {
+          plugins: [
+            { name: "removeViewBox", active: false },
+            { name: "removeEmptyAttrs", active: false },
+          ],
+        },
+        webp: { quality: 80 },
+        avif: { quality: 60 },
+      }),
+      gzipPlugin(),
+      brotliPlugin(),
+    ],
   },
   server: {
     host: "0.0.0.0",
