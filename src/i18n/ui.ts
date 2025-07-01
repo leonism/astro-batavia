@@ -131,9 +131,7 @@ export const ui = {
     "home.newsletter.privacyNote":
       "We respect your privacy. Unsubscribe at any time.",
     "home.newsletter.emailPlaceholder": "Enter your email",
-    "home.newsletter.subscribeButton": "Subscribe",
-    "home.features.sectionSubtitle":
-      "Discover our key features and how they can benefit you.",
+    "home.newsletter.subscribeButton": "Subscribe"
   },
   es: {
     "nav.home": "Inicio",
