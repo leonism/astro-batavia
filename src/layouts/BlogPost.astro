@@ -40,7 +40,7 @@ if (currentIndex !== -1) {
   if (currentIndex > 0) {
     const prev = sortedLangPosts[currentIndex - 1];
     // prev.slug is like 'en/blog/post-title', we want '/en/blog/post-title' or '/es/blog/post-title'
-    const prevUrl = lang === 'en' ? `/${lang}/${prev.slug.substring(3)}` : `/${prev.slug}`;
+    const prevUrl = getLocalizedPath(`/blog/${prev.slug.replace(/^(en|es|ja)\//g, '')}`, lang);
     previousPostData = {
       url: prevUrl,
       title: prev.data.title,
@@ -49,7 +49,7 @@ if (currentIndex !== -1) {
   if (currentIndex < sortedLangPosts.length - 1) {
     const next = sortedLangPosts[currentIndex + 1];
     // next.slug is like 'en/blog/post-title', we want '/en/blog/post-title' or '/es/blog/post-title'
-    const nextUrl = lang === 'en' ? `/${lang}/${next.slug.substring(3)}` : `/${next.slug}`;
+    const nextUrl = getLocalizedPath(`/blog/${next.slug.replace(/^(en|es|ja)\//g, '')}`, lang);
     nextPostData = {
       url: nextUrl,
       title: next.data.title,
