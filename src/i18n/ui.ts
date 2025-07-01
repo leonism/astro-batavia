@@ -131,7 +131,7 @@ export const ui = {
     "home.newsletter.privacyNote":
       "We respect your privacy. Unsubscribe at any time.",
     "home.newsletter.emailPlaceholder": "Enter your email",
-    "home.newsletter.subscribeButton": "Subscribe"
+    "home.newsletter.subscribeButton": "Subscribe",
   },
   es: {
     "nav.home": "Inicio",
@@ -142,7 +142,7 @@ export const ui = {
     "nav.authors": "Autores",
     "nav.search": "Buscar",
     "nav.toggle": "Alternar navegación",
-    "footer.copyright": "© 2024 Astro Batavia. Todos los derechos reservados.",
+    "footer.copyright": "© 2025 Astro Batavia. Todos los derechos reservados.",
     "footer.builtWith": "Construido con",
     "footer.poweredBy": "Impulsado por",
     "footer.designedBy": "Diseñado por",
@@ -269,7 +269,7 @@ export const ui = {
     "nav.authors": "著者",
     "nav.search": "検索",
     "nav.toggle": "ナビゲーションの切り替え",
-    "footer.copyright": "© 2024 Astro Batavia. All rights reserved.",
+    "footer.copyright": "© 2025 Astro Batavia. All rights reserved.",
     "footer.builtWith": "構築",
     "footer.poweredBy": "提供",
     "footer.designedBy": "デザイン",
