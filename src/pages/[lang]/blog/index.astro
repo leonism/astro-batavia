@@ -2,7 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
-import { useTranslations, isValidLanguage } from '@/i18n/utils';
+import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils';
 
 export async function getStaticPaths() {
   return [{ params: { lang: "es" } }, { params: { lang: "ja" } }];
@@ -130,7 +130,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
         </h2>
         <div class="flex flex-wrap gap-2">
           <a
-            href={`/${lang}/blog`}
+            href={getLocalizedPath('/blog', lang)}
             class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
               !currentTag
                 ? 'border-primary-600 bg-primary-600 text-white hover:bg-primary-700'
@@ -141,7 +141,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
           </a>
           {allTags.map((tag) => (
             <a
-              href={`/${lang}/blog?tag=${tag}`}
+              href={`${getLocalizedPath('/blog', lang)}?tag=${tag}`}
               class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
                 currentTag === tag
                   ? 'border-primary-600 bg-primary-600 text-white hover:bg-primary-700'
