@@ -2,8 +2,8 @@ import { defineConfig } from "astro/config";
 import sentry from "@sentry/astro";
 import spotlightjs from "@spotlightjs/astro";
 import mdx from "@astrojs/mdx";
-import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
 import { remarkReadingTime } from "./src/utils/remark-reading-time.mjs";
 // import viteImagemin from 'vite-plugin-imagemin';
 // import gzipPlugin from 'rollup-plugin-gzip';
@@ -21,9 +21,6 @@ export default defineConfig({
         theme: "github-dark",
       },
       remarkPlugins: [remarkReadingTime],
-    }),
-    tailwind({
-      applyBaseStyles: false,
     }),
     sitemap({
       i18n: {
@@ -52,6 +49,7 @@ export default defineConfig({
     },
   },
   vite: {
+    plugins: [tailwindcss()],
     optimizeDeps: {
       include: ["@astrojs/markdown-remark"],
     },
@@ -65,6 +63,7 @@ export default defineConfig({
         },
       },
     },
+    // Additional plugins can be added here:
     // plugins: [
     //   viteImagemin({
     //     gifsicle: { optimizationLevel: 7 },
