@@ -7,7 +7,6 @@ import FooterBottomBar from "@/components/footer/FooterBottomBar.astro";
 
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const t = useTranslations(lang);
-const currentYear = new Date().getFullYear();
 const navigationLinks: Link[] = [
   { href: getLocalizedPath("/", lang), text: t("nav.home"), isLocalized: false },
   { href: getLocalizedPath("/blog", lang), text: t("nav.blog"), isLocalized: false },
@@ -16,7 +15,10 @@ const navigationLinks: Link[] = [
   { href: getLocalizedPath("/search", lang), text: t("nav.search"), isLocalized: false },
 ];
 const legalLinks: Link[] = [
-  { href: getLocalizedPath("/contact", lang), text: t("footer.links.contact"), isLocalized: false },
+  {
+    href: getLocalizedPath("/contact", lang),
+    text: t("footer.links.contact"),
+    isLocalized: false },
   {
     href: getLocalizedPath("/cookies", lang),
     text: t("footer.links.cookies"),
@@ -63,7 +65,6 @@ const resourceLinks: Link[] = [
     </div>
     <FooterBottomBar
       lang={lang}
-      currentYear={currentYear}
     />
   </div>
 </footer>

@@ -4,10 +4,9 @@ import type { LanguageKey } from "@/i18n/types";
 
 interface Props {
   lang: LanguageKey;
-  currentYear: number;
 }
 
-const { lang, currentYear } = Astro.props;
+const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
