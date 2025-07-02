@@ -13,6 +13,7 @@ interface Props {
 
 const { post, index, authorImage, authorSlug } = Astro.props;
 
+// Fix double /blog/ issue - post.slug already contains the full path
 const postUrl = `/${post.slug}`;
 ---
 
