@@ -10,7 +10,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
   readingTime?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, author, tags, slug, readingTime } = Astro.props;
+const { title, description, pubDate, editDate: updatedDate, heroImage, author, tags, slug, readingTime } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -22,7 +22,7 @@ const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>
 
 // Sort posts by publication date (ascending for easier next/prev indexing)
 const sortedLangPosts = allLangPosts.sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => new Date(b.data.publishedDate).getTime() - new Date(a.data.publishedDate).getTime()
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
 
 // The 'slug' prop comes as 'en/blog/post-title' and collection slugs are also 'en/blog/post-title'
@@ -38,8 +38,8 @@ let nextPostData: { url: string; title: string } | undefined = undefined;
 if (currentIndex !== -1) {
   if (currentIndex > 0) {
     const prev = sortedLangPosts[currentIndex - 1];
-    // prev.slug is like 'en/blog/post-title', we want '/en/blog/post-title' or '/es/blog/post-title'
-    const prevUrl = getLocalizedPath(`/blog/${prev.slug.replace(/^(en|es|ja)\//g, '')}`, lang);
+    const prevSlugWithoutLang = prev.slug.replace(/^(en|es|ja)\/blog\//g, '');
+    const prevUrl = getLocalizedPath(`/blog/${prevSlugWithoutLang}`, lang);
     previousPostData = {
       url: prevUrl,
       title: prev.data.title,
@@ -47,8 +47,8 @@ if (currentIndex !== -1) {
   }
   if (currentIndex < sortedLangPosts.length - 1) {
     const next = sortedLangPosts[currentIndex + 1];
-    // next.slug is like 'en/blog/post-title', we want '/en/blog/post-title' or '/es/blog/post-title'
-    const nextUrl = getLocalizedPath(`/blog/${next.slug.replace(/^(en|es|ja)\//g, '')}`, lang);
+    const nextSlugWithoutLang = next.slug.replace(/^(en|es|ja)\/blog\//g, '');
+    const nextUrl = getLocalizedPath(`/blog/${nextSlugWithoutLang}`, lang);
     nextPostData = {
       url: nextUrl,
       title: next.data.title,
@@ -185,7 +185,7 @@ if (currentIndex !== -1) {
     </div>
 
     <!-- Article Navigation -->
-    <BlogPostNavigation 
+    <BlogPostNavigation
       previousPostData={previousPostData}
       nextPostData={nextPostData}
       lang={lang}
