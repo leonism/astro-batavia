@@ -4,7 +4,6 @@ import Layout from './Layout.astro';
 import Picture from '@/components/ui/Picture.astro';
 import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
 import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
-import { generateStructuredData } from '@/utils/seo';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
@@ -57,15 +56,7 @@ if (currentIndex !== -1) {
   }
 }
 
-const structuredData = generateStructuredData({
-  title,
-  description,
-  image: heroImage,
-  author,
-  datePublished: pubDate,
-  dateModified: updatedDate,
-  url: Astro.url.href,
-});
+// Structured data is now handled by the enhanced SEO component
 ---
 
 <Layout
@@ -73,8 +64,30 @@ const structuredData = generateStructuredData({
   description={description}
   image={heroImage}
   lang={lang}
+  type="article"
+  publishedTime={pubDate.toISOString()}
+  modifiedTime={updatedDate?.toISOString()}
+  author={author}
+  tags={tags || []}
+  readingTime={readingTime ? parseInt(readingTime.replace(/\D/g, '')) : undefined}
+  wordCount={undefined}
+  excerpt={description}
+  breadcrumbs={[
+    { name: t('nav.home'), url: getLocalizedPath('/', lang) },
+    { name: t('nav.blog'), url: getLocalizedPath('/blog', lang) },
+    { name: title, url: Astro.url.pathname }
+  ]}
+  organization={{
+    name: "Astro Batavia",
+    url: "https://astro-batavia.vercel.app",
+    logo: "https://astro-batavia.vercel.app/favicon.svg",
+    sameAs: [
+      "https://github.com/yourusername",
+      "https://twitter.com/yourusername",
+      "https://linkedin.com/company/yourcompany"
+    ]
+  }}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
   <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back to blog link -->

@@ -1,21 +1,24 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import Picture from "@/components/ui/Picture.astro";
-import { formatDate, useTranslations } from "@/i18n/utils";
+import { formatDate, useTranslations, getLocalizedPath } from "@/i18n/utils";
 import type { ui } from "@/i18n/ui"; // Import the type of ui
 
 export interface Props {
   post: CollectionEntry<"blog">;
-  lang: keyof typeof ui; // Use the specific language type
+  lang: keyof typeof ui | string; // Support both specific language type and string
   showExcerpt?: boolean;
   isFeatured?: boolean;
 }
 
 const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
-const t = useTranslations(lang);
+const t = useTranslations(lang as keyof typeof ui);
 
-// Construct the post URL using the slug from frontmatter
-const postUrl = `/${post.slug}`;
+// Construct the post URL - support both methods for compatibility
+const cleanSlug = post.slug.replace(/^(en|es|ja)\//g, "");
+const postUrl = typeof lang === 'string' && (lang === 'en' || lang === 'es' || lang === 'ja')
+  ? getLocalizedPath(`/blog/${cleanSlug}`, lang)
+  : `/${post.slug}`;
 
 // Extract excerpt from content
 const excerpt = showExcerpt
@@ -173,7 +176,7 @@ const excerptClasses = [
       <a
         href={postUrl}
         class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm transition-colors duration-200">
-        {t("blog.read-more")}
+        {t("blog.readMore")}
         <svg
           class="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-200"
           fill="none"
