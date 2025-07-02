@@ -11,20 +11,12 @@ const { latestPosts } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Try to get authors collection, fallback to empty array if it doesn't exist
-let allAuthors: any[] = [];
-try {
-  allAuthors = await getCollection("authors");
-} catch (error) {
-  // Authors collection doesn't exist, use empty array
-  console.warn("Authors collection not found, using fallback author data");
-}
+// Authors collection doesn't exist in this project, using fallback author data
+const allAuthors: any[] = [];
 
-// Function to find author details by slug
+// Function to find author details by slug (returns undefined since no authors collection)
 const getAuthorDetails = (authorSlug: string) => {
-  return allAuthors.find(
-    (author: any) => author.slug === authorSlug
-  );
+  return undefined;
 };
 ---
 
