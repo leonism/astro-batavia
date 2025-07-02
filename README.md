@@ -1,71 +1,652 @@
-# Astro Batavia
+<div align="center">
+  <h1>🚀 Astro Batavia</h1>
+  <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
 
-## Table of Contents
+[![Astro](https://img.shields.io/badge/Astro-5.10.1-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
-- [Tech Stack](#tech-stack)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Configuration](#configuration)
-- [Deployment](#deployment)
+</div>
 
-A modern blog CMS built with Astro.js featuring:
+## 📋 Table of Contents
 
-- Multi-language support (i18n)
-- Modular component architecture (ThemeInitializer, BackToTopScript)
-- Refined social media button layout
-- Decap CMS integration for content management
-- Tailwind CSS for styling
-- Sitemap generation
-- Markdown/MDX support
+- [✨ Features](#-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [🏗️ Architecture](#️-architecture)
+- [🚀 Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Development](#development)
+- [🌐 Internationalization](#-internationalization)
+- [📝 Content Management](#-content-management)
+- [🎨 Customization](#-customization)
+- [📦 Build & Deployment](#-build--deployment)
+- [🔧 Configuration](#-configuration)
+- [📁 Project Structure](#-project-structure)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-## Tech Stack
+## ✨ Features
 
-- Astro 5.8.0
-- @astrojs/mdx 4.3.0
-- @astrojs/tailwind 5.1.5
-- @astrojs/sitemap 3.4.0
-- Tailwind CSS 3.4.17
+### 🌍 **Multilingual Support**
 
-## Features
+- **3 Languages**: English, Spanish, and Japanese
+- **Smart Routing**: Language-prefixed URLs with fallback handling
+- **Localized Content**: Date formatting, UI translations, and content management
+- **SEO Optimized**: Language-specific meta tags and hreflang attributes
 
-- Git-based content management via Decap CMS
-- Responsive design
-- SEO optimized
-- Reading time calculation
-- Dark/light theme support
-- Modular component architecture (ThemeInitializer, BackToTopScript)
-- Refined social media button layout
+### 📱 **Modern Design**
 
-## Getting Started
+- **Responsive Layout**: Mobile-first design with Tailwind CSS
+- **Dark Mode**: System preference detection with manual toggle
+- **Performance**: Static site generation with optimized assets
+- **Accessibility**: WCAG compliant with semantic HTML
 
-1. Clone the repository
-2. Run `npm install`
-3. Run `npm run dev`
-4. Access admin at `/admin`
+### 📝 **Content Management**
 
-## Configuration
+- **Decap CMS**: Git-based headless CMS for easy content editing
+- **MDX Support**: Rich markdown with React components
+- **Reading Time**: Automatic calculation for better UX
+- **Tag System**: Categorization and filtering capabilities
+- **Draft Support**: Preview unpublished content
 
-- Site URL: Configured in `astro.config.mjs`
-- Content collections: Defined in `src/content/config.ts`
-- CMS settings: Configured in `public/admin/config.yml`
+### 🔍 **SEO & Analytics**
 
-## Deployment
+- **Advanced SEO**: Open Graph, Twitter Cards, JSON-LD structured data
+- **Sitemap**: Automatic generation with i18n support
+- **Analytics Ready**: Sentry integration for error tracking
+- **Performance**: Lighthouse-optimized with compression
 
-Configured for Netlify with:
+### 🎯 **Developer Experience**
 
-- Git Gateway backend
-- Branch: main
-- Media folder: public/images
-- Automated deployments via Netlify
+- **TypeScript**: Full type safety across the codebase
+- **Component Architecture**: Modular and reusable components
+- **Hot Reload**: Fast development with Astro's dev server
+- **Build Optimization**: Automatic compression and minification
 
-### Solar System Exploration, 1950s – 1960s
+## 🛠️ Tech Stack
 
-- [ ] Mercury
-- [x] Venus
-- [x] Earth (Orbit/Moon)
-- [x] Mars
-- [ ] Jupiter
-- [ ] Saturn
-- [ ] Uranus
-- [ ] Neptune
-- [ ] Comet Haley
+### **Core Framework**
+
+- **[Astro 5.10.1](https://astro.build)** - Static site generator with islands architecture
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript development
+- **[MDX 4.3.0](https://mdxjs.com/)** - Markdown with JSX components
+
+### **Styling & UI**
+
+- **[Tailwind CSS 3.4.17](https://tailwindcss.com)** - Utility-first CSS framework
+- **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)** - Beautiful typographic defaults
+- **Custom Design System** - Consistent color palette and spacing
+
+### **Content & CMS**
+
+- **[Decap CMS](https://decapcms.org/)** - Git-based content management
+- **[Zod](https://zod.dev/)** - Schema validation for content types
+- **Reading Time Calculation** - Automatic reading time estimation
+
+### **SEO & Analytics**
+
+- **[@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)** - Automatic sitemap generation
+- **[Sentry](https://sentry.io/)** - Error tracking and performance monitoring
+- **[Spotlight.js](https://spotlightjs.com/)** - Development debugging tools
+
+### **Build & Optimization**
+
+- **Vite** - Fast build tool and dev server
+- **Image Optimization** - Automatic image compression and format conversion
+- **Compression** - Gzip and Brotli compression for production builds
+
+## 🏗️ Architecture
+
+Astro Batavia follows a modern, component-based architecture designed for scalability and maintainability:
+
+```
+┌─ 🌐 Multi-language Routing (/en, /es, /ja)
+├─ 📄 Static Site Generation (Astro Islands)
+├─ 🎨 Component Library (Modular & Reusable)
+├─ 📝 Content Layer (MDX + Decap CMS)
+├─ 🔍 SEO Layer (Structured Data + Meta)
+└─ ⚡ Performance Layer (Compression + Optimization)
+```
+
+### **Key Architectural Decisions**
+
+- **Islands Architecture**: Minimal JavaScript with selective hydration
+- **Content Collections**: Type-safe content management with Zod validation
+- **Internationalization**: Route-based language switching with shared components
+- **Component Composition**: Atomic design principles with reusable UI components
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** 18.0.0 or higher
+- **npm** 8.0.0 or higher (or **yarn** 1.22.0+)
+- **Git** for version control
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/your-username/astro-batavia.git
+   cd astro-batavia
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+### Development
+
+1. **Start the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   The site will be available at `http://localhost:5000`
+
+2. **Available Scripts**
+
+   ```bash
+   npm run dev          # Start development server
+   npm run build        # Build for production with compression
+   npm run build:only   # Build without compression
+   npm run compress     # Compress existing build
+   ```
+
+3. **Access the CMS**
+   - Development: `http://localhost:5000/admin`
+   - Production: `https://yourdomain.com/admin`
+
+## 🌐 Internationalization
+
+Astro Batavia supports three languages out of the box with a flexible i18n system:
+
+### **Supported Languages**
+
+- 🇺🇸 **English** (`en`) - Default language
+- 🇪🇸 **Spanish** (`es`)
+- 🇯🇵 **Japanese** (`ja`)
+
+### **URL Structure**
+
+```
+/                    → Redirects to /en/
+/en/                 → English homepage
+/es/                 → Spanish homepage
+/ja/                 → Japanese homepage
+/en/blog/my-post     → English blog post
+/es/blog/mi-post     → Spanish blog post
+```
+
+### **Adding a New Language**
+
+1. **Update language configuration**
+
+   ```typescript
+   // src/i18n/ui.ts
+   export const languages = {
+     en: "English",
+     es: "Español",
+     ja: "日本語",
+     fr: "Français", // Add new language
+   };
+   ```
+
+2. **Add translations**
+
+   ```typescript
+   // src/i18n/ui.ts
+   export const ui = {
+     // ... existing translations
+     fr: {
+       "nav.home": "Accueil",
+       "nav.blog": "Blog",
+       // ... add all required translations
+     },
+   } as const;
+   ```
+
+3. **Update Astro configuration**
+   ```javascript
+   // astro.config.mjs
+   i18n: {
+     defaultLocale: "en",
+     locales: ["en", "es", "ja", "fr"], // Add new locale
+   }
+   ```
+
+## 📝 Content Management
+
+### **Decap CMS Integration**
+
+Content is managed through Decap CMS, providing a user-friendly interface for non-technical users:
+
+- **Git-based**: All content stored in your repository
+- **Real-time Preview**: See changes before publishing
+- **Media Management**: Upload and organize images
+- **Workflow**: Draft → Review → Publish process
+
+### **Content Structure**
+
+```
+src/content/blog/
+├── en/           # English posts
+│   ├── post-1.mdx
+│   └── post-2.mdx
+├── es/           # Spanish posts
+│   ├── articulo-1.mdx
+│   └── articulo-2.mdx
+└── ja/           # Japanese posts
+    ├── 記事-1.mdx
+    └── 記事-2.mdx
+```
+
+### **Frontmatter Schema**
+
+Each blog post includes comprehensive metadata:
+
+```yaml
+---
+title: "Your Post Title"
+slug: "your-post-slug"
+language: "en"
+categories: ["Technology", "Web Development"]
+description: "Post description for SEO"
+keywords: ["astro", "blog", "seo"]
+author:
+  name: "Author Name"
+  url: "https://author-website.com"
+  image: "/images/author.jpg"
+publishDate: 2024-01-15
+editDate: 2024-01-16
+heroImage: "/images/hero.jpg"
+tags: ["astro", "tutorial"]
+draft: false
+commentStatus: "open"
+robots: "index, follow"
+canonical: "https://yourdomain.com/en/blog/your-post-slug"
+---
+```
+
+### **Creating Content**
+
+1. **Via CMS**: Use the admin interface at `/admin`
+2. **Via Files**: Create `.mdx` files in the appropriate language folder
+3. **Via API**: Use the content collections API for programmatic creation
+
+## 🎨 Customization
+
+### **Design System**
+
+The project uses a custom design system built on Tailwind CSS:
+
+```javascript
+// tailwind.config.mjs
+colors: {
+  primary: {
+    50: 'hsl(210 100% 98%)',
+    500: 'hsl(210 100% 60%)',
+    600: 'hsl(210 100% 50%)', // Main brand color
+    900: 'hsl(210 100% 20%)',
+  }
+}
+```
+
+### **Component Customization**
+
+- **Header**: Modify `src/components/navigation/Header.astro`
+- **Footer**: Update `src/components/footer/Footer.astro`
+- **Blog Cards**: Customize `src/components/cards/BlogCard.astro`
+- **Layout**: Edit `src/layouts/Layout.astro`
+
+### **Styling Guidelines**
+
+- Use Tailwind utility classes for consistency
+- Follow the established color palette
+- Maintain responsive design principles
+- Ensure dark mode compatibility
+
+## 📦 Build & Deployment
+
+### **Build Process**
+
+```bash
+# Standard build
+npm run build
+
+# Build with compression (recommended for production)
+npm run build        # Includes automatic compression
+
+# Manual compression of existing build
+npm run compress
+```
+
+### **Build Output**
+
+```
+dist/
+├── en/              # English pages
+├── es/              # Spanish pages
+├── ja/              # Japanese pages
+├── assets/          # Optimized CSS/JS
+├── images/          # Compressed images
+└── *.html.gz        # Gzip compressed files
+└── *.html.br        # Brotli compressed files
+```
+
+### **Deployment Options**
+
+#### **Netlify**
+
+```toml
+# netlify.toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[headers]]
+  for = "*.gz"
+  [headers.values]
+    Content-Encoding = "gzip"
+```
+
+#### **Vercel**
+
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "astro"
+}
+```
+
+#### **GitHub Pages**
+
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - run: npm ci
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+```
+
+## 🔧 Configuration
+
+### **Environment Variables**
+
+Create a `.env` file in the root directory:
+
+```env
+# Analytics & Tracking
+ALGOLIA_APP_ID=your_algolia_app_id
+ALGOLIA_API_KEY=your_algolia_api_key
+GTM_ID=your_google_tag_manager_id
+
+# Comments
+DISQUS_SHORTNAME=your_disqus_shortname
+
+# Error Tracking
+SENTRY_DSN=your_sentry_dsn
+```
+
+### **Site Configuration**
+
+```javascript
+// astro.config.mjs
+export default defineConfig({
+  site: "https://yourdomain.com", // Update with your domain
+  output: "static",
+  // ... other configuration
+});
+```
+
+### **CMS Configuration**
+
+Update the CMS backend in `public/admin/config.yml`:
+
+```yaml
+backend:
+  name: git-gateway
+  branch: main # or your default branch
+
+# For GitHub
+backend:
+  name: github
+  repo: your-username/your-repo
+  branch: main
+```
+
+## 📁 Project Structure
+
+```
+astro-batavia/
+├── 📁 public/                    # Static assets
+│   ├── 📁 admin/                 # Decap CMS configuration
+│   │   ├── config.yml            # CMS settings
+│   │   └── index.html            # CMS entry point
+│   ├── 📁 images/                # Static images
+│   ├── favicon.svg               # Site favicon
+│   ├── robots.txt                # SEO robots file
+│   └── site.webmanifest          # PWA manifest
+├── 📁 src/                       # Source code
+│   ├── 📁 components/            # Reusable components
+│   │   ├── 📁 blog/              # Blog-specific components
+│   │   ├── 📁 cards/             # Card components
+│   │   ├── 📁 common/            # Shared components
+│   │   ├── 📁 footer/            # Footer components
+│   │   ├── 📁 home/              # Homepage components
+│   │   ├── 📁 navigation/        # Navigation components
+│   │   ├── 📁 search/            # Search functionality
+│   │   ├── 📁 sections/          # Page sections
+│   │   └── 📁 ui/                # UI primitives
+│   ├── 📁 content/               # Content collections
+│   │   ├── 📁 blog/              # Blog posts by language
+│   │   │   ├── 📁 en/            # English posts
+│   │   │   ├── 📁 es/            # Spanish posts
+│   │   │   └── 📁 ja/            # Japanese posts
+│   │   └── config.ts             # Content schema definitions
+│   ├── 📁 i18n/                  # Internationalization
+│   │   ├── types.ts              # i18n TypeScript types
+│   │   ├── ui.ts                 # UI translations
+│   │   └── utils.ts              # i18n utility functions
+│   ├── 📁 layouts/               # Page layouts
+│   │   ├── BlogPost.astro        # Blog post layout
+│   │   └── Layout.astro          # Base layout
+│   ├── 📁 pages/                 # Route pages
+│   │   ├── 📁 [lang]/            # Dynamic language routes
+│   │   ├── 📁 api/               # API endpoints
+│   │   ├── 📁 blog/              # Blog pages
+│   │   ├── 📁 en/                # English pages
+│   │   ├── 📁 es/                # Spanish pages
+│   │   ├── 📁 ja/                # Japanese pages
+│   │   ├── 404.astro             # 404 error page
+│   │   └── index.astro           # Root redirect
+│   ├── 📁 styles/                # Global styles
+│   │   └── global.css            # CSS custom properties
+│   ├── 📁 utils/                 # Utility functions
+│   │   ├── remark-reading-time.mjs # Reading time plugin
+│   │   ├── search.ts             # Search utilities
+│   │   └── seo.ts                # SEO utilities
+│   └── env.d.ts                  # Environment types
+├── 📁 scripts/                   # Build scripts
+│   └── compress.js               # Asset compression
+├── astro.config.mjs              # Astro configuration
+├── package.json                  # Dependencies & scripts
+├── tailwind.config.mjs           # Tailwind configuration
+├── tsconfig.json                 # TypeScript configuration
+└── README.md                     # Project documentation
+```
+
+### **Key Directories Explained**
+
+- **`src/components/`**: Modular, reusable UI components following atomic design principles
+- **`src/content/blog/`**: Multilingual blog posts organized by language subdirectories
+- **`src/i18n/`**: Complete internationalization system with translations and utilities
+- **`src/pages/`**: File-based routing with language-specific directories
+- **`public/admin/`**: Decap CMS configuration for content management
+- **`scripts/`**: Build-time optimization and compression scripts
+
+## 🤝 Contributing
+
+We welcome contributions to Astro Batavia! Here's how you can help:
+
+### **Getting Started**
+
+1. **Fork the repository**
+
+   ```bash
+   git clone https://github.com/your-username/astro-batavia.git
+   cd astro-batavia
+   ```
+
+2. **Create a feature branch**
+
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+
+3. **Make your changes**
+
+   - Follow the existing code style
+   - Add tests if applicable
+   - Update documentation
+
+4. **Test your changes**
+
+   ```bash
+   npm run dev
+   npm run build
+   ```
+
+5. **Commit and push**
+
+   ```bash
+   git commit -m "Add amazing feature"
+   git push origin feature/amazing-feature
+   ```
+
+6. **Create a Pull Request**
+
+### **Contribution Guidelines**
+
+#### **Code Style**
+
+- Use TypeScript for type safety
+- Follow existing naming conventions
+- Use Tailwind CSS for styling
+- Maintain component modularity
+- Write descriptive commit messages
+
+#### **Adding New Features**
+
+- **Components**: Place in appropriate `src/components/` subdirectory
+- **Pages**: Follow the existing language structure
+- **Translations**: Add to all supported languages in `src/i18n/ui.ts`
+- **Content**: Use the established frontmatter schema
+
+#### **Bug Reports**
+
+When reporting bugs, please include:
+
+- Steps to reproduce
+- Expected vs actual behavior
+- Browser and OS information
+- Screenshots if applicable
+
+#### **Feature Requests**
+
+For new features, please:
+
+- Check existing issues first
+- Provide detailed use cases
+- Consider backward compatibility
+- Discuss implementation approach
+
+### **Development Workflow**
+
+1. **Local Development**
+
+   ```bash
+   npm run dev          # Start dev server
+   ```
+
+2. **Code Quality**
+
+   ```bash
+   npm run build        # Test production build
+   ```
+
+3. **Testing**
+   - Test all language versions
+   - Verify responsive design
+   - Check accessibility
+   - Validate SEO metadata
+
+## 📄 License
+
+This project is licensed under the **ISC License** - see the [LICENSE](LICENSE) file for details.
+
+### **ISC License Summary**
+
+The ISC license is a permissive free software license that allows you to:
+
+✅ **Use** the software for any purpose
+✅ **Modify** the software
+✅ **Distribute** the software
+✅ **Sublicense** the software
+✅ **Sell** copies of the software
+
+**Requirements:**
+
+- Include the original copyright notice
+- Include the license text
+
+**Limitations:**
+
+- No warranty provided
+- No liability assumed
+
+---
+
+<div align="center">
+  <h3>🌟 Star this project if you find it helpful!</h3>
+  <p>
+    <a href="https://github.com/your-username/astro-batavia/stargazers">⭐ Stars</a> •
+    <a href="https://github.com/your-username/astro-batavia/issues">🐛 Issues</a> •
+    <a href="https://github.com/your-username/astro-batavia/pulls">🔀 Pull Requests</a>
+  </p>
+
+  <p><strong>Built with ❤️ using Astro.js</strong></p>
+
+  <p>
+    <a href="https://astro.build">🚀 Astro</a> •
+    <a href="https://tailwindcss.com">🎨 Tailwind CSS</a> •
+    <a href="https://decapcms.org">📝 Decap CMS</a>
+  </p>
+</div>
