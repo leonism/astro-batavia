@@ -1,14 +1,14 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import BlogCard from "../../components/BlogCard.astro";
+import BlogCard from "../../components/blog/BlogCard.astro";
 import { useTranslations } from "../../i18n/utils";
 
 export async function getStaticPaths() {
   return [
     { params: { lang: "en" } },
     { params: { lang: "es" } },
-    { params: { lang: "ja" } }
+    { params: { lang: "ja" } },
   ];
 }
 
@@ -16,16 +16,24 @@ const { lang } = Astro.params as { lang: "en" | "es" | "ja" };
 const t = useTranslations(lang);
 
 // Get all blog posts for the specific language
-const allPosts = await getCollection("blog", ({ id, data }: { id: string; data: { draft: boolean } }) => {
-  return id.startsWith(`${lang}/`) && !data.draft;
-});
+const allPosts = await getCollection(
+  "blog",
+  ({ id, data }: { id: string; data: { draft: boolean } }) => {
+    return id.startsWith(`${lang}/`) && !data.draft;
+  }
+);
 
 const posts = allPosts.sort(
-  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
 // Get all unique tags
-const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => post.data.tags || []))];
+const allTags = [
+  ...new Set(
+    posts.flatMap((post: CollectionEntry<"blog">) => post.data.tags || [])
+  ),
+];
 ---
 
 <Layout
@@ -71,13 +79,11 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
         <input
           type="search"
           id="main-search-input"
-          placeholder={
-            lang === "es"
-              ? "Buscar artículos..."
-              : lang === "ja"
-                ? "記事を検索..."
-                : "Search articles..."
-          }
+          placeholder={lang === "es"
+            ? "Buscar artículos..."
+            : lang === "ja"
+              ? "記事を検索..."
+              : "Search articles..."}
           class="block w-full pl-10 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-colors duration-200 shadow-sm"
           autocomplete="off"
           spellcheck="false"
@@ -119,13 +125,15 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
                     : "All Topics"
               }
             </button>
-            {allTags.slice(0, 10).map((tag) => (
-              <button
-                class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
-                data-tag={tag}>
-                #{tag}
-              </button>
-            ))}
+            {
+              allTags.slice(0, 10).map((tag) => (
+                <button
+                  class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+                  data-tag={tag}>
+                  #{tag}
+                </button>
+              ))
+            }
           </div>
         </div>
 
@@ -203,16 +211,21 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
       <div
         id="results-container"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.map((post: CollectionEntry<"blog">) => (
-          <div
-            class="post-item"
-            data-tags={JSON.stringify(post.data.tags || [])}
-            data-title={post.data.title}
-            data-description={post.data.description}
-            data-date={post.data.pubDate.toISOString()}>
-            <BlogCard post={post} lang={lang} />
-          </div>
-        ))}
+        {
+          posts.map((post) => (
+            <div
+              class="post-item"
+              data-tags={JSON.stringify(post.data.tags || [])}
+              data-title={post.data.title}
+              data-description={post.data.description}
+              data-date={post.data.pubDate.toISOString()}>
+              <BlogCard
+                post={post}
+                lang={lang}
+              />
+            </div>
+          ))
+        }
       </div>
     </div>
 
@@ -311,7 +324,7 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
     // Search functionality
     function performSearch() {
       const query = searchInput.value.toLowerCase().trim();
-      
+
       if (query === "") {
         filteredPosts = [...allPosts];
       } else {
@@ -320,22 +333,20 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
           return searchText.includes(query);
         });
       }
-      
+
       applyFilters();
     }
 
     // Tag filtering
     function applyTagFilter(tag: string) {
       currentTag = tag;
-      
+
       if (tag === "all") {
         // No additional filtering needed
       } else {
-        filteredPosts = filteredPosts.filter((post) =>
-          post.tags.includes(tag)
-        );
+        filteredPosts = filteredPosts.filter((post) => post.tags.includes(tag));
       }
-      
+
       applySorting();
     }
 
@@ -355,7 +366,7 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
           filteredPosts.sort((a, b) => b.title.localeCompare(a.title));
           break;
       }
-      
+
       renderResults();
     }
 
@@ -367,19 +378,20 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
     // Render results
     function renderResults() {
       resultsContainer.innerHTML = "";
-      
+
       if (filteredPosts.length === 0) {
         noResults.classList.remove("hidden");
         searchStatus.textContent = "";
       } else {
         noResults.classList.add("hidden");
-        const resultText = currentLang === "es" 
-          ? `Mostrando ${filteredPosts.length} artículo${filteredPosts.length !== 1 ? 's' : ''}`
-          : currentLang === "ja"
-            ? `${filteredPosts.length}件の記事を表示`
-            : `Showing ${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''}`;
+        const resultText =
+          currentLang === "es"
+            ? `Mostrando ${filteredPosts.length} artículo${filteredPosts.length !== 1 ? "s" : ""}`
+            : currentLang === "ja"
+              ? `${filteredPosts.length}件の記事を表示`
+              : `Showing ${filteredPosts.length} article${filteredPosts.length !== 1 ? "s" : ""}`;
         searchStatus.textContent = resultText;
-        
+
         filteredPosts.forEach((post) => {
           resultsContainer.appendChild(post.element.cloneNode(true));
         });
@@ -388,28 +400,46 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
 
     // Event listeners
     searchInput.addEventListener("input", performSearch);
-    
+
     tagFilters.forEach((filter) => {
       filter.addEventListener("click", (e) => {
         e.preventDefault();
         const tag = (e.target as HTMLElement).getAttribute("data-tag") || "all";
-        
+
         // Update active state
-        tagFilters.forEach((f) => f.classList.remove("active", "bg-primary-600", "text-white"));
-        tagFilters.forEach((f) => f.classList.add("border-gray-300", "dark:border-gray-600", "text-gray-700", "dark:text-gray-300"));
-        
-        (e.target as HTMLElement).classList.add("active", "bg-primary-600", "text-white");
-        (e.target as HTMLElement).classList.remove("border-gray-300", "dark:border-gray-600", "text-gray-700", "dark:text-gray-300");
-        
+        tagFilters.forEach((f) =>
+          f.classList.remove("active", "bg-primary-600", "text-white")
+        );
+        tagFilters.forEach((f) =>
+          f.classList.add(
+            "border-gray-300",
+            "dark:border-gray-600",
+            "text-gray-700",
+            "dark:text-gray-300"
+          )
+        );
+
+        (e.target as HTMLElement).classList.add(
+          "active",
+          "bg-primary-600",
+          "text-white"
+        );
+        (e.target as HTMLElement).classList.remove(
+          "border-gray-300",
+          "dark:border-gray-600",
+          "text-gray-700",
+          "dark:text-gray-300"
+        );
+
         performSearch();
       });
     });
-    
+
     sortSelect.addEventListener("change", (e) => {
       currentSort = (e.target as HTMLSelectElement).value;
       applySorting();
     });
-    
+
     if (clearSearch) {
       clearSearch.addEventListener("click", () => {
         searchInput.value = "";
