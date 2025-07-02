@@ -11,25 +11,25 @@ const currentYear = new Date().getFullYear();
 const navigationLinks: Link[] = [
   { href: getLocalizedPath("/", lang), text: t("nav.home"), isLocalized: false },
   { href: getLocalizedPath("/blog", lang), text: t("nav.blog"), isLocalized: false },
-  { href: getLocalizedPath("/about", lang), text: t("nav.about"), isLocalized: false },
   { href: getLocalizedPath("/services", lang), text: t("nav.services"), isLocalized: false },
+  { href: getLocalizedPath("/about", lang), text: t("nav.about"), isLocalized: false },
   { href: getLocalizedPath("/search", lang), text: t("nav.search"), isLocalized: false },
 ];
 const legalLinks: Link[] = [
+  { href: getLocalizedPath("/contact", lang), text: t("footer.links.contact"), isLocalized: false },
   {
     href: getLocalizedPath("/cookies", lang),
-    text: t("legal.cookiesPolicy"),
+    text: t("footer.links.cookies"),
     isLocalized: false,
   },
   {
     href: getLocalizedPath("/privacy", lang),
-    text: t("legal.privacyPolicy"),
+    text: t("footer.links.privacy"),
     isLocalized: false,
   },
-  { href: getLocalizedPath("/contact", lang), text: t("nav.contact"), isLocalized: false },
   {
     href: getLocalizedPath("/terms", lang),
-    text: t("legal.termsOfService"),
+    text: t("footer.links.terms"),
     isLocalized: false,
   },
 ];
