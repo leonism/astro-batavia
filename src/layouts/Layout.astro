@@ -15,6 +15,37 @@ export interface Props {
   noindex?: boolean;
   lang?: string;
   canonical?: string;
+  type?: "website" | "article" | "blog";
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  authorUrl?: string;
+  authorImage?: string;
+  tags?: string[];
+  category?: string;
+  readingTime?: number;
+  wordCount?: number;
+  excerpt?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  organization?: {
+    name: string;
+    url: string;
+    logo: string;
+    sameAs?: string[];
+  };
+  video?: {
+    url: string;
+    thumbnail: string;
+    description?: string;
+    duration?: string;
+  };
+  product?: {
+    name: string;
+    brand?: string;
+    price?: string;
+    currency?: string;
+    availability?: string;
+  };
 }
 
 const {
@@ -24,6 +55,21 @@ const {
   noindex = false,
   lang = "en",
   canonical,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  author,
+  authorUrl,
+  authorImage,
+  tags = [],
+  category,
+  readingTime,
+  wordCount,
+  excerpt,
+  breadcrumbs = [],
+  organization,
+  video,
+  product,
 } = Astro.props;
 ---
 
@@ -76,6 +122,21 @@ const {
       noindex={noindex}
       canonical={canonical}
       lang={lang}
+      type={type}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      author={author}
+      authorUrl={authorUrl}
+      authorImage={authorImage}
+      tags={tags}
+      category={category}
+      readingTime={readingTime?.toString()}
+       wordCount={wordCount?.toString()}
+      excerpt={excerpt}
+      breadcrumbs={breadcrumbs}
+      organization={organization}
+      video={video}
+      product={product}
     />
     <ThemeInitializer />
     <ViewTransitions />

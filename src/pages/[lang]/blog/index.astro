@@ -5,7 +5,11 @@ import BlogCard from '@/components/blog/BlogCard.astro';
 import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils';
 
 export async function getStaticPaths() {
-  return [{ params: { lang: "es" } }, { params: { lang: "ja" } }];
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "es" } },
+    { params: { lang: "ja" } }
+  ];
 }
 
 const { lang } = Astro.params;
@@ -59,7 +63,15 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
 
 <Layout
   title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''} | Astro Batavia`}
-  description={t('meta.description')}
+  description={currentTag
+    ? (lang === 'es' ? `Explora artículos sobre ${currentTag} en nuestro blog de tecnología y desarrollo web.` : lang === 'ja' ? `${currentTag}に関する技術とウェブ開発のブログ記事をご覧ください。` : `Explore articles about ${currentTag} on our technology and web development blog.`)
+    : (lang === 'es'
+      ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
+      : lang === 'ja'
+      ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+      : 'Explore our collection of articles covering web development, technology trends, and insights.'
+    )
+  }
   lang={lang}
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
