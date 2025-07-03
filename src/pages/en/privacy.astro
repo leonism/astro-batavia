@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+<<<<<<< HEAD:src/pages/privacy.astro
 <<<<<<< HEAD
 
 const lang = "en";
@@ -9,6 +10,11 @@ const lang = "en";
 const lang = "en";
 // const t = useTranslations(lang);
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+import { getLocalizedPath } from "@/i18n/utils";
+
+const lang = "en";
+>>>>>>> stable-0.0.9:src/pages/en/privacy.astro
 ---
 
 <Layout
@@ -150,11 +156,15 @@ const lang = "en";
         <p>You can opt out of marketing communications at any time by:</p>
         <ul>
           <li>Clicking the unsubscribe link in our emails</li>
+<<<<<<< HEAD:src/pages/privacy.astro
 <<<<<<< HEAD
           <li>Contacting us directly at hello@Astro Batavia.com</li>
 =======
           <li>Contacting us directly at hello@astrobatavia.com</li>
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+          <li>Contacting us directly at hello@Astro Batavia.com</li>
+>>>>>>> stable-0.0.9:src/pages/en/privacy.astro
           <li>Updating your preferences in your account settings</li>
         </ul>
 
@@ -237,15 +247,19 @@ const lang = "en";
           practices, please contact us:
         </p>
         <ul>
+<<<<<<< HEAD:src/pages/privacy.astro
 <<<<<<< HEAD
           <li><strong>Email:</strong> privacy@Astro Batavia.com</li>
 =======
           <li><strong>Email:</strong> privacy@AstroBatavia.com</li>
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+          <li><strong>Email:</strong> privacy@Astro Batavia.com</li>
+>>>>>>> stable-0.0.9:src/pages/en/privacy.astro
           <li><strong>Address:</strong> San Francisco, CA, United States</li>
           <li>
             <strong>Contact Form:</strong>
-            <a href="/contact">Contact Page</a>
+            <a href={getLocalizedPath("/contact", "en")}>Contact Page</a>
           </li>
         </ul>
 
@@ -282,7 +296,7 @@ const lang = "en";
             hesitate to reach out.
           </p>
           <a
-            href="/contact"
+            href={getLocalizedPath("/contact", "en")}
             class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
             Contact Our Privacy Team
             <svg

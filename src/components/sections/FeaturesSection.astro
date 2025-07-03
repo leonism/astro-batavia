@@ -1,5 +1,9 @@
 ---
 import FeatureCard from "../cards/FeatureCard.astro";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section class="py-24 bg-slate-50 dark:bg-slate-800">
@@ -7,20 +11,17 @@ import FeatureCard from "../cards/FeatureCard.astro";
     <header class="text-center mb-16">
       <h2
         class="text-5xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-        Built for <span
-          class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
-          >Performance</span
-        >
+        {t("home.features.sectionTitle")}
       </h2>
       <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-        Experience the perfect blend of speed, accessibility, and modern design
+        {t("home.features.sectionSubtitle")}
       </p>
     </header>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <FeatureCard
-        title="Lightning Fast"
-        description="Built with Astro's island architecture for exceptional performance. Zero JavaScript by default, hydrate only when needed."
+        title={t("home.features.fast.title")}
+        description={t("home.features.fast.fullDescription")}
         iconGradientFrom="from-blue-500"
         iconGradientTo="to-indigo-600">
         <svg
@@ -40,8 +41,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="Multi-Language"
-        description="Complete internationalization support for English, Spanish, and Japanese. Seamless language switching and localized content."
+        title={t("home.features.multilang.title")}
+        description={t("home.features.multilang.fullDescription")}
         iconGradientFrom="from-purple-500"
         iconGradientTo="to-pink-600">
         <svg
@@ -61,8 +62,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="Easy Management"
-        description="Git-based CMS with live preview and rich content editing. Version control for all your content with seamless publishing workflow."
+        title={t("home.features.easyManage.title")}
+        description={t("home.features.easyManage.fullDescription")}
         iconGradientFrom="from-green-500"
         iconGradientTo="to-emerald-600">
         <svg
@@ -82,8 +83,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="Accessibility First"
-        description="Fully WCAG compliant with keyboard navigation, ARIA labels, and semantic HTML. Built for all users from the ground up."
+        title={t("home.features.accessibility.title")}
+        description={t("home.features.accessibility.description")}
         iconGradientFrom="from-amber-500"
         iconGradientTo="to-orange-600">
         <svg
@@ -103,8 +104,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="Responsive Design"
-        description="Fully responsive layouts that adapt to any screen size. Mobile-first approach with optimized touch targets and readability."
+        title={t("home.features.responsive.title")}
+        description={t("home.features.responsive.description")}
         iconGradientFrom="from-cyan-500"
         iconGradientTo="to-sky-600">
         <svg
@@ -124,8 +125,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="SEO Optimized"
-        description="Automatic sitemaps, semantic markup, and performance optimizations to help your content rank higher in search results."
+        title={t("home.features.seo.title")}
+        description={t("home.features.seo.description")}
         iconGradientFrom="from-fuchsia-500"
         iconGradientTo="to-violet-600">
         <svg
@@ -145,8 +146,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="Secure by Default"
-        description="Built-in security features including CSRF protection, XSS prevention, and automatic HTTPS. Regular security updates included."
+        title={t("home.features.secure.title")}
+        description={t("home.features.secure.description")}
         iconGradientFrom="from-red-500"
         iconGradientTo="to-rose-600">
         <svg
@@ -166,8 +167,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="Analytics Ready"
-        description="Built-in analytics dashboard with privacy-focused tracking. Integration with Google Analytics, Plausible, and more."
+        title={t("home.features.analytics.title")}
+        description={t("home.features.analytics.description")}
         iconGradientFrom="from-lime-500"
         iconGradientTo="to-teal-600">
         <svg
@@ -187,8 +188,8 @@ import FeatureCard from "../cards/FeatureCard.astro";
       </FeatureCard>
 
       <FeatureCard
-        title="Community Support"
-        description="Join our active community of developers. Get help, share ideas, and contribute to the open-source ecosystem."
+        title={t("home.features.community.title")}
+        description={t("home.features.community.description")}
         iconGradientFrom="from-violet-500"
         iconGradientTo="to-purple-600">
         <svg

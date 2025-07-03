@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { getLangFromUrl, useTranslations, getLocalizedPath } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
 import FooterBrand from "@/components/footer/FooterBrand.astro";
 import FooterLinks, { type Link } from "@/components/footer/FooterLinks.astro";
@@ -9,28 +9,28 @@ const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const t = useTranslations(lang);
 const currentYear = new Date().getFullYear();
 const navigationLinks: Link[] = [
-  { href: `/`, text: t("nav.home"), isLocalized: true }, // Assuming home should be localized
-  { href: `/blog`, text: t("nav.blog"), isLocalized: true }, // Assuming blog should be localized
-  { href: `/about`, text: t("nav.about"), isLocalized: true }, // Assuming about should be localized
-  { href: `/services`, text: t("nav.services"), isLocalized: true }, // Assuming services should be localized
-  { href: `/search`, text: t("nav.search"), isLocalized: true }, // Assuming search should be localized
+  { href: getLocalizedPath("/", lang), text: t("nav.home"), isLocalized: false },
+  { href: getLocalizedPath("/blog", lang), text: t("nav.blog"), isLocalized: false },
+  { href: getLocalizedPath("/services", lang), text: t("nav.services"), isLocalized: false },
+  { href: getLocalizedPath("/about", lang), text: t("nav.about"), isLocalized: false },
+  { href: getLocalizedPath("/search", lang), text: t("nav.search"), isLocalized: false },
 ];
 const legalLinks: Link[] = [
+  { href: getLocalizedPath("/contact", lang), text: t("footer.links.contact"), isLocalized: false },
   {
-    href: `/cookies`,
-    text: t("legal.cookiesPolicy"),
-    isLocalized: true,
+    href: getLocalizedPath("/cookies", lang),
+    text: t("footer.links.cookies"),
+    isLocalized: false,
   },
   {
-    href: `/privacy`,
-    text: t("legal.privacyPolicy"),
-    isLocalized: true,
+    href: getLocalizedPath("/privacy", lang),
+    text: t("footer.links.privacy"),
+    isLocalized: false,
   },
-  { href: `/contact`, text: t("nav.contact"), isLocalized: true },
   {
-    href: `/terms`,
-    text: t("legal.termsOfService"),
-    isLocalized: true,
+    href: getLocalizedPath("/terms", lang),
+    text: t("footer.links.terms"),
+    isLocalized: false,
   },
 ];
 const resourceLinks: Link[] = [

@@ -1,15 +1,16 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
-import { formatDate, getLangFromUrl, useTranslations } from '@/i18n/utils';
-import { generateStructuredData } from '@/utils/seo';
+import Picture from '@/components/ui/Picture.astro';
+import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
+import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
   readingTime?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, author, tags, slug, readingTime } = Astro.props;
+const { title, description, pubDate, editDate: updatedDate, heroImage, author, tags, slug, readingTime } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -21,13 +22,15 @@ const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>
 
 // Sort posts by publication date (ascending for easier next/prev indexing)
 const sortedLangPosts = allLangPosts.sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
 
-// The 'slug' prop is the clean slug (e.g., 'my-post-title')
-// entry.slug from getCollection is 'en/my-post-title'
-const currentPostCollectionSlug = `${lang}/${slug}`;
+// The 'slug' prop comes as 'en/blog/post-title' and collection slugs are also 'en/blog/post-title'
+// So we can use the slug directly for matching
+const currentPostCollectionSlug = slug;
 const currentIndex = sortedLangPosts.findIndex((post: CollectionEntry<'blog'>) => post.slug === currentPostCollectionSlug);
+
+
 
 let previousPostData: { url: string; title: string } | undefined = undefined;
 let nextPostData: { url: string; title: string } | undefined = undefined;
@@ -35,29 +38,25 @@ let nextPostData: { url: string; title: string } | undefined = undefined;
 if (currentIndex !== -1) {
   if (currentIndex > 0) {
     const prev = sortedLangPosts[currentIndex - 1];
+    const prevSlugWithoutLang = prev.slug.replace(/^(en|es|ja)\/blog\//g, '');
+    const prevUrl = getLocalizedPath(`/blog/${prevSlugWithoutLang}`, lang);
     previousPostData = {
-      url: `/${lang}/blog/${prev.slug.substring(lang.length + 1)}`,
+      url: prevUrl,
       title: prev.data.title,
     };
   }
   if (currentIndex < sortedLangPosts.length - 1) {
     const next = sortedLangPosts[currentIndex + 1];
+    const nextSlugWithoutLang = next.slug.replace(/^(en|es|ja)\/blog\//g, '');
+    const nextUrl = getLocalizedPath(`/blog/${nextSlugWithoutLang}`, lang);
     nextPostData = {
-      url: `/${lang}/blog/${next.slug.substring(lang.length + 1)}`,
+      url: nextUrl,
       title: next.data.title,
     };
   }
 }
 
-const structuredData = generateStructuredData({
-  title,
-  description,
-  image: heroImage,
-  author,
-  datePublished: pubDate,
-  dateModified: updatedDate,
-  url: Astro.url.href,
-});
+// Structured data is now handled by the enhanced SEO component
 ---
 
 <Layout
@@ -65,14 +64,36 @@ const structuredData = generateStructuredData({
   description={description}
   image={heroImage}
   lang={lang}
+  type="article"
+  publishedTime={pubDate.toISOString()}
+  modifiedTime={updatedDate?.toISOString()}
+  author={author}
+  tags={tags || []}
+  readingTime={readingTime ? parseInt(readingTime.replace(/\D/g, '')) : undefined}
+  wordCount={undefined}
+  excerpt={description}
+  breadcrumbs={[
+    { name: t('nav.home'), url: getLocalizedPath('/', lang) },
+    { name: t('nav.blog'), url: getLocalizedPath('/blog', lang) },
+    { name: title, url: Astro.url.pathname }
+  ]}
+  organization={{
+    name: "Astro Batavia",
+    url: "https://astro-batavia.vercel.app",
+    logo: "https://astro-batavia.vercel.app/favicon.svg",
+    sameAs: [
+      "https://github.com/yourusername",
+      "https://twitter.com/yourusername",
+      "https://linkedin.com/company/yourcompany"
+    ]
+  }}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
   <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back to blog link -->
     <div class="mb-8">
       <a
-        href={lang === 'en' ? '/blog' : `/${lang}/blog`}
+        href={getLocalizedPath('/blog', lang)}
         class="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,12 +107,15 @@ const structuredData = generateStructuredData({
     <header class="mb-8">
       {heroImage && (
         <div class="mb-8 rounded-lg overflow-hidden">
-          <img
+          <Picture
             src={heroImage}
             alt={title}
+            width={1200}
+            height={600}
             class="w-full h-64 sm:h-80 lg:h-96 object-cover"
             loading="eager"
             decoding="async"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
           />
         </div>
       )}
@@ -117,7 +141,7 @@ const structuredData = generateStructuredData({
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
           </svg>
           <time datetime={pubDate.toISOString()}>
-            {t('blog.published')} {formatDate(pubDate, lang)}
+            {t('blog.publishedOn')} {formatDate(pubDate, lang)}
           </time>
         </div>
 
@@ -127,7 +151,7 @@ const structuredData = generateStructuredData({
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
             </svg>
             <time datetime={updatedDate.toISOString()}>
-              {t('blog.updated')} {formatDate(updatedDate, lang)}
+              Updated {formatDate(updatedDate, lang)}
             </time>
           </div>
         )}
@@ -156,30 +180,15 @@ const structuredData = generateStructuredData({
     </header>
 
     <!-- Article content -->
-    <div class="prose prose-lg max-w-none dark:prose-dark prose-headings:font-semibold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-primary-600 hover:prose-a:text-primary-700 dark:prose-a:text-primary-400 dark:hover:prose-a:text-primary-300 prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800">
+    <div class="prose prose-lg max-w-none dark:prose-invert">
       <slot />
     </div>
 
-    <!-- Next/Previous Article Navigation -->
-    {(previousPostData || nextPostData) && (
-      <nav class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between gap-8">
-        {previousPostData ? (
-          <a href={previousPostData.url} class="group flex-1 text-left p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
-            <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('blog.previousArticle') || 'Previous Article'}</div>
-            <div class="text-lg font-semibold text-primary-600 dark:text-primary-400 group-hover:underline">
-              {previousPostData.title}
-            </div>
-          </a>
-        ) : <div class="flex-1"></div>}
-        {nextPostData ? (
-          <a href={nextPostData.url} class="group flex-1 text-right p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
-            <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('blog.nextArticle') || 'Next Article'}</div>
-            <div class="text-lg font-semibold text-primary-600 dark:text-primary-400 group-hover:underline">
-              {nextPostData.title}
-            </div>
-          </a>
-        ) : <div class="flex-1"></div>}
-      </nav>
-    )}
+    <!-- Article Navigation -->
+    <BlogPostNavigation
+      previousPostData={previousPostData}
+      nextPostData={nextPostData}
+      lang={lang}
+    />
   </article>
 </Layout>

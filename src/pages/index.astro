@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 <<<<<<< HEAD
@@ -448,3 +449,8 @@ const t = useTranslations(lang);
   <NewsletterSection />
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 </Layout>
+=======
+// Redirect to English version since all languages now require prefixes
+return Astro.redirect("/en/");
+---
+>>>>>>> stable-0.0.9

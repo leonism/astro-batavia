@@ -1,5 +1,6 @@
 ---
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import BlogCard from "@/components/BlogCard.astro";
@@ -78,14 +79,46 @@ const allTags = [
     )
   ),
 ].sort();
+=======
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import BlogCard from "../../components/blog/BlogCard.astro";
+import { useTranslations } from "../../i18n/utils";
 
-// Initial posts list will be empty, fetched via API on client side.
+export async function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "es" } },
+    { params: { lang: "ja" } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: "en" | "es" | "ja" };
+const t = useTranslations(lang);
+
+// Get all blog posts for the specific language
+const allPosts = await getCollection("blog", ({ id, data }: { id: string; data: { draft: boolean } }) => {
+  return id.startsWith(`${lang}/`) && !data.draft;
+});
+>>>>>>> stable-0.0.9
+
+const posts = allPosts.sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Get all unique tags
+const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => post.data.tags || []))];
 ---
 
 <Layout
+<<<<<<< HEAD
   title={`${t("nav.search")} | AstroBatavia`}
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
   description={t("meta.description")}
+=======
+  title={`${t("nav.search")} | Astro Batavia`}
+  description="Search through our collection of articles and find exactly what you're looking for"
+>>>>>>> stable-0.0.9
   lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
@@ -99,7 +132,11 @@ const allTags = [
           lang === "es"
             ? "Encuentra artículos, temas e ideas en toda nuestra colección de blog."
             : lang === "ja"
+<<<<<<< HEAD
               ? "ブログ全体から記事、トピック、洞察を見つけてください。"
+=======
+              ? "ブログコレクション全体から記事、トピック、洞察を見つけてください。"
+>>>>>>> stable-0.0.9
               : "Find articles, topics, and insights across our entire blog collection."
         }
       </p>
@@ -126,7 +163,17 @@ const allTags = [
         <input
           type="search"
           id="main-search-input"
+<<<<<<< HEAD
           placeholder={t("search.placeholder")}
+=======
+          placeholder={
+            lang === "es"
+              ? "Buscar artículos..."
+              : lang === "ja"
+                ? "記事を検索..."
+                : "Search articles..."
+          }
+>>>>>>> stable-0.0.9
           class="block w-full pl-10 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-colors duration-200 shadow-sm"
           autocomplete="off"
           spellcheck="false"
@@ -152,7 +199,11 @@ const allTags = [
               lang === "es"
                 ? "Filtrar por tema:"
                 : lang === "ja"
+<<<<<<< HEAD
                   ? "トピック別にフィルター:"
+=======
+                  ? "トピックでフィルター:"
+>>>>>>> stable-0.0.9
                   : "Filter by topic:"
             }
           </label>
@@ -162,12 +213,17 @@ const allTags = [
               data-tag="all">
               {
                 lang === "es"
+<<<<<<< HEAD
                   ? "Todos los Temas"
+=======
+                  ? "Todos los temas"
+>>>>>>> stable-0.0.9
                   : lang === "ja"
                     ? "すべてのトピック"
                     : "All Topics"
               }
             </button>
+<<<<<<< HEAD
             {
               allTags.slice(0, 10).map((tag) => (
                 <button
@@ -177,6 +233,15 @@ const allTags = [
                 </button>
               ))
             }
+=======
+            {allTags.slice(0, 10).map((tag) => (
+              <button
+                class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+                data-tag={tag}>
+                #{tag}
+              </button>
+            ))}
+>>>>>>> stable-0.0.9
           </div>
         </div>
 
@@ -198,16 +263,26 @@ const allTags = [
             <option value="date-desc">
               {
                 lang === "es"
+<<<<<<< HEAD
                   ? "Más Recientes"
                   : lang === "ja"
                     ? "最新順"
+=======
+                  ? "Más reciente primero"
+                  : lang === "ja"
+                    ? "新しい順"
+>>>>>>> stable-0.0.9
                     : "Newest First"
               }
             </option>
             <option value="date-asc">
               {
                 lang === "es"
+<<<<<<< HEAD
                   ? "Más Antiguos"
+=======
+                  ? "Más antiguo primero"
+>>>>>>> stable-0.0.9
                   : lang === "ja"
                     ? "古い順"
                     : "Oldest First"
@@ -244,6 +319,7 @@ const allTags = [
         id="search-status"
         class="text-center text-gray-500 dark:text-gray-400 mb-6">
 <<<<<<< HEAD
+<<<<<<< HEAD
         {
           lang === "es"
             ? `Ingresa un término de búsqueda para encontrar artículos, o explora todos los ${posts.length} artículos a continuación.`
@@ -279,6 +355,29 @@ const allTags = [
 =======
         {/* Results will be rendered here by client-side JavaScript */}
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+        {
+          lang === "es"
+            ? `Ingresa un término de búsqueda para encontrar artículos, o navega por los ${posts.length} artículos a continuación.`
+            : lang === "ja"
+              ? `記事を見つけるために検索語を入力するか、以下の${posts.length}記事を閲覧してください。`
+              : `Enter a search term to find articles, or browse all ${posts.length} articles below.`
+        }
+      </div>
+      <div
+        id="results-container"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post: CollectionEntry<"blog">) => (
+          <div
+            class="post-item"
+            data-tags={JSON.stringify(post.data.tags || [])}
+            data-title={post.data.title}
+            data-description={post.data.description}
+            data-date={post.data.pubDate.toISOString()}>
+            <BlogCard post={post} lang={lang} />
+          </div>
+        ))}
+>>>>>>> stable-0.0.9
       </div>
     </div>
 
@@ -299,7 +398,17 @@ const allTags = [
         ></path>
       </svg>
       <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+<<<<<<< HEAD
         {t("search.no-results")}
+=======
+        {
+          lang === "es"
+            ? "No se encontraron resultados"
+            : lang === "ja"
+              ? "結果が見つかりません"
+              : "No results found"
+        }
+>>>>>>> stable-0.0.9
       </h3>
       <p class="text-gray-500 dark:text-gray-400 mb-4">
         {
@@ -327,10 +436,14 @@ const allTags = [
 
 <script>
 <<<<<<< HEAD
+<<<<<<< HEAD
   document.addEventListener("DOMContentLoaded", () => {
 =======
   document.addEventListener("astro:page-load", () => {
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+  document.addEventListener("astro:page-load", () => {
+>>>>>>> stable-0.0.9
     const searchInput = document.getElementById(
       "main-search-input"
     ) as HTMLInputElement;
@@ -338,6 +451,7 @@ const allTags = [
     const sortSelect = document.getElementById(
       "sort-select"
     ) as HTMLSelectElement;
+<<<<<<< HEAD
 <<<<<<< HEAD
     const postItems = document.querySelectorAll(".post-item");
     const resultsContainer = document.getElementById("results-container");
@@ -351,6 +465,8 @@ const allTags = [
     let currentTag = "all";
     let currentSort = "date-desc";
 =======
+=======
+>>>>>>> stable-0.0.9
     const resultsContainer = document.getElementById("results-container")!;
     const searchStatus = document.getElementById("search-status")!;
     const noResults = document.getElementById("no-results")!;
@@ -359,14 +475,31 @@ const allTags = [
 
     if (!searchInput) return;
 
-    let currentApiResults: any[] = []; // To store results from API
-    let displayedItems: any[] = []; // To store items currently displayed (after client-side tag/sort)
+    let allPosts: any[] = [];
+    let filteredPosts: any[] = [];
+    let currentTag = "all";
+    let currentSort = "date-desc";
 
+<<<<<<< HEAD
     // let currentQuery = ''; // Not needed, use searchInput.value
     let currentTag = "all";
     let currentSort = "date-desc";
     let isLoading = false;
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+    // Initialize posts from DOM
+    function initializePosts() {
+      const postElements = document.querySelectorAll(".post-item");
+      allPosts = Array.from(postElements).map((el) => ({
+        element: el,
+        tags: JSON.parse(el.getAttribute("data-tags") || "[]"),
+        title: el.getAttribute("data-title") || "",
+        description: el.getAttribute("data-description") || "",
+        date: new Date(el.getAttribute("data-date") || ""),
+      }));
+      filteredPosts = [...allPosts];
+    }
+>>>>>>> stable-0.0.9
 
     // Keyboard shortcut for search
     document.addEventListener("keydown", (e) => {
@@ -376,6 +509,7 @@ const allTags = [
       }
     });
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     // Search functionality
     function performSearch() {
@@ -734,6 +868,119 @@ const allTags = [
     } else {
       // If no query in URL, then set initial status
       updateSearchStatus(0, "");
+=======
+    // Search functionality
+    function performSearch() {
+      const query = searchInput.value.toLowerCase().trim();
+      
+      if (query === "") {
+        filteredPosts = [...allPosts];
+      } else {
+        filteredPosts = allPosts.filter((post) => {
+          const searchText = `${post.title} ${post.description}`.toLowerCase();
+          return searchText.includes(query);
+        });
+      }
+      
+      applyFilters();
+>>>>>>> stable-0.0.9
     }
+
+    // Tag filtering
+    function applyTagFilter(tag: string) {
+      currentTag = tag;
+      
+      if (tag === "all") {
+        // No additional filtering needed
+      } else {
+        filteredPosts = filteredPosts.filter((post) =>
+          post.tags.includes(tag)
+        );
+      }
+      
+      applySorting();
+    }
+
+    // Sorting
+    function applySorting() {
+      switch (currentSort) {
+        case "date-desc":
+          filteredPosts.sort((a, b) => b.date.getTime() - a.date.getTime());
+          break;
+        case "date-asc":
+          filteredPosts.sort((a, b) => a.date.getTime() - b.date.getTime());
+          break;
+        case "title-asc":
+          filteredPosts.sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        case "title-desc":
+          filteredPosts.sort((a, b) => b.title.localeCompare(a.title));
+          break;
+      }
+      
+      renderResults();
+    }
+
+    // Apply all filters
+    function applyFilters() {
+      applyTagFilter(currentTag);
+    }
+
+    // Render results
+    function renderResults() {
+      resultsContainer.innerHTML = "";
+      
+      if (filteredPosts.length === 0) {
+        noResults.classList.remove("hidden");
+        searchStatus.textContent = "";
+      } else {
+        noResults.classList.add("hidden");
+        const resultText = currentLang === "es" 
+          ? `Mostrando ${filteredPosts.length} artículo${filteredPosts.length !== 1 ? 's' : ''}`
+          : currentLang === "ja"
+            ? `${filteredPosts.length}件の記事を表示`
+            : `Showing ${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''}`;
+        searchStatus.textContent = resultText;
+        
+        filteredPosts.forEach((post) => {
+          resultsContainer.appendChild(post.element.cloneNode(true));
+        });
+      }
+    }
+
+    // Event listeners
+    searchInput.addEventListener("input", performSearch);
+    
+    tagFilters.forEach((filter) => {
+      filter.addEventListener("click", (e) => {
+        e.preventDefault();
+        const tag = (e.target as HTMLElement).getAttribute("data-tag") || "all";
+        
+        // Update active state
+        tagFilters.forEach((f) => f.classList.remove("active", "bg-primary-600", "text-white"));
+        tagFilters.forEach((f) => f.classList.add("border-gray-300", "dark:border-gray-600", "text-gray-700", "dark:text-gray-300"));
+        
+        (e.target as HTMLElement).classList.add("active", "bg-primary-600", "text-white");
+        (e.target as HTMLElement).classList.remove("border-gray-300", "dark:border-gray-600", "text-gray-700", "dark:text-gray-300");
+        
+        performSearch();
+      });
+    });
+    
+    sortSelect.addEventListener("change", (e) => {
+      currentSort = (e.target as HTMLSelectElement).value;
+      applySorting();
+    });
+    
+    if (clearSearch) {
+      clearSearch.addEventListener("click", () => {
+        searchInput.value = "";
+        performSearch();
+      });
+    }
+
+    // Initialize
+    initializePosts();
+    renderResults();
   });
 </script>

@@ -6,11 +6,37 @@ export interface Props {
   noindex?: boolean;
   canonical?: string;
   lang?: string;
-  type?: "website" | "article";
+  type?: "website" | "article" | "blog" | "profile";
   publishedTime?: string;
   modifiedTime?: string;
   author?: string;
+  authorUrl?: string;
+  authorImage?: string;
   tags?: string[];
+  category?: string;
+  readingTime?: string;
+  wordCount?: number;
+  excerpt?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  organization?: {
+    name: string;
+    url: string;
+    logo: string;
+    sameAs?: string[];
+  };
+  video?: {
+    url: string;
+    thumbnail: string;
+    duration?: string;
+    description?: string;
+  };
+  product?: {
+    name: string;
+    price?: string;
+    currency?: string;
+    availability?: string;
+    brand?: string;
+  };
 }
 
 const {
@@ -24,7 +50,17 @@ const {
   publishedTime,
   modifiedTime,
   author,
+  authorUrl,
+  authorImage,
   tags = [],
+  category,
+  readingTime,
+  wordCount,
+  excerpt,
+  breadcrumbs = [],
+  organization,
+  video,
+  product,
 } = Astro.props;
 
 const siteTitle = "Astro Batavia";
@@ -34,6 +70,119 @@ const imageUrl = image
   ? new URL(image, siteUrl).href
   : `${siteUrl}/images/og-default.jpg`;
 const canonicalUrl = canonical || Astro.url.href;
+
+// Enhanced meta data
+const finalExcerpt = excerpt || description;
+const defaultOrganization = {
+  name: "Astro Batavia",
+  url: siteUrl,
+  logo: `${siteUrl}/images/logo.png`,
+  sameAs: [
+    "https://twitter.com/astrobatavia",
+    "https://github.com/astrobatavia",
+    "https://linkedin.com/company/astrobatavia"
+  ]
+};
+const orgData = organization || defaultOrganization;
+
+// Generate JSON-LD structured data
+const generateJsonLd = () => {
+  const baseSchema: any = {
+    "@context": "https://schema.org",
+    "@type": type === "article" ? "Article" : type === "blog" ? "BlogPosting" : "WebPage",
+    "headline": title,
+    "description": description,
+    "url": canonicalUrl,
+    "image": {
+      "@type": "ImageObject",
+      "url": imageUrl,
+      "width": 1200,
+      "height": 630
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": orgData.name,
+      "url": orgData.url,
+      "logo": {
+        "@type": "ImageObject",
+        "url": orgData.logo
+      },
+      ...(orgData.sameAs && { "sameAs": orgData.sameAs })
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl
+    }
+  };
+
+  // Add article-specific data
+  if (type === "article" || type === "blog") {
+    Object.assign(baseSchema, {
+      "datePublished": publishedTime,
+      "dateModified": modifiedTime || publishedTime,
+      ...(author && {
+        "author": {
+          "@type": "Person",
+          "name": author,
+          ...(authorUrl && { "url": authorUrl }),
+          ...(authorImage && { "image": authorImage })
+        }
+      }),
+      ...(category && { "articleSection": category }),
+      ...(tags.length > 0 && { "keywords": tags.join(", ") }),
+      ...(wordCount && { "wordCount": wordCount }),
+      ...(readingTime && { "timeRequired": `PT${readingTime}M` })
+    });
+  }
+
+  // Add breadcrumbs if available
+  if (breadcrumbs.length > 0) {
+    baseSchema["breadcrumb"] = {
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((crumb, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": crumb.name,
+        "item": crumb.url
+      }))
+    };
+  }
+
+  // Add video data if available
+  if (video) {
+    baseSchema["video"] = {
+      "@type": "VideoObject",
+      "name": title,
+      "description": video.description || description,
+      "thumbnailUrl": video.thumbnail,
+      "contentUrl": video.url,
+      ...(video.duration && { "duration": video.duration })
+    };
+  }
+
+  // Add product data if available
+  if (product) {
+    baseSchema["mainEntity"] = {
+      "@type": "Product",
+      "name": product.name,
+      "description": description,
+      "image": imageUrl,
+      ...(product.brand && { "brand": { "@type": "Brand", "name": product.brand } }),
+      ...(product.price && {
+        "offers": {
+          "@type": "Offer",
+          "price": product.price,
+          "priceCurrency": product.currency || "USD",
+          "availability": `https://schema.org/${product.availability || "InStock"}`
+        }
+      })
+    };
+  }
+
+  return JSON.stringify(baseSchema);
+};
+
+const jsonLdData = generateJsonLd();
 
 // Language mappings
 const hreflangMap = {
@@ -57,12 +206,59 @@ const getAlternateUrls = () => {
 const alternateUrls = getAlternateUrls();
 ---
 
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" set:html={jsonLdData}></script>
+
 <!-- Basic Meta Tags -->
 <title>{fullTitle}</title>
 <meta
   name="description"
   content={description}
 />
+<meta
+  name="keywords"
+  content={tags.join(", ")}
+/>
+{
+  author && (
+    <meta
+      name="author"
+      content={author}
+    />
+  )
+}
+{
+  category && (
+    <meta
+      name="article:section"
+      content={category}
+    />
+  )
+}
+{
+  readingTime && (
+    <meta
+      name="reading-time"
+      content={`${readingTime} minutes`}
+    />
+  )
+}
+{
+  wordCount && (
+    <meta
+      name="word-count"
+      content={wordCount.toString()}
+    />
+  )
+}
+{
+  finalExcerpt && finalExcerpt !== description && (
+    <meta
+      name="excerpt"
+      content={finalExcerpt}
+    />
+  )
+}
 {
   noindex && (
     <meta
@@ -80,7 +276,7 @@ const alternateUrls = getAlternateUrls();
   )
 }
 
-<!-- Open Graph -->
+<!-- Enhanced Open Graph -->
 <meta
   property="og:type"
   content={type}
@@ -98,6 +294,22 @@ const alternateUrls = getAlternateUrls();
   content={imageUrl}
 />
 <meta
+  property="og:image:width"
+  content="1200"
+/>
+<meta
+  property="og:image:height"
+  content="630"
+/>
+<meta
+  property="og:image:type"
+  content="image/jpeg"
+/>
+<meta
+  property="og:image:alt"
+  content={title}
+/>
+<meta
   property="og:url"
   content={canonicalUrl}
 />
@@ -109,6 +321,40 @@ const alternateUrls = getAlternateUrls();
   property="og:locale"
   content={hreflangMap[lang as keyof typeof hreflangMap]}
 />
+{
+  authorImage && (
+    <meta
+      property="og:image:secure_url"
+      content={imageUrl}
+    />
+  )
+}
+{
+  video && (
+    <>
+      <meta
+        property="og:video"
+        content={video.url}
+      />
+      <meta
+        property="og:video:secure_url"
+        content={video.url}
+      />
+      <meta
+        property="og:video:type"
+        content="video/mp4"
+      />
+      <meta
+        property="og:video:width"
+        content="1280"
+      />
+      <meta
+        property="og:video:height"
+        content="720"
+      />
+    </>
+  )
+}
 
 {
   type === "article" && (
@@ -141,10 +387,10 @@ const alternateUrls = getAlternateUrls();
   )
 }
 
-<!-- Twitter Card -->
+<!-- Enhanced Twitter Card -->
 <meta
   name="twitter:card"
-  content="summary_large_image"
+  content={video ? "player" : "summary_large_image"}
 />
 <meta
   name="twitter:title"
@@ -157,6 +403,147 @@ const alternateUrls = getAlternateUrls();
 <meta
   name="twitter:image"
   content={imageUrl}
+/>
+<meta
+  name="twitter:image:alt"
+  content={title}
+/>
+<meta
+  name="twitter:site"
+  content="@yoursitehandle"
+/>
+{
+  author && (
+    <meta
+      name="twitter:creator"
+      content={`@${author.replace(/\s+/g, '').toLowerCase()}`}
+    />
+  )
+}
+{
+  video && (
+    <>
+      <meta
+        name="twitter:player"
+        content={video.url}
+      />
+      <meta
+        name="twitter:player:width"
+        content="1280"
+      />
+      <meta
+        name="twitter:player:height"
+        content="720"
+      />
+    </>
+  )
+}
+
+<!-- LinkedIn Specific -->
+<meta
+  property="linkedin:owner"
+  content="your-linkedin-company-id"
+/>
+
+<!-- WhatsApp Specific -->
+<meta
+  property="whatsapp:title"
+  content={fullTitle}
+/>
+<meta
+  property="whatsapp:description"
+  content={description}
+/>
+<meta
+  property="whatsapp:image"
+  content={imageUrl}
+/>
+
+<!-- Telegram Specific -->
+<meta
+  property="telegram:channel"
+  content="@yourchannel"
+/>
+
+<!-- Pinterest Specific -->
+<meta
+  name="pinterest-rich-pin"
+  content="true"
+/>
+<meta
+  property="pinterest:description"
+  content={description}
+/>
+
+<!-- Apple Specific -->
+<meta
+  name="apple-mobile-web-app-title"
+  content={siteTitle}
+/>
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+/>
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+/>
+
+<!-- Microsoft Specific -->
+<meta
+  name="msapplication-TileColor"
+  content="#000000"
+/>
+<meta
+  name="msapplication-TileImage"
+  content={imageUrl}
+/>
+<meta
+  name="msapplication-config"
+  content="/browserconfig.xml"
+/>
+
+<!-- Performance & Security Headers -->
+<meta
+  http-equiv="X-UA-Compatible"
+  content="IE=edge"
+/>
+<meta
+  name="referrer"
+  content="strict-origin-when-cross-origin"
+/>
+<meta
+  name="format-detection"
+  content="telephone=no"
+/>
+<meta
+  name="theme-color"
+  content="#000000"
+/>
+<meta
+  name="color-scheme"
+  content="light dark"
+/>
+
+<!-- Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://www.google-analytics.com" />
+
+<!-- DNS Prefetch -->
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+
+<!-- Accessibility -->
+<meta
+  name="accessibility"
+  content="WCAG 2.1 AA compliant"
+/>
+
+<!-- Content Security Policy (Basic) -->
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com blob: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com ws://localhost:* http://localhost:* ws://127.0.0.1:* http://127.0.0.1:*; worker-src 'self' blob: data:;"
 />
 
 <!-- Hreflang Tags -->
@@ -184,22 +571,21 @@ const alternateUrls = getAlternateUrls();
   name="msapplication-TileColor"
   content="#3b82f6"
 />
-<meta
-  name=""
-  mobile-web-app-capable"
+<meta name="apple-mobile-web-app-status-bar-style" content="black"
+  name="apple-mobile-web-app-capable"
   content="yes"
 />
+<meta name="mobile-web-app-capable" content="yes" />
 <meta
   name="apple-mobile-web-app-status-bar-style"
-  content="default"
+  content="black"
 />
 
 <!-- Favicon -->
 <link
   rel="icon"
   type="image/svg+xml"
-  href="/favicon.svg"
-/>
+  href="/favicon.svg" />
 <link
   rel="icon"
   type="image/png"
@@ -210,14 +596,11 @@ const alternateUrls = getAlternateUrls();
   rel="icon"
   type="image/png"
   sizes="16x16"
-  href="/favicon-16x16.png"
-/>
+  href="/favicon-16x16.png" />
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/apple-touch-icon.png"
-/>
+  href="/apple-touch-icon.png" />
 <link
   rel="manifest"
-  href="/site.webmanifest"
-/>
+  href="/site.webmanifest" />
