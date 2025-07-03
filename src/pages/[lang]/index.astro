@@ -1,25 +1,10 @@
 ---
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { getCollection, type CollectionEntry } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
-import BlogCard from "@/components/BlogCard.astro";
-=======
-export const prerender = true;
-import { type CollectionEntry, getCollection } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
-import HomeHero from "@/components/home/HomeHero.astro";
-import HomeLatestPosts from "@/components/home/HomeLatestPosts.astro";
-import HomeNewsletter from "@/components/home/HomeNewsletter.astro";
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-=======
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import HeroSection from "@/components/sections/HeroSection.astro";
 import FeaturesSection from "@/components/sections/FeaturesSection.astro";
 import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
 import NewsletterSection from "@/components/sections/NewsletterSection.astro";
->>>>>>> stable-0.0.9
 import { useTranslations, isValidLanguage } from "@/i18n/utils";
 
 export async function getStaticPaths() {
@@ -36,24 +21,9 @@ if (!lang || !isValidLanguage(lang)) {
 const t = useTranslations(lang);
 
 // Get latest blog posts for this language
-<<<<<<< HEAD
-<<<<<<< HEAD
 const allPosts = await getCollection("blog", (post: CollectionEntry<"blog">) => {
   return post.id.startsWith(`${lang}/`) && !post.data.draft;
 });
-=======
-const allPosts = await getCollection(
-  "blog",
-  ({ id, data }: { id: string; data: CollectionEntry<"blog">["data"] }) => {
-    return id.startsWith(`${lang}/`) && !data.draft;
-  }
-);
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-=======
-const allPosts = await getCollection("blog", (post: CollectionEntry<"blog">) => {
-  return post.id.startsWith(`${lang}/`) && !post.data.draft;
-});
->>>>>>> stable-0.0.9
 
 // Sort posts by publication date (newest first)
 const sortedPosts = allPosts.sort(
@@ -64,193 +34,11 @@ const latestPosts = sortedPosts.slice(0, 3);
 ---
 
 <Layout
-<<<<<<< HEAD
-  title="Astro Batavia - Modern Multi-Language Blog"
+  title="AstroBlog - Modern Multi-Language Blog"
   description={t("meta.description")}
   lang={lang}>
-  <!-- Hero Section -->
-  <section
-    class="relative bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-32">
-    <div
-      class="absolute inset-0 opacity-50"
-      style="background-image: url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22%3E%3C/circle%3E%3C/g%3E%3C/g%3E%3C/svg%3E')">
-    </div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center">
-        <h1
-          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-          {
-            lang === "es" ? (
-              <>
-                Moderno Blog{" "}
-                <span class="text-transparent bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text">
-                  Multiidioma
-                </span>
-              </>
-            ) : lang === "ja" ? (
-              <>
-                モダンな{" "}
-                <span class="text-transparent bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text">
-                  多言語ブログ
-                </span>
-              </>
-            ) : (
-              <>
-                Modern{" "}
-                <span class="text-transparent bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text">
-                  Multi-Language
-                </span>{" "}
-                Blog
-              </>
-            )
-          }
-        </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-          {
-            lang === "es"
-              ? "Descubre perspectivas sobre tecnología, desarrollo web y más en español."
-              : lang === "ja"
-                ? "テクノロジー、ウェブ開発などに関する洞察を日本語で発見してください。"
-                : "Discover insights about technology, web development, and more."
-          }
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href={`/${lang}/blog`}
-            class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
-            {
-              lang === "es"
-                ? "Explorar Artículos"
-                : lang === "ja"
-                  ? "記事を探索"
-                  : "Explore Articles"
-            }
-          </a>
-          <a
-            href={`/${lang}/search`}
-            class="inline-flex items-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-lg font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
-            {
-              lang === "es"
-                ? "Buscar Contenido"
-                : lang === "ja"
-                  ? "コンテンツを検索"
-                  : "Search Content"
-            }
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Latest Posts Section -->
-  {
-    latestPosts.length > 0 && (
-      <section class="py-16 bg-white dark:bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              {lang === "es"
-                ? "Últimos Artículos"
-                : lang === "ja"
-                  ? "最新記事"
-                  : "Latest Articles"}
-            </h2>
-            <p class="text-xl text-gray-600 dark:text-gray-300">
-              {lang === "es"
-                ? "Descubre nuestras últimas perspectivas e historias"
-                : lang === "ja"
-                  ? "最新の洞察とストーリーを発見"
-                  : "Discover our newest insights and stories"}
-            </p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {latestPosts.map((post: CollectionEntry<"blog">) => (
-              <BlogCard
-                post={post}
-                lang={lang}
-              />
-            ))}
-          </div>
-
-          <div class="text-center mt-12">
-            <a
-              href={`/${lang}/blog`}
-              class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all duration-200">
-              {lang === "es"
-                ? "Ver Todos los Artículos"
-                : lang === "ja"
-                  ? "すべての記事を見る"
-                  : "View All Articles"}
-            </a>
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Newsletter Section -->
-  <section class="py-24 bg-primary-50 dark:bg-gray-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        {lang === "es"
-          ? "Mantente Actualizado"
-          : lang === "ja"
-            ? "最新情報を入手"
-            : "Stay Updated"}
-      </h2>
-      <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
-        {lang === "es"
-          ? "Suscríbete a nuestro boletín para recibir las últimas actualizaciones."
-          : lang === "ja"
-            ? "最新のアップデートを受け取るためにニュースレターを購読してください。"
-            : "Subscribe to our newsletter to get the latest updates."}
-      </p>
-      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-        <input
-          type="email"
-          placeholder={
-            lang === "es"
-              ? "Ingresa tu email"
-              : lang === "ja"
-                ? "メールアドレスを入力"
-                : "Enter your email"
-          }
-          class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          required
-        />
-        <button
-          type="submit"
-          class="px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
-          {lang === "es" ? "Suscribirse" : lang === "ja" ? "購読" : "Subscribe"}
-        </button>
-      </form>
-    </div>
-  </section>
-=======
-  title="AstroBatavia - Modern Multi-Language Blog"
-  description={t("meta.description")}
-  lang={lang}>
-<<<<<<< HEAD
-  <HomeHero
-    lang={lang}
-    t={t}
-  />
-  <HomeLatestPosts
-    latestPosts={latestPosts}
-    lang={lang}
-    t={t}
-  />
-  <HomeNewsletter
-    lang={lang}
-    t={t}
-  />
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-=======
   <HeroSection />
   <FeaturesSection />
   <FeaturedStoriesSection latestPosts={latestPosts} />
   <NewsletterSection />
->>>>>>> stable-0.0.9
 </Layout>

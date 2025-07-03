@@ -1,15 +1,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
-<<<<<<< HEAD
-<<<<<<< HEAD
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-  plugins: ["@tailwindcss/typography", "@tailwindcss/forms"],
-=======
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-=======
-  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
->>>>>>> stable-0.0.9
   darkMode: 'class',
   theme: {
     extend: {
@@ -378,5 +370,4 @@ export default {
   plugins: [
     require('@tailwindcss/typography'),
   ],
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
 };
