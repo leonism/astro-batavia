@@ -1,6 +1,15 @@
 // Removed astro:content imports as they are server-side only
 import { getLocalizedPath } from '@/i18n/utils';
 
+export interface SearchablePost {
+  slug: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags?: string[];
+  lang: string;
+}
+
 export interface SearchResult {
   title: string;
   description: string;
@@ -124,7 +133,7 @@ export async function advancedSearch(
     return filteredPosts.map(post => ({
       title: post.data.title,
       description: post.data.description,
-      url: getLocalizedPath(`/blog/${post.slug.replace(/^(en|es|ja)\//g, '')}`, lang),
+      url: getLocalizedPath(`/blog/${post.slug.replace(/^(en|es|ja)\/blog\//g, '')}`, lang),
       pubDate: formatSearchDate(post.data.pubDate),
       tags: post.data.tags,
       lang: lang,
