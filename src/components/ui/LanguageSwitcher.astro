@@ -12,7 +12,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
   id="language-switcher">
   <button
     id="language-toggle"
-    class="flex items-center space-x-1 md:mx-2 md:mr-3 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200"
+    class="flex items-center space-x-1 md:mx-0 md:mr-0 px-1 py-0 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200"
     aria-haspopup="true"
     aria-expanded="false">
     <svg
@@ -39,7 +39,8 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
         stroke-linejoin="round"
         stroke-width="2"
         d="M19 9l-7 7-7-7"
-      ></path>
+      >
+      </path>
     </svg>
   </button>
 
@@ -47,7 +48,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
     id="language-dropdown"
     class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-600 z-50 hidden">
     <div
-      class="py-1"
+      class="py-0"
       role="menu"
       aria-orientation="vertical">
       {
