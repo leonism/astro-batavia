@@ -1,8 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import Picture from "@/components/ui/Picture.astro";
 import { formatDate, useTranslations } from "@/i18n/utils";
 import type { ui } from "@/i18n/ui"; // Import the type of ui
+import Picture from "@/components/ui/Picture.astro";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -13,8 +13,6 @@ export interface Props {
 
 const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
 const t = useTranslations(lang as keyof typeof ui);
-
-// Construct the post URL - fix double /blog/ issue
 const postUrl = `/${post.slug}`;
 
 // Extract excerpt from content
@@ -149,7 +147,7 @@ const excerptClasses = [
 
         <!-- Reading time -->
         {
-          post.data.readingTime && (
+          'readingTime' in post.data && (
             <div class="flex items-center">
               <svg
                 class="w-4 h-4 mr-1"
