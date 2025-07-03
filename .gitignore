@@ -1,3 +1,52 @@
+# Node
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+.pnpm-debug.log
+
+# Astro build output
 dist/
-.astro
+.output/
+
+# Local env files
+.env
+.env.*.local
+
+# VSCode settings
+.vscode/
+
+# MacOS metadata
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Optional: If using local Netlify or Cloudflare preview folders
+.netlify/
+.cloudflare/
+
+# Optional: Ignore local analytics or debugging output
+.analytics-debug/
+
+# Optional: Next or Vercel preview artifacts if migrating
+.next/
+.vercel/
+
+# Optional: Custom local cache (e.g., Astro integrations)
+.cache/
+astro-cache/
+
+# Optional: Bun
+bun.lockb
+
+# IDE / Editor
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# System
+Thumbs.db
