@@ -13,9 +13,6 @@ export function useTranslations(lang: keyof typeof ui) {
 }
 
 export function getLocalizedPath(path: string, lang: string) {
-  if (lang === defaultLang) {
-    return path;
-  }
   return `/${lang}${path}`;
 }
 

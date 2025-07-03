@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 <<<<<<< HEAD
@@ -10,6 +11,19 @@ import { useTranslations, isValidLanguage } from "@/i18n/utils";
 
 export async function getStaticPaths() {
   return [{ params: { lang: "es" } }, { params: { lang: "ja" } }];
+=======
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import BlogCard from '@/components/blog/BlogCard.astro';
+import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "es" } },
+    { params: { lang: "ja" } }
+  ];
+>>>>>>> stable-0.0.9
 }
 
 const { lang } = Astro.params;
@@ -89,10 +103,25 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
 ---
 
 <Layout
+<<<<<<< HEAD
   title={`${t("nav.blog")}${currentTag ? ` | #${currentTag}` : ""} | AstroBatavia`}
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
   description={t("meta.description")}
   lang={lang}>
+=======
+  title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''} | Astro Batavia`}
+  description={currentTag
+    ? (lang === 'es' ? `Explora artículos sobre ${currentTag} en nuestro blog de tecnología y desarrollo web.` : lang === 'ja' ? `${currentTag}に関する技術とウェブ開発のブログ記事をご覧ください。` : `Explore articles about ${currentTag} on our technology and web development blog.`)
+    : (lang === 'es'
+      ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
+      : lang === 'ja'
+      ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+      : 'Explore our collection of articles covering web development, technology trends, and insights.'
+    )
+  }
+  lang={lang}
+>
+>>>>>>> stable-0.0.9
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="text-center mb-12">
@@ -188,6 +217,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
     </div>
 
     <!-- Tags Filter -->
+<<<<<<< HEAD
     {
       allTags.length > 0 && (
         <div class="mb-8">
@@ -214,6 +244,32 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
 =======
             <a
               href={`/${lang}/blog`}
+=======
+    {allTags.length > 0 && (
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          {lang === 'es'
+            ? 'Explorar por Tema'
+            : lang === 'ja'
+            ? 'トピック別に閲覧'
+            : 'Browse by Topic'
+          }
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          <a
+            href={getLocalizedPath('/blog', lang)}
+            class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
+              !currentTag
+                ? 'border-primary-600 bg-primary-600 text-white hover:bg-primary-700'
+                : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400'
+            }`}
+          >
+            {lang === 'es' ? 'Todos' : lang === 'ja' ? 'すべて' : 'All'}
+          </a>
+          {allTags.map((tag) => (
+            <a
+              href={`${getLocalizedPath('/blog', lang)}?tag=${tag}`}
+>>>>>>> stable-0.0.9
               class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
                 !currentTag
                   ? "border-primary-600 bg-primary-600 text-white hover:bg-primary-700"
@@ -235,9 +291,33 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
             ))}
           </div>
         </div>
+<<<<<<< HEAD
       )
     }
 <<<<<<< HEAD
+=======
+      </div>
+    )}
+
+    <!-- Featured Post Section -->
+    {
+      featuredPost &&
+        !currentTag && ( // Only show featured post if no tag is selected
+          <section class="mb-16 animate-fade-in">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center sm:text-left">
+              {t("blog.featuredArticle") || "Featured Article"}
+            </h2>
+            <div class="featured-post-card">
+              <BlogCard
+                post={featuredPost}
+                lang={lang}
+                isFeatured={true}
+              />
+            </div>
+          </section>
+        )
+    }
+>>>>>>> stable-0.0.9
 
     <!-- Posts Grid -->
     {

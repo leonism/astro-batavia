@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+<<<<<<< HEAD:src/pages/terms.astro
 <<<<<<< HEAD
 
 const lang = "en";
@@ -9,6 +10,11 @@ const lang = "en";
 const lang = "en";
 // const t = useTranslations(lang);
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+import { getLocalizedPath } from "@/i18n/utils";
+
+const lang = "en";
+>>>>>>> stable-0.0.9:src/pages/en/terms.astro
 ---
 
 <Layout
@@ -210,6 +216,7 @@ const lang = "en";
           us:
         </p>
         <ul>
+<<<<<<< HEAD:src/pages/terms.astro
 <<<<<<< HEAD
           <li><strong>Email:</strong> legal@Astro Batavia.com</li>
           <li><strong>Address:</strong> San Francisco, CA, United States</li>
@@ -223,6 +230,13 @@ const lang = "en";
             <strong>Contact Form:</strong>
             <a href="/en/contact">Contact Page</a>
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+          <li><strong>Email:</strong> legal@Astro Batavia.com</li>
+          <li><strong>Address:</strong> San Francisco, CA, United States</li>
+          <li>
+            <strong>Contact Form:</strong>
+            <a href={getLocalizedPath("/contact", "en")}>Contact Page</a>
+>>>>>>> stable-0.0.9:src/pages/en/terms.astro
           </li>
         </ul>
 
@@ -260,7 +274,7 @@ const lang = "en";
             services.
           </p>
           <a
-            href="/contact"
+            href={getLocalizedPath("/contact", "en")}
             class="inline-flex items-center px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors">
             Contact Legal Team
             <svg

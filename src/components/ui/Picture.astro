@@ -1,0 +1,50 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync' | 'auto';
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  decoding = 'async',
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+} = Astro.props;
+
+// Check if the image is external (starts with http/https)
+const isExternalImage = src.startsWith('http');
+
+// Only generate different formats for local images
+const getImageUrl = (originalSrc: string, format: string) => {
+  if (isExternalImage) return null;
+  const ext = originalSrc.split('.').pop();
+  return originalSrc.replace(`.${ext}`, `.${format}`);
+};
+
+const avifSrc = getImageUrl(src, 'avif');
+const webpSrc = getImageUrl(src, 'webp');
+---
+
+<picture>
+  {avifSrc && <source srcset={avifSrc} type="image/avif" sizes={sizes} />}
+  {webpSrc && <source srcset={webpSrc} type="image/webp" sizes={sizes} />}
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    class={className}
+    loading={loading}
+    decoding={decoding}
+  />
+</picture>

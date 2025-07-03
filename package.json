@@ -5,21 +5,47 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
-    "build": "astro build"
+    "build": "astro build && node scripts/compress.js",
+    "build:only": "astro build",
+    "compress": "node scripts/compress.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Gemika Haziq Nugroho",
   "license": "ISC",
   "description": "",
   "dependencies": {
+<<<<<<< HEAD
     "astro": "^5.10.1",
     "@astrojs/sitemap": "^3.4.0",
+=======
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/sitemap": "^3.4.1",
+>>>>>>> stable-0.0.9
     "@astrojs/tailwind": "^5.1.5",
     "@sentry/astro": "^9.23.0",
     "@spotlightjs/astro": "^3.2.3",
     "@tailwindcss/typography": "^0.5.16",
+<<<<<<< HEAD
+=======
+    "astro": "^5.10.1",
+>>>>>>> stable-0.0.9
     "mdast-util-to-string": "^4.0.0",
     "reading-time": "^1.5.0",
     "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "csso": "^5.0.5",
+    "glob": "^11.0.3",
+    "html-minifier-terser": "^7.2.0",
+    "imagemin": "^9.0.1",
+    "imagemin-avif": "^0.1.6",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-svgo": "^11.0.1",
+    "imagemin-webp": "^8.0.0",
+    "rollup-plugin-brotli": "^3.1.0",
+    "rollup-plugin-gzip": "^4.1.1",
+    "terser": "^5.43.1",
+    "vite-plugin-imagemin": "^0.6.1"
   }
 }

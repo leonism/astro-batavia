@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { getLocalizedPath } from "@/i18n/utils";
 
 const lang = "es";
 // Remove unused translation initialization since it's not being used in this file
@@ -251,7 +252,7 @@ const lang = "es";
           <li><strong>Dirección:</strong> San Francisco, CA, Estados Unidos</li>
           <li>
             <strong>Formulario de Contacto:</strong>
-            <a href="/contact">Página de Contacto</a>
+            <a href={getLocalizedPath("/contact", "es")}>Página de Contacto</a>
           </li>
         </ul>
 
@@ -288,7 +289,7 @@ const lang = "es";
             manejamos sus datos, no dude en ponerse en contacto.
           </p>
           <a
-            href="/contact"
+            href={getLocalizedPath("/contact", "es")}
             class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
             Contactar con Nuestro Equipo de Privacidad
             <svg

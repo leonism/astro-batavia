@@ -1,5 +1,6 @@
 ---
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import BlogCard from "@/components/BlogCard.astro";
@@ -11,6 +12,14 @@ import HomeHero from "@/components/home/HomeHero.astro";
 import HomeLatestPosts from "@/components/home/HomeLatestPosts.astro";
 import HomeNewsletter from "@/components/home/HomeNewsletter.astro";
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import FeaturesSection from "@/components/sections/FeaturesSection.astro";
+import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
+import NewsletterSection from "@/components/sections/NewsletterSection.astro";
+>>>>>>> stable-0.0.9
 import { useTranslations, isValidLanguage } from "@/i18n/utils";
 
 export async function getStaticPaths() {
@@ -28,6 +37,7 @@ const t = useTranslations(lang);
 
 // Get latest blog posts for this language
 <<<<<<< HEAD
+<<<<<<< HEAD
 const allPosts = await getCollection("blog", (post: CollectionEntry<"blog">) => {
   return post.id.startsWith(`${lang}/`) && !post.data.draft;
 });
@@ -39,6 +49,11 @@ const allPosts = await getCollection(
   }
 );
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+const allPosts = await getCollection("blog", (post: CollectionEntry<"blog">) => {
+  return post.id.startsWith(`${lang}/`) && !post.data.draft;
+});
+>>>>>>> stable-0.0.9
 
 // Sort posts by publication date (newest first)
 const sortedPosts = allPosts.sort(
@@ -217,6 +232,7 @@ const latestPosts = sortedPosts.slice(0, 3);
   title="AstroBatavia - Modern Multi-Language Blog"
   description={t("meta.description")}
   lang={lang}>
+<<<<<<< HEAD
   <HomeHero
     lang={lang}
     t={t}
@@ -231,4 +247,10 @@ const latestPosts = sortedPosts.slice(0, 3);
     t={t}
   />
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+  <HeroSection />
+  <FeaturesSection />
+  <FeaturedStoriesSection latestPosts={latestPosts} />
+  <NewsletterSection />
+>>>>>>> stable-0.0.9
 </Layout>

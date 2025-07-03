@@ -1,5 +1,5 @@
-import { getCollection, type CollectionEntry } from "astro:content";
 import type { APIRoute } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 export interface SearchResult {
   title: string;
@@ -47,7 +47,7 @@ export const GET: APIRoute = async ({ request }) => {
       (post: CollectionEntry<"blog">) => ({
         title: post.data.title,
         description: post.data.description,
-        url: `/${lang}/blog/${post.slug.replace(`${lang}/`, "")}`, // All URLs now include /lang/ prefix
+        url: `/${lang}/blog/${post.slug.replace(new RegExp(`^${lang}\/blog\/`), "")}`, // All URLs now include /lang/ prefix
         pubDate: formatSearchDate(post.data.pubDate),
         tags: post.data.tags,
         lang: lang,

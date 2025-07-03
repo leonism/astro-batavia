@@ -7,15 +7,32 @@
         "title": {
           "type": "string"
         },
+        "lang": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "description": {
           "type": "string"
         },
-        "slug": {
-          "type": "string"
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "author": {
-          "type": "string",
-          "default": "Admin"
+          "type": "string"
+        },
+        "authorImage": {
+          "type": "string"
+        },
+        "authorURL": {
+          "type": "string"
         },
         "pubDate": {
           "anyOf": [
@@ -33,7 +50,7 @@
             }
           ]
         },
-        "updatedDate": {
+        "editDate": {
           "anyOf": [
             {
               "type": "string",
@@ -52,27 +69,25 @@
         "heroImage": {
           "type": "string"
         },
-        "draft": {
-          "type": "boolean",
-          "default": false
+        "heroImageAlt": {
+          "type": "string"
         },
         "tags": {
           "type": "array",
           "items": {
             "type": "string"
-          },
-          "default": [
-            "general"
-          ]
+          }
         },
-        "canonical": {
+        "draft": {
+          "type": "boolean"
+        },
+        "comment": {
+          "type": "boolean"
+        },
+        "robots": {
           "type": "string"
         },
-        "noindex": {
-          "type": "boolean",
-          "default": false
-        },
-        "readingTime": {
+        "canonicalURL": {
           "type": "string"
         },
         "$schema": {
@@ -81,8 +96,13 @@
       },
       "required": [
         "title",
+        "lang",
+        "categories",
         "description",
-        "pubDate"
+        "author",
+        "pubDate",
+        "tags",
+        "draft"
       ],
       "additionalProperties": false
     }
