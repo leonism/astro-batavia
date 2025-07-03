@@ -1,11 +1,17 @@
 <div align="center">
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
-  
+
   [![Astro](https://img.shields.io/badge/Astro-5.10.1-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
   [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
+
+  <!-- Additional new badges below -->
+  [![Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare_Pages-F38020?style=flat&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+  [![Vercel](https://img.shields.io/badge/Preview-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://vercel.com/)
+  [![Multilingual](https://img.shields.io/badge/Multilingual-Yes-0A7E07?style=flat)](#)
+  [![Dark Mode](https://img.shields.io/badge/Dark_Mode-Enabled-000000?style=flat)](#)
 </div>
 
 ## 📋 Table of Contents
@@ -165,7 +171,7 @@ Astro Batavia supports three languages out of the box with a flexible i18n syste
 ```
 /                    → Redirects to /en/
 /en/                 → English homepage
-/es/                 → Spanish homepage  
+/es/                 → Spanish homepage
 /ja/                 → Japanese homepage
 /en/blog/my-post     → English blog post
 /es/blog/mi-post     → Spanish blog post
@@ -178,7 +184,7 @@ Astro Batavia supports three languages out of the box with a flexible i18n syste
    // src/i18n/ui.ts
    export const languages = {
      en: 'English',
-     es: 'Español', 
+     es: 'Español',
      ja: '日本語',
      fr: 'Français' // Add new language
    };
@@ -224,7 +230,7 @@ src/content/blog/
 ├── en/           # English posts
 │   ├── post-1.mdx
 │   └── post-2.mdx
-├── es/           # Spanish posts  
+├── es/           # Spanish posts
 │   ├── articulo-1.mdx
 │   └── articulo-2.mdx
 └── ja/           # Japanese posts
@@ -317,7 +323,7 @@ npm run compress
 ```
 dist/
 ├── en/              # English pages
-├── es/              # Spanish pages  
+├── es/              # Spanish pages
 ├── ja/              # Japanese pages
 ├── assets/          # Optimized CSS/JS
 ├── images/          # Compressed images
@@ -579,11 +585,11 @@ This project is licensed under the **ISC License** - see the [LICENSE](LICENSE) 
 
 The ISC license is a permissive free software license that allows you to:
 
-✅ **Use** the software for any purpose  
-✅ **Modify** the software  
-✅ **Distribute** the software  
-✅ **Sublicense** the software  
-✅ **Sell** copies of the software  
+✅ **Use** the software for any purpose
+✅ **Modify** the software
+✅ **Distribute** the software
+✅ **Sublicense** the software
+✅ **Sell** copies of the software
 
 **Requirements:**
 - Include the original copyright notice
@@ -602,9 +608,9 @@ The ISC license is a permissive free software license that allows you to:
     <a href="https://github.com/your-username/astro-batavia/issues">🐛 Issues</a> •
     <a href="https://github.com/your-username/astro-batavia/pulls">🔀 Pull Requests</a>
   </p>
-  
+
   <p><strong>Built with ❤️ using Astro.js</strong></p>
-  
+
   <p>
     <a href="https://astro.build">🚀 Astro</a> •
     <a href="https://tailwindcss.com">🎨 Tailwind CSS</a> •
