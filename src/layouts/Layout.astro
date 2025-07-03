@@ -1,8 +1,11 @@
 ---
 import { ViewTransitions } from "astro:transitions";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import SEO from "@/components/SEO.astro";
+import Header from "@/components/navigation/Header.astro";
+import Footer from "@/components/footer/Footer.astro";
+import SEO from "@/components/common/SEO.astro";
+import BackToTop from "@/components/ui/BackToTop.astro";
+import ThemeInitializer from "@/components/common/ThemeInitializer.astro";
+import BackToTopScript from "@/components/common/BackToTopScript.astro";
 import "@/styles/global.css";
 
 export interface Props {
@@ -84,6 +87,11 @@ const {
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
     <meta
       name="generator"
       content={Astro.generator}
@@ -114,7 +122,7 @@ const {
       noindex={noindex}
       canonical={canonical}
       lang={lang}
-      type={type ===
+      type={type}
       publishedTime={publishedTime}
       modifiedTime={modifiedTime}
       author={author}
@@ -123,37 +131,14 @@ const {
       tags={tags}
       category={category}
       readingTime={readingTime?.toString()}
-      wordCount={wordCount}
+       wordCount={wordCount}
       excerpt={excerpt}
       breadcrumbs={breadcrumbs}
       organization={organization}
       video={video}
       product={product}
     />
-
-    <!-- Theme Script (load early to prevent flash) -->
-    <script is:inline>
-      // Theme initialization
-      const getThemePreference = () => {
-        if (
-          typeof localStorage !== "undefined" &&
-          localStorage.getItem("theme")
-        ) {
-          return localStorage.getItem("theme");
-        }
-        return window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
-      };
-
-      const isDark = getThemePreference() === "dark";
-      document.documentElement.classList[isDark ? "add" : "remove"]("dark");
-
-      if (typeof localStorage !== "undefined") {
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-      }
-    </script>
-
+    <ThemeInitializer />
     <ViewTransitions />
     <link
       rel="icon"
@@ -163,42 +148,14 @@ const {
   </head>
   <body
     class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300">
-    <div class="min-h-screen flex flex-col">
+    <div class="md:min-h-full lg:min-h-screen flex flex-col">
       <Header />
-
       <main class="flex-1 pt-16">
         <slot />
       </main>
-
       <Footer />
     </div>
-
-    <!-- Theme toggle functionality -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const themeToggle = document.getElementById("theme-toggle");
-
-        if (themeToggle) {
-          themeToggle.addEventListener("click", () => {
-            const isDark = document.documentElement.classList.contains("dark");
-            const newTheme = isDark ? "light" : "dark";
-
-            document.documentElement.classList.toggle("dark");
-            localStorage.setItem("theme", newTheme);
-          });
-        }
-
-        // System theme preference change listener
-        window
-          .matchMedia("(prefers-color-scheme: dark)")
-          .addEventListener("change", (e) => {
-            if (!localStorage.getItem("theme")) {
-              document.documentElement.classList[e.matches ? "add" : "remove"](
-                "dark"
-              );
-            }
-          });
-      });
-    </script>
+    <BackToTop />
+    <BackToTopScript />
   </body>
 </html>
