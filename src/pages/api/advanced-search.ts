@@ -123,7 +123,7 @@ export async function advancedSearch(
     return filteredPosts.map((post: CollectionEntry<"blog">) => ({
       title: post.data.title,
       description: post.data.description,
-      url: `/${lang}/blog/${post.slug.replace(`${lang}/`, "")}`, // All URLs now include /lang/ prefix
+      url: `/${lang}/blog/${post.slug.replace(new RegExp(`^${lang}\/blog\/`), "")}`, // All URLs now include /lang/ prefix
       pubDate: formatSearchDate(post.data.pubDate),
       tags: post.data.tags,
       lang: lang,

@@ -1,12 +1,11 @@
 <div align="center">
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
-
-[![Astro](https://img.shields.io/badge/Astro-5.10.1-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
-
+  
+  [![Astro](https://img.shields.io/badge/Astro-5.10.1-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+  [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 </div>
 
 ## 📋 Table of Contents
@@ -30,21 +29,18 @@
 ## ✨ Features
 
 ### 🌍 **Multilingual Support**
-
 - **3 Languages**: English, Spanish, and Japanese
 - **Smart Routing**: Language-prefixed URLs with fallback handling
 - **Localized Content**: Date formatting, UI translations, and content management
 - **SEO Optimized**: Language-specific meta tags and hreflang attributes
 
 ### 📱 **Modern Design**
-
 - **Responsive Layout**: Mobile-first design with Tailwind CSS
 - **Dark Mode**: System preference detection with manual toggle
 - **Performance**: Static site generation with optimized assets
 - **Accessibility**: WCAG compliant with semantic HTML
 
 ### 📝 **Content Management**
-
 - **Decap CMS**: Git-based headless CMS for easy content editing
 - **MDX Support**: Rich markdown with React components
 - **Reading Time**: Automatic calculation for better UX
@@ -52,14 +48,12 @@
 - **Draft Support**: Preview unpublished content
 
 ### 🔍 **SEO & Analytics**
-
 - **Advanced SEO**: Open Graph, Twitter Cards, JSON-LD structured data
 - **Sitemap**: Automatic generation with i18n support
 - **Analytics Ready**: Sentry integration for error tracking
 - **Performance**: Lighthouse-optimized with compression
 
 ### 🎯 **Developer Experience**
-
 - **TypeScript**: Full type safety across the codebase
 - **Component Architecture**: Modular and reusable components
 - **Hot Reload**: Fast development with Astro's dev server
@@ -68,31 +62,26 @@
 ## 🛠️ Tech Stack
 
 ### **Core Framework**
-
 - **[Astro 5.10.1](https://astro.build)** - Static site generator with islands architecture
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript development
 - **[MDX 4.3.0](https://mdxjs.com/)** - Markdown with JSX components
 
 ### **Styling & UI**
-
 - **[Tailwind CSS 3.4.17](https://tailwindcss.com)** - Utility-first CSS framework
 - **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)** - Beautiful typographic defaults
 - **Custom Design System** - Consistent color palette and spacing
 
 ### **Content & CMS**
-
 - **[Decap CMS](https://decapcms.org/)** - Git-based content management
 - **[Zod](https://zod.dev/)** - Schema validation for content types
 - **Reading Time Calculation** - Automatic reading time estimation
 
 ### **SEO & Analytics**
-
 - **[@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)** - Automatic sitemap generation
 - **[Sentry](https://sentry.io/)** - Error tracking and performance monitoring
 - **[Spotlight.js](https://spotlightjs.com/)** - Development debugging tools
 
 ### **Build & Optimization**
-
 - **Vite** - Fast build tool and dev server
 - **Image Optimization** - Automatic image compression and format conversion
 - **Compression** - Gzip and Brotli compression for production builds
@@ -111,7 +100,6 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 ```
 
 ### **Key Architectural Decisions**
-
 - **Islands Architecture**: Minimal JavaScript with selective hydration
 - **Content Collections**: Type-safe content management with Zod validation
 - **Internationalization**: Route-based language switching with shared components
@@ -128,14 +116,12 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 ### Installation
 
 1. **Clone the repository**
-
    ```bash
    git clone https://github.com/your-username/astro-batavia.git
    cd astro-batavia
    ```
 
 2. **Install dependencies**
-
    ```bash
    npm install
    ```
@@ -149,15 +135,12 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 ### Development
 
 1. **Start the development server**
-
    ```bash
    npm run dev
    ```
-
    The site will be available at `http://localhost:5000`
 
 2. **Available Scripts**
-
    ```bash
    npm run dev          # Start development server
    npm run build        # Build for production with compression
@@ -174,17 +157,15 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 Astro Batavia supports three languages out of the box with a flexible i18n system:
 
 ### **Supported Languages**
-
 - 🇺🇸 **English** (`en`) - Default language
 - 🇪🇸 **Spanish** (`es`)
 - 🇯🇵 **Japanese** (`ja`)
 
 ### **URL Structure**
-
 ```
 /                    → Redirects to /en/
 /en/                 → English homepage
-/es/                 → Spanish homepage
+/es/                 → Spanish homepage  
 /ja/                 → Japanese homepage
 /en/blog/my-post     → English blog post
 /es/blog/mi-post     → Spanish blog post
@@ -193,28 +174,26 @@ Astro Batavia supports three languages out of the box with a flexible i18n syste
 ### **Adding a New Language**
 
 1. **Update language configuration**
-
    ```typescript
    // src/i18n/ui.ts
    export const languages = {
-     en: "English",
-     es: "Español",
-     ja: "日本語",
-     fr: "Français", // Add new language
+     en: 'English',
+     es: 'Español', 
+     ja: '日本語',
+     fr: 'Français' // Add new language
    };
    ```
 
 2. **Add translations**
-
    ```typescript
    // src/i18n/ui.ts
    export const ui = {
      // ... existing translations
      fr: {
-       "nav.home": "Accueil",
-       "nav.blog": "Blog",
+       'nav.home': 'Accueil',
+       'nav.blog': 'Blog',
        // ... add all required translations
-     },
+     }
    } as const;
    ```
 
@@ -245,7 +224,7 @@ src/content/blog/
 ├── en/           # English posts
 │   ├── post-1.mdx
 │   └── post-2.mdx
-├── es/           # Spanish posts
+├── es/           # Spanish posts  
 │   ├── articulo-1.mdx
 │   └── articulo-2.mdx
 └── ja/           # Japanese posts
@@ -338,7 +317,7 @@ npm run compress
 ```
 dist/
 ├── en/              # English pages
-├── es/              # Spanish pages
+├── es/              # Spanish pages  
 ├── ja/              # Japanese pages
 ├── assets/          # Optimized CSS/JS
 ├── images/          # Compressed images
@@ -349,7 +328,6 @@ dist/
 ### **Deployment Options**
 
 #### **Netlify**
-
 ```toml
 # netlify.toml
 [build]
@@ -363,7 +341,6 @@ dist/
 ```
 
 #### **Vercel**
-
 ```json
 {
   "buildCommand": "npm run build",
@@ -373,13 +350,12 @@ dist/
 ```
 
 #### **GitHub Pages**
-
 ```yaml
 # .github/workflows/deploy.yml
 name: Deploy to GitHub Pages
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -387,7 +363,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
       - run: npm ci
       - run: npm run build
       - uses: peaceiris/actions-gh-pages@v3
@@ -519,33 +495,28 @@ We welcome contributions to Astro Batavia! Here's how you can help:
 ### **Getting Started**
 
 1. **Fork the repository**
-
    ```bash
    git clone https://github.com/your-username/astro-batavia.git
    cd astro-batavia
    ```
 
 2. **Create a feature branch**
-
    ```bash
    git checkout -b feature/amazing-feature
    ```
 
 3. **Make your changes**
-
    - Follow the existing code style
    - Add tests if applicable
    - Update documentation
 
 4. **Test your changes**
-
    ```bash
    npm run dev
    npm run build
    ```
 
 5. **Commit and push**
-
    ```bash
    git commit -m "Add amazing feature"
    git push origin feature/amazing-feature
@@ -556,7 +527,6 @@ We welcome contributions to Astro Batavia! Here's how you can help:
 ### **Contribution Guidelines**
 
 #### **Code Style**
-
 - Use TypeScript for type safety
 - Follow existing naming conventions
 - Use Tailwind CSS for styling
@@ -564,25 +534,20 @@ We welcome contributions to Astro Batavia! Here's how you can help:
 - Write descriptive commit messages
 
 #### **Adding New Features**
-
 - **Components**: Place in appropriate `src/components/` subdirectory
 - **Pages**: Follow the existing language structure
 - **Translations**: Add to all supported languages in `src/i18n/ui.ts`
 - **Content**: Use the established frontmatter schema
 
 #### **Bug Reports**
-
 When reporting bugs, please include:
-
 - Steps to reproduce
 - Expected vs actual behavior
 - Browser and OS information
 - Screenshots if applicable
 
 #### **Feature Requests**
-
 For new features, please:
-
 - Check existing issues first
 - Provide detailed use cases
 - Consider backward compatibility
@@ -591,13 +556,11 @@ For new features, please:
 ### **Development Workflow**
 
 1. **Local Development**
-
    ```bash
    npm run dev          # Start dev server
    ```
 
 2. **Code Quality**
-
    ```bash
    npm run build        # Test production build
    ```
@@ -616,19 +579,17 @@ This project is licensed under the **ISC License** - see the [LICENSE](LICENSE) 
 
 The ISC license is a permissive free software license that allows you to:
 
-✅ **Use** the software for any purpose
-✅ **Modify** the software
-✅ **Distribute** the software
-✅ **Sublicense** the software
-✅ **Sell** copies of the software
+✅ **Use** the software for any purpose  
+✅ **Modify** the software  
+✅ **Distribute** the software  
+✅ **Sublicense** the software  
+✅ **Sell** copies of the software  
 
 **Requirements:**
-
 - Include the original copyright notice
 - Include the license text
 
 **Limitations:**
-
 - No warranty provided
 - No liability assumed
 
@@ -641,9 +602,9 @@ The ISC license is a permissive free software license that allows you to:
     <a href="https://github.com/your-username/astro-batavia/issues">🐛 Issues</a> •
     <a href="https://github.com/your-username/astro-batavia/pulls">🔀 Pull Requests</a>
   </p>
-
+  
   <p><strong>Built with ❤️ using Astro.js</strong></p>
-
+  
   <p>
     <a href="https://astro.build">🚀 Astro</a> •
     <a href="https://tailwindcss.com">🎨 Tailwind CSS</a> •
