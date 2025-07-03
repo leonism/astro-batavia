@@ -12,7 +12,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
   id="language-switcher">
   <button
     id="language-toggle"
-    class="flex items-center space-x-1 md:mx-0 md:mr-0 px-1 py-0 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200"
+    class="flex items-center space-x-2 md:mx-2 md:mr-1 px-0 py-0 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200"
     aria-haspopup="true"
     aria-expanded="false">
     <svg
@@ -100,7 +100,6 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
       languageToggle.addEventListener("click", (e) => {
         e.preventDefault();
         const isVisible = !languageDropdown.classList.contains("hidden");
-
         if (isVisible) {
           languageDropdown.classList.add("hidden");
           languageChevron.style.transform = "rotate(0deg)";
@@ -117,7 +116,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
         if (
           !languageToggle.contains(e.target as Node) &&
           !languageDropdown.contains(e.target as Node)
-        ) {
+          ) {
           languageDropdown.classList.add("hidden");
           languageChevron.style.transform = "rotate(0deg)";
           languageToggle.setAttribute("aria-expanded", "false");
