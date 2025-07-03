@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { getLocalizedPath } from "@/i18n/utils";
 const lang = "ja";
 ---
 
@@ -171,7 +172,7 @@ const lang = "ja";
           </li>
           <li>
             <strong>お問い合わせフォーム:</strong>
-            <a href="/contact">お問い合わせページ</a>
+            <a href={getLocalizedPath("/contact", "ja")}>お問い合わせページ</a>
           </li>
         </ul>
 
@@ -203,7 +204,7 @@ const lang = "ja";
             これらの規約は法的に拘束力のある契約です。当社のサービスをご利用になる前に、よくお読みになり、ご質問がある場合はお問い合わせください。
           </p>
           <a
-            href="/contact"
+            href={getLocalizedPath("/contact", "ja")}
             class="inline-flex items-center px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors">
             法務チームに連絡する
             <svg

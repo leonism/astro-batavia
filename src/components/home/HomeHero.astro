@@ -1,6 +1,7 @@
 ---
 import type { ui } from "@/i18n/ui";
 import BaseHero from "@/components/ui/BaseHero.astro";
+import { getLocalizedPath } from "@/i18n/utils";
 
 const { lang, t } = Astro.props as {
   lang: keyof typeof ui;
@@ -8,14 +9,14 @@ const { lang, t } = Astro.props as {
 };
 
 const title = `${t("home.hero.title")} <span class="text-primary-600 dark:text-primary-400">${t("home.hero.titleHighlight")}</span> ${t("home.hero.titleSuffix" as any, "")}`;
-const subtitle = t("home.hero.subtitle");
+const subtitle = t("home.hero.description");
 
 const cta1Text = t("home.hero.exploreButton");
-const cta1Link = `/${lang}/blog`;
+const cta1Link = getLocalizedPath('/blog', lang);
 const cta1IconSvg = "M13 7l5 5m0 0l-5 5m5-5H6";
 
 const cta2Text = t("home.hero.searchButton");
-const cta2Link = `/${lang}/search`;
+const cta2Link = getLocalizedPath('/search', lang);
 const cta2IconSvg = "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z";
 
 const featureFastTitle = t("home.features.fast.title");

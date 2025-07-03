@@ -1,0 +1,85 @@
+---
+import { useTranslations } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
+
+interface Props {
+  previousPostData?: { url: string; title: string };
+  nextPostData?: { url: string; title: string };
+  lang: LanguageKey;
+}
+
+const { previousPostData, nextPostData, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{(previousPostData || nextPostData) && (
+  <nav class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700" aria-label="Blog post navigation">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Previous Article -->
+      {previousPostData ? (
+        <a
+          href={previousPostData.url}
+          title={`${t("blog.previousArticle")}: ${previousPostData.title}`}
+          class="group flex flex-col p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+        >
+          <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+            <svg
+              class="w-4 h-4 mr-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+            <span class="group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              {t("blog.previousArticle")}
+            </span>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+            {previousPostData.title}
+          </h3>
+        </a>
+      ) : (
+        <div></div>
+      )}
+
+      <!-- Next Article -->
+      {nextPostData ? (
+        <a
+          href={nextPostData.url}
+          title={`${t("blog.nextArticle")}: ${nextPostData.title}`}
+          class="group flex flex-col p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] text-right md:items-end"
+        >
+          <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2 md:flex-row-reverse">
+            <svg
+              class="w-4 h-4 ml-2 md:mr-2 md:ml-0 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+            <span class="group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              {t("blog.nextArticle")}
+            </span>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+            {nextPostData.title}
+          </h3>
+        </a>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  </nav>
+)}

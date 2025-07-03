@@ -1,0 +1,37 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import FeaturesSection from "@/components/sections/FeaturesSection.astro";
+import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
+import NewsletterSection from "@/components/sections/NewsletterSection.astro";
+import { useTranslations } from "@/i18n/utils";
+
+// Get latest blog posts in English
+const allPosts = await getCollection(
+  "blog",
+  ({ id, data }: { id: string; data: { draft: boolean } }) => {
+    return id.startsWith("en/") && !data.draft;
+  }
+);
+
+// Sort posts by publication date (newest first)
+const sortedPosts = allPosts.sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const latestPosts = sortedPosts.slice(0, 3);
+
+const lang = "en";
+const t = useTranslations(lang);
+---
+
+<Layout
+  title="AstroBlog - Modern Multi-Language Blog"
+  description={t("meta.description") as string}
+  lang={lang as string}>
+  <HeroSection />
+  <FeaturesSection />
+  <FeaturedStoriesSection latestPosts={latestPosts} />
+  <NewsletterSection />
+</Layout>

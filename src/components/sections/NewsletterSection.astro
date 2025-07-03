@@ -1,13 +1,15 @@
 ---
 import NewsletterForm from "@/components/ui/NewsletterForm.astro";
-// TODO: Consider internationalizing these strings as well
-const title = "Stay in the Loop";
-const subtitle =
-  "Get the latest articles, tutorials, and insights delivered straight to your inbox. Join our community of developers and creators.";
-const emailPlaceholder = "Enter your email address";
-const buttonText = "Subscribe";
-const privacyNoteText =
-  "(No spam, unsubscribe at any time. We respect your privacy.)";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const title = t("home.newsletter.title");
+const subtitle = t("home.newsletter.subtitle");
+const emailPlaceholder = t("home.newsletter.emailPlaceholder");
+const buttonText = t("home.newsletter.buttonText");
+const privacyNoteText = t("home.newsletter.privacyNote");
 ---
 
 <NewsletterForm

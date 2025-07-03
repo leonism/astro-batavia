@@ -1,19 +1,29 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import FeaturedPostCard from "../cards/FeaturedPostCard.astro";
+import { getLangFromUrl, useTranslations, getLocalizedPath } from "@/i18n/utils";
 
 interface Props {
   latestPosts: CollectionEntry<"blog">[];
 }
 
 const { latestPosts } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
-const allAuthors = await getCollection("authors");
+// Try to get authors collection, fallback to empty array if it doesn't exist
+let allAuthors: any[] = [];
+try {
+  allAuthors = await getCollection("authors");
+} catch (error) {
+  // Authors collection doesn't exist, use empty array
+  console.warn("Authors collection not found, using fallback author data");
+}
 
 // Function to find author details by slug
 const getAuthorDetails = (authorSlug: string) => {
   return allAuthors.find(
-    (author: CollectionEntry<"authors">) => author.slug === authorSlug
+    (author: any) => author.slug === authorSlug
   );
 };
 ---
@@ -27,21 +37,17 @@ const getAuthorDetails = (authorSlug: string) => {
       <h2
         id="featured-stories-heading"
         class="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 sm:mb-6">
-        Featured <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"
-          >Stories</span
-        >
+        {t("home.featuredStories.title")}
       </h2>
       <p
         class="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-        Discover insights, tutorials, and stories from our community of
-        developers and creators
+        {t("home.featuredStories.subtitle")}
       </p>
     </header>
 
     {
       latestPosts.length > 0 && (
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
+        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-16">
           {latestPosts.map((post, index) => {
             const author = getAuthorDetails(post.data.author);
             const authorImage =
@@ -63,9 +69,9 @@ const getAuthorDetails = (authorSlug: string) => {
 
     <div class="text-center">
       <a
-        href="/blog"
+        href={getLocalizedPath("/blog", lang)}
         class="inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-semibold text-white/90 dark:text-slate-300 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
-        View All Articles
+        {t("home.featuredStories.viewAll")}
         <svg
           aria-hidden="true"
           class="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1"

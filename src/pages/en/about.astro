@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { getLocalizedPath } from "@/i18n/utils";
 
 const lang = "en";
 <<<<<<< HEAD
@@ -373,13 +374,17 @@ const t = useTranslations(lang);
           </svg>
         </a>
         <a
+<<<<<<< HEAD:src/pages/about.astro
 <<<<<<< HEAD
           href="/contact"
 =======
           href="/en/contact"
 >>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
+=======
+          href={getLocalizedPath("/contact", "en")}
+>>>>>>> stable-0.0.9:src/pages/en/about.astro
           class="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-2xl hover:bg-white/20 transition-all duration-300 border-2 border-white/20">
-          Get in Touch
+          Get In Touch
         </a>
       </div>
     </div>
