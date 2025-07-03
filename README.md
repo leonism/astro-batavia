@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# Astro Batavia
-=======
 <div align="center">
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
@@ -10,7 +7,6 @@
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
   [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 </div>
->>>>>>> stable-0.0.9
 
 ## 📋 Table of Contents
 

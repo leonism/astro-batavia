@@ -1,85 +1,4 @@
 ---
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { getCollection } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
-import BlogCard from "@/components/BlogCard.astro";
-import { useTranslations, isValidLanguage } from "@/i18n/utils";
-=======
-import { getCollection, type CollectionEntry } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
-import { useTranslations, isValidLanguage } from "@/i18n/utils"; // Removed getLangFromUrl
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-
-export async function getStaticPaths() {
-  return [{ params: { lang: "es" } }, { params: { lang: "ja" } }];
-}
-
-const { lang } = Astro.params;
-
-// Validate language
-if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect("/404");
-}
-
-const t = useTranslations(lang);
-
-<<<<<<< HEAD
-// Get blog posts for this language
-const allPosts = await getCollection(
-  "blog",
-  ({
-    id,
-    data,
-  }: {
-    id: string;
-    data: {
-      draft: boolean;
-      pubDate: Date;
-      tags: string[];
-      title: string;
-      description: string;
-    };
-  }) => {
-    return id.startsWith(`${lang}/`) && !data.draft;
-  }
-);
-
-const posts = allPosts.sort(
-  (a: { data: { pubDate: Date } }, b: { data: { pubDate: Date } }) =>
-    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
-// Get all unique tags
-const allTags = [
-  ...new Set(
-    posts.flatMap(
-      (post: { data: { tags: string[] | undefined } }) => post.data.tags || []
-    )
-  ),
-];
----
-
-<Layout
-  title={`${t("nav.search")} | Astro Batavia`}
-=======
-// Get all unique tags for the current language to display filter buttons
-// This still loads all posts for the language just to get tags.
-// A more optimized approach might be a separate API endpoint for tags or pre-building a tag list.
-const allPostsForTags = await getCollection(
-  "blog",
-  ({ id, data }: CollectionEntry<"blog">) => {
-    return id.startsWith(`${lang}/`) && !data.draft;
-  }
-);
-const allTags = [
-  ...new Set(
-    allPostsForTags.flatMap(
-      (post: CollectionEntry<"blog">) => post.data.tags || []
-    )
-  ),
-].sort();
-=======
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import BlogCard from "../../components/blog/BlogCard.astro";
@@ -100,7 +19,6 @@ const t = useTranslations(lang);
 const allPosts = await getCollection("blog", ({ id, data }: { id: string; data: { draft: boolean } }) => {
   return id.startsWith(`${lang}/`) && !data.draft;
 });
->>>>>>> stable-0.0.9
 
 const posts = allPosts.sort(
   (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -111,14 +29,8 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
 ---
 
 <Layout
-<<<<<<< HEAD
-  title={`${t("nav.search")} | AstroBatavia`}
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-  description={t("meta.description")}
-=======
   title={`${t("nav.search")} | Astro Batavia`}
   description="Search through our collection of articles and find exactly what you're looking for"
->>>>>>> stable-0.0.9
   lang={lang}>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
@@ -132,11 +44,7 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
           lang === "es"
             ? "Encuentra artículos, temas e ideas en toda nuestra colección de blog."
             : lang === "ja"
-<<<<<<< HEAD
-              ? "ブログ全体から記事、トピック、洞察を見つけてください。"
-=======
               ? "ブログコレクション全体から記事、トピック、洞察を見つけてください。"
->>>>>>> stable-0.0.9
               : "Find articles, topics, and insights across our entire blog collection."
         }
       </p>
@@ -163,9 +71,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
         <input
           type="search"
           id="main-search-input"
-<<<<<<< HEAD
-          placeholder={t("search.placeholder")}
-=======
           placeholder={
             lang === "es"
               ? "Buscar artículos..."
@@ -173,7 +78,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
                 ? "記事を検索..."
                 : "Search articles..."
           }
->>>>>>> stable-0.0.9
           class="block w-full pl-10 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-colors duration-200 shadow-sm"
           autocomplete="off"
           spellcheck="false"
@@ -199,11 +103,7 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
               lang === "es"
                 ? "Filtrar por tema:"
                 : lang === "ja"
-<<<<<<< HEAD
-                  ? "トピック別にフィルター:"
-=======
                   ? "トピックでフィルター:"
->>>>>>> stable-0.0.9
                   : "Filter by topic:"
             }
           </label>
@@ -213,27 +113,12 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
               data-tag="all">
               {
                 lang === "es"
-<<<<<<< HEAD
-                  ? "Todos los Temas"
-=======
                   ? "Todos los temas"
->>>>>>> stable-0.0.9
                   : lang === "ja"
                     ? "すべてのトピック"
                     : "All Topics"
               }
             </button>
-<<<<<<< HEAD
-            {
-              allTags.slice(0, 10).map((tag) => (
-                <button
-                  class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
-                  data-tag={tag}>
-                  #{tag}
-                </button>
-              ))
-            }
-=======
             {allTags.slice(0, 10).map((tag) => (
               <button
                 class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
@@ -241,7 +126,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
                 #{tag}
               </button>
             ))}
->>>>>>> stable-0.0.9
           </div>
         </div>
 
@@ -263,26 +147,16 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
             <option value="date-desc">
               {
                 lang === "es"
-<<<<<<< HEAD
-                  ? "Más Recientes"
-                  : lang === "ja"
-                    ? "最新順"
-=======
                   ? "Más reciente primero"
                   : lang === "ja"
                     ? "新しい順"
->>>>>>> stable-0.0.9
                     : "Newest First"
               }
             </option>
             <option value="date-asc">
               {
                 lang === "es"
-<<<<<<< HEAD
-                  ? "Más Antiguos"
-=======
                   ? "Más antiguo primero"
->>>>>>> stable-0.0.9
                   : lang === "ja"
                     ? "古い順"
                     : "Oldest First"
@@ -318,44 +192,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
       <div
         id="search-status"
         class="text-center text-gray-500 dark:text-gray-400 mb-6">
-<<<<<<< HEAD
-<<<<<<< HEAD
-        {
-          lang === "es"
-            ? `Ingresa un término de búsqueda para encontrar artículos, o explora todos los ${posts.length} artículos a continuación.`
-            : lang === "ja"
-              ? `記事を検索するには検索語を入力するか、以下の${posts.length}記事をすべて閲覧してください。`
-              : `Enter a search term to find articles, or browse all ${posts.length} articles below.`
-        }
-=======
-        {/* This message will be updated by JS */}
-        Please enter a search term to begin.
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-      </div>
-
-      <div
-        id="results-container"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<<<<<<< HEAD
-        {
-          posts.map((post: typeof posts[0]) => (
-            <div
-              class="post-item"
-              data-tags={JSON.stringify(post.data.tags || [])}
-              data-title={post.data.title}
-              data-description={post.data.description}
-              data-date={post.data.pubDate.toISOString()}>
-              <BlogCard
-                post={post}
-                lang={lang}
-              />
-            </div>
-          ))
-        }
-=======
-        {/* Results will be rendered here by client-side JavaScript */}
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-=======
         {
           lang === "es"
             ? `Ingresa un término de búsqueda para encontrar artículos, o navega por los ${posts.length} artículos a continuación.`
@@ -377,7 +213,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
             <BlogCard post={post} lang={lang} />
           </div>
         ))}
->>>>>>> stable-0.0.9
       </div>
     </div>
 
@@ -398,9 +233,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
         ></path>
       </svg>
       <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-<<<<<<< HEAD
-        {t("search.no-results")}
-=======
         {
           lang === "es"
             ? "No se encontraron resultados"
@@ -408,7 +240,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
               ? "結果が見つかりません"
               : "No results found"
         }
->>>>>>> stable-0.0.9
       </h3>
       <p class="text-gray-500 dark:text-gray-400 mb-4">
         {
@@ -435,15 +266,7 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
 </Layout>
 
 <script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-  document.addEventListener("DOMContentLoaded", () => {
-=======
   document.addEventListener("astro:page-load", () => {
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-=======
-  document.addEventListener("astro:page-load", () => {
->>>>>>> stable-0.0.9
     const searchInput = document.getElementById(
       "main-search-input"
     ) as HTMLInputElement;
@@ -451,22 +274,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
     const sortSelect = document.getElementById(
       "sort-select"
     ) as HTMLSelectElement;
-<<<<<<< HEAD
-<<<<<<< HEAD
-    const postItems = document.querySelectorAll(".post-item");
-    const resultsContainer = document.getElementById("results-container");
-    const searchStatus = document.getElementById("search-status");
-    const noResults = document.getElementById("no-results");
-    const clearSearch = document.getElementById("clear-search");
-
-    if (!searchInput || !resultsContainer || !searchStatus || !noResults)
-      return;
-
-    let currentTag = "all";
-    let currentSort = "date-desc";
-=======
-=======
->>>>>>> stable-0.0.9
     const resultsContainer = document.getElementById("results-container")!;
     const searchStatus = document.getElementById("search-status")!;
     const noResults = document.getElementById("no-results")!;
@@ -480,13 +287,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
     let currentTag = "all";
     let currentSort = "date-desc";
 
-<<<<<<< HEAD
-    // let currentQuery = ''; // Not needed, use searchInput.value
-    let currentTag = "all";
-    let currentSort = "date-desc";
-    let isLoading = false;
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-=======
     // Initialize posts from DOM
     function initializePosts() {
       const postElements = document.querySelectorAll(".post-item");
@@ -499,7 +299,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
       }));
       filteredPosts = [...allPosts];
     }
->>>>>>> stable-0.0.9
 
     // Keyboard shortcut for search
     document.addEventListener("keydown", (e) => {
@@ -509,366 +308,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
       }
     });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    // Search functionality
-    function performSearch() {
-      const query = searchInput.value.toLowerCase().trim();
-      const filteredItems: Element[] = [];
-
-      postItems.forEach((item) => {
-        const title = item.getAttribute("data-title")?.toLowerCase() || "";
-        const description =
-          item.getAttribute("data-description")?.toLowerCase() || "";
-        const tags = JSON.parse(item.getAttribute("data-tags") || "[]");
-
-        // Check if matches search query
-        const matchesQuery =
-          !query ||
-          title.includes(query) ||
-          description.includes(query) ||
-          tags.some((tag: string) => tag.toLowerCase().includes(query));
-
-        // Check if matches selected tag
-        const matchesTag = currentTag === "all" || tags.includes(currentTag);
-
-        if (matchesQuery && matchesTag) {
-          filteredItems.push(item);
-          (item as HTMLElement).style.display = "block";
-        } else {
-          (item as HTMLElement).style.display = "none";
-        }
-      });
-
-      // Sort results
-      sortResults(filteredItems);
-
-      // Update status
-      updateSearchStatus(filteredItems.length, query);
-    }
-
-    // Sort results
-    function sortResults(items: Element[]) {
-      const sortedItems = Array.from(items).sort((a, b) => {
-        const aTitle = a.getAttribute("data-title") || "";
-        const bTitle = b.getAttribute("data-title") || "";
-        const aDate = new Date(a.getAttribute("data-date") || "");
-        const bDate = new Date(b.getAttribute("data-date") || "");
-=======
-    // Debounce function
-    function debounce(func: Function, delay: number) {
-      let timeoutId: number;
-      return function (this: any, ...args: any[]) {
-        clearTimeout(timeoutId);
-        timeoutId = window.setTimeout(() => func.apply(this, args), delay);
-      };
-    }
-
-    async function fetchAndDisplayResults() {
-      const query = searchInput.value.toLowerCase().trim();
-
-      if (!query) {
-        currentApiResults = [];
-        applyClientFiltersAndRender();
-        updateSearchStatus(0, query);
-        return;
-      }
-
-      if (isLoading) return;
-      isLoading = true;
-      searchStatus.innerHTML = `
-        <div class="flex items-center justify-center">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-primary-600 dark:text-primary-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          Searching...
-        </div>
-      `;
-      noResults.style.display = "none";
-      resultsContainer.innerHTML = "";
-
-      try {
-        const response = await fetch(
-          `/api/search?q=${encodeURIComponent(query)}&lang=${currentLang}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        currentApiResults = await response.json();
-        // applyClientFiltersAndRender() is called, which calls updateSearchStatus, which will clear the spinner.
-      } catch (error) {
-        console.error("Search API fetch error:", error);
-        searchStatus.textContent = "Search failed. Please try again."; // This will clear the spinner
-        currentApiResults = [];
-        applyClientFiltersAndRender(); // Clear results on error
-      } finally {
-        isLoading = false;
-        // If searchStatus still contains the spinner (e.g. if applyClientFiltersAndRender didn't update it due to no query),
-        // ensure it's cleared or set to a default message if needed.
-        // However, updateSearchStatus should handle this.
-      }
-    }
-
-    function applyClientFiltersAndRender() {
-      let itemsToDisplay = [...currentApiResults];
-
-      // Client-side tag filtering
-      if (currentTag !== "all") {
-        itemsToDisplay = itemsToDisplay.filter(
-          (item) => item.tags && item.tags.includes(currentTag)
-        );
-      }
-
-      // Client-side sorting
-      itemsToDisplay.sort((a, b) => {
-        const aTitle = a.title || "";
-        const bTitle = b.title || "";
-        // API returns formatted date string, parse them back for sorting
-        const aDate = new Date(a.pubDate);
-        const bDate = new Date(b.pubDate);
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-
-        switch (currentSort) {
-          case "date-asc":
-            return aDate.getTime() - bDate.getTime();
-          case "title-asc":
-            return aTitle.localeCompare(bTitle);
-          case "title-desc":
-            return bTitle.localeCompare(aTitle);
-          case "date-desc":
-          default:
-            return bDate.getTime() - aDate.getTime();
-        }
-      });
-
-<<<<<<< HEAD
-      // Reorder DOM elements
-      sortedItems.forEach((item) => {
-        resultsContainer?.appendChild(item);
-=======
-      displayedItems = itemsToDisplay;
-      renderResultsDOM(displayedItems);
-      updateSearchStatus(
-        displayedItems.length,
-        searchInput.value.toLowerCase().trim()
-      );
-    }
-
-    function renderResultsDOM(items: any[]) {
-      resultsContainer.innerHTML = ""; // Clear previous results
-      if (items.length === 0 && searchInput.value.toLowerCase().trim()) {
-        noResults.style.display = "block";
-        searchStatus.style.display = "none";
-      } else {
-        noResults.style.display = "none";
-        searchStatus.style.display = "block"; // Ensure status is visible if there are results or initial prompt
-      }
-
-      items.forEach((item) => {
-        // Simplified card structure - for full BlogCard features, this would be more complex
-        // or require a different rendering strategy (e.g., Astro islands if possible for client-side render)
-        const card = document.createElement("div");
-        card.className =
-          "post-item p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300";
-        // This is a very basic representation. Real BlogCard has more structure.
-        // Using BlogCard.astro structure as a reference for key elements.
-        // This will NOT have the exact same styling or functionality as BlogCard.astro without replicating all its CSS and JS.
-
-        let tagsHTML = "";
-        if (item.tags && item.tags.length > 0) {
-          tagsHTML = item.tags
-            .slice(0, 3)
-            .map(
-              (tag: string) =>
-                `<span class="inline-block bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">${tag}</span>`
-            )
-            .join("");
-        }
-
-        card.innerHTML = `
-          ${item.heroImage ? `<img src="${item.heroImage}" alt="${item.title}" class="w-full h-40 object-cover rounded-t-lg mb-4">` : ""}
-          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-            <a href="${item.url}" class="hover:underline">${item.title}</a>
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">${item.description.substring(0, 100)}${item.description.length > 100 ? "..." : ""}</p>
-          <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-            <span>${item.pubDate}</span>
-            ${item.readingTime ? `<span> · ${item.readingTime}</span>` : ""}
-          </div>
-          <div class="mb-3">${tagsHTML}</div>
-          <a href="${item.url}" class="text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline">Read more &rarr;</a>
-        `;
-        resultsContainer.appendChild(card);
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-      });
-    }
-
-    // Update search status (localized messages)
-    function updateSearchStatus(count: number, query: string) {
-      const lang = document.documentElement.lang;
-      const messages = {
-        en: {
-          found: (count: number, query: string) =>
-            `Found ${count} article${count === 1 ? "" : "s"} matching "${query}"`,
-          showing: (count: number) => `Showing all ${count} articles`,
-          tagged: (count: number, tag: string) =>
-            `Showing ${count} article${count === 1 ? "" : "s"} tagged with "${tag}"`,
-        },
-        es: {
-          found: (count: number, query: string) =>
-            `Se encontraron ${count} artículo${count === 1 ? "" : "s"} que coinciden con "${query}"`,
-          showing: (count: number) => `Mostrando todos los ${count} artículos`,
-          tagged: (count: number, tag: string) =>
-            `Mostrando ${count} artículo${count === 1 ? "" : "s"} etiquetado${count === 1 ? "" : "s"} con "${tag}"`,
-        },
-        ja: {
-          found: (count: number, query: string) =>
-            `"${query}"に一致する${count}件の記事が見つかりました`,
-          showing: (count: number) => `${count}件の記事をすべて表示`,
-          tagged: (count: number, tag: string) =>
-            `"${tag}"でタグ付けされた${count}件の記事を表示`,
-        },
-      };
-
-      const langMessages =
-        messages[lang as keyof typeof messages] || messages.en;
-
-      if (query) {
-        if (count === 0) {
-          searchStatus!.style.display = "none";
-          noResults!.style.display = "block";
-        } else {
-          searchStatus!.style.display = "block";
-          noResults!.style.display = "none";
-          searchStatus!.textContent = langMessages.found(count, query);
-        }
-      } else {
-        searchStatus!.style.display = "block";
-        noResults!.style.display = "none";
-        if (currentTag === "all") {
-          searchStatus!.textContent = langMessages.showing(count);
-        } else {
-          searchStatus!.textContent = langMessages.tagged(count, currentTag);
-        }
-      }
-    }
-
-    const debouncedFetchAndDisplayResults = debounce(
-      fetchAndDisplayResults,
-      300
-    );
-
-    // Search input event
-    searchInput.addEventListener("input", () => {
-<<<<<<< HEAD
-      performSearch();
-=======
-      debouncedFetchAndDisplayResults();
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-    });
-
-    // Tag filter events
-    tagFilters.forEach((filter) => {
-      filter.addEventListener("click", () => {
-        // Update active filter
-        tagFilters.forEach((f) => {
-          f.classList.remove("active", "bg-primary-600", "text-white");
-          f.classList.add(
-            "border-gray-300",
-            "dark:border-gray-600",
-            "text-gray-700",
-            "dark:text-gray-300"
-          );
-        });
-
-        filter.classList.add("active", "bg-primary-600", "text-white");
-        filter.classList.remove(
-          "border-gray-300",
-          "dark:border-gray-600",
-          "text-gray-700",
-          "dark:text-gray-300"
-        );
-
-        currentTag = filter.getAttribute("data-tag") || "all";
-<<<<<<< HEAD
-        performSearch();
-=======
-        applyClientFiltersAndRender(); // Re-filter and render existing API results
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-      });
-    });
-
-    // Sort change event
-    sortSelect.addEventListener("change", () => {
-      currentSort = sortSelect.value;
-      applyClientFiltersAndRender(); // Re-sort and render existing API results
-    });
-
-    // Clear search
-    clearSearch?.addEventListener("click", () => {
-      searchInput.value = "";
-      currentTag = "all";
-<<<<<<< HEAD
-
-      // Reset tag filters
-=======
-      currentApiResults = []; // Clear API results
-
-      // Reset tag filters UI
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-      tagFilters.forEach((f) => {
-        f.classList.remove("active", "bg-primary-600", "text-white");
-        f.classList.add(
-          "border-gray-300",
-          "dark:border-gray-600",
-          "text-gray-700",
-          "dark:text-gray-300"
-        );
-      });
-<<<<<<< HEAD
-
-      const allFilter = document.querySelector('[data-tag="all"]');
-      if (allFilter) {
-        allFilter.classList.add("active", "bg-primary-600", "text-white");
-        allFilter.classList.remove(
-=======
-      const allTopicsFilter = document.querySelector(
-        '.tag-filter[data-tag="all"]'
-      );
-      if (allTopicsFilter) {
-        allTopicsFilter.classList.add("active", "bg-primary-600", "text-white");
-        allTopicsFilter.classList.remove(
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-          "border-gray-300",
-          "dark:border-gray-600",
-          "text-gray-700",
-          "dark:text-gray-300"
-        );
-      }
-
-<<<<<<< HEAD
-      performSearch();
-=======
-      applyClientFiltersAndRender(); // This will clear the DOM and update status
->>>>>>> 771a0a126f0221d7e2dd9bd0103257e8679d9d92
-      searchInput.focus();
-    });
-
-    // Initial load - update status to prompt for search
-    // updateSearchStatus(0, ''); // Will be handled by initial fetch or lack thereof
-
-    // Check for query parameter on page load
-    const urlParams = new URLSearchParams(window.location.search);
-    const queryFromUrl = urlParams.get("q");
-
-    if (queryFromUrl) {
-      searchInput.value = queryFromUrl;
-      fetchAndDisplayResults(); // Perform initial search if query is in URL
-    } else {
-      // If no query in URL, then set initial status
-      updateSearchStatus(0, "");
-=======
     // Search functionality
     function performSearch() {
       const query = searchInput.value.toLowerCase().trim();
@@ -883,7 +322,6 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
       }
       
       applyFilters();
->>>>>>> stable-0.0.9
     }
 
     // Tag filtering

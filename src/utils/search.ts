@@ -1,44 +1,3 @@
-<<<<<<< HEAD
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
-
-export interface SearchResult {
-  title: string;
-  description: string;
-  url: string;
-  pubDate: string;
-  tags?: string[];
-  lang: string;
-  slug: string;
-}
-
-// Simple client-side search implementation
-export async function searchPosts(query: string, lang: string = 'en'): Promise<SearchResult[]> {
-  try {
-    // In a real implementation, this would be replaced with Algolia or another search service
-    // For now, we'll do a simple client-side search
-
-    const allPosts = await getCollection('blog', ({ id, data }) => {
-      return id.startsWith(`${lang}/`) && !data.draft;
-    });
-
-    const results = allPosts
-      .filter(post => {
-        const searchText = `${post.data.title} ${post.data.description} ${(post.data.tags || []).join(' ')}`.toLowerCase();
-        return searchText.includes(query.toLowerCase());
-      })
-      .map(post => ({
-        title: post.data.title,
-        description: post.data.description,
-        url: lang === 'en' ? `/blog/${post.slug.replace('en/', '')}` : `/${lang}/blog/${post.slug.replace(`${lang}/`, '')}`,
-        pubDate: formatSearchDate(post.data.pubDate),
-        tags: post.data.tags,
-        lang: lang,
-        slug: post.slug,
-      }))
-      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
-
-=======
 // Removed astro:content imports as they are server-side only
 import { getLocalizedPath } from '@/i18n/utils';
 
@@ -71,7 +30,6 @@ export async function searchPosts(query: string, lang: string = 'en'): Promise<S
     }
     
     const results = await response.json();
->>>>>>> stable-0.0.9
     return results;
   } catch (error) {
     console.error('Search error:', error);
@@ -175,11 +133,7 @@ export async function advancedSearch(
     return filteredPosts.map(post => ({
       title: post.data.title,
       description: post.data.description,
-<<<<<<< HEAD
-      url: lang === 'en' ? `/blog/${post.slug.replace('en/', '')}` : `/${lang}/blog/${post.slug.replace(`${lang}/`, '')}`,
-=======
       url: getLocalizedPath(`/blog/${post.slug.replace(/^(en|es|ja)\/blog\//g, '')}`, lang),
->>>>>>> stable-0.0.9
       pubDate: formatSearchDate(post.data.pubDate),
       tags: post.data.tags,
       lang: lang,

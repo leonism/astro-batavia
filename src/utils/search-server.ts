@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
-=======
 import { getCollection, type CollectionEntry } from 'astro:content';
->>>>>>> stable-0.0.9
 import type { SearchablePost, SearchResult, SearchFilters } from './search';
 
 // Server-side function to get all posts for a language
@@ -107,11 +102,7 @@ export async function advancedSearchServer(
       slug: post.slug,
       title: post.data.title,
       description: post.data.description,
-<<<<<<< HEAD
-      url: lang === 'en' ? `/blog/${post.slug.replace('en/', '')}` : `/${lang}/blog/${post.slug.replace(`${lang}/`, '')}`,
-=======
       url: lang === 'en' ? `/blog/${post.slug.replace(/^en\/blog\//, '')}` : `/${lang}/blog/${post.slug.replace(new RegExp(`^${lang}\/blog\/`), '')}`,
->>>>>>> stable-0.0.9
       pubDate: post.data.pubDate,
       formattedPubDate: formatSearchDate(post.data.pubDate),
       tags: post.data.tags,
