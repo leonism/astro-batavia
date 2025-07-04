@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://your-blog.com/sitemap-index.xml
+Sitemap: https://https://astro-batavia.pages.dev/sitemap-index.xml
 
 # Disallow admin area
 Disallow: /admin/
