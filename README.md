@@ -123,7 +123,7 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/astro-batavia.git
+   git clone https://github.com/leonism/astro-batavia.git
    cd astro-batavia
    ```
 
@@ -502,7 +502,7 @@ We welcome contributions to Astro Batavia! Here's how you can help:
 
 1. **Fork the repository**
    ```bash
-   git clone https://github.com/your-username/astro-batavia.git
+   git clone https://github.com/leonism/astro-batavia.git
    cd astro-batavia
    ```
 
@@ -604,9 +604,9 @@ The ISC license is a permissive free software license that allows you to:
 <div align="center">
   <h3>🌟 Star this project if you find it helpful!</h3>
   <p>
-    <a href="https://github.com/your-username/astro-batavia/stargazers">⭐ Stars</a> •
-    <a href="https://github.com/your-username/astro-batavia/issues">🐛 Issues</a> •
-    <a href="https://github.com/your-username/astro-batavia/pulls">🔀 Pull Requests</a>
+    <a href="https://github.com/leonism/astro-batavia/stargazers">⭐ Stars</a> •
+    <a href="https://github.com/your-leonism/astro-batavia/issues">🐛 Issues</a> •
+    <a href="https://github.com/leonism/astro-batavia/pulls">🔀 Pull Requests</a>
   </p>
 
   <p><strong>Built with ❤️ using Astro.js</strong></p>
