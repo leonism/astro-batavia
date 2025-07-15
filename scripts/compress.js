@@ -1,25 +1,23 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const zlib = require('zlib');
-const { promisify } = require('util');
+import { promises as fs } from 'fs';
+import path from 'path';
+import zlib, { constants as zlibConstants } from 'zlib';
+import { promisify } from 'util';
 
 const gzip = promisify(zlib.gzip);
 const brotliCompress = promisify(zlib.brotliCompress);
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
-const readdir = promisify(fs.readdir);
-const stat = promisify(fs.stat);
 
-async function compressFile(filePath) {
+const COMPRESSION_EXTENSIONS = new Set([
+  '.html', '.css', '.js', '.json', '.xml', '.svg', '.txt',
+]);
+
+async function compressFile(filePath, data) {
   try {
-    const data = await readFile(filePath);
-    
     // Create Gzip version
     const gzipData = await gzip(data, { level: 9 });
-    await writeFile(`${filePath}.gz`, gzipData);
-    
+    await fs.writeFile(`${filePath}.gz`, gzipData);
+
     // Create Brotli version
     const brotliData = await brotliCompress(data, {
       params: {
@@ -27,49 +25,61 @@ async function compressFile(filePath) {
         [zlib.constants.BROTLI_PARAM_SIZE_HINT]: data.length,
       },
     });
-    await writeFile(`${filePath}.br`, brotliData);
-    
+    await fs.writeFile(`${filePath}.br`, brotliData);
+
     console.log(`Compressed: ${path.relative(process.cwd(), filePath)}`);
   } catch (error) {
     console.error(`Error compressing ${filePath}:`, error.message);
   }
 }
 
-async function walkDirectory(dir) {
-  const files = await readdir(dir);
-  
-  for (const file of files) {
-    const filePath = path.join(dir, file);
-    const fileStat = await stat(filePath);
-    
-    if (fileStat.isDirectory()) {
-      await walkDirectory(filePath);
-    } else if (fileStat.isFile()) {
-      const ext = path.extname(file).toLowerCase();
-      
-      // Compress HTML, CSS, JS, JSON, XML, and SVG files
-      if (['.html', '.css', '.js', '.json', '.xml', '.svg', '.txt'].includes(ext)) {
-        await compressFile(filePath);
+async function getFilesToCompress(dir) {
+  let filesToProcess = [];
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      filesToProcess = filesToProcess.concat(await getFilesToCompress(fullPath));
+    } else if (entry.isFile()) {
+      const ext = path.extname(entry.name).toLowerCase();
+      if (COMPRESSION_EXTENSIONS.has(ext)) {
+        filesToProcess.push(fullPath);
       }
     }
   }
+  return filesToProcess;
 }
 
 async function main() {
   const distDir = path.join(process.cwd(), 'dist');
-  
-  if (!fs.existsSync(distDir)) {
-    console.error('dist directory not found. Please run the build first.');
+
+  try {
+    await fs.access(distDir);
+  } catch (error) {
+    console.error('Error: dist directory not found. Please run the build first.');
     process.exit(1);
   }
-  
+
   console.log('Starting compression...');
-  await walkDirectory(distDir);
+  const files = await getFilesToCompress(distDir);
+
+  // Read all file data in parallel
+  const fileReadPromises = files.map(async (filePath) => ({
+    filePath,
+    data: await fs.readFile(filePath),
+  }));
+  const fileData = await Promise.all(fileReadPromises);
+
+  // Compress all files in parallel
+  const compressionPromises = fileData.map(({ filePath, data }) =>
+    compressFile(filePath, data)
+  );
+  await Promise.all(compressionPromises);
+
   console.log('Compression completed!');
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
-
-module.exports = { compressFile, walkDirectory };
