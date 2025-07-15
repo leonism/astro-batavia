@@ -17,6 +17,7 @@
   "description": "",
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",
+    "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.4.1",
     "@astrojs/tailwind": "^5.1.5",
     "@digi4care/astro-google-tagmanager": "^1.6.0",
