@@ -37,6 +37,7 @@ export default defineConfig({
     }),
     sentry(),
     spotlightjs(),
+    htmlMinifier(),
   ],
   i18n: {
     defaultLocale: "en",
