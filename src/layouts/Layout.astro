@@ -1,12 +1,12 @@
 ---
-import { ViewTransitions } from "astro:transitions";
-import Header from "@/components/navigation/Header.astro";
-import Footer from "@/components/footer/Footer.astro";
-import SEO from "@/components/common/SEO.astro";
-import BackToTop from "@/components/ui/BackToTop.astro";
-import ThemeInitializer from "@/components/common/ThemeInitializer.astro";
-import BackToTopScript from "@/components/common/BackToTopScript.astro";
-import "@/styles/global.css";
+import { ViewTransitions } from 'astro:transitions';
+import Header from '@/components/navigation/Header.astro';
+import Footer from '@/components/footer/Footer.astro';
+import SEO from '@/components/common/SEO.astro';
+import BackToTop from '@/components/ui/BackToTop.astro';
+import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
+import BackToTopScript from '@/components/common/BackToTopScript.astro';
+import '@/styles/global.css';
 
 export interface Props {
   title: string;
@@ -15,7 +15,7 @@ export interface Props {
   noindex?: boolean;
   lang?: string;
   canonical?: string;
-  type?: "website" | "article" | "blog";
+  type?: 'website' | 'article' | 'blog';
   publishedTime?: string;
   modifiedTime?: string;
   author?: string;
@@ -50,12 +50,12 @@ export interface Props {
 
 const {
   title,
-  description = "A modern multi-language blog built with Astro.js",
+  description = 'A modern multi-language blog built with Astro.js',
   image,
   noindex = false,
-  lang = "en",
+  lang = 'en',
   canonical,
-  type = "website",
+  type = 'website',
   publishedTime,
   modifiedTime,
   author,
@@ -131,7 +131,7 @@ const {
       tags={tags}
       category={category}
       readingTime={readingTime?.toString()}
-       wordCount={wordCount}
+      wordCount={wordCount}
       excerpt={excerpt}
       breadcrumbs={breadcrumbs}
       organization={organization}
@@ -146,20 +146,33 @@ const {
       href="/favicon.svg"
     />
     <!-- Google Tag Manager -->
-    <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5BH6SQST');</script>
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5BH6SQST');
+    </script>
     <!-- End Google Tag Manager -->
   </head>
   <body
-    class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300">
+    class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BH6SQST"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5BH6SQST"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden">
+      </iframe>
+    </noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <div class="md:min-h-full lg:min-h-screen flex flex-col">
+    <div class="flex flex-col md:min-h-full lg:min-h-screen">
       <Header />
       <main class="flex-1 pt-16">
         <slot />
