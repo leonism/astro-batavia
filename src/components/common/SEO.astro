@@ -6,7 +6,7 @@ export interface Props {
   noindex?: boolean;
   canonical?: string;
   lang?: string;
-  type?: "website" | "article" | "blog" | "profile";
+  type?: 'website' | 'article' | 'blog' | 'profile';
   publishedTime?: string;
   modifiedTime?: string;
   author?: string;
@@ -45,8 +45,8 @@ const {
   image,
   noindex = false,
   canonical,
-  lang = "en",
-  type = "website",
+  lang = 'en',
+  type = 'website',
   publishedTime,
   modifiedTime,
   author,
@@ -63,119 +63,117 @@ const {
   product,
 } = Astro.props;
 
-const siteTitle = "Astro Batavia";
+const siteTitle = 'Astro Batavia';
 const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
-const siteUrl = Astro.site?.href || "https://astro-batavia.pages.dev/";
-const imageUrl = image
-  ? new URL(image, siteUrl).href
-  : `${siteUrl}/images/og-default.jpg`;
+const siteUrl = Astro.site?.href || 'https://astro-batavia.pages.dev';
+const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.svg`;
 const canonicalUrl = canonical || Astro.url.href;
 
 // Enhanced meta data
 const finalExcerpt = excerpt || description;
 const defaultOrganization = {
-  name: "Astro Batavia",
+  name: 'Astro Batavia',
   url: siteUrl,
   logo: `${siteUrl}/images/logo.png`,
   sameAs: [
-    "https://twitter.com/astrobatavia",
-    "https://github.com/astrobatavia",
-    "https://linkedin.com/company/astrobatavia"
-  ]
+    'https://twitter.com/astrobatavia',
+    'https://github.com/astrobatavia',
+    'https://linkedin.com/company/astrobatavia',
+  ],
 };
 const orgData = organization || defaultOrganization;
 
 // Generate JSON-LD structured data
 const generateJsonLd = () => {
   const baseSchema: any = {
-    "@context": "https://schema.org",
-    "@type": type === "article" ? "Article" : type === "blog" ? "BlogPosting" : "WebPage",
-    "headline": title,
-    "description": description,
-    "url": canonicalUrl,
-    "image": {
-      "@type": "ImageObject",
-      "url": imageUrl,
-      "width": 1200,
-      "height": 630
+    '@context': 'https://schema.org',
+    '@type': type === 'article' ? 'Article' : type === 'blog' ? 'BlogPosting' : 'WebPage',
+    headline: title,
+    description: description,
+    url: canonicalUrl,
+    image: {
+      '@type': 'ImageObject',
+      url: imageUrl,
+      width: 1200,
+      height: 630,
     },
-    "publisher": {
-      "@type": "Organization",
-      "name": orgData.name,
-      "url": orgData.url,
-      "logo": {
-        "@type": "ImageObject",
-        "url": orgData.logo
+    publisher: {
+      '@type': 'Organization',
+      name: orgData.name,
+      url: orgData.url,
+      logo: {
+        '@type': 'ImageObject',
+        url: orgData.logo,
       },
-      ...(orgData.sameAs && { "sameAs": orgData.sameAs })
+      ...(orgData.sameAs && { sameAs: orgData.sameAs }),
     },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": canonicalUrl
-    }
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
   };
 
   // Add article-specific data
-  if (type === "article" || type === "blog") {
+  if (type === 'article' || type === 'blog') {
     Object.assign(baseSchema, {
-      "datePublished": publishedTime,
-      "dateModified": modifiedTime || publishedTime,
+      datePublished: publishedTime,
+      dateModified: modifiedTime || publishedTime,
       ...(author && {
-        "author": {
-          "@type": "Person",
-          "name": author,
-          ...(authorUrl && { "url": authorUrl }),
-          ...(authorImage && { "image": authorImage })
-        }
+        author: {
+          '@type': 'Person',
+          name: author,
+          ...(authorUrl && { url: authorUrl }),
+          ...(authorImage && { image: authorImage }),
+        },
       }),
-      ...(category && { "articleSection": category }),
-      ...(tags.length > 0 && { "keywords": tags.join(", ") }),
-      ...(wordCount && { "wordCount": wordCount }),
-      ...(readingTime && { "timeRequired": `PT${readingTime}M` })
+      ...(category && { articleSection: category }),
+      ...(tags.length > 0 && { keywords: tags.join(', ') }),
+      ...(wordCount && { wordCount: wordCount }),
+      ...(readingTime && { timeRequired: `PT${readingTime}M` }),
     });
   }
 
   // Add breadcrumbs if available
   if (breadcrumbs.length > 0) {
-    baseSchema["breadcrumb"] = {
-      "@type": "BreadcrumbList",
-      "itemListElement": breadcrumbs.map((crumb, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": crumb.name,
-        "item": crumb.url
-      }))
+    baseSchema['breadcrumb'] = {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.name,
+        item: crumb.url,
+      })),
     };
   }
 
   // Add video data if available
   if (video) {
-    baseSchema["video"] = {
-      "@type": "VideoObject",
-      "name": title,
-      "description": video.description || description,
-      "thumbnailUrl": video.thumbnail,
-      "contentUrl": video.url,
-      ...(video.duration && { "duration": video.duration })
+    baseSchema['video'] = {
+      '@type': 'VideoObject',
+      name: title,
+      description: video.description || description,
+      thumbnailUrl: video.thumbnail,
+      contentUrl: video.url,
+      ...(video.duration && { duration: video.duration }),
     };
   }
 
   // Add product data if available
   if (product) {
-    baseSchema["mainEntity"] = {
-      "@type": "Product",
-      "name": product.name,
-      "description": description,
-      "image": imageUrl,
-      ...(product.brand && { "brand": { "@type": "Brand", "name": product.brand } }),
+    baseSchema['mainEntity'] = {
+      '@type': 'Product',
+      name: product.name,
+      description: description,
+      image: imageUrl,
+      ...(product.brand && { brand: { '@type': 'Brand', name: product.brand } }),
       ...(product.price && {
-        "offers": {
-          "@type": "Offer",
-          "price": product.price,
-          "priceCurrency": product.currency || "USD",
-          "availability": `https://schema.org/${product.availability || "InStock"}`
-        }
-      })
+        offers: {
+          '@type': 'Offer',
+          price: product.price,
+          priceCurrency: product.currency || 'USD',
+          availability: `https://schema.org/${product.availability || 'InStock'}`,
+        },
+      }),
     };
   }
 
@@ -186,18 +184,18 @@ const jsonLdData = generateJsonLd();
 
 // Language mappings
 const hreflangMap = {
-  en: "en-US",
-  es: "es-ES",
-  ja: "ja-JP",
+  en: 'en-US',
+  es: 'es-ES',
+  ja: 'ja-JP',
 };
 
 // Get alternate language URLs
 const getAlternateUrls = () => {
   const currentPath = Astro.url.pathname;
-  const pathWithoutLang = currentPath.replace(/^\/(en|es|ja)/, "") || "/";
+  const pathWithoutLang = currentPath.replace(/^\/(en|es|ja)/, '') || '/';
 
   return {
-    en: pathWithoutLang === "/" ? siteUrl : `${siteUrl}${pathWithoutLang}`,
+    en: pathWithoutLang === '/' ? siteUrl : `${siteUrl}${pathWithoutLang}`,
     es: `${siteUrl}/es${pathWithoutLang}`,
     ja: `${siteUrl}/ja${pathWithoutLang}`,
   };
@@ -207,7 +205,10 @@ const alternateUrls = getAlternateUrls();
 ---
 
 <!-- JSON-LD Structured Data -->
-<script type="application/ld+json" set:html={jsonLdData}></script>
+<script
+  type="application/ld+json"
+  set:html={jsonLdData}
+/>
 
 <!-- Basic Meta Tags -->
 <title>{fullTitle}</title>
@@ -217,7 +218,7 @@ const alternateUrls = getAlternateUrls();
 />
 <meta
   name="keywords"
-  content={tags.join(", ")}
+  content={tags.join(', ')}
 />
 {
   author && (
@@ -357,7 +358,7 @@ const alternateUrls = getAlternateUrls();
 }
 
 {
-  type === "article" && (
+  type === 'article' && (
     <>
       {publishedTime && (
         <meta
@@ -390,7 +391,7 @@ const alternateUrls = getAlternateUrls();
 <!-- Enhanced Twitter Card -->
 <meta
   name="twitter:card"
-  content={video ? "player" : "summary_large_image"}
+  content={video ? 'player' : 'summary_large_image'}
 />
 <meta
   name="twitter:title"
@@ -526,13 +527,29 @@ const alternateUrls = getAlternateUrls();
 />
 
 <!-- Preconnect to external domains -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preconnect" href="https://www.google-analytics.com" />
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+/>
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+/>
+<link
+  rel="preconnect"
+  href="https://www.google-analytics.com"
+/>
 
 <!-- DNS Prefetch -->
-<link rel="dns-prefetch" href="//www.google-analytics.com" />
-<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link
+  rel="dns-prefetch"
+  href="//www.google-analytics.com"
+/>
+<link
+  rel="dns-prefetch"
+  href="//fonts.googleapis.com"
+/>
 
 <!-- Accessibility -->
 <meta
@@ -571,11 +588,16 @@ const alternateUrls = getAlternateUrls();
   name="msapplication-TileColor"
   content="#3b82f6"
 />
-<meta name="apple-mobile-web-app-status-bar-style" content="black"
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black"
   name="apple-mobile-web-app-capable"
   content="yes"
 />
-<meta name="mobile-web-app-capable" content="yes" />
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+/>
 <meta
   name="apple-mobile-web-app-status-bar-style"
   content="black"
@@ -585,7 +607,8 @@ const alternateUrls = getAlternateUrls();
 <link
   rel="icon"
   type="image/svg+xml"
-  href="/favicon.svg" />
+  href="/favicon.svg"
+/>
 <link
   rel="icon"
   type="image/png"
@@ -596,11 +619,14 @@ const alternateUrls = getAlternateUrls();
   rel="icon"
   type="image/png"
   sizes="16x16"
-  href="/favicon-16x16.png" />
+  href="/favicon-16x16.png"
+/>
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/apple-touch-icon.png" />
+  href="/apple-touch-icon.png"
+/>
 <link
   rel="manifest"
-  href="/site.webmanifest" />
+  href="/site.webmanifest"
+/>
