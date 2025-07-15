@@ -13,7 +13,7 @@ import htmlMinifier from './src/integrations/html-minifier.mjs';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://astro-batavia.pages.dev/',
+  site: 'https://astro-batavia.pages.dev',
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
