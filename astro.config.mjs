@@ -34,6 +34,7 @@ export default defineConfig({
           ja: 'ja-JP',
         },
       },
+      customPages: ['/rss.xml'],
     }),
     sentry(),
     spotlightjs(),
