@@ -1,29 +1,12 @@
 ---
 import { getLangFromUrl } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
-import EnterpriseSearchBox from "@/components/search/EnterpriseSearchBox.astro";
+
 import HeaderLogo from "./HeaderLogo.astro";
 import HeaderNavLinks from "./HeaderNavLinks.astro";
 import HeaderUtilities from "./HeaderUtilities.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
-
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const currentPath = Astro.url.pathname;
-
-// Get all blog posts for indexing
-const allPosts = await getCollection(
-  "blog",
-  ({ id, data }: { id: string; data: any }) => {
-    return !data.draft;
-  }
-);
-
-// Sort posts by publication date (newest first)
-const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
-  const dateA = a?.data?.pubDate ? new Date(a.data.pubDate).getTime() : 0;
-  const dateB = b?.data?.pubDate ? new Date(b.data.pubDate).getTime() : 0;
-  return dateB - dateA;
-});
 ---
 
 <header
@@ -39,7 +22,14 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
           variant="desktop"
         />
       </div>
-      <HeaderUtilities />
+      <div class="flex items-center gap-5">
+        <button id="open-search-overlay" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Open search">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </button>
+        <HeaderUtilities />
+      </div>
     </div>
     <div
       id="mobile-menu"
@@ -52,11 +42,7 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
           currentPath={currentPath}
           variant="mobile"
         />
-        <div
-          class="pt-2"
-          aria-label="Mobile search">
-          <EnterpriseSearchBox placeholder="Search articles, tags, authors..." lang={lang} posts={sortedPosts} />
-        </div>
+        
       </div>
     </div>
   </nav>

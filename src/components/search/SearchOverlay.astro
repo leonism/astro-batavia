@@ -1,0 +1,156 @@
+---
+import { getLangFromUrl } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
+import EnterpriseSearchBox from "./EnterpriseSearchBox.astro";
+import { getCollection } from "astro:content";
+
+const lang = getLangFromUrl(Astro.url) as LanguageKey;
+
+// Get all blog posts for indexing
+const allPosts = await getCollection(
+  "blog",
+  ({ id, data }: { id: string; data: any }) => {
+    return !data.draft;
+  }
+);
+
+// Sort posts by publication date (newest first)
+const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
+  const dateA = a?.data?.pubDate ? new Date(a.data.pubDate).getTime() : 0;
+  const dateB = b?.data?.pubDate ? new Date(b.data.pubDate).getTime() : 0;
+  return dateB - dateA;
+});
+---
+
+<div
+  id="search-overlay"
+  class="fixed inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-[100] flex flex-col items-center justify-center p-4 hidden"
+  aria-hidden="true"
+>
+  <button
+    id="close-search-overlay"
+    class="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+    aria-label="Close search"
+  >
+    <svg
+      class="h-8 w-8"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      ></path>
+    </svg>
+  </button>
+
+  <div class="w-full max-w-3xl">
+    <EnterpriseSearchBox
+      placeholder="Type to search..."
+      lang={lang}
+      posts={sortedPosts}
+    />
+    <div id="search-results-container" class="mt-8">
+      <!-- Search results will be dynamically inserted here -->
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const openSearchOverlayButton = document.getElementById(
+      "open-search-overlay"
+    );
+    const closeSearchOverlayButton = document.getElementById(
+      "close-search-overlay"
+    );
+    const searchOverlay = document.getElementById("search-overlay");
+    const searchInput = document.getElementById("enterprise-search-input");
+    const searchResultsContainer = document.getElementById(
+      "search-results-container"
+    );
+
+    const toggleSearchOverlay = (show) => {
+      if (!searchOverlay) return;
+      if (show) {
+        searchOverlay.classList.remove("hidden");
+        searchOverlay.setAttribute("aria-hidden", "false");
+        if (searchInput) {
+          searchInput.focus();
+        }
+      } else {
+        searchOverlay.classList.add("hidden");
+        searchOverlay.setAttribute("aria-hidden", "true");
+        if (searchInput) {
+          searchInput.value = ""; // Clear search input on close
+        }
+        if (searchResultsContainer) {
+          searchResultsContainer.innerHTML = ""; // Clear results on close
+        }
+      }
+    };
+
+    openSearchOverlayButton?.addEventListener("click", () =>
+      toggleSearchOverlay(true)
+    );
+    closeSearchOverlayButton?.addEventListener("click", () =>
+      toggleSearchOverlay(false)
+    );
+
+    // Close overlay when pressing Escape key
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !searchOverlay.classList.contains("hidden")) {
+        toggleSearchOverlay(false);
+      }
+    });
+
+    // Listen for search results and display them
+    document.addEventListener("search-results-updated", (event) => {
+      const { results, query } = event.detail;
+      if (searchResultsContainer) {
+        if (results.length === 0 && query.length > 0) {
+          searchResultsContainer.innerHTML = `
+            <p class="text-center text-gray-600 dark:text-gray-400 text-lg">No results found for "${query}".</p>
+          `;
+        } else if (results.length > 0) {
+          searchResultsContainer.innerHTML = `
+            <ul class="space-y-4">
+              ${results
+                .map(
+                  (result) => `
+                <li>
+                  <a href="/${result.lang}/blog/${result.slug}" class="block p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">${result.data.title}</h3>
+                    <p class="text-gray-600 dark:text-gray-400">${result.data.description}</p>
+                  </a>
+                </li>
+              `
+                )
+                .join("")}
+            </ul>
+          `;
+        } else {
+          searchResultsContainer.innerHTML = ""; // Clear results if query is empty
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  #search-overlay {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
