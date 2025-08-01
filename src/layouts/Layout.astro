@@ -7,6 +7,8 @@ import BackToTop from '@/components/ui/BackToTop.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import BackToTopScript from '@/components/common/BackToTopScript.astro';
 import { GoogleTagmanager, GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
+import SearchOverlay from '@/components/search/SearchOverlay.astro';
+import { GoogleTagmanager, GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import '@/styles/global.css';
 
 export interface Props {
@@ -146,7 +148,7 @@ const {
       type="image/svg+xml"
       href="/favicon.svg"
     />
-    <GoogleTagmanager id="GTM-5BH6SQST" />
+    
   </head>
   <body
     class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
@@ -160,5 +162,6 @@ const {
     </div>
     <BackToTop />
     <BackToTopScript />
+    <SearchOverlay />
   </body>
 </html>
