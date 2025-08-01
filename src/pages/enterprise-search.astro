@@ -10,7 +10,7 @@ const lang = "en";
 const allPosts = await getCollection(
   "blog",
   ({ id, data }: { id: string; data: any }) => {
-    return id.startsWith(`${lang}/`) && !data.draft;
+    return (lang === 'en' ? !id.includes('/') : id.startsWith(`${lang}/`)) && !data.draft;
   }
 );
 
@@ -439,7 +439,7 @@ const canonical = new URL("/en/enterprise-search", Astro.site).toString();
   }
 
   // Initialize search client when DOM is ready
-  document.addEventListener("DOMContentLoaded", async () => {
+  document.addEventListener("astro:page-load", async () => {
     const searchClient = new EnterpriseSearchClient();
 
     // Index all posts for search
@@ -462,7 +462,7 @@ const canonical = new URL("/en/enterprise-search", Astro.site).toString();
     description: post.data.description,
     content: post.body || "",
     tags: post.data.tags || [],
-    url: `/en/blog/${post.slug.replace(/^en\/blog\//, "")}`,
+    url: `/${post.slug.replace(/^(en\/)?blog\//, "blog/")}`,
     pubDate: post.data.pubDate,
     author: post.data.author || "",
     category: post.data.categories?.[0] || "",
