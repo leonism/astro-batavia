@@ -1,0 +1,16 @@
+node_modules
+.next
+.vscode
+public
+dist
+out
+coverage
+components.json
+*.lock
+*.git
+*.gitignore
+*.eslintrc.*
+*.prettierrc*
+tailwind.config.*
+prettier.config.js
+README.md
