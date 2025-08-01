@@ -155,11 +155,13 @@ const {
             <!-- Post Image -->
             {post.data.heroImage && (
               <div class="flex-shrink-0">
-                <img 
+                <Picture 
                   src={post.data.heroImage} 
                   alt={post.data.title}
                   class="w-24 h-24 object-cover rounded-lg"
                   loading="lazy"
+                  width={96}
+                  height={96}
                 />
               </div>
             )}
