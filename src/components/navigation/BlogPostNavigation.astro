@@ -14,9 +14,8 @@ const t = useTranslations(lang);
 
 {(previousPostData || nextPostData) && (
   <nav class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700" aria-label="Blog post navigation">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Previous Article -->
-      {previousPostData ? (
+    <div class={`grid gap-6 ${previousPostData && nextPostData ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+      {previousPostData && (
         <a
           href={previousPostData.url}
           title={`${t("blog.previousArticle")}: ${previousPostData.title}`}
@@ -44,12 +43,9 @@ const t = useTranslations(lang);
             {previousPostData.title}
           </h3>
         </a>
-      ) : (
-        <div></div>
       )}
 
-      <!-- Next Article -->
-      {nextPostData ? (
+      {nextPostData && (
         <a
           href={nextPostData.url}
           title={`${t("blog.nextArticle")}: ${nextPostData.title}`}
@@ -77,8 +73,6 @@ const t = useTranslations(lang);
             {nextPostData.title}
           </h3>
         </a>
-      ) : (
-        <div></div>
       )}
     </div>
   </nav>
