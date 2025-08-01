@@ -110,6 +110,7 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
     // Listen for search results and display them
     document.addEventListener("search-results-updated", (event) => {
       const { results, query } = event.detail;
+      console.log("Search results updated:", { results, query });
       if (searchResultsContainer) {
         if (results.length === 0 && query.length > 0) {
           searchResultsContainer.innerHTML = `

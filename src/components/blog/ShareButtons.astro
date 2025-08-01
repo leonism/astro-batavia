@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+
+const shareLinks = [
+  {
+    name: "Twitter",
+    icon: `<svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="w-5 h-5"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.814L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.714 6.236L18.244 2.25zm-2.97 1.153L6.438 20.75h2.842L18.504 3.403h-2.97z"></path></svg>`,
+    href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+  },
+  {
+    name: "Facebook",
+    icon: `<svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="w-5 h-5"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.505 1.492-3.89 3.776-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22H12c5.523 0 10-4.477 10-10z" clip-rule="evenodd"></path></svg>`,
+    href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+  },
+  {
+    name: "LinkedIn",
+    icon: `<svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="w-5 h-5"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path></svg>`,
+    href: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`,
+  },
+  {
+    name: "WhatsApp",
+    icon: `<svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="w-5 h-5"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.5 3.42 1.46 4.87L2 22l5.32-1.42c1.34.73 2.87 1.12 4.38 1.12 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 1.6c4.58 0 8.31 3.73 8.31 8.31 0 4.58-3.73 8.31-8.31 8.31-1.45 0-2.8-.37-4.01-1.02l-.29-.17-3.04.81.83-2.95-.19-.3c-.94-1.49-1.44-3.2-1.44-4.98C3.73 5.33 7.46 1.6 12.04 1.6zm-2.1 4.98c-.12 0-.24.03-.36.06-.3.08-.6.18-.89.3-.28.12-.55.26-.8.42-.24.16-.47.33-.68.52-.2.19-.39.39-.56.6-.17.2-.32.42-.46.65-.13.23-.25.47-.35.72-.1.25-.18.5-.25.76-.06.26-.1.53-.12.8-.02.27-.03.54-.03.82 0 .28.01.56.03.83.02.27.06.54.12.8.06.26.14.51.25.76.1.25.22.49.35.72.13.23.28.45.46.65.17.2.36.39.56.6.21.19.44.36.68.52.25.16.52.3.8.42.29.12.59.22.89.3.12.03.24.06.36.06.24 0 .48-.03.71-.09.23-.06.46-.14.68-.24.22-.1.43-.23.63-.37.2-.14.39-.3.57-.47.18-.17.34-.36.49-.56.15-.2.28-.41.39-.63.11-.22.2-.45.27-.69.07-.24.12-.49.14-.74.02-.25.03-.5.03-.76 0-.26-.01-.52-.03-.77-.02-.25-.06-.5-.14-.74-.07-.24-.16-.47-.27-.69-.11-.22-.24-.43-.39-.63-.15-.2-.32-.39-.49-.56-.18-.17-.37-.33-.57-.47-.2-.14-.43-.27-.63-.37-.23-.1-.46-.18-.71-.24-.23-.06-.47-.09-.71-.09zM10.5 16.4c-.2-.01-.4-.02-.59-.06-.19-.04-.38-.1-.56-.17-.18-.07-.35-.16-.51-.26-.16-.1-.3-.22-.43-.35-.13-.13-.24-.27-.33-.42-.09-.15-.16-.3-.2-.46-.04-.16-.06-.32-.06-.49 0-.17.01-.34.04-.51.03-.17.08-.33.14-.49.06-.16.14-.31.23-.46.09-.15.2-.29.33-.42.13-.13.27-.25.43-.35.16-.1.33-.19.51-.26.18-.07.37-.13.56-.17.19-.04.39-.06.59-.06.2 0 .4.01.59.03.19.02.38.06.56.1.18.04.35.09.51.16.16.07.3.15.43.24.13.09.24.19.33.3.09.11.16.23.2.36.04.13.06.27.06.41 0 .14-.01.28-.03.42-.02.14-.06.28-.12.41-.06.13-.14.26-.23.38-.09.12-.2.23-.33.33-.13.1-.27.19-.43.24-.16.05-.33.09-.51.12-.18.03-.37.04-.56.04z"></path></svg>`,
+    href: `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`,
+  },
+  {
+    name: "Email",
+    icon: `<svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="w-5 h-5"><path fill-rule="evenodd" d="M.05 3.555A2 2 0 012 2h20a2 2 0 011.95 1.555L12 12.75 0 3.555zM0 4.697v14.596A2 2 0 002 22h20a2 2 0 002-2.697V4.697l-12 9.103-12-9.103z" clip-rule="evenodd"></path></svg>`,
+    href: `mailto:?subject=${encodedTitle}&body=${encodedUrl}`,
+  },
+];
+---
+
+<div class="flex flex-wrap gap-3 mt-8 justify-center md:justify-start">
+  {shareLinks.map((link) => (
+    <a
+      href={link.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200"
+      aria-label={`Share on ${link.name}`}
+    >
+      <Fragment set:html={link.icon} />
+      <span class="ml-2 hidden sm:inline">{link.name}</span>
+    </a>
+  ))}
+</div>
