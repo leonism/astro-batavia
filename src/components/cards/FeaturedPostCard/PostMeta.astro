@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import Picture from "@/components/ui/Picture.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -16,10 +17,12 @@ const { post, authorImage, authorSlug } = Astro.props;
     class="flex items-center gap-1.5 font-medium group-author">
     <div
       class="relative w-8 h-8 rounded-full overflow-hidden border-2 border-transparent group-hover/author:border-blue-400 transition-colors duration-300 avatar-gradient">
-      <img
+      <Picture
         src={post.data.authorImage || "/images/placeholder-hero.svg"}
         alt={post.data.author}
         class="absolute inset-0 w-full h-full object-cover rounded-full"
+        width={32}
+        height={32}
       />
     </div>
     <span
