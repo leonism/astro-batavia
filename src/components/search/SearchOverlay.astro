@@ -73,6 +73,8 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
       "search-results-container"
     );
 
+    console.log('SearchOverlay: openSearchOverlayButton found?', !!openSearchOverlayButton);
+
     const toggleSearchOverlay = (show) => {
       if (!searchOverlay) return;
       if (show) {
@@ -103,6 +105,14 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
     // Close overlay when pressing Escape key
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && !searchOverlay.classList.contains("hidden")) {
+        toggleSearchOverlay(false);
+      }
+    });
+
+    // Close overlay when clicking outside the content area
+    searchOverlay.addEventListener("click", (event) => {
+      const contentArea = searchOverlay.querySelector(".w-full.max-w-3xl");
+      if (contentArea && !contentArea.contains(event.target as Node)) {
         toggleSearchOverlay(false);
       }
     });
