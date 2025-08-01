@@ -239,12 +239,10 @@ const {
   }
 </style>
 
-<script>
+<script define:vars={{ posts }}>
   import { searchIntegration } from "@/features/search/searchIntegration";
   import { searchUtils } from "@/features/search/searchIntegration";
   import type { SearchableDocument, SearchResult } from "@/features/search/EnterpriseSearchEngine";
-
-  const posts: SearchableDocument[] = Astro.props.posts;
 
   document.addEventListener("astro:page-load", async () => {
     const searchInput = document.getElementById("enterprise-search-input") as HTMLInputElement;
@@ -490,22 +488,4 @@ const {
     renderPopularSearches();
     renderRecentSearches();
   });
-</script>
-
-<script define:vars={{ posts }}>
-  // Make posts data available to the search client
-  window.__SEARCH_DATA__ = posts.map((post) => ({
-    id: post.id,
-    title: post.data.title,
-    description: post.data.description,
-    content: post.body || "",
-    tags: post.data.tags || [],
-    url: `/${post.slug.replace(/^(en\/)?blog\//, "blog/")}`,
-    pubDate: post.data.pubDate,
-    author: post.data.author || "",
-    category: post.data.categories?.[0] || "",
-    lang: post.data.lang || "en",
-    slug: post.slug,
-    readingTime: post.data.readingTime || 0,
-  }));
 </script>
