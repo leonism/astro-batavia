@@ -107,6 +107,14 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
       }
     });
 
+    // Close overlay when clicking outside the content area
+    searchOverlay.addEventListener("click", (event) => {
+      const contentArea = searchOverlay.querySelector(".w-full.max-w-3xl");
+      if (contentArea && !contentArea.contains(event.target as Node)) {
+        toggleSearchOverlay(false);
+      }
+    });
+
     // Listen for search results and display them
     document.addEventListener("search-results-updated", (event) => {
       const { results, query } = event.detail;
