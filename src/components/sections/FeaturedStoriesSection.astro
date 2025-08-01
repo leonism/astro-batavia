@@ -49,17 +49,10 @@ const getAuthorDetails = (authorSlug: string) => {
       latestPosts.length > 0 && (
         <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-16">
           {latestPosts.map((post, index) => {
-            const author = getAuthorDetails(post.data.author);
-            const authorImage =
-              post.data.authorImage || "/images/placeholder-hero.svg"; // Use post's authorImage, fallback to placeholder
-            const authorSlug = author?.slug || "admin"; // Default to 'admin' slug
-
             return (
               <FeaturedPostCard
                 post={post}
                 index={index}
-                authorImage={authorImage}
-                authorSlug={authorSlug}
               />
             );
           })}
