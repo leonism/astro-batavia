@@ -53,7 +53,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
       aria-orientation="vertical">
       {
         Object.entries(languages).map(([langCode, langName]) => {
-          const href = getLocalizedPath(currentPath || "/", langCode);
+          const href = getLocalizedPath(currentPath, langCode);
           const isActive = langCode === lang;
 
           return (
