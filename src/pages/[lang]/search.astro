@@ -6,7 +6,6 @@ import { useTranslations } from "../../i18n/utils";
 
 export async function getStaticPaths() {
   return [
-    { params: { lang: "en" } },
     { params: { lang: "es" } },
     { params: { lang: "ja" } }
   ];
@@ -17,7 +16,7 @@ const t = useTranslations(lang);
 
 // Get all blog posts for the specific language
 const allPosts = await getCollection("blog", ({ id, data }: { id: string; data: { draft: boolean } }) => {
-  return id.startsWith(`${lang}/`) && !data.draft;
+  return (lang === 'en' ? true : id.startsWith(`${lang}/`)) && !data.draft;
 });
 
 const posts = allPosts.sort(
