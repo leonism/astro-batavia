@@ -173,7 +173,7 @@ const allTags = [...new Set(posts.flatMap((post: CollectionEntry<"blog">) => pos
 </Layout>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const searchInput = document.getElementById(
       "main-search-input"
     ) as HTMLInputElement;
