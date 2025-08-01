@@ -91,7 +91,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const languageToggle = document.getElementById("language-toggle");
     const languageDropdown = document.getElementById("language-dropdown");
     const languageChevron = document.getElementById("language-chevron");

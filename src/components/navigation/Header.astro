@@ -1,11 +1,10 @@
 ---
 import { getLangFromUrl } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
-import SearchBox from "@/components/ui/SearchBox.astro";
+
 import HeaderLogo from "./HeaderLogo.astro";
 import HeaderNavLinks from "./HeaderNavLinks.astro";
 import HeaderUtilities from "./HeaderUtilities.astro";
-
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const currentPath = Astro.url.pathname;
 ---
@@ -23,7 +22,14 @@ const currentPath = Astro.url.pathname;
           variant="desktop"
         />
       </div>
-      <HeaderUtilities />
+      <div class="flex items-center gap-5">
+        <button id="open-search-overlay" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Open search">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </button>
+        <HeaderUtilities />
+      </div>
     </div>
     <div
       id="mobile-menu"
@@ -36,11 +42,7 @@ const currentPath = Astro.url.pathname;
           currentPath={currentPath}
           variant="mobile"
         />
-        <div
-          class="pt-2"
-          aria-label="Mobile search">
-          <SearchBox />
-        </div>
+        
       </div>
     </div>
   </nav>

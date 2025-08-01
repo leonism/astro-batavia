@@ -6,6 +6,7 @@ import SEO from '@/components/common/SEO.astro';
 import BackToTop from '@/components/ui/BackToTop.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import BackToTopScript from '@/components/common/BackToTopScript.astro';
+import SearchOverlay from '@/components/search/SearchOverlay.astro';
 import { GoogleTagmanager, GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import '@/styles/global.css';
 
@@ -160,5 +161,6 @@ const {
     </div>
     <BackToTop />
     <BackToTopScript />
+    <SearchOverlay />
   </body>
 </html>

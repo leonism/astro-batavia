@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 import Picture from '@/components/ui/Picture.astro';
 import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
+import ShareButtons from '@/components/blog/ShareButtons.astro';
 import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
 
 type Props = CollectionEntry<'blog'>['data'] & {
@@ -34,6 +35,10 @@ const currentIndex = sortedLangPosts.findIndex((post: CollectionEntry<'blog'>) =
 
 let previousPostData: { url: string; title: string } | undefined = undefined;
 let nextPostData: { url: string; title: string } | undefined = undefined;
+
+console.log("Current Post Slug:", currentPostCollectionSlug);
+console.log("Sorted Lang Posts:", sortedLangPosts.map(p => p.slug));
+console.log("Current Index:", currentIndex);
 
 if (currentIndex !== -1) {
   if (currentIndex > 0) {
@@ -183,6 +188,9 @@ if (currentIndex !== -1) {
     <div class="prose prose-lg max-w-none dark:prose-invert">
       <slot />
     </div>
+
+    <!-- Share Buttons -->
+    <ShareButtons title={title} url={Astro.url.href} />
 
     <!-- Article Navigation -->
     <BlogPostNavigation
