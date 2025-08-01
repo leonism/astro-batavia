@@ -12,13 +12,12 @@ const { post, authorImage, authorSlug } = Astro.props;
 
 <div
   class="flex items-center text-left gap-3 sm:gap-1 text-sm sm:text-xs text-blue-200">
-  <a
-    href={`/authors/${authorSlug}`}
+  <div
     class="flex items-center gap-1.5 font-medium group-author">
     <div
       class="relative w-8 h-8 rounded-full overflow-hidden border-2 border-transparent group-hover/author:border-blue-400 transition-colors duration-300 avatar-gradient">
       <img
-        src={authorImage || "/images/placeholder-hero.svg"}
+        src={post.data.authorImage || "/images/placeholder-hero.svg"}
         alt={post.data.author}
         class="absolute inset-0 w-full h-full object-cover rounded-full"
       />
@@ -27,7 +26,7 @@ const { post, authorImage, authorSlug } = Astro.props;
       class="group-hover/author:text-blue-300 transition-colors duration-300">
       {post.data.author}
     </span>
-  </a>
+  </div>
   <span
     class="h-1 w-1 rounded-full bg-blue-200"
     aria-hidden="true">
