@@ -6,7 +6,7 @@ import { useTranslations } from "@/i18n/utils";
 
 // Get all English blog posts
 const allPosts = await getCollection("blog", ({ id, data }: { id: string; data: { draft: boolean } }) => {
-  return id.startsWith("en/") && !data.draft;
+  return !id.startsWith("es/") && !id.startsWith("ja/") && !data.draft;
 });
 
 // Sort posts by publication date (newest first)
