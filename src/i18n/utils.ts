@@ -13,10 +13,8 @@ export function useTranslations(lang: keyof typeof ui) {
 }
 
 export function getLocalizedPath(path: string, lang: string) {
-  if (lang === defaultLang) {
-    return path;
-  }
-  return `/${lang}${path}`;
+  const localizedPath = lang === defaultLang ? path : `/${lang}${path}`;
+  return localizedPath.startsWith("/") ? localizedPath : `/${localizedPath}`;
 }
 
 export function removeLocaleFromPath(path: string) {
