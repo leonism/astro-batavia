@@ -22,7 +22,7 @@ const t = useTranslations(lang);
 
 // Get latest blog posts for this language
 const allPosts = await getCollection("blog", (post: CollectionEntry<"blog">) => {
-  return post.id.startsWith(`${lang}/`) && !post.data.draft;
+  return (lang === 'en' ? !post.id.includes('/') : post.id.startsWith(`${lang}/`)) && !post.data.draft;
 });
 
 // Sort posts by publication date (newest first)
