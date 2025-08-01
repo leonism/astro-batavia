@@ -47,7 +47,7 @@ const t = useTranslations(lang);
 <script>
   import { searchPosts } from "@/utils/search";
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const searchInput = document.getElementById(
       "search-input"
     ) as HTMLInputElement;

@@ -1,13 +1,29 @@
 ---
 import { getLangFromUrl } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
-import SearchBox from "@/components/ui/SearchBox.astro";
+import EnterpriseSearchBox from "@/components/search/EnterpriseSearchBox.astro";
 import HeaderLogo from "./HeaderLogo.astro";
 import HeaderNavLinks from "./HeaderNavLinks.astro";
 import HeaderUtilities from "./HeaderUtilities.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const currentPath = Astro.url.pathname;
+
+// Get all blog posts for indexing
+const allPosts = await getCollection(
+  "blog",
+  ({ id, data }: { id: string; data: any }) => {
+    return !data.draft;
+  }
+);
+
+// Sort posts by publication date (newest first)
+const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
+  const dateA = a?.data?.pubDate ? new Date(a.data.pubDate).getTime() : 0;
+  const dateB = b?.data?.pubDate ? new Date(b.data.pubDate).getTime() : 0;
+  return dateB - dateA;
+});
 ---
 
 <header
@@ -39,7 +55,7 @@ const currentPath = Astro.url.pathname;
         <div
           class="pt-2"
           aria-label="Mobile search">
-          <SearchBox />
+          <EnterpriseSearchBox placeholder="Search articles, tags, authors..." lang={lang} posts={sortedPosts} />
         </div>
       </div>
     </div>
