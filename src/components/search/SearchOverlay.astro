@@ -73,6 +73,8 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
       "search-results-container"
     );
 
+    console.log('SearchOverlay: openSearchOverlayButton found?', !!openSearchOverlayButton);
+
     const toggleSearchOverlay = (show) => {
       if (!searchOverlay) return;
       if (show) {
