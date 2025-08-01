@@ -61,10 +61,10 @@ const currentPath = Astro.url.pathname;
       mobileMenu.setAttribute("aria-expanded", String(!isExpanded));
     };
 
-    const closeMobileMenu = (event) => {
+    const closeMobileMenu = (event: MouseEvent) => {
       if (!mobileMenu || !mobileMenuButton) return;
 
-      const target = event.target;
+      const target = event.target as Node;
       const isClickInside =
         mobileMenuButton.contains(target) || mobileMenu.contains(target);
 
@@ -79,8 +79,8 @@ const currentPath = Astro.url.pathname;
       document.addEventListener("click", closeMobileMenu);
 
       // Prevent clicks inside the mobile menu from closing it immediately
-      mobileMenu.addEventListener("click", (event) => {
-        if (event.target.tagName === "A") {
+      mobileMenu.addEventListener("click", (event: MouseEvent) => {
+        if (event.target instanceof HTMLElement && event.target.tagName === "A") {
           event.stopPropagation();
         }
       });
