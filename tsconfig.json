@@ -19,11 +19,6 @@
       "@/*": ["src/*"]
     }
   },
-<<<<<<< HEAD
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.astro"],
-  "exclude": ["node_modules", "dist"]
-=======
   "include": ["src/**/*", "astro.config.mjs"],
   "exclude": ["node_modules", "dist", "src/pages/search.astro", "src/pages/[lang]/search.astro", "src/components/ui/SearchBox.astro"]
->>>>>>> dev
 }
