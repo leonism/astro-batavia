@@ -37,7 +37,6 @@ export default defineConfig({
     }),
     sentry(),
     spotlightjs(),
-    image(),
   ],
   i18n: {
     defaultLocale: 'en',
