@@ -20,5 +20,5 @@
     }
   },
   "include": ["src/**/*", "astro.config.mjs"],
-  "exclude": ["node_modules", "dist", "src/pages/search.astro", "src/pages/[lang]/search.astro", "src/components/ui/SearchBox.astro"]
+  "exclude": ["node_modules", "dist", "src/pages/search.astro", "src/pages/[lang]/search.astro", "src/components/ui/SearchBox.astro", "src/pages/blog/index.astro"]
 }
