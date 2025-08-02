@@ -18,7 +18,7 @@ const t = useTranslations(lang);
 
 // Fetch all posts for the current language to find next/previous
 const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>) => {
-  return entry.id.startsWith(`${lang}/`) && !entry.data.draft;
+  return entry.slug.startsWith(`${lang}/blog/`) && !entry.data.draft;
 });
 
 // Sort posts by publication date (ascending for easier next/prev indexing)
