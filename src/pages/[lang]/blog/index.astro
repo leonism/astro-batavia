@@ -23,7 +23,7 @@ const t = useTranslations(lang);
 
 // Get blog posts for this language
 const allPostsUnsorted = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
-  return (lang === 'en' ? true : id.startsWith(`${lang}/`)) && !data.draft;
+  return (lang === 'en' ? !id.includes('/') : id.startsWith(`${lang}/`)) && !data.draft;
 });
 
 // Get unique tags from all posts for the current language
@@ -140,7 +140,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
             : 'Browse by Topic'
           }
         </h2>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2" id="tag-list">
           <a
             href={getLocalizedPath('/blog', lang)}
             class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
@@ -151,19 +151,28 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
           >
             {lang === 'es' ? 'Todos' : lang === 'ja' ? 'すべて' : 'All'}
           </a>
-          {allTags.map((tag) => (
+          {allTags.map((tag, index) => (
             <a
               href={`${getLocalizedPath('/blog', lang)}?tag=${tag}`}
-              class={`px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
+              class={`tag-item px-4 py-2 text-sm font-medium rounded-full border transition-colors duration-200 ${
                 currentTag === tag
                   ? 'border-primary-600 bg-primary-600 text-white hover:bg-primary-700'
                   : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400'
               }`}
+              data-index={index}
             >
               #{tag}
             </a>
           ))}
         </div>
+        {allTags.length > 10 && (
+          <button
+            id="toggle-tags-btn"
+            class="mt-4 px-4 py-2 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+          >
+            {lang === 'es' ? 'Mostrar más' : lang === 'ja' ? 'さらに表示' : 'Show more'}
+          </button>
+        )}
       </div>
     )}
 
@@ -234,60 +243,11 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
   </div>
 </Layout>
 
-<script define:vars={{ postsPerPage, totalPages }}>
-  document.addEventListener("DOMContentLoaded", () => {
-    const loadMoreBtn = document.getElementById("load-more");
-    const postsContainer = document.getElementById("posts-container");
-
-    if (!(loadMoreBtn instanceof HTMLButtonElement) || !postsContainer) {
-      if (loadMoreBtn && postItems.length <= postsPerPage) {
-        // if button exists but not needed
-        loadMoreBtn.style.display = "none";
-      }
-      return;
-    }
-
-    const postItems = Array.from(postsContainer.children);
-    let currentPage = 1;
-
-    // Initially hide posts beyond the first page if not all are displayed
-    if (postItems.length > postsPerPage) {
-      for (let i = postsPerPage; i < postItems.length; i++) {
-        const item = postItems[i];
-        if (item instanceof HTMLElement) {
-          item.style.display = "none";
-        }
-      }
-    } else {
-      // If all posts are already shown, hide the button
-      loadMoreBtn.style.display = "none";
-    }
-
-    loadMoreBtn.addEventListener("click", () => {
-      currentPage++;
-      const startIndex = (currentPage - 1) * postsPerPage;
-      const endIndex = Math.min(currentPage * postsPerPage, postItems.length);
-
-      for (let i = startIndex; i < endIndex; i++) {
-        const item = postItems[i];
-        if (item instanceof HTMLElement) {
-          item.style.display = "block"; // Or 'grid' or 'flex' depending on item's display type
-          item.classList.add("animate-fade-in");
-        }
-      }
-
-      if (currentPage >= totalPages || endIndex >= postItems.length) {
-        const currentDocumentLang = document.documentElement.lang;
-        const messages = {
-          en: "No more articles to load",
-          es: "No hay más artículos para cargar",
-          ja: "読み込む記事がありません",
-        };
-
-        loadMoreBtn.textContent = messages[currentDocumentLang] || messages.en;
-        loadMoreBtn.disabled = true;
-        loadMoreBtn.classList.add("opacity-50", "cursor-not-allowed");
-      }
-    });
-  });
+<script>
+  window.__astro_vars_blog_index_script = {
+    postsPerPage: postsPerPage,
+    totalPages: totalPages,
+    lang: lang,
+  };
 </script>
+<script type="module" src="/src/components/blog/blogIndexClient.js"></script>
