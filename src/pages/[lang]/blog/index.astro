@@ -6,6 +6,7 @@ import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils
 
 export async function getStaticPaths() {
   return [
+    { params: { lang: "en" } },
     { params: { lang: "es" } },
     { params: { lang: "ja" } }
   ];
