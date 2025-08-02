@@ -52,16 +52,18 @@ const sortedPosts = filteredPostsUnsorted.sort(
     b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const featuredPost = sortedPosts.length > 0 ? sortedPosts[0] : null;
-const otherPosts = sortedPosts.length > 0 ? sortedPosts.slice(1) : [];
-
-// Pagination setup for otherPosts
-const postsPerPage = featuredPost ? 8 : 9; // Adjust if featured post takes one slot
-const totalPages = Math.ceil(otherPosts.length / postsPerPage);
-const postsToDisplay = otherPosts; // For pagination and load more, we use otherPosts
+const postsPerPage = 9;
+const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+const postsToDisplay = sortedPosts.slice(0, postsPerPage);
+const pageProps = {
+  postsPerPage,
+  totalPages,
+  lang,
+};
 ---
 
 <Layout
+  {...pageProps}
   title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''} | Astro Batavia`}
   description={currentTag
     ? (lang === 'es' ? `Explora artículos sobre ${currentTag} en nuestro blog de tecnología y desarrollo web.` : lang === 'ja' ? `${currentTag}に関する技術とウェブ開発のブログ記事をご覧ください。` : `Explore articles about ${currentTag} on our technology and web development blog.`)
@@ -131,24 +133,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
 
     
 
-    <!-- Featured Post Section -->
-    {
-      featuredPost &&
-        !currentTag && ( // Only show featured post if no tag is selected
-          <section class="mb-16 animate-fade-in">
-            <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center sm:text-left">
-              {t("blog.featuredArticle") || "Featured Article"}
-            </h2>
-            <div class="featured-post-card">
-              <BlogCard
-                post={featuredPost}
-                lang={lang}
-                isFeatured={true}
-              />
-            </div>
-          </section>
-        )
-    }
+    
 
     <!-- Posts Grid -->
     {postsToDisplay.length > 0 ? (
@@ -177,7 +162,7 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
     )}
 
     <!-- Load More Button -->
-    {postsToDisplay.length > postsPerPage && (
+    {totalPages > 1 && (
       <div class="text-center">
         <button
           id="load-more"
@@ -198,11 +183,6 @@ const postsToDisplay = otherPosts; // For pagination and load more, we use other
   </div>
 </Layout>
 
-<script>
-  window.__astro_vars_blog_index_script = {
-    postsPerPage: postsPerPage,
-    totalPages: totalPages,
-    lang: lang,
-  };
+<script define:vars={{ totalPages, lang }}>
+  import "../../../components/blog/blogIndexClient.js";
 </script>
-<script type="module" src="/src/components/blog/blogIndexClient.js"></script>
