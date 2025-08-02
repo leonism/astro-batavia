@@ -18,7 +18,7 @@ const t = useTranslations(lang);
 
 // Fetch all posts for the current language to find next/previous
 const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>) => {
-  return entry.id.startsWith(`${lang}/`) && !entry.data.draft;
+  return entry.slug.startsWith(`${lang}/blog/`) && !entry.data.draft;
 });
 
 // Sort posts by publication date (ascending for easier next/prev indexing)
@@ -35,10 +35,6 @@ const currentIndex = sortedLangPosts.findIndex((post: CollectionEntry<'blog'>) =
 
 let previousPostData: { url: string; title: string } | undefined = undefined;
 let nextPostData: { url: string; title: string } | undefined = undefined;
-
-console.log("Current Post Slug:", currentPostCollectionSlug);
-console.log("Sorted Lang Posts:", sortedLangPosts.map(p => p.slug));
-console.log("Current Index:", currentIndex);
 
 if (currentIndex !== -1) {
   if (currentIndex > 0) {
@@ -60,6 +56,12 @@ if (currentIndex !== -1) {
     };
   }
 }
+
+console.log("Current Post Slug:", currentPostCollectionSlug);
+console.log("Sorted Lang Posts:", sortedLangPosts.map(p => p.slug));
+console.log("Current Index:", currentIndex);
+console.log("Previous Post Data:", previousPostData);
+console.log("Next Post Data:", nextPostData);
 
 // Structured data is now handled by the enhanced SEO component
 ---

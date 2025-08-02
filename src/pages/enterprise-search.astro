@@ -122,6 +122,7 @@ const canonical = new URL("/en/enterprise-search", Astro.site).toString();
             placeholder="Search articles, tags, authors..."
             lang={lang}
             enableVoiceSearch={true}
+            posts={sortedPosts}
           />
         </div>
       </div>
@@ -427,7 +428,7 @@ const canonical = new URL("/en/enterprise-search", Astro.site).toString();
 </Layout>
 
 <!-- Load Enterprise Search Client -->
-<script>
+<script type="module">
   import { EnterpriseSearchClient } from "@/features/search/EnterpriseSearchClient";
 
   // Type declarations for global window properties
@@ -454,9 +455,15 @@ const canonical = new URL("/en/enterprise-search", Astro.site).toString();
 </script>
 
 <!-- Inject search data -->
-<script define:vars={{ posts: sortedPosts }}>
+<script define:vars={{ posts: sortedPosts }} type="module">
+  import type { CollectionEntry } from "astro:content";
+
+  interface SearchDataPost extends CollectionEntry<"blog"> {
+    readingTime?: number;
+  }
+
   // Make posts data available to the search client
-  window.__SEARCH_DATA__ = posts.map((post) => ({
+  window.__SEARCH_DATA__ = (posts as SearchDataPost[]).map((post: SearchDataPost) => ({
     id: post.id,
     title: post.data.title,
     description: post.data.description,
