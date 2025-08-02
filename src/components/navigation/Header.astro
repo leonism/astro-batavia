@@ -22,8 +22,8 @@ const currentPath = Astro.url.pathname;
           variant="desktop"
         />
       </div>
-      <div class="flex items-center ml-0">
-        <button id="open-search-overlay" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Open search">
+      <div class="flex items-center">
+        <button id="open-search-overlay" class="text-gray-600 mr-2 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Open search">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
@@ -31,67 +31,87 @@ const currentPath = Astro.url.pathname;
         <HeaderUtilities />
       </div>
     </div>
-    <div
-      id="mobile-menu"
-      class="md:hidden hidden pb-4"
-      aria-expanded="false"
-      aria-label="Mobile menu">
-      <div class="flex flex-col gap-2">
-        <HeaderNavLinks
-          lang={lang}
-          currentPath={currentPath}
-          variant="mobile"
-        />
-
-      </div>
-    </div>
   </nav>
 </header>
+<div id="mobile-nav-overlay" class="mobile-nav-overlay hidden md:hidden"></div>
+<div
+  id="mobile-menu"
+  class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
+  aria-expanded="false"
+  aria-label="Mobile menu">
+  <div class="flex justify-end mb-4">
+    <button id="close-mobile-menu" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Close mobile menu">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="flex flex-col gap-4">
+    <HeaderNavLinks
+      lang={lang}
+      currentPath={currentPath}
+      variant="mobile"
+    />
+  </div>
+</div>
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
+<script>
+  document.addEventListener("astro:page-load", () => {
     const mobileMenuButton = document.getElementById("mobile-menu-button");
     const mobileMenu = document.getElementById("mobile-menu");
+    const closeMobileMenuButton = document.getElementById("close-mobile-menu");
+    const mobileNavOverlay = document.getElementById("mobile-nav-overlay");
 
-    const toggleMobileMenu = () => {
-      if (!mobileMenu) return;
-
-      const isExpanded = mobileMenu.getAttribute("aria-expanded") === "true";
-      mobileMenu.classList.toggle("hidden");
-      mobileMenu.setAttribute("aria-expanded", String(!isExpanded));
+    const openMobileMenu = () => {
+      if (!mobileMenu || !mobileNavOverlay) return;
+      mobileMenu.classList.remove("hidden");
+      mobileNavOverlay.classList.remove("hidden");
+      document.body.classList.add("mobile-nav-open");
+      mobileNavOverlay.classList.add("is-active");
+      mobileMenu.classList.add("is-active");
+      mobileMenu.setAttribute("aria-expanded", "true");
     };
 
-    const closeMobileMenu = (event) => {
-      if (!mobileMenu || !mobileMenuButton) return;
-
-      const target = event.target;
-      const isClickInside =
-        mobileMenuButton.contains(target) || mobileMenu.contains(target);
-
-      if (!isClickInside) {
+    const closeMobileMenu = () => {
+      if (!mobileMenu || !mobileNavOverlay) return;
+      document.body.classList.remove("mobile-nav-open");
+      mobileNavOverlay.classList.remove("is-active");
+      mobileMenu.classList.remove("is-active");
+      mobileMenu.setAttribute("aria-expanded", "false");
+      // Add hidden class after transition for better UX
+      setTimeout(() => {
         mobileMenu.classList.add("hidden");
-        mobileMenu.setAttribute("aria-expanded", "false");
-      }
+        mobileNavOverlay.classList.add("hidden");
+      }, 300); // Match CSS transition duration
     };
 
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener("click", toggleMobileMenu);
-      document.addEventListener("click", closeMobileMenu);
-
-      // Prevent clicks inside the mobile menu from closing it immediately
-      mobileMenu.addEventListener("click", (event) => {
-        if (event.target && event.target.tagName === "A") {
-          event.stopPropagation();
-        }
-      });
+    if (mobileMenuButton) {
+      mobileMenuButton.addEventListener("click", openMobileMenu);
     }
 
-    return () => {
-      if (mobileMenuButton) {
-        mobileMenuButton.removeEventListener("click", toggleMobileMenu);
+    if (closeMobileMenuButton) {
+      closeMobileMenuButton.addEventListener("click", closeMobileMenu);
+    }
+
+    if (mobileNavOverlay) {
+      mobileNavOverlay.addEventListener("click", closeMobileMenu);
+    }
+
+    // Close menu on escape key press
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && mobileMenu && mobileMenu.classList.contains("is-active")) {
+        closeMobileMenu();
       }
-      document.removeEventListener("click", closeMobileMenu);
-      // No need to remove the mobileMenu click listener as it's tied to the element's lifecycle
-    };
+    });
+
+    // Close menu when clicking outside of it
+    document.addEventListener("click", (event) => {
+      if (mobileMenu && mobileNavOverlay && mobileMenuButton && mobileMenu.classList.contains("is-active")) {
+        const target = event.target as Node;
+        if (!mobileMenu.contains(target) && !mobileMenuButton.contains(target)) {
+          closeMobileMenu();
+        }
+      }
+    });
   });
 </script>
