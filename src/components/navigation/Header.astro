@@ -55,7 +55,7 @@ const currentPath = Astro.url.pathname;
   </div>
 </div>
 
-<script>
+<script is:inline>
   document.addEventListener("astro:page-load", () => {
     const mobileMenuButton = document.getElementById("mobile-menu-button");
     const mobileMenu = document.getElementById("mobile-menu");
@@ -107,7 +107,8 @@ const currentPath = Astro.url.pathname;
     // Close menu when clicking outside of it
     document.addEventListener("click", (event) => {
       if (mobileMenu && mobileNavOverlay && mobileMenuButton && mobileMenu.classList.contains("is-active")) {
-        const target = event.target as Node;
+        const target = event.target;
+        if (!(target instanceof Node)) return;
         if (!mobileMenu.contains(target) && !mobileMenuButton.contains(target)) {
           closeMobileMenu();
         }
