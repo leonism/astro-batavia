@@ -33,10 +33,10 @@ const currentPath = Astro.url.pathname;
     </div>
   </nav>
 </header>
-<div id="mobile-nav-overlay" class="mobile-nav-overlay"></div>
+<div id="mobile-nav-overlay" class="mobile-nav-overlay hidden md:hidden"></div>
 <div
   id="mobile-menu"
-  class="fixed top-0 right-0 h-full w-64 bg-white dark:bg-slate-900 z-50 shadow-lg p-6"
+  class="fixed top-0 right-0 h-full w-64 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
   aria-expanded="false"
   aria-label="Mobile menu">
   <div class="flex justify-end mb-4">
@@ -64,6 +64,8 @@ const currentPath = Astro.url.pathname;
 
     const openMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
+      mobileMenu.classList.remove("hidden");
+      mobileNavOverlay.classList.remove("hidden");
       document.body.classList.add("mobile-nav-open");
       mobileNavOverlay.classList.add("is-active");
       mobileMenu.classList.add("is-active");
@@ -76,6 +78,11 @@ const currentPath = Astro.url.pathname;
       mobileNavOverlay.classList.remove("is-active");
       mobileMenu.classList.remove("is-active");
       mobileMenu.setAttribute("aria-expanded", "false");
+      // Add hidden class after transition for better UX
+      setTimeout(() => {
+        mobileMenu.classList.add("hidden");
+        mobileNavOverlay.classList.add("hidden");
+      }, 300); // Match CSS transition duration
     };
 
     if (mobileMenuButton) {
