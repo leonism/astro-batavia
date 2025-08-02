@@ -31,12 +31,4 @@ const { show } = Astro.props;
   )
 }
 
-<script>
-  import { initializeLoadMoreButton } from "@/features/blog/loadMorePosts";
-  document.addEventListener("DOMContentLoaded", () => {
-    // Only initialize if the button is actually rendered
-    if (document.getElementById("load-more")) {
-      initializeLoadMoreButton();
-    }
-  });
-</script>
+<script type="module" src="/src/components/blog/loadMoreButtonClient.js"></script>
