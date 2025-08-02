@@ -19,9 +19,6 @@ export class SearchIntegration {
   private searchEngine: EnterpriseSearchEngine;
   private config: Required<SearchIntegrationConfig>;
   private isInitialized = false;
-  private searchHistory: string[] = [];
-  private popularSearches: string[] = [];
-
   constructor(config: SearchIntegrationConfig = {}) {
     this.config = {
       enableAnalytics: true,
@@ -34,9 +31,6 @@ export class SearchIntegration {
     };
 
     this.searchEngine = new EnterpriseSearchEngine();
-
-    this.loadSearchHistory();
-    this.loadPopularSearches();
   }
 
   /**
@@ -83,12 +77,6 @@ export class SearchIntegration {
       const suggestions = await this.searchEngine.getSuggestions(query, 5);
       const suggestionTexts = suggestions.map((s: SearchSuggestion) => s.text);
 
-      // Track search if analytics enabled
-      if (this.config.enableAnalytics && query.trim()) {
-        this.addToSearchHistory(query);
-        // Note: trackSearch is called internally by the search engine
-      }
-
       const searchTime = performance.now() - startTime;
 
       return {
@@ -113,7 +101,7 @@ export class SearchIntegration {
    */
   async getSuggestions(partialQuery: string, limit = 8): Promise<string[]> {
     if (!this.isInitialized || !partialQuery.trim()) {
-      return this.getPopularSearches().slice(0, limit);
+      return [];
     }
 
     try {
@@ -149,124 +137,6 @@ export class SearchIntegration {
    */
   clearCache(): void {
     this.searchEngine.clearCache();
-  }
-
-  /**
-   * Get search history
-   */
-  getSearchHistory(): string[] {
-    return [...this.searchHistory];
-  }
-
-  /**
-   * Get popular searches
-   */
-  getPopularSearches(): string[] {
-    return [...this.popularSearches];
-  }
-
-  /**
-   * Clear search history
-   */
-  clearSearchHistory(): void {
-    this.searchHistory = [];
-    this.saveSearchHistory();
-  }
-
-  /**
-   * Add query to search history
-   */
-  private addToSearchHistory(query: string): void {
-    const trimmedQuery = query.trim().toLowerCase();
-    if (!trimmedQuery || this.searchHistory.includes(trimmedQuery)) {
-      return;
-    }
-
-    this.searchHistory.unshift(trimmedQuery);
-    this.searchHistory = this.searchHistory.slice(0, 20); // Keep only last 20 searches
-    this.saveSearchHistory();
-  }
-
-  /**
-   * Load search history from localStorage
-   */
-  private loadSearchHistory(): void {
-    try {
-      const stored = localStorage.getItem('enterprise-search-history');
-      if (stored) {
-        this.searchHistory = JSON.parse(stored);
-      }
-    } catch (error) {
-      console.warn('Failed to load search history:', error);
-      this.searchHistory = [];
-    }
-  }
-
-  /**
-   * Save search history to localStorage
-   */
-  private saveSearchHistory(): void {
-    try {
-      localStorage.setItem('enterprise-search-history', JSON.stringify(this.searchHistory));
-    } catch (error) {
-      console.warn('Failed to save search history:', error);
-    }
-  }
-
-  /**
-   * Load popular searches from localStorage or set defaults
-   */
-  private loadPopularSearches(): void {
-    try {
-      const stored = localStorage.getItem('enterprise-search-popular');
-      if (stored) {
-        this.popularSearches = JSON.parse(stored);
-      } else {
-        // Default popular searches
-        this.popularSearches = [
-          'JavaScript',
-          'React',
-          'TypeScript',
-          'CSS',
-          'Node.js',
-          'Vue.js',
-          'Python',
-          'API'
-        ];
-        this.savePopularSearches();
-      }
-    } catch (error) {
-      console.warn('Failed to load popular searches:', error);
-      this.popularSearches = [];
-    }
-  }
-
-  /**
-   * Save popular searches to localStorage
-   */
-  private savePopularSearches(): void {
-    try {
-      localStorage.setItem('enterprise-search-popular', JSON.stringify(this.popularSearches));
-    } catch (error) {
-      console.warn('Failed to save popular searches:', error);
-    }
-  }
-
-  /**
-   * Update popular searches based on analytics
-   */
-  updatePopularSearches(): void {
-    if (!this.config.enableAnalytics) {
-      return;
-    }
-
-    const analytics = this.getAnalytics();
-    if (analytics && analytics.topQueries) {
-      this.popularSearches = analytics.topQueries
-        .slice(0, 10)
-        .map((item: any) => item.query);
-      this.savePopularSearches();
-    }
   }
 
   /**
