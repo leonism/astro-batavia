@@ -36,7 +36,7 @@ const currentPath = Astro.url.pathname;
 <div id="mobile-nav-overlay" class="mobile-nav-overlay hidden md:hidden"></div>
 <div
   id="mobile-menu"
-  class="fixed top-0 right-0 h-full w-64 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
+  class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
   aria-expanded="false"
   aria-label="Mobile menu">
   <div class="flex justify-end mb-4">
@@ -55,8 +55,8 @@ const currentPath = Astro.url.pathname;
   </div>
 </div>
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
+<script>
+  document.addEventListener("astro:page-load", () => {
     const mobileMenuButton = document.getElementById("mobile-menu-button");
     const mobileMenu = document.getElementById("mobile-menu");
     const closeMobileMenuButton = document.getElementById("close-mobile-menu");
@@ -107,7 +107,7 @@ const currentPath = Astro.url.pathname;
     // Close menu when clicking outside of it
     document.addEventListener("click", (event) => {
       if (mobileMenu && mobileNavOverlay && mobileMenuButton && mobileMenu.classList.contains("is-active")) {
-        const target = event.target;
+        const target = event.target as Node;
         if (!mobileMenu.contains(target) && !mobileMenuButton.contains(target)) {
           closeMobileMenu();
         }
