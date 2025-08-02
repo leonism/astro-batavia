@@ -4,6 +4,7 @@ import spotlightjs from '@spotlightjs/astro';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import image from '@astrojs/image';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mjs';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 import viteImagemin from 'vite-plugin-imagemin';
@@ -37,6 +38,7 @@ export default defineConfig({
     }),
     sentry(),
     spotlightjs(),
+    image(),
   ],
   i18n: {
     defaultLocale: 'en',
