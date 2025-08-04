@@ -22,11 +22,14 @@ const sortedPosts = (allPosts || []).sort((a: any, b: any) => {
 });
 ---
 
-<div
+<section
   id="search-overlay"
   class="fixed inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-[100] flex flex-col items-center justify-center p-4 hidden"
+  aria-labelledby="search-overlay-title"
+  role="search"
   aria-hidden="true"
 >
+  <h2 id="search-overlay-title" class="sr-only">Search</h2>
   <button
     id="close-search-overlay"
     class="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"

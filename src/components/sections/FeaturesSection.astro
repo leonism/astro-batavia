@@ -6,10 +6,11 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<section class="py-24 bg-slate-50 dark:bg-slate-800">
+<section class="py-24 bg-slate-50 dark:bg-slate-800" aria-labelledby="features-title">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <header class="text-center mb-16">
       <h2
+        id="features-title"
         class="text-5xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
         {t("home.features.sectionTitle")}
       </h2>
