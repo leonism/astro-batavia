@@ -83,101 +83,41 @@ const defaultOrganization = {
 };
 const orgData = organization || defaultOrganization;
 
+import {
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+  generateWebsiteSchema,
+} from '../../utils/jsonLd';
+
 // Generate JSON-LD structured data
 const generateJsonLd = () => {
-  const baseSchema: any = {
-    '@context': 'https://schema.org',
-    '@type': type === 'article' ? 'Article' : type === 'blog' ? 'BlogPosting' : 'WebPage',
-    headline: title,
-    description: description,
-    url: canonicalUrl,
-    image: {
-      '@type': 'ImageObject',
-      url: imageUrl,
-      width: 1200,
-      height: 630,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: orgData.name,
-      url: orgData.url,
-      logo: {
-        '@type': 'ImageObject',
-        url: orgData.logo,
-      },
-      ...(orgData.sameAs && { sameAs: orgData.sameAs }),
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': canonicalUrl,
-    },
-  };
+  const schemas = [];
 
-  // Add article-specific data
+  if (type === 'website') {
+    schemas.push(generateWebsiteSchema({ siteTitle, siteUrl }));
+  }
+
   if (type === 'article' || type === 'blog') {
-    Object.assign(baseSchema, {
-      datePublished: publishedTime,
-      dateModified: modifiedTime || publishedTime,
-      ...(author && {
-        author: {
-          '@type': 'Person',
-          name: author,
-          ...(authorUrl && { url: authorUrl }),
-          ...(authorImage && { image: authorImage }),
-        },
+    schemas.push(
+      generateArticleSchema({
+        title,
+        description,
+        image: imageUrl,
+        publishedTime,
+        modifiedTime,
+        author,
+        authorUrl,
+        organization: orgData,
+        canonical: canonicalUrl,
       }),
-      ...(category && { articleSection: category }),
-      ...(tags.length > 0 && { keywords: tags.join(', ') }),
-      ...(wordCount && { wordCount: wordCount }),
-      ...(readingTime && { timeRequired: `PT${readingTime}M` }),
-    });
+    );
   }
 
-  // Add breadcrumbs if available
   if (breadcrumbs.length > 0) {
-    baseSchema['breadcrumb'] = {
-      '@type': 'BreadcrumbList',
-      itemListElement: breadcrumbs.map((crumb, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        name: crumb.name,
-        item: crumb.url,
-      })),
-    };
+    schemas.push(generateBreadcrumbSchema(breadcrumbs));
   }
 
-  // Add video data if available
-  if (video) {
-    baseSchema['video'] = {
-      '@type': 'VideoObject',
-      name: title,
-      description: video.description || description,
-      thumbnailUrl: video.thumbnail,
-      contentUrl: video.url,
-      ...(video.duration && { duration: video.duration }),
-    };
-  }
-
-  // Add product data if available
-  if (product) {
-    baseSchema['mainEntity'] = {
-      '@type': 'Product',
-      name: product.name,
-      description: description,
-      image: imageUrl,
-      ...(product.brand && { brand: { '@type': 'Brand', name: product.brand } }),
-      ...(product.price && {
-        offers: {
-          '@type': 'Offer',
-          price: product.price,
-          priceCurrency: product.currency || 'USD',
-          availability: `https://schema.org/${product.availability || 'InStock'}`,
-        },
-      }),
-    };
-  }
-
-  return JSON.stringify(baseSchema);
+  return JSON.stringify(schemas);
 };
 
 const jsonLdData = generateJsonLd();
