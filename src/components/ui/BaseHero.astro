@@ -66,8 +66,10 @@ const {
 const iconBaseClass = "w-5 h-5 transition-transform";
 ---
 
-<header
+<section
   class:list={[sectionClass]}
+  aria-labelledby="hero-title"
+  role="region"
   {...rest}>
   {
     showDecorativeElements && (
@@ -89,6 +91,7 @@ const iconBaseClass = "w-5 h-5 transition-transform";
       {
         title && (
           <h1
+            id="hero-title"
             class:list={[titleClass]}
             set:html={title}
           />

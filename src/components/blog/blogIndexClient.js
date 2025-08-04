@@ -1,6 +1,4 @@
-document.addEventListener("astro:page-load", () => {
-  const { totalPages, lang } = Astro.props;
-
+export function initializeBlogIndex(totalPages, lang) {
   const loadMoreBtn = document.getElementById("load-more");
   const postsContainer = document.getElementById("posts-container");
 

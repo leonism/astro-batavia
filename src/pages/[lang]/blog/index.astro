@@ -167,6 +167,8 @@ const pageProps = {
         <button
           id="load-more"
           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200"
+          data-total-pages={totalPages}
+          data-lang={lang}
         >
           {lang === 'es'
             ? 'Cargar Más Artículos'
@@ -183,6 +185,14 @@ const pageProps = {
   </div>
 </Layout>
 
-<script define:vars={{ totalPages, lang }}>
-  import "../../../components/blog/blogIndexClient.js";
+<script type="module">
+  import { initializeBlogIndex } from "../../../components/blog/blogIndexClient.js";
+  document.addEventListener("astro:page-load", () => {
+    const loadMoreBtn = document.getElementById("load-more");
+    if (loadMoreBtn) {
+      const totalPages = parseInt(loadMoreBtn.dataset.totalPages);
+      const lang = loadMoreBtn.dataset.lang;
+      initializeBlogIndex(totalPages, lang);
+    }
+  });
 </script>
