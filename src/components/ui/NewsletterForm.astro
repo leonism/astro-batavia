@@ -47,11 +47,14 @@ const {
 
 <section
   class={sectionClass}
+  aria-labelledby="newsletter-title"
+  role="region"
   {...rest}>
   <div class={containerClass}>
     {
       title && (
         <h2
+          id="newsletter-title"
           class={titleClass}
           set:html={title}
         />
