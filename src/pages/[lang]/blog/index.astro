@@ -186,7 +186,7 @@ const pageProps = {
 </Layout>
 
 <script type="module">
-  import { initializeBlogIndex } from "../../../components/blog/blogIndexClient.js";
+  import { initializeBlogIndex } from "/js/blogIndexClient.js";
   document.addEventListener("astro:page-load", () => {
     const loadMoreBtn = document.getElementById("load-more");
     if (loadMoreBtn) {

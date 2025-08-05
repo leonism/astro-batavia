@@ -36,9 +36,9 @@ export function initializeBlogIndex(totalPages, lang) {
           const postElement = document.createElement('div');
           postElement.classList.add('post-item', 'animate-fade-in');
           postElement.innerHTML = `
-            <article class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] min-h-[420px] max-h-[480px] flex flex-col">
+            <article class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] min-h-[380px] max-h-[380px] flex flex-col">
               ${post.heroImage ? `
-              <div class="overflow-hidden h-72">
+              <div class="overflow-hidden h-52">
                 <img src="${post.heroImage}" alt="${post.title}" width="600" height="400" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px">
               </div>
               ` : ''}
