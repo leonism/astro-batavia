@@ -56,11 +56,39 @@ const currentPath = Astro.url.pathname;
 </div>
 
 <script is:inline>
+  // Make toggleSearchOverlay globally accessible
+  function toggleSearchOverlay(show) {
+    const searchOverlay = document.getElementById("search-overlay");
+    if (!searchOverlay) return;
+    if (show) {
+      searchOverlay.classList.remove("hidden");
+      searchOverlay.setAttribute("aria-hidden", "false");
+      const searchInput = searchOverlay.querySelector("#search-input");
+      if (searchInput) {
+        searchInput.focus();
+      }
+    } else {
+      searchOverlay.classList.add("hidden");
+      searchOverlay.setAttribute("aria-hidden", "true");
+      const searchInput = searchOverlay.querySelector("#search-input");
+      if (searchInput) {
+        searchInput.value = ""; // Clear search input on close
+      }
+      const searchResultsContainer = searchOverlay.querySelector("#search-results-container");
+      if (searchResultsContainer) {
+        searchResultsContainer.innerHTML = ""; // Clear results on close
+      }
+    }
+  }
+
   document.addEventListener("astro:page-load", () => {
     const mobileMenuButton = document.getElementById("mobile-menu-button");
     const mobileMenu = document.getElementById("mobile-menu");
     const closeMobileMenuButton = document.getElementById("close-mobile-menu");
     const mobileNavOverlay = document.getElementById("mobile-nav-overlay");
+
+    const openSearchOverlayButton = document.getElementById("open-search-overlay");
+    const closeSearchOverlayButtonFromOverlay = document.getElementById("close-search-overlay");
 
     const openMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
@@ -97,11 +125,20 @@ const currentPath = Astro.url.pathname;
       mobileNavOverlay.addEventListener("click", closeMobileMenu);
     }
 
+    if (openSearchOverlayButton) {
+      openSearchOverlayButton.addEventListener("click", () => toggleSearchOverlay(true));
+    }
+
+    if (closeSearchOverlayButtonFromOverlay) {
+      closeSearchOverlayButtonFromOverlay.addEventListener("click", () => toggleSearchOverlay(false));
+    }
+
     // Close menu on escape key press
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && mobileMenu && mobileMenu.classList.contains("is-active")) {
         closeMobileMenu();
       }
+      toggleSearchOverlay(false);
     });
 
     // Close menu when clicking outside of it
@@ -111,6 +148,16 @@ const currentPath = Astro.url.pathname;
         if (!(target instanceof Node)) return;
         if (!mobileMenu.contains(target) && !mobileMenuButton.contains(target)) {
           closeMobileMenu();
+        }
+      }
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      const searchOverlay = document.getElementById("search-overlay");
+      const openSearchOverlayButton = document.getElementById("open-search-overlay");
+      if (searchOverlay && !searchOverlay.classList.contains("hidden")) {
+        const contentArea = searchOverlay.querySelector(".w-full.max-w-3xl");
+        if (contentArea && !contentArea.contains(target) && target !== openSearchOverlayButton) {
+          toggleSearchOverlay(false);
         }
       }
     });
