@@ -5,6 +5,7 @@ import Picture from '@/components/ui/Picture.astro';
 import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
 import ShareButtons from '@/components/blog/ShareButtons.astro';
 import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
+import RelatedArticles from '@/components/blog/RelatedArticles.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
@@ -51,6 +52,15 @@ if (currentIndex !== -1) {
     };
   }
 }
+
+// Related articles logic
+const currentPostTags = tags || [];
+const relatedPosts = allLangPosts
+  .filter(post => post.slug !== currentPostCollectionSlug) // Exclude current post
+  .filter(post => post.data.tags && post.data.tags.some(tag => currentPostTags.includes(tag))) // Filter by common tags
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()) // Sort by newest
+  .slice(0, 3); // Limit to 3 related articles
+
 ---
 
 <Layout
@@ -180,5 +190,8 @@ if (currentIndex !== -1) {
       nextPostData={nextPostData}
       lang={lang}
     />
+
+    <!-- Related Articles -->
+    <RelatedArticles relatedPosts={relatedPosts} lang={lang} />
   </article>
 </Layout>
