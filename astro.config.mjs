@@ -36,6 +36,7 @@ export default defineConfig({
     }),
     sentry(),
     spotlightjs(),
+    htmlMinifier(),
   ],
   i18n: {
     defaultLocale: 'en',
@@ -65,8 +66,12 @@ export default defineConfig({
       },
     },
     plugins: [
-      gzipPlugin(),
-      brotliPlugin(),
+      gzipPlugin({
+        filter: /\.(html|js|css|svg|json|xml)$/i,
+      }),
+      brotliPlugin({
+        filter: /\.(html|js|css|svg|json|xml)$/i,
+      }),
     ],
   },
   server: {
