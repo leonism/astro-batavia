@@ -1,0 +1,199 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SearchInputForm from '@/components/search/SearchInputForm.astro';
+import SearchFilters from '@/components/search/SearchFilters.astro';
+import SearchResults from '@/components/search/SearchResults.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations, isValidLanguage } from '@/i18n/utils';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "es" } },
+    { params: { lang: "ja" } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+// Validate language
+if (!lang || !isValidLanguage(lang)) {
+  return Astro.redirect("/404");
+}
+
+const t = useTranslations(lang);
+
+// Fetch all posts to get unique tags for filtering
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))].sort();
+
+// Initial posts for display (empty, will be populated by client-side JS)
+const initialPosts = [];
+---
+
+<Layout
+  title={t('search.pageTitle')}
+  description={t('search.pageDescription')}
+  lang={lang}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4 text-center">
+      {t('search.pageTitle')}
+    </h1>
+    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto text-center mb-12">
+      {t('search.pageDescription')}
+    </p>
+
+    <SearchInputForm placeholder={t('search.inputPlaceholder')} />
+
+    <SearchFilters tags={allTags} />
+
+    <SearchResults
+      posts={initialPosts}
+      lang={lang}
+      noResultsText={t('search.noResults')}
+      initialStatusText={t('search.initialStatus')}
+    />
+  </div>
+</Layout>
+
+<script type="module">
+  import { SearchIntegration } from '@/features/search/searchIntegration';
+  import { EnterpriseSearchEngine } from '@/features/search/EnterpriseSearchEngine';
+
+  document.addEventListener('astro:page-load', async () => {
+    const searchInput = document.getElementById('main-search-input');
+    const searchResultsContainer = document.getElementById('search-results');
+    const searchStatus = document.getElementById('search-status');
+    const noResultsDiv = document.getElementById('no-results');
+    const clearSearchButton = document.getElementById('clear-search');
+    const tagFilterButtons = document.querySelectorAll('.tag-filter');
+    const sortSelect = document.getElementById('sort-select');
+    const searchSuggestionsDatalist = document.getElementById('search-suggestions');
+
+    if (!searchInput || !searchResultsContainer || !searchStatus || !noResultsDiv || !clearSearchButton || !sortSelect || !searchSuggestionsDatalist) {
+      console.error("Search elements not found.");
+      return;
+    }
+
+    const searchEngine = new EnterpriseSearchEngine();
+    const searchIntegration = new SearchIntegration();
+
+    let allDocuments = [];
+
+    // Fetch and index documents
+    try {
+      const response = await fetch('/api/search-index');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      allDocuments = await response.json();
+      searchEngine.indexDocuments(allDocuments);
+      searchStatus.textContent = `Ready to search ${allDocuments.length} articles.`;
+    } catch (error) {
+      console.error("Failed to load search index:", error);
+      searchStatus.textContent = "Error loading search data.";
+      return;
+    }
+
+    let currentFilters = { tags: [] };
+    let currentSort = { sortBy: 'relevance', sortOrder: 'desc' };
+
+    const performSearch = () => {
+      const query = searchInput.value;
+      const results = searchEngine.search(query, currentFilters, currentSort);
+      displayResults(results, query);
+    };
+
+    const displayResults = (results, query) => {
+      searchResultsContainer.innerHTML = '';
+      if (results.length === 0 && query.length > 0) {
+        noResultsDiv.classList.remove('hidden');
+        searchStatus.textContent = '';
+      } else {
+        noResultsDiv.classList.add('hidden');
+        searchStatus.textContent = `Found ${results.length} results for "${query}".`;
+        results.forEach(result => {
+          const resultElement = document.createElement('div');
+          resultElement.innerHTML = `
+            <a href="/${result.lang}/blog/${result.slug}" class="block p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">${result.highlightedTitle || result.title}</h3>
+              <p class="text-gray-600 dark:text-gray-400">${result.highlightedDescription || result.description}</p>
+            </a>
+          `;
+          searchResultsContainer.appendChild(resultElement);
+        });
+      }
+    };
+
+    const fetchSuggestions = async (query) => {
+      if (query.length < 2) {
+        searchSuggestionsDatalist.innerHTML = '';
+        return;
+      }
+      try {
+        const response = await fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}&lang=${lang}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const suggestions = await response.json();
+        searchSuggestionsDatalist.innerHTML = '';
+        suggestions.forEach(suggestion => {
+          const option = document.createElement('option');
+          option.value = suggestion;
+          searchSuggestionsDatalist.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Failed to fetch suggestions:", error);
+      }
+    };
+
+    searchInput.addEventListener('input', () => {
+      performSearch();
+      fetchSuggestions(searchInput.value);
+    });
+
+    tagFilterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        tagFilterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const tag = button.dataset.tag;
+        currentFilters.tags = tag === 'all' ? [] : [tag];
+        performSearch();
+      });
+    });
+
+    sortSelect.addEventListener('change', () => {
+      const [sortBy, sortOrder] = sortSelect.value.split('-');
+      currentSort = { sortBy, sortOrder };
+      performSearch();
+    });
+
+    clearSearchButton.addEventListener('click', () => {
+      searchInput.value = '';
+      currentFilters.tags = [];
+      tagFilterButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.tag-filter[data-tag="all"]').classList.add('active');
+      currentSort = { sortBy: 'relevance', sortOrder: 'desc' };
+      sortSelect.value = 'relevance-desc';
+      performSearch();
+      searchSuggestionsDatalist.innerHTML = ''; // Clear suggestions on clear
+    });
+
+    // Initial search on page load if there's a query param
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    const initialTag = urlParams.get('tag');
+
+    if (initialQuery) {
+      searchInput.value = initialQuery;
+    }
+    if (initialTag) {
+      currentFilters.tags = [initialTag];
+      document.querySelector(`.tag-filter[data-tag="${initialTag}"]`).classList.add('active');
+    }
+    if (initialQuery || initialTag) {
+      performSearch();
+    }
+  });
+</script>
