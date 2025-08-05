@@ -12,7 +12,6 @@ type Props = CollectionEntry<'blog'>['data'] & {
 };
 
 const { title, description, pubDate, editDate: updatedDate, heroImage, author, tags, slug, readingTime } = Astro.props;
-
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -26,12 +25,8 @@ const sortedLangPosts = allLangPosts.sort(
   (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime()
 );
 
-// The 'slug' prop comes as 'en/blog/post-title' and collection slugs are also 'en/blog/post-title'
-// So we can use the slug directly for matching
 const currentPostCollectionSlug = slug;
 const currentIndex = sortedLangPosts.findIndex((post: CollectionEntry<'blog'>) => post.slug === currentPostCollectionSlug);
-
-
 
 let previousPostData: { url: string; title: string } | undefined = undefined;
 let nextPostData: { url: string; title: string } | undefined = undefined;
@@ -56,14 +51,6 @@ if (currentIndex !== -1) {
     };
   }
 }
-
-console.log("Current Post Slug:", currentPostCollectionSlug);
-console.log("Sorted Lang Posts:", sortedLangPosts.map(p => p.slug));
-console.log("Current Index:", currentIndex);
-console.log("Previous Post Data:", previousPostData);
-console.log("Next Post Data:", nextPostData);
-
-// Structured data is now handled by the enhanced SEO component
 ---
 
 <Layout
@@ -89,14 +76,14 @@ console.log("Next Post Data:", nextPostData);
     url: "https://astro-batavia.vercel.app",
     logo: "https://astro-batavia.vercel.app/favicon.svg",
     sameAs: [
-      "https://github.com/yourusername",
-      "https://twitter.com/yourusername",
-      "https://linkedin.com/company/yourcompany"
+      "https://github.com/leonism",
+      "https://twitter.com/gerryleonugroho",
+      "https://linkedin.com/company/astro-batavia"
     ]
   }}
 >
-
   <article role="article" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
     <!-- Back to blog link -->
     <div class="mb-8">
       <a
@@ -112,6 +99,7 @@ console.log("Next Post Data:", nextPostData);
 
     <!-- Article header -->
     <header class="mb-8">
+      <!-- Removed hardcoded <h1> to avoid duplication with Markdown -->
       {heroImage && (
         <div class="mb-8 rounded-lg overflow-hidden">
           <Picture
@@ -126,14 +114,6 @@ console.log("Next Post Data:", nextPostData);
           />
         </div>
       )}
-
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-        {title}
-      </h1>
-
-      <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-6">
-        {description}
-      </p>
 
       <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
         <div class="flex items-center">
