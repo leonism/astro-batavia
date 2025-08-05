@@ -1,20 +1,22 @@
 import { minify } from 'html-minifier-terser';
+import { glob } from 'glob';
+import fs from 'fs/promises';
+import path from 'path';
 
+/**
+ * @returns {import('astro').AstroIntegration}
+ */
 export default function htmlMinifier() {
   return {
     name: 'html-minifier',
     hooks: {
       'astro:build:done': async ({ dir }) => {
-        const { glob } = await import('glob');
-        const fs = await import('fs/promises');
-        const path = await import('path');
-        
         // Find all HTML files in the dist directory
         const htmlFiles = await glob('**/*.html', {
           cwd: dir.pathname,
           absolute: true,
         });
-        
+
         // Minify each HTML file
         for (const file of htmlFiles) {
           try {
@@ -33,7 +35,7 @@ export default function htmlMinifier() {
               sortAttributes: true,
               sortClassName: true,
             });
-            
+
             await fs.writeFile(file, minified);
             console.log(`Minified: ${path.relative(dir.pathname, file)}`);
           } catch (error) {

@@ -9,7 +9,7 @@ const gzip = promisify(zlib.gzip);
 const brotliCompress = promisify(zlib.brotliCompress);
 
 const COMPRESSION_EXTENSIONS = new Set([
-  '.html', '.css', '.js', '.json', '.xml', '.svg', '.txt',
+  '.html', '.css', '.js', '.json', '.xml', '.svg', '.txt', '.wasm', '.webmanifest'
 ]);
 
 async function compressFile(filePath, data) {
