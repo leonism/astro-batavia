@@ -104,4 +104,4 @@ export function initializeBlogIndex(totalPages, lang) {
       loadMoreBtn.textContent = "Error! Check console";
     }
   });
-});
+}
