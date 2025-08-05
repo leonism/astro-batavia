@@ -1,7 +1,8 @@
 ---
 import { getLangFromUrl } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
-import type { SearchResult } from '../../features/search/EnterpriseSearchEngine.js';
+import EnterpriseSearchEngine, { type SearchResult } from '../../features/search/EnterpriseSearchEngine';
+import { searchIntegration } from '../../features/search/searchIntegration';
 ---
 
 <section
@@ -67,7 +68,8 @@ import type { SearchResult } from '../../features/search/EnterpriseSearchEngine.
     }
 
     const searchEngine = new EnterpriseSearchEngine();
-    const searchIntegration = new SearchIntegration(); // Although not directly used here, it's good to have it initialized if needed elsewhere.
+    // Use the already exported instance of searchIntegration
+    // const searchIntegration = new SearchIntegration(); 
 
     let allDocuments = [];
 
@@ -161,7 +163,7 @@ import type { SearchResult } from '../../features/search/EnterpriseSearchEngine.
     // Close overlay when clicking outside the content area
     searchOverlay.addEventListener("click", (event) => {
       const contentArea = searchOverlay.querySelector(".w-full.max-w-3xl");
-      if (contentArea && !contentArea.contains(event.target as Node)) {
+      if (contentArea && !contentArea.contains(event.target)) {
         toggleSearchOverlay(false);
       }
     });
