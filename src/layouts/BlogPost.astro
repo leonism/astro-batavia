@@ -23,7 +23,7 @@ const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>
 
 // Sort posts by publication date (ascending for easier next/prev indexing)
 const sortedLangPosts = allLangPosts.sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime()
 );
 
 // The 'slug' prop comes as 'en/blog/post-title' and collection slugs are also 'en/blog/post-title'
