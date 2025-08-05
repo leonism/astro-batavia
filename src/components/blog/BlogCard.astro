@@ -11,6 +11,7 @@ export interface Props {
 }
 
 const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
+const pubDate = new Date(post.data.pubDate);
 const t = useTranslations(lang as keyof typeof ui);
 const postUrl = `/${post.slug}`;
 
@@ -125,7 +126,7 @@ const excerptClasses = [
 
           <!-- Published date -->
           <time
-            datetime={post.data.pubDate.toISOString()}
+                        datetime={post.data.pubDate.toISOString()}
             class="flex items-center">
             <svg
               class="w-4 h-4 mr-1"

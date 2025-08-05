@@ -11,7 +11,7 @@ import { useTranslations } from "@/i18n/utils";
 const allPosts = await getCollection(
   "blog",
   ({ id, data }: { id: string; data: { draft: boolean } }) => {
-    return !id.startsWith("es/") && !id.startsWith("ja/") && !data.draft;
+    return id.startsWith("en/") && !data.draft;
   }
 );
 
