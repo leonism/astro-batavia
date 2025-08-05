@@ -59,7 +59,7 @@ const initialPosts = [];
 
 <script type="module">
   import { SearchIntegration } from '/src/features/search/searchIntegration.js';
-  import { EnterpriseSearchEngine } from '/src/features/search/EnterpriseSearchEngine.js';
+  import EnterpriseSearchEngine from '/src/features/search/EnterpriseSearchEngine.js';
 
   document.addEventListener('astro:page-load', async () => {
     const searchInput = document.getElementById('main-search-input');
