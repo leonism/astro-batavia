@@ -23,7 +23,7 @@ const t = useTranslations(lang);
 
 // Get blog posts for this language
 const allPostsUnsorted = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
-  return (lang === 'en' ? !id.includes('/') : id.startsWith(`${lang}/`)) && !data.draft;
+  return id.startsWith(`${lang}/`) && !data.draft;
 });
 
 // Get unique tags from all posts for the current language

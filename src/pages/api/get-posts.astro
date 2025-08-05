@@ -12,7 +12,7 @@ export async function get({ request }: { request: Request }) {
     const tag = url.searchParams.get('tag');
 
     const allPostsUnsorted = await getCollection('blog', ({ id, data }) => {
-      const isLangMatch = lang === 'en' ? !id.includes('/') : id.startsWith(`${lang}/`);
+      const isLangMatch = id.startsWith(`${lang}/`);
       const isTagMatch = tag ? data.tags?.includes(tag) : true;
       return isLangMatch && isTagMatch && !data.draft;
     });
@@ -29,7 +29,7 @@ export async function get({ request }: { request: Request }) {
       url: `/${post.slug.replace(/^(en\/)?/, '')}`,
       title: post.data.title,
       description: post.data.description,
-      pubDate: post.data.pubDate.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' }),
+      pubDate: post.data.pubDate,
       heroImage: post.data.heroImage,
       tags: post.data.tags,
       author: post.data.author,
