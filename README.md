@@ -89,6 +89,7 @@
 
 ### **Build & Optimization**
 - **Vite** - Fast build tool and dev server
+- **HTML, CSS, & JS Minification** - Automatic minification for optimized delivery
 - **Image Optimization** - Automatic image compression and format conversion
 - **Compression** - Gzip and Brotli compression for production builds
 
