@@ -100,7 +100,9 @@ class EnterpriseSearchEngine {
   ]);
 
   constructor() {
-    this.loadAnalyticsFromStorage();
+    if (typeof window !== 'undefined') {
+      this.loadAnalyticsFromStorage();
+    }
   }
 
   /**
@@ -634,6 +636,7 @@ class EnterpriseSearchEngine {
   }
 
   private loadAnalyticsFromStorage(): void {
+    if (typeof window === 'undefined') return;
     try {
       const stored = localStorage.getItem("search-analytics");
       if (stored) {
@@ -650,6 +653,7 @@ class EnterpriseSearchEngine {
   }
 
   private saveAnalyticsToStorage(): void {
+    if (typeof window === 'undefined') return;
     try {
       localStorage.setItem("search-analytics", JSON.stringify(this.analytics));
     } catch (error) {
