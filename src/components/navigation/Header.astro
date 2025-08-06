@@ -12,7 +12,7 @@ const currentPath = Astro.url.pathname;
 <header
   class="fixed top-0 z-50 w-full bg-white/50 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50"
   aria-label="Main navigation">
-  <nav role="navigation" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <HeaderLogo lang={lang} />
       <div class="hidden md:flex items-center gap-5">
@@ -24,7 +24,7 @@ const currentPath = Astro.url.pathname;
       </div>
       <div class="flex items-center">
         <button id="open-search-overlay" class="text-gray-600 mr-2 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Open search">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
         </button>
@@ -33,15 +33,16 @@ const currentPath = Astro.url.pathname;
     </div>
   </nav>
 </header>
-<div id="mobile-nav-overlay" class="mobile-nav-overlay hidden md:hidden"></div>
+<div id="mobile-nav-overlay" class="mobile-nav-overlay hidden md:hidden" aria-hidden="true"></div>
 <div
   id="mobile-menu"
   class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
-  aria-expanded="false"
-  aria-label="Mobile menu">
+  aria-modal="true"
+  aria-label="Mobile menu"
+  role="dialog">
   <div class="flex justify-end mb-4">
     <button id="close-mobile-menu" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Close mobile menu">
-      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </button>
@@ -90,27 +91,52 @@ const currentPath = Astro.url.pathname;
     const openSearchOverlayButton = document.getElementById("open-search-overlay");
     const closeSearchOverlayButtonFromOverlay = document.getElementById("close-search-overlay");
 
+    let lastActiveElement;
+
     const openMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
+      lastActiveElement = document.activeElement;
       mobileMenu.classList.remove("hidden");
       mobileNavOverlay.classList.remove("hidden");
+      mobileNavOverlay.setAttribute("aria-hidden", "false");
       document.body.classList.add("mobile-nav-open");
-      mobileNavOverlay.classList.add("is-active");
-      mobileMenu.classList.add("is-active");
-      mobileMenu.setAttribute("aria-expanded", "true");
+      mobileMenu.setAttribute("aria-hidden", "false");
+      mobileMenuButton.setAttribute("aria-expanded", "true");
+      
+      const focusableElements = mobileMenu.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const firstFocusableElement = focusableElements[0];
+      const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+      firstFocusableElement.focus();
+
+      mobileMenu.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusableElement) {
+            lastFocusableElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastFocusableElement) {
+            firstFocusableElement.focus();
+            e.preventDefault();
+          }
+        }
+      });
     };
 
     const closeMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
       document.body.classList.remove("mobile-nav-open");
-      mobileNavOverlay.classList.remove("is-active");
-      mobileMenu.classList.remove("is-active");
-      mobileMenu.setAttribute("aria-expanded", "false");
-      // Add hidden class after transition for better UX
-      setTimeout(() => {
-        mobileMenu.classList.add("hidden");
-        mobileNavOverlay.classList.add("hidden");
-      }, 300); // Match CSS transition duration
+      mobileMenu.classList.add("hidden");
+      mobileNavOverlay.classList.add("hidden");
+      mobileMenu.setAttribute("aria-hidden", "true");
+      mobileNavOverlay.setAttribute("aria-hidden", "true");
+      mobileMenuButton.setAttribute("aria-expanded", "false");
+      if (lastActiveElement) {
+        lastActiveElement.focus();
+      }
     };
 
     if (mobileMenuButton) {
@@ -133,32 +159,12 @@ const currentPath = Astro.url.pathname;
       closeSearchOverlayButtonFromOverlay.addEventListener("click", () => toggleSearchOverlay(false));
     }
 
-    // Close menu on escape key press
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && mobileMenu && mobileMenu.classList.contains("is-active")) {
+      if (event.key === "Escape" && !mobileMenu.classList.contains("hidden")) {
         closeMobileMenu();
       }
-      toggleSearchOverlay(false);
-    });
-
-    // Close menu when clicking outside of it
-    document.addEventListener("click", (event) => {
-      if (mobileMenu && mobileNavOverlay && mobileMenuButton && mobileMenu.classList.contains("is-active")) {
-        const target = event.target;
-        if (!(target instanceof Node)) return;
-        if (!mobileMenu.contains(target) && !mobileMenuButton.contains(target)) {
-          closeMobileMenu();
-        }
-      }
-      const target = event.target;
-      if (!(target instanceof Node)) return;
-      const searchOverlay = document.getElementById("search-overlay");
-      const openSearchOverlayButton = document.getElementById("open-search-overlay");
-      if (searchOverlay && !searchOverlay.classList.contains("hidden")) {
-        const contentArea = searchOverlay.querySelector(".w-full.max-w-3xl");
-        if (contentArea && !contentArea.contains(target) && target !== openSearchOverlayButton) {
-          toggleSearchOverlay(false);
-        }
+      if (event.key === "Escape" && !document.getElementById("search-overlay").classList.contains("hidden")) {
+        toggleSearchOverlay(false);
       }
     });
   });
