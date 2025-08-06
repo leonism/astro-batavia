@@ -30,6 +30,7 @@ const { title, links, lang } = Astro.props;
             }
             target={link.isExternal ? "_blank" : undefined}
             rel={link.isExternal ? "noopener noreferrer" : undefined}
+            aria-label={link.isExternal ? `${link.text} (opens in a new tab)` : undefined}
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
             {link.text}
           </a>
