@@ -69,7 +69,6 @@ const iconBaseClass = "w-5 h-5 transition-transform";
 <section
   class:list={[sectionClass]}
   aria-labelledby="hero-title"
-  role="region"
   {...rest}>
   {
     showDecorativeElements && (
@@ -87,7 +86,7 @@ const iconBaseClass = "w-5 h-5 transition-transform";
   }
 
   <div class:list={[containerClass]}>
-    <hgroup class="space-y-6">
+    <div class="space-y-6">
       {
         title && (
           <h1
@@ -105,7 +104,7 @@ const iconBaseClass = "w-5 h-5 transition-transform";
           />
         )
       }
-    </hgroup>
+    </div>
 
     {
       (cta1Text || cta2Text) && (
@@ -114,7 +113,7 @@ const iconBaseClass = "w-5 h-5 transition-transform";
             <a
               href={cta1Link}
               class:list={[cta1Class]}
-              aria-label={cta1AriaLabel}>
+              aria-label={cta1AriaLabel || cta1Text}>
               {cta1IconSvg && cta1IconPosition === "before" && (
                 <svg
                   class:list={[iconBaseClass, "mr-2"]}
@@ -158,7 +157,7 @@ const iconBaseClass = "w-5 h-5 transition-transform";
             <a
               href={cta2Link}
               class:list={[cta2Class]}
-              aria-label={cta2AriaLabel}>
+              aria-label={cta2AriaLabel || cta2Text}>
               {cta2IconSvg && cta2IconPosition === "before" && (
                 <svg
                   class:list={[iconBaseClass, "mr-2"]}
@@ -217,4 +216,4 @@ const iconBaseClass = "w-5 h-5 transition-transform";
       )
     }
   </div>
-</header>
+</section>

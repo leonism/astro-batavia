@@ -11,7 +11,7 @@ const { lang, currentYear } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<footer class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+<div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
   <div class="flex flex-col md:flex-row justify-between items-center gap-4">
     <div class="flex items-center gap-4">
       <p class="text-gray-500 dark:text-gray-400 text-sm">
@@ -22,7 +22,7 @@ const t = useTranslations(lang);
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
-        aria-label="RSS Feed">
+        aria-label="RSS Feed (opens in a new tab)">
         <svg
           class="sm:w-3 sm:h-3 w-4 h-4"
           fill="currentColor"
@@ -44,9 +44,9 @@ const t = useTranslations(lang);
         target="_blank"
         rel="noopener noreferrer"
         class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200 ml-1"
-        aria-label="Astro">
+        aria-label="Made with Astro (opens in a new tab)">
         Astro
       </a>
     </p>
   </div>
-</footer>
+</div>
