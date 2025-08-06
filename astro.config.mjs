@@ -6,8 +6,6 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mjs';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
-import gzipPlugin from 'rollup-plugin-gzip';
-import brotliPlugin from 'rollup-plugin-brotli';
 
 // https://astro.build/config
 export default defineConfig({
@@ -65,14 +63,6 @@ export default defineConfig({
         },
       },
     },
-    plugins: [
-      gzipPlugin({
-        filter: /\.(html|js|css|svg|json|xml)$/i,
-      }),
-      brotliPlugin({
-        filter: /\.(html|js|css|svg|json|xml)$/i,
-      }),
-    ],
   },
   server: {
     host: '0.0.0.0',
