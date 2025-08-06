@@ -2,9 +2,10 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import zlib from 'zlib';
 import { promisify } from 'util';
-import { fileURLToPath } from 'url';
 import { performance } from 'perf_hooks';
 import os from 'os';
+import { glob } from 'glob';
+import { fileURLToPath } from 'url';
 
 const gzip = promisify(zlib.gzip);
 const brotliCompress = promisify(zlib.brotliCompress);
@@ -15,65 +16,31 @@ const SUPPORTED_EXTENSIONS = new Set([
 
 const DEFAULT_DIST_DIR = 'dist';
 
-async function compressFile(filePath, data) {
-  const results = {
-    success: [],
-    errors: [],
-  };
-  const gzipPath = `${filePath}.gz`;
-  const brotliPath = `${filePath}.br`;
-
-  try {
-    const gzipData = await gzip(data, { level: zlib.constants.Z_BEST_COMPRESSION });
-    await fs.writeFile(gzipPath, gzipData);
-    results.success.push(gzipPath);
-  } catch (err) {
-    results.errors.push({ type: 'Gzip', error: err });
-  }
-
-  try {
-    const brotliData = await brotliCompress(data, {
-      params: {
-        [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
-        [zlib.constants.BROTLI_PARAM_SIZE_HINT]: data.length,
-      },
-    });
-    await fs.writeFile(brotliPath, brotliData);
-    results.success.push(brotliPath);
-  } catch (err) {
-    results.errors.push({ type: 'Brotli', error: err });
-  }
-
-  return results;
+// Runs gzip and brotli in parallel for a single file's data
+async function compressData(data) {
+  const gzipPromise = gzip(data, { level: zlib.constants.Z_BEST_COMPRESSION });
+  const brotliPromise = brotliCompress(data, {
+    params: {
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 11, // Max quality
+      [zlib.constants.BROTLI_PARAM_SIZE_HINT]: data.length,
+    },
+  });
+  // Await both promises to run them in parallel
+  return Promise.all([gzipPromise, brotliPromise]);
 }
 
-async function* walkDirectory(dir) {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      yield* walkDirectory(fullPath);
-    } else if (entry.isFile()) {
-      yield fullPath;
-    }
-  }
-}
-
+// Finds all files matching the supported extensions using glob
 async function getCompressibleFiles(dir) {
-  const compressible = [];
-  for await (const file of walkDirectory(dir)) {
-    const ext = path.extname(file).toLowerCase();
-    if (SUPPORTED_EXTENSIONS.has(ext)) {
-      compressible.push(file);
-    }
-  }
-  return compressible;
+  const extensions = Array.from(SUPPORTED_EXTENSIONS).map(ext => ext.substring(1));
+  const pattern = `**/*.{${extensions.join(',')}}`;
+  // Use glob for faster file discovery
+  return glob(pattern, { cwd: dir, absolute: true, nodir: true });
 }
 
-async function runCompressionEngine(distDir = DEFAULT_DIST_DIR) {
+async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verbose: false }) {
   const startTime = performance.now();
-  console.log('🚀 Starting enterprise-grade compression build tool...');
-  console.log(`🔍 Scanning for compressible files in: ${distDir}`);
+  console.log('🚀 Starting high-performance compression...');
+  console.log(`🔍 Finding compressible files in: ${distDir}`);
 
   try {
     await fs.access(distDir);
@@ -96,34 +63,38 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR) {
   const queue = [...files];
   let compressedVariants = 0;
   let filesProcessed = 0;
-  let filesWithErrors = 0;
   const allErrors = [];
 
   const worker = async () => {
-    while (queue.length > 0) {
+    while (true) {
       const filePath = queue.shift();
-      if (!filePath) continue;
+      if (!filePath) {
+        return; // No more files
+      }
 
       try {
         const data = await fs.readFile(filePath);
-        const result = await compressFile(filePath, data);
+        const [gzipData, brotliData] = await compressData(data);
 
-        result.success.forEach((out) => console.log(`✅ Compressed: ${path.relative(process.cwd(), out)}`));
-        compressedVariants += result.success.length;
+        const writeGzipPromise = fs.writeFile(`${filePath}.gz`, gzipData);
+        const writeBrotliPromise = fs.writeFile(`${filePath}.br`, brotliData);
 
-        if (result.errors.length > 0) {
-          filesWithErrors++;
-          result.errors.forEach(e => {
-            console.error(`❌ ${e.type} failed for: ${filePath}`, e.error);
-            allErrors.push({ filePath, error: `[${e.type}] ${e.error.message}` });
-          });
+        await Promise.all([writeGzipPromise, writeBrotliPromise]);
+
+        if (options.verbose) {
+          const relativePath = path.relative(process.cwd(), filePath);
+          console.log(`✅ Compressed: ${relativePath} (.gz, .br)`);
         }
+        
+        compressedVariants += 2;
+
       } catch (err) {
-        filesWithErrors++;
-        console.error(`❌ Failed to read file: ${filePath}`, err);
-        allErrors.push({ filePath, error: `Failed to read file: ${err.message}` });
+        console.error(`❌ Failed to compress: ${filePath}`, err);
+        allErrors.push({ filePath, error: err.message });
       } finally {
         filesProcessed++;
+        const progress = ((filesProcessed / files.length) * 100).toFixed(0);
+        process.stdout.write(`[${'#'.repeat(Math.floor(parseInt(progress) / 5)).padEnd(20, ' ')}] ${progress}% (${filesProcessed}/${files.length})\r`);
       }
     }
   };
@@ -131,18 +102,19 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR) {
   const workerPromises = Array.from({ length: numWorkers }, worker);
   await Promise.all(workerPromises);
 
+  process.stdout.write('\n'); // Final newline after progress indicator
+
   const endTime = performance.now();
   const duration = (endTime - startTime).toFixed(2);
 
   console.log('\n' + '-'.repeat(50));
   console.log('🏁 Compression Task Summary');
   console.log('-'.repeat(50));
-  console.log(`- Files Scanned: ${files.length}`);
-  console.log(`- Files Processed: ${filesProcessed}`);
+  console.log(`- Files Scanned & Processed: ${filesProcessed}`);
   console.log(`- Compressed Variants Created: ${compressedVariants}`);
-  console.log(`- Files with Errors: ${filesWithErrors}`);
+  console.log(`- Errors: ${allErrors.length}`);
   
-  if (filesWithErrors > 0) {
+  if (allErrors.length > 0) {
     console.log('\n🚨 Error Details:');
     allErrors.forEach(e => {
       console.log(`  - File: ${e.filePath}\n    Error: ${e.error}`);
@@ -152,7 +124,7 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR) {
   console.log(`\n⏱️  Total Execution Time: ${duration}ms`);
   console.log('-'.repeat(50));
 
-  if (filesWithErrors > 0) {
+  if (allErrors.length > 0) {
     console.log('\n❌ Build finished with errors.');
     process.exit(1);
   } else {
@@ -160,10 +132,11 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR) {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url.startsWith('file://') && process.argv[1] === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
-  const targetDir = args[0] || DEFAULT_DIST_DIR;
-  runCompressionEngine(targetDir).catch((err) => {
+  const targetDir = args.find(arg => !arg.startsWith('--')) || DEFAULT_DIST_DIR;
+  const verbose = args.includes('--verbose');
+  runCompressionEngine(targetDir, { verbose }).catch((err) => {
     console.error('An unhandled error occurred in the compression engine:', err);
     process.exit(1);
   });
