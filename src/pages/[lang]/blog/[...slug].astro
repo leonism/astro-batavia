@@ -50,9 +50,10 @@ if (!lang || !isValidLanguage(lang)) {
 }
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content, headings = [] } = await post.render();
+console.log('Extracted headings:', headings);
 ---
 
-<BlogPost {...post.data} slug={post.slug}>
+<BlogPost {...post.data} slug={post.slug} headings={headings}>
   <Content />
 </BlogPost>

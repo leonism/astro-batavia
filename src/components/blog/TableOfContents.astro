@@ -1,0 +1,133 @@
+---
+import { useTranslations } from '@/i18n/utils';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  lang: string;
+}
+
+const { headings, lang } = Astro.props;
+const t = useTranslations(lang);
+
+const MAX_VISIBLE_HEADINGS = 5;
+const hasMoreHeadings = headings.length > MAX_VISIBLE_HEADINGS;
+---
+
+<div class="toc-container bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+  <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+    {t('blog.tableOfContents')}
+  </h2>
+  <nav aria-label={t('blog.tableOfContents')}>
+    <ul id="toc-list" class="space-y-2">
+      {headings.slice(0, MAX_VISIBLE_HEADINGS).map((heading) => (
+        <li>
+          <a
+            href={`#${heading.slug}`}
+            class={`block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200
+              depth-${heading.depth}`}
+            style={{ paddingLeft: `${(heading.depth - 2) * 1}rem` }}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+      {hasMoreHeadings && (
+        <div id="toc-more-content" class="hidden space-y-2">
+          {headings.slice(MAX_VISIBLE_HEADINGS).map((heading) => (
+            <li>
+              <a
+                href={`#${heading.slug}`}
+                class={`block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200
+                  depth-${heading.depth}`}
+                style={{ paddingLeft: `${(heading.depth - 2) * 1}rem` }}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </div>
+      )}
+    </ul>
+    {hasMoreHeadings && (
+      <button
+        id="toc-toggle-button"
+        class="mt-4 w-full text-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200 font-medium"
+        aria-expanded="false"
+        aria-controls="toc-more-content"
+      >
+        {t('blog.showMore')}
+      </button>
+    )}
+  </nav>
+</div>
+
+<style is:global>
+  .toc-container ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .toc-container li {
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-container a {
+    display: block;
+    padding: 0.25rem 0;
+  }
+
+  .toc-container a.depth-2 {
+    font-weight: 600;
+  }
+
+  .toc-container a.depth-3 {
+    font-weight: 500;
+  }
+
+  .toc-container a.depth-4 {
+    font-weight: 400;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .toc-container {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleButton = document.getElementById('toc-toggle-button');
+    const moreContent = document.getElementById('toc-more-content');
+
+    if (toggleButton && moreContent) {
+      let isExpanded = false;
+
+      toggleButton.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        if (isExpanded) {
+          moreContent.classList.remove('hidden');
+          toggleButton.textContent = toggleButton.dataset.showLessText || 'Show less';
+          toggleButton.setAttribute('aria-expanded', 'true');
+        } else {
+          moreContent.classList.add('hidden');
+          toggleButton.textContent = toggleButton.dataset.showMoreText || 'Show more';
+          toggleButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Set initial button text based on i18n
+      toggleButton.textContent = toggleButton.dataset.showMoreText || 'Show more';
+    }
+  });
+</script>
