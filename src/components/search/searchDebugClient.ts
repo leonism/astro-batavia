@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       searchOverlay.classList.add("hidden");
       searchOverlay.setAttribute("aria-hidden", "true");
-      searchInput.value = "";
+      (searchInput as HTMLInputElement).value = "";
       searchResultsContainer.innerHTML = "";
     }
   };

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * upon clicking, as the full pagination logic is not implemented.
    */
   function initializeLoadMoreButton() {
-    const loadMoreBtn = document.getElementById("load-more");
+    const loadMoreBtn = document.getElementById("load-more") as HTMLButtonElement;
 
     if (loadMoreBtn) {
       loadMoreBtn.addEventListener("click", () => {
