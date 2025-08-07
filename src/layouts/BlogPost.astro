@@ -6,13 +6,15 @@ import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro
 import ShareButtons from '@/components/blog/ShareButtons.astro';
 import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
 import RelatedArticles from '@/components/blog/RelatedArticles.astro';
+import TableOfContents from '@/components/blog/TableOfContents.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
   readingTime?: string;
+  headings: { depth: number; slug: string; text: string }[];
 };
 
-const { title, description, pubDate, editDate: updatedDate, heroImage, author, tags, slug, readingTime } = Astro.props;
+const { title, description, pubDate, editDate: updatedDate, heroImage, author, tags, slug, readingTime, headings } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -109,7 +111,6 @@ const relatedPosts = allLangPosts
 
     <!-- Article header -->
     <header class="mb-8">
-      <!-- Removed hardcoded <h1> to avoid duplication with Markdown -->
       {heroImage && (
         <div class="mb-8 rounded-lg overflow-hidden">
           <Picture
@@ -175,6 +176,10 @@ const relatedPosts = allLangPosts
         </div>
       )}
     </header>
+
+    {headings.length > 0 && (
+      <TableOfContents headings={headings} lang={lang} />
+    )}
 
     <!-- Article content -->
     <div class="prose prose-lg max-w-none dark:prose-invert">
