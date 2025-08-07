@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function initializeLoadMoreButton() {
     const loadMoreBtn = document.getElementById("load-more");
 
-    if (loadMoreBtn) {
+    if (loadMoreBtn instanceof HTMLButtonElement) {
       loadMoreBtn.addEventListener("click", () => {
         loadMoreBtn.textContent = "No more articles to load";
         loadMoreBtn.disabled = true;

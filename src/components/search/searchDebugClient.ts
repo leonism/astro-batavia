@@ -21,6 +21,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  interface SearchDocument {
+    id: string;
+    title: string;
+    description: string;
+    content: string;
+    tags: string[];
+    url: string;
+    pubDate: string;
+    author: string;
+    lang: string;
+    slug: string;
+  }
+
   // Test fetch to search index
   try {
     console.log("Fetching search index...");
@@ -31,13 +44,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const data = await response.json();
+    const data: SearchDocument[] = await response.json();
     console.log("Search index data:", data.length, "documents");
     console.log("First document:", data[0]);
     
     // Simple search test
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
+    searchInput.addEventListener('input', (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      if (!target) return;
+      const query = target.value.toLowerCase();
       console.log("Search query:", query);
       
       if (query.length < 2) {
@@ -45,10 +60,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
       
-      const results = data.filter(doc => 
+      const results = data.filter((doc: SearchDocument) => 
         doc.title.toLowerCase().includes(query) ||
         doc.description.toLowerCase().includes(query) ||
-        doc.tags.some(tag => tag.toLowerCase().includes(query))
+        doc.tags.some((tag: string) => tag.toLowerCase().includes(query))
       );
       
       console.log("Search results:", results.length);
@@ -56,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (results.length === 0) {
         searchResultsContainer.innerHTML = `<p>No results found for "${query}"</p>`;
       } else {
-        searchResultsContainer.innerHTML = results.map(result => `
+        searchResultsContainer.innerHTML = results.map((result: SearchDocument) => `
           <div class="p-4 border rounded mb-2">
             <h3 class="font-bold">${result.title}</h3>
             <p class="text-gray-600">${result.description}</p>
@@ -70,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to load search index:", error);
   }
 
-  const toggleSearchOverlay = (show) => {
+  const toggleSearchOverlay = (show: boolean) => {
     console.log("Toggle search overlay:", show);
     if (show) {
       searchOverlay.classList.remove("hidden");
@@ -79,7 +94,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       searchOverlay.classList.add("hidden");
       searchOverlay.setAttribute("aria-hidden", "true");
-      (searchInput as HTMLInputElement).value = "";
+      if (searchInput instanceof HTMLInputElement) {
+        searchInput.value = "";
+      }
       searchResultsContainer.innerHTML = "";
     }
   };
@@ -104,9 +121,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Close overlay when clicking outside the content area
   searchOverlay.addEventListener("click", (event) => {
     const contentArea = searchOverlay.querySelector(".max-w-4xl");
-    if (contentArea && !contentArea.contains(event.target)) {
+    if (contentArea && event.target instanceof Node && !contentArea.contains(event.target)) {
       toggleSearchOverlay(false);
     }
   });
 });
-
