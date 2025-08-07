@@ -17,10 +17,8 @@ export const GET: APIRoute = async () => {
       url: `/blog/${post.slug}`,
       pubDate: post.data.pubDate,
       author: post.data.author,
-      category: post.data.category,
       lang: post.slug.split('/')[0], // Assuming slug format like 'en/post-title'
       slug: post.slug,
-      readingTime: post.data.readingTime,
     }));
 
     const searchEngine = new EnterpriseSearchEngine();
