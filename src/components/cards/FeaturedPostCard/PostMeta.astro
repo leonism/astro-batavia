@@ -16,7 +16,7 @@ const { post, authorImage, authorSlug } = Astro.props;
   <div
     class="flex items-center gap-1.5 font-medium group-author">
     <div
-      class="relative w-8 h-8 rounded-full overflow-hidden border-2 border-transparent group-hover/author:border-blue-400 transition-colors duration-300 avatar-gradient">
+      class="relative w-12 h-12 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-transparent group-hover/author:border-blue-400 transition-colors duration-300 avatar-gradient">
       <Picture
         src={post.data.authorImage || "/images/placeholder-hero.svg"}
         alt={post.data.author}
@@ -26,7 +26,7 @@ const { post, authorImage, authorSlug } = Astro.props;
       />
     </div>
     <span
-      class="group-hover/author:text-blue-300 transition-colors duration-300">
+      class="group-hover/author:text-blue-300 transition-colors duration-300 line-clamp-1 sm:line-clamp-none">
       {post.data.author}
     </span>
   </div>
@@ -36,7 +36,7 @@ const { post, authorImage, authorSlug } = Astro.props;
   </span>
   <time
     datetime={new Date(post.data.pubDate).toISOString()}
-    class="flex items-center gap-1.5 text-blue-200/80 font-light">
+    class="flex items-center gap-1.5 text-blue-200/80 font-light sm:line-clamp-1 line-clamp-none sm:text-base md:text-lg">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
