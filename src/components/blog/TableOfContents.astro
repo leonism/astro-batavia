@@ -15,56 +15,44 @@ interface Props {
 
 const { headings, lang } = Astro.props;
 const t = useTranslations(lang);
-
-const MAX_VISIBLE_HEADINGS = 5;
-const hasMoreHeadings = headings.length > MAX_VISIBLE_HEADINGS;
 ---
 
 <div class="toc-container bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
-  <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-    {t('blog.tableOfContents')}
-  </h2>
-  <nav aria-label={t('blog.tableOfContents')}>
-    <ul id="toc-list" class="space-y-2">
-      {headings.slice(0, MAX_VISIBLE_HEADINGS).map((heading) => (
+  <div class="flex items-center justify-between cursor-pointer" id="toc-toggle-wrapper">
+    <div class="flex items-center gap-2">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+        {t('blog.tableOfContents')}
+      </h2>
+    </div>
+    <div class="flex items-center justify-center w-8 h-8 border border-primary-600 dark:border-primary-400 rounded-full">
+      <svg
+        id="toc-arrow-icon"
+        class="w-5 h-5 text-primary-600 dark:text-primary-400 transition-transform duration-300 transform rotate-0"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+  </div>
+
+  <nav aria-label={t('blog.tableOfContents')} class="mt-4">
+    <ul id="toc-list" class="space-y-2 hidden">
+      {headings.map((heading) => (
         <li>
           <a
             href={`#${heading.slug}`}
-            class={`block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200
-              depth-${heading.depth}`}
+            class={`block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 depth-${heading.depth}`}
             style={{ paddingLeft: `${(heading.depth - 2) * 1}rem` }}
           >
             {heading.text}
           </a>
         </li>
       ))}
-      {hasMoreHeadings && (
-        <div id="toc-more-content" class="hidden space-y-2">
-          {headings.slice(MAX_VISIBLE_HEADINGS).map((heading) => (
-            <li>
-              <a
-                href={`#${heading.slug}`}
-                class={`block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200
-                  depth-${heading.depth}`}
-                style={{ paddingLeft: `${(heading.depth - 2) * 1}rem` }}
-              >
-                {heading.text}
-              </a>
-            </li>
-          ))}
-        </div>
-      )}
     </ul>
-    {hasMoreHeadings && (
-      <button
-        id="toc-toggle-button"
-        class="mt-4 w-full text-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200 font-medium"
-        aria-expanded="false"
-        aria-controls="toc-more-content"
-      >
-        {t('blog.showMore')}
-      </button>
-    )}
   </nav>
 </div>
 
@@ -95,7 +83,6 @@ const hasMoreHeadings = headings.length > MAX_VISIBLE_HEADINGS;
     font-weight: 400;
   }
 
-  /* Responsive adjustments */
   @media (max-width: 768px) {
     .toc-container {
       margin-left: 0;
@@ -108,27 +95,20 @@ const hasMoreHeadings = headings.length > MAX_VISIBLE_HEADINGS;
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const toggleButton = document.getElementById('toc-toggle-button');
-    const moreContent = document.getElementById('toc-more-content');
+    const toggleWrapper = document.getElementById('toc-toggle-wrapper');
+    const tocList = document.getElementById('toc-list');
+    const arrowIcon = document.getElementById('toc-arrow-icon');
 
-    if (toggleButton && moreContent) {
+    if (toggleWrapper && tocList && arrowIcon) {
       let isExpanded = false;
 
-      toggleButton.addEventListener('click', () => {
+      toggleWrapper.addEventListener('click', () => {
         isExpanded = !isExpanded;
-        if (isExpanded) {
-          moreContent.classList.remove('hidden');
-          toggleButton.textContent = toggleButton.dataset.showLessText || 'Show less';
-          toggleButton.setAttribute('aria-expanded', 'true');
-        } else {
-          moreContent.classList.add('hidden');
-          toggleButton.textContent = toggleButton.dataset.showMoreText || 'Show more';
-          toggleButton.setAttribute('aria-expanded', 'false');
-        }
-      });
 
-      // Set initial button text based on i18n
-      toggleButton.textContent = toggleButton.dataset.showMoreText || 'Show more';
+        tocList.classList.toggle('hidden', !isExpanded);
+        arrowIcon.classList.toggle('rotate-180', isExpanded);
+        toggleWrapper.setAttribute('aria-expanded', isExpanded.toString());
+      });
     }
   });
 </script>
