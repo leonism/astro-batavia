@@ -20,7 +20,7 @@ const { post, index } = Astro.props;
   aria-level={index === 0 ? 1 : 2}>
   <a
     href={`/${post.slug}`}
-    class="hover:text-primary-200 focus:text-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors duration-200 line-clamp-2"
+    class="hover:text-primary-200 focus:text-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors duration-200 line-clamp-2 sm:line-clamp-none"
     aria-describedby={`featured-post-desc-${post.slug}`}>
     {post.data.title}
   </a>
