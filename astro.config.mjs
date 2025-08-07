@@ -4,7 +4,7 @@ import spotlightjs from '@spotlightjs/astro';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
-import { remarkReadingTime } from './src/utils/remark-reading-time.mjs';
+import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 
 // https://astro.build/config
