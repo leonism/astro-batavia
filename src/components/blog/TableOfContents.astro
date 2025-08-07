@@ -110,21 +110,36 @@ const t = useTranslations(lang);
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  const initTocToggle = () => {
     const toggleWrapper = document.getElementById('toc-toggle-wrapper');
     const tocList = document.getElementById('toc-list');
     const arrowIcon = document.getElementById('toc-arrow-icon');
 
-    if (toggleWrapper && tocList && arrowIcon) {
-      let isExpanded = false;
-
-      toggleWrapper.addEventListener('click', () => {
-        isExpanded = !isExpanded;
-
-        tocList.classList.toggle('hidden', !isExpanded);
-        arrowIcon.classList.toggle('rotate-180', isExpanded);
-        toggleWrapper.setAttribute('aria-expanded', isExpanded.toString());
-      });
+    if (!toggleWrapper || !tocList || !arrowIcon) {
+      return;
     }
-  });
+
+    // Prevent re-initializing the script on the same element
+    if (toggleWrapper.dataset.tocInitialized) {
+      return;
+    }
+    toggleWrapper.dataset.tocInitialized = 'true';
+
+    // Set initial ARIA state based on the visibility of the content
+    const isInitiallyExpanded = !tocList.classList.contains('hidden');
+    toggleWrapper.setAttribute('aria-expanded', isInitiallyExpanded.toString());
+    arrowIcon.classList.toggle('rotate-180', isInitiallyExpanded);
+
+    toggleWrapper.addEventListener('click', () => {
+      const isExpanded = toggleWrapper.getAttribute('aria-expanded') === 'true';
+      const newIsExpanded = !isExpanded;
+
+      toggleWrapper.setAttribute('aria-expanded', newIsExpanded.toString());
+      tocList.classList.toggle('hidden', !newIsExpanded);
+      arrowIcon.classList.toggle('rotate-180', newIsExpanded);
+    });
+  };
+
+  // Run the script on initial page load and after Astro's client-side navigation
+  document.addEventListener('astro:page-load', initTocToggle);
 </script>
