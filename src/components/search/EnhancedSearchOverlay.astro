@@ -13,7 +13,7 @@ const t = useTranslations(lang);
   aria-hidden="true"
 >
   <h2 id="search-overlay-title" class="sr-only">Search</h2>
-  
+
   <!-- Close Button -->
   <button
     id="close-search-overlay"
@@ -44,7 +44,7 @@ const t = useTranslations(lang);
           <span id="search-time">0ms</span>
         </div>
       </div>
-      
+
       <!-- Search Shortcuts -->
       <div class="absolute right-2 top-1/2 transform -translate-y-1/2 hidden md:flex items-center space-x-1 text-xs text-gray-400">
         <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded border">ESC</kbd>
@@ -54,7 +54,7 @@ const t = useTranslations(lang);
     <!-- Search Suggestions Section -->
     <div id="search-suggestions" class="mb-6">
       <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">Start typing to search...</div>
-      
+
       <!-- Categories -->
       <div id="categories-section" class="mb-4">
         <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">CATEGORIES</h3>
@@ -136,8 +136,6 @@ const t = useTranslations(lang);
   </div>
 </section>
 
-<script type="module" src="/js/workingSearchClient.ts"></script>
-
 <style>
   #search-overlay {
     animation: fadeIn 0.3s ease-out forwards;
@@ -194,4 +192,3 @@ const t = useTranslations(lang);
     @apply ring-2 ring-primary-500 ring-opacity-50;
   }
 </style>
-
