@@ -83,7 +83,7 @@ const excerptClasses = [
     )}
 
     <h2 class={titleClasses} id={`blog-post-title-${post.id}`}>
-      <a href={postUrl} class="stretched-link">
+      <a href={postUrl}>
         {post.data.title}
       </a>
     </h2>
@@ -131,16 +131,6 @@ const excerptClasses = [
 </article>
 
 <style>
-  .stretched-link::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    content: "";
-  }
-
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
