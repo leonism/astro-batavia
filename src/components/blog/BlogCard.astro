@@ -68,7 +68,7 @@ const excerptClasses = [
 
   <div class={contentClasses}>
     {post.data.tags && post.data.tags.length > 0 && (
-      <div class={`flex flex-wrap gap-2 mb-3 ${isFeatured ? "md:mb-4" : ""}`}>
+      <div class={`flex flex-wrap gap-2 mb-3 ${isFeatured ? "md:mb-4" : ""}`} role="group" aria-label="Post tags">
         {post.data.tags.slice(0, 3).map((tag: string) => (
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
             #{tag}

@@ -151,10 +151,11 @@ const {
   </head>
   <body
     class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black">Skip to content</a>
     <GoogleTagmanagerNoscript id="GTM-5BH6SQST" />
     <div id="app" class="flex flex-col md:min-h-full lg:min-h-screen">
       <Header />
-      <main role="main" class="flex-1 pt-16">
+      <main role="main" id="main-content" class="flex-1 pt-16">
         <slot />
       </main>
       <Footer />

@@ -286,6 +286,17 @@ html {
   border: 0;
 }
 
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
 /* Spinner animation */
 @keyframes spin {
   to {

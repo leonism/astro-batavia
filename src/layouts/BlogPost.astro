@@ -94,109 +94,111 @@ const relatedPosts = allLangPosts
     ]
   }}
 >
-  <article role="article" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <main id="main-content">
+    <article role="article" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- Back to blog link -->
-    <div class="mb-8">
-      <a
-        href={getLocalizedPath('/blog', lang)}
-        class="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
-      >
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        {t('blog.back-to-blog')}
-      </a>
-    </div>
-
-    <!-- Article header -->
-    <header class="mb-8">
-      {heroImage && (
-        <div class="mb-8 rounded-lg overflow-hidden">
-          <Picture
-            src={heroImage}
-            alt={title}
-            width={1200}
-            height={600}
-            class="w-full h-64 sm:h-80 lg:h-96 object-cover"
-            loading="eager"
-            decoding="async"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-          />
-        </div>
-      )}
-
-      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-        <div class="flex items-center">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      <!-- Back to blog link -->
+      <div class="mb-8">
+        <a
+          href={getLocalizedPath('/blog', lang)}
+          class="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
           </svg>
-          <span>{author}</span>
-        </div>
-
-        <div class="flex items-center">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-          </svg>
-          <time datetime={pubDate.toISOString()}>
-            {t('blog.publishedOn')} {formatDate(pubDate, lang)}
-          </time>
-        </div>
-
-        {updatedDate && (
-          <div class="flex items-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-            </svg>
-            <time datetime={updatedDate.toISOString()}>
-              Updated {formatDate(updatedDate, lang)}
-            </time>
-          </div>
-        )}
-
-        {readingTime && (
-          <div class="flex items-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span>{readingTime}</span>
-          </div>
-        )}
+          {t('blog.back-to-blog')}
+        </a>
       </div>
 
-      {tags && tags.length > 0 && (
-        <div class="mt-6">
-          <div class="flex flex-wrap gap-2">
-            {tags.map((tag: string) => (
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
-                #{tag}
-              </span>
-            ))}
+      <!-- Article header -->
+      <header class="mb-8">
+        {heroImage && (
+          <div class="mb-8 rounded-lg overflow-hidden">
+            <Picture
+              src={heroImage}
+              alt={title}
+              width={1200}
+              height={600}
+              class="w-full h-64 sm:h-80 lg:h-96 object-cover"
+              loading="eager"
+              decoding="async"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            />
           </div>
+        )}
+
+        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            <span>{author}</span>
+          </div>
+
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <time datetime={pubDate.toISOString()}>
+              {t('blog.publishedOn')} {formatDate(pubDate, lang)}
+            </time>
+          </div>
+
+          {updatedDate && (
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <time datetime={updatedDate.toISOString()}>
+                Updated {formatDate(updatedDate, lang)}
+              </time>
+            </div>
+          )}
+
+          {readingTime && (
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>{readingTime}</span>
+            </div>
+          )}
         </div>
+
+        {tags && tags.length > 0 && (
+          <div class="mt-6" role="group" aria-label="Article tags">
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag: string) => (
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      {headings.length > 0 && (
+        <TableOfContents headings={headings} lang={lang} />
       )}
-    </header>
 
-    {headings.length > 0 && (
-      <TableOfContents headings={headings} lang={lang} />
-    )}
+      <!-- Article content -->
+      <div class="prose prose-lg max-w-none dark:prose-invert">
+        <slot />
+      </div>
 
-    <!-- Article content -->
-    <div class="prose prose-lg max-w-none dark:prose-invert">
-      <slot />
-    </div>
+      <!-- Share Buttons -->
+      <ShareButtons title={title} url={Astro.url.href} />
 
-    <!-- Share Buttons -->
-    <ShareButtons title={title} url={Astro.url.href} />
+      <!-- Article Navigation -->
+      <BlogPostNavigation
+        previousPostData={previousPostData}
+        nextPostData={nextPostData}
+        lang={lang}
+      />
 
-    <!-- Article Navigation -->
-    <BlogPostNavigation
-      previousPostData={previousPostData}
-      nextPostData={nextPostData}
-      lang={lang}
-    />
-
-    <!-- Related Articles -->
-    <RelatedArticles relatedPosts={relatedPosts} lang={lang} />
-  </article>
+      <!-- Related Articles -->
+      <RelatedArticles relatedPosts={relatedPosts} lang={lang} />
+    </article>
+  </main>
 </Layout>
