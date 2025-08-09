@@ -236,6 +236,10 @@ html {
   @apply scroll-mt-20;
 }
 
+.prose h1 {
+  @apply text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl;
+}
+
 /* Table styles */
 .prose table {
   @apply w-full border-collapse border border-gray-200 dark:border-gray-700;
