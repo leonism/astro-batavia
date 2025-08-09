@@ -1,5 +1,7 @@
 
 
+import Search from './Search.astro';
+
 <section
   id="search-overlay"
   class="fixed inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-[100] p-4 hidden"
@@ -29,33 +31,6 @@
   </button>
 
   <div class="w-full max-w-3xl">
-            <div class="max-w-4xl mx-auto">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Search articles, tags, authors..."
-            class="block w-full px-5 py-3 text-lg border-2 border-gray-200 dark:border-gray-600 rounded-xl leading-6 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all duration-300 shadow-lg hover:shadow-xl"
-          />
-        </div>
-    <div id="search-results-container" class="mt-8">
-      <!-- Search results will be dynamically inserted here -->
-    </div>
+    <Search />
   </div>
 </section>
-
-<script type="module" src="./searchOverlayClient.ts"></script>
-
-<style>
-  #search-overlay {
-    animation: fadeIn 0.3s ease-out forwards;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-</style>

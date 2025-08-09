@@ -1,0 +1,126 @@
+---
+import HeaderNavLinks from "./HeaderNavLinks.astro";
+import { getLangFromUrl } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
+
+const lang = getLangFromUrl(Astro.url) as LanguageKey;
+const currentPath = Astro.url.pathname;
+---
+
+<div
+  id="mobile-nav-overlay"
+  class="mobile-nav-overlay hidden md:hidden"
+  aria-hidden="true"
+  role="presentation"
+></div>
+<div
+  id="mobile-menu"
+  class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
+  aria-modal="true"
+  aria-label="Mobile menu"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="flex justify-end mb-4">
+    <button
+      id="close-mobile-menu"
+      class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+      aria-label="Close mobile menu"
+    >
+      <svg
+        class="h-6 w-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+    </button>
+  </div>
+  <div class="flex flex-col gap-4">
+    <HeaderNavLinks lang={lang} currentPath={currentPath} variant="mobile" />
+  </div>
+</div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const closeMobileMenuButton = document.getElementById("close-mobile-menu");
+    const mobileNavOverlay = document.getElementById("mobile-nav-overlay");
+
+    let lastActiveElement;
+
+    const openMobileMenu = () => {
+      if (!mobileMenu || !mobileNavOverlay) return;
+      lastActiveElement = document.activeElement;
+      mobileMenu.classList.remove("hidden");
+      mobileNavOverlay.classList.remove("hidden");
+      mobileNavOverlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("mobile-nav-open");
+      mobileMenu.setAttribute("aria-hidden", "false");
+      mobileMenuButton.setAttribute("aria-expanded", "true");
+
+      const focusableElements = mobileMenu.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstFocusableElement = focusableElements[0];
+      const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+      firstFocusableElement.focus();
+
+      mobileMenu.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusableElement) {
+            lastFocusableElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastFocusableElement) {
+            firstFocusableElement.focus();
+            e.preventDefault();
+          }
+        }
+      });
+    };
+
+    const closeMobileMenu = () => {
+      if (!mobileMenu || !mobileNavOverlay) return;
+      document.body.classList.remove("mobile-nav-open");
+      mobileMenu.classList.add("hidden");
+      mobileNavOverlay.classList.add("hidden");
+      mobileMenu.setAttribute("aria-hidden", "true");
+      mobileNavOverlay.setAttribute("aria-hidden", "true");
+      mobileMenuButton.setAttribute("aria-expanded", "false");
+      if (lastActiveElement) {
+        (lastActiveElement as HTMLElement).focus();
+      }
+    };
+
+    if (mobileMenuButton) {
+      mobileMenuButton.addEventListener("click", openMobileMenu);
+    }
+
+    if (closeMobileMenuButton) {
+      closeMobileMenuButton.addEventListener("click", closeMobileMenu);
+    }
+
+    if (mobileNavOverlay) {
+      mobileNavOverlay.addEventListener("click", closeMobileMenu);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !mobileMenu.classList.contains("hidden")) {
+        closeMobileMenu();
+      }
+    });
+  });
+</script>

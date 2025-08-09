@@ -1,0 +1,83 @@
+---
+import EnterpriseSearchEngine, { type SearchResult } from '../../features/search/EnterpriseSearchEngine';
+---
+
+<div client:visible>
+  <div class="max-w-4xl mx-auto">
+    <input
+      type="text"
+      id="search-input"
+      placeholder="Search articles, tags, authors..."
+      class="block w-full px-5 py-3 text-lg border-2 border-gray-200 dark:border-gray-600 rounded-xl leading-6 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all duration-300 shadow-lg hover:shadow-xl"
+    />
+  </div>
+  <div id="search-results-container" class="mt-8"></div>
+</div>
+
+<script>
+  import EnterpriseSearchEngine, { type SearchResult } from '../../features/search/EnterpriseSearchEngine';
+
+  const searchInput = document.getElementById("search-input") as HTMLInputElement;
+  const searchResultsContainer = document.getElementById("search-results-container");
+
+  if (!searchInput || !searchResultsContainer) {
+    console.error("Search elements not found.");
+  } else {
+    const searchEngine = new EnterpriseSearchEngine();
+
+    let allDocuments: any[] = [];
+
+    // Fetch and index documents
+    fetch('/api/search-index')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(documents => {
+        allDocuments = documents;
+        searchEngine.indexDocuments(allDocuments);
+        console.log(`Search engine initialized with ${allDocuments.length} documents for overlay.`);
+      })
+      .catch(error => {
+        console.error("Failed to load search index for overlay:", error);
+      });
+
+    const performSearch = () => {
+      const query = searchInput.value;
+      const results = searchEngine.search(query);
+      displayResults(results, query);
+    };
+
+    const displayResults = (results: SearchResult[], query: string) => {
+      searchResultsContainer.innerHTML = '';
+      if (results.length === 0 && query.length > 0) {
+        searchResultsContainer.innerHTML = `
+          <p class="text-center text-gray-600 dark:text-gray-400 text-lg">No results found for "${query}".</p>
+        `;
+      } else if (results.length > 0) {
+        searchResultsContainer.innerHTML = `
+          <ul class="space-y-4">
+            ${results
+              .map(
+                (result: SearchResult) => `
+                <li>
+                  <a href="/${result.lang}/blog/${result.slug}" class="block p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">${result.highlightedTitle || result.title}</h3>
+                    <p class="text-gray-600 dark:text-gray-400">${result.highlightedDescription || result.description}</p>
+                  </a>
+                </li>
+              `
+              )
+              .join("")}
+          </ul>
+        `;
+      } else {
+        searchResultsContainer.innerHTML = ""; // Clear results if query is empty
+      }
+    };
+
+    searchInput.addEventListener('input', performSearch);
+  }
+</script>
