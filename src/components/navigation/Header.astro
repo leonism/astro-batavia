@@ -12,7 +12,7 @@ const currentPath = Astro.url.pathname;
 <header
   class="fixed top-0 z-50 w-full bg-white/50 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50"
   aria-label="Main navigation">
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" role="navigation">
     <div class="flex justify-between items-center h-16">
       <HeaderLogo lang={lang} />
       <div class="hidden md:flex items-center gap-5">
@@ -23,7 +23,7 @@ const currentPath = Astro.url.pathname;
         />
       </div>
       <div class="flex items-center">
-        <button id="open-search-overlay" class="text-gray-600 mr-2 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Open search">
+        <button id="open-search-overlay" class="text-gray-600 mr-2 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Open search" aria-controls="search-overlay" aria-haspopup="dialog">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
@@ -33,13 +33,15 @@ const currentPath = Astro.url.pathname;
     </div>
   </nav>
 </header>
-<div id="mobile-nav-overlay" class="mobile-nav-overlay hidden md:hidden" aria-hidden="true"></div>
+<div id="mobile-nav-overlay" class="mobile-nav-overlay hidden md:hidden" aria-hidden="true" role="presentation"></div>
 <div
   id="mobile-menu"
   class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
   aria-modal="true"
   aria-label="Mobile menu"
-  role="dialog">
+  role="dialog"
+  aria-hidden="true"
+>
   <div class="flex justify-end mb-4">
     <button id="close-mobile-menu" class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" aria-label="Close mobile menu">
       <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

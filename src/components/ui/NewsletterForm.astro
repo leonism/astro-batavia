@@ -73,34 +73,40 @@ const {
     <form
       action={formAction}
       method={formMethod}
-      class={formClass}>
+      class={formClass}
+      role="form"
+      aria-labelledby="newsletter-title"
+    >
+      <label for="email-input" class="sr-only">Email address</label>
       <input
         type="email"
         name="email"
+        id="email-input"
         placeholder={emailPlaceholder}
         class={inputClass}
         required
+        aria-describedby="privacy-note"
       />
 
-      <button
-        type="submit"
-        class={buttonClass}>
+      <button type="submit" class={buttonClass} aria-label="Subscribe to newsletter">
         {buttonText}
         <svg
           class="w-5 h-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
-          aria-hidden="true">
+          aria-hidden="true"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d={buttonIconSvg}>
+            d={buttonIconSvg}
+          >
           </path>
         </svg>
       </button>
     </form>
-    {showPrivacyNote && <p class={privacyNoteClass}>{privacyNoteText}</p>}
+    {showPrivacyNote && <p id="privacy-note" class={privacyNoteClass}>{privacyNoteText}</p>}
   </div>
 </section>

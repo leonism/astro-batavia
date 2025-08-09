@@ -15,12 +15,13 @@ interface Props {
 const { title, links, lang } = Astro.props;
 ---
 
-<div class="my-0">
+<div class="my-0" role="navigation" aria-labelledby={`${title.toLowerCase()}-links`}>
   <h3
+    id={`${title.toLowerCase()}-links`}
     class="text-sm mt-7 font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">
     {title}
   </h3>
-  <ul class="space-y-2">
+  <ul class="space-y-2" role="list">
     {
       links.map((link) => (
         <li>
