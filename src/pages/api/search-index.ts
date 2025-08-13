@@ -14,11 +14,11 @@ export const GET: APIRoute = async () => {
       description: post.data.description,
       content: post.body,
       tags: post.data.tags || [],
-      url: `/blog/${post.slug}`,
+      url: `/${post.slug}`,
       pubDate: post.data.pubDate,
       author: post.data.author,
-      lang: post.slug.split('/')[0], // Assuming slug format like 'en/post-title'
-      slug: post.slug,
+      lang: post.slug.split('/')[0], // Assuming slug format like 'en/blog/post-title'
+      slug: post.slug.split('/').slice(2).join('/'), // Get everything after 'en/blog/'
     }));
 
     const searchEngine = new EnterpriseSearchEngine();
