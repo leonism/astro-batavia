@@ -23,6 +23,7 @@ interface SearchState {
   isSearching: boolean;
   currentQuery: string;
   selectedSuggestionIndex: number;
+  selectedResultIndex: number;
   lastSearchTime: number;
   hasResults: boolean;
   currentLang: string;
@@ -65,6 +66,7 @@ class EnhancedSearchClient {
       isSearching: false,
       currentQuery: '',
       selectedSuggestionIndex: -1,
+      selectedResultIndex: -1,
       lastSearchTime: 0,
       hasResults: false,
       currentLang: document.documentElement.lang || 'en'
@@ -218,40 +220,209 @@ class EnhancedSearchClient {
   private handleKeyboardNavigation(event: KeyboardEvent): void {
     if (!this.config.enableKeyboardNavigation) return;
     
+    // Handle suggestions navigation
     const suggestions = this.elements.suggestionsContainer?.children;
-    if (!suggestions || suggestions.length === 0) return;
+    const results = this.elements.resultsContainer?.querySelectorAll('.search-result');
     
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        this.state.selectedSuggestionIndex = Math.min(
-          this.state.selectedSuggestionIndex + 1,
-          suggestions.length - 1
-        );
-        this.updateSuggestionSelection();
+        this.navigateDown(suggestions, results);
         break;
         
       case 'ArrowUp':
         event.preventDefault();
-        this.state.selectedSuggestionIndex = Math.max(
-          this.state.selectedSuggestionIndex - 1,
-          -1
-        );
-        this.updateSuggestionSelection();
+        this.navigateUp(suggestions, results);
         break;
         
       case 'Enter':
-        if (this.state.selectedSuggestionIndex >= 0) {
-          event.preventDefault();
-          const selectedElement = suggestions[this.state.selectedSuggestionIndex] as HTMLElement;
-          this.selectSuggestion(selectedElement.textContent || '');
-        }
+        event.preventDefault();
+        this.handleEnterKey(suggestions, results);
         break;
         
       case 'Escape':
-        this.clearSuggestions();
-        this.elements.searchInput?.blur();
+        this.handleEscapeKey();
         break;
+        
+      case 'Tab':
+        // Allow natural tab navigation through results
+        if (this.state.selectedSuggestionIndex >= 0) {
+          this.clearSuggestions();
+        }
+        break;
+        
+      case 'Home':
+        if (event.ctrlKey) {
+          event.preventDefault();
+          this.navigateToFirst(suggestions, results);
+        }
+        break;
+        
+      case 'End':
+        if (event.ctrlKey) {
+          event.preventDefault();
+          this.navigateToLast(suggestions, results);
+        }
+        break;
+    }
+  }
+
+  /**
+   * Navigate down through suggestions and results
+   */
+  private navigateDown(suggestions: HTMLCollection | undefined, results: NodeListOf<Element>): void {
+    const hasActiveSuggestions = suggestions && suggestions.length > 0 && 
+      !this.elements.suggestionsContainer?.classList.contains('hidden');
+    
+    if (hasActiveSuggestions) {
+      this.state.selectedSuggestionIndex = Math.min(
+        this.state.selectedSuggestionIndex + 1,
+        suggestions.length - 1
+      );
+      this.updateSuggestionSelection();
+    } else if (results.length > 0) {
+      this.state.selectedResultIndex = Math.min(
+        this.state.selectedResultIndex + 1,
+        results.length - 1
+      );
+      this.updateResultSelection(results);
+    }
+  }
+
+  /**
+   * Navigate up through suggestions and results
+   */
+  private navigateUp(suggestions: HTMLCollection | undefined, results: NodeListOf<Element>): void {
+    const hasActiveSuggestions = suggestions && suggestions.length > 0 && 
+      !this.elements.suggestionsContainer?.classList.contains('hidden');
+    
+    if (hasActiveSuggestions) {
+      this.state.selectedSuggestionIndex = Math.max(
+        this.state.selectedSuggestionIndex - 1,
+        -1
+      );
+      this.updateSuggestionSelection();
+    } else if (results.length > 0) {
+      this.state.selectedResultIndex = Math.max(
+        this.state.selectedResultIndex - 1,
+        -1
+      );
+      this.updateResultSelection(results);
+    }
+  }
+
+  /**
+   * Handle Enter key for suggestions and results
+   */
+  private handleEnterKey(suggestions: HTMLCollection | undefined, results: NodeListOf<Element>): void {
+    const hasActiveSuggestions = suggestions && suggestions.length > 0 && 
+      !this.elements.suggestionsContainer?.classList.contains('hidden');
+    
+    if (hasActiveSuggestions && this.state.selectedSuggestionIndex >= 0) {
+      const selectedElement = suggestions[this.state.selectedSuggestionIndex] as HTMLElement;
+      const suggestionText = selectedElement.querySelector('button')?.textContent || selectedElement.textContent || '';
+      this.selectSuggestion(suggestionText);
+    } else if (results.length > 0 && this.state.selectedResultIndex >= 0) {
+      const selectedResult = results[this.state.selectedResultIndex] as HTMLElement;
+      const link = selectedResult.querySelector('a') as HTMLAnchorElement;
+      if (link) {
+        this.announceToScreenReader(`Opening article: ${link.getAttribute('aria-describedby') || 'Selected article'}`);
+        link.click();
+      }
+    }
+  }
+
+  /**
+   * Handle Escape key
+   */
+  private handleEscapeKey(): void {
+    if (this.elements.suggestionsContainer && !this.elements.suggestionsContainer.classList.contains('hidden')) {
+      this.clearSuggestions();
+    } else {
+      this.elements.searchInput?.blur();
+      this.state.selectedResultIndex = -1;
+      this.updateResultSelection(this.elements.resultsContainer?.querySelectorAll('.search-result') || []);
+    }
+  }
+
+  /**
+   * Navigate to first item
+   */
+  private navigateToFirst(suggestions: HTMLCollection | undefined, results: NodeListOf<Element>): void {
+    const hasActiveSuggestions = suggestions && suggestions.length > 0 && 
+      !this.elements.suggestionsContainer?.classList.contains('hidden');
+    
+    if (hasActiveSuggestions) {
+      this.state.selectedSuggestionIndex = 0;
+      this.updateSuggestionSelection();
+    } else if (results.length > 0) {
+      this.state.selectedResultIndex = 0;
+      this.updateResultSelection(results);
+    }
+  }
+
+  /**
+   * Navigate to last item
+   */
+  private navigateToLast(suggestions: HTMLCollection | undefined, results: NodeListOf<Element>): void {
+    const hasActiveSuggestions = suggestions && suggestions.length > 0 && 
+      !this.elements.suggestionsContainer?.classList.contains('hidden');
+    
+    if (hasActiveSuggestions) {
+      this.state.selectedSuggestionIndex = suggestions.length - 1;
+      this.updateSuggestionSelection();
+    } else if (results.length > 0) {
+      this.state.selectedResultIndex = results.length - 1;
+      this.updateResultSelection(results);
+    }
+  }
+
+  /**
+   * Update result selection styling and accessibility
+   */
+  private updateResultSelection(results: NodeListOf<Element> | Element[]): void {
+    const resultsArray = Array.from(results);
+    
+    resultsArray.forEach((result, index) => {
+      const isSelected = index === this.state.selectedResultIndex;
+      const resultElement = result as HTMLElement;
+      
+      // Update visual selection
+      resultElement.classList.toggle('selected', isSelected);
+      resultElement.classList.toggle('ring-2', isSelected);
+      resultElement.classList.toggle('ring-primary-500', isSelected);
+      resultElement.classList.toggle('bg-primary-50', isSelected);
+      resultElement.classList.toggle('dark:bg-primary-900/20', isSelected);
+      
+      // Update ARIA attributes
+      resultElement.setAttribute('aria-selected', isSelected.toString());
+      
+      // Scroll into view if selected
+      if (isSelected) {
+        resultElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest'
+        });
+        
+        // Focus management for screen readers
+        const link = resultElement.querySelector('a') as HTMLAnchorElement;
+        if (link) {
+          link.focus({ preventScroll: true });
+          this.announceToScreenReader(
+            `Result ${index + 1} of ${resultsArray.length}: ${link.getAttribute('aria-label') || 'Article'}`
+          );
+        }
+      }
+    });
+    
+    // Update search input ARIA attributes
+    if (this.elements.searchInput && resultsArray.length > 0) {
+      const selectedId = this.state.selectedResultIndex >= 0 
+        ? `result-${this.state.selectedResultIndex}`
+        : '';
+      this.elements.searchInput.setAttribute('aria-activedescendant', selectedId);
+      this.elements.searchInput.setAttribute('aria-expanded', 'true');
     }
   }
 
