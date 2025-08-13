@@ -13,6 +13,7 @@
 .search-result {
   @apply transform transition-all duration-200 ease-in-out;
   animation: fadeInUp 0.3s ease-out forwards;
+  @apply relative;
 }
 
 .search-result:hover {
@@ -22,6 +23,34 @@
 
 .search-result:focus-within {
   @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
+}
+
+/* Keyboard navigation selection */
+.search-result.selected {
+  @apply ring-2 ring-primary-500 ring-offset-2;
+  @apply bg-primary-50 dark:bg-primary-900/20;
+  @apply shadow-lg scale-[1.02];
+  @apply border-l-4 border-primary-500;
+  transform: translateY(-1px);
+}
+
+.search-result[aria-selected="true"] {
+  @apply ring-2 ring-primary-600 ring-offset-2;
+  @apply bg-primary-100 dark:bg-primary-900/30;
+  @apply shadow-xl;
+}
+
+/* Results container for keyboard navigation */
+#search-results {
+  @apply scroll-smooth;
+}
+
+#search-results[role="listbox"] {
+  @apply focus:outline-none;
+}
+
+.search-result[role="option"] {
+  @apply cursor-pointer;
 }
 
 /* Search suggestion styles */
