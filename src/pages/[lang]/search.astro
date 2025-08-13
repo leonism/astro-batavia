@@ -58,138 +58,165 @@ const initialPosts = [];
 </Layout>
 
 <script type="module">
-  import EnhancedSearchClient from '/src/features/search/EnhancedSearchClient.js';
+  import { SearchIntegration } from '/src/features/search/searchIntegration.js';
+  import EnterpriseSearchEngine from '/src/features/search/EnterpriseSearchEngine.js';
 
   document.addEventListener('astro:page-load', async () => {
-    console.log('Enhanced search page loading...');
-    
-    // Initialize enhanced search client
-    const searchClient = new EnhancedSearchClient({
-      searchInputId: 'main-search-input',
-      resultsContainerId: 'search-results',
-      statusElementId: 'search-status',
-      noResultsElementId: 'no-results',
-      debounceMs: 150,
-      minQueryLength: 1,
-      maxSuggestions: 8,
-      enableVoiceSearch: true,
-      enableKeyboardNavigation: true,
-      enableAnalytics: true
-    });
+    const searchInput = document.getElementById('main-search-input');
+    const searchResultsContainer = document.getElementById('search-results');
+    const searchStatus = document.getElementById('search-status');
+    const noResultsDiv = document.getElementById('no-results');
+    const clearSearchButton = document.getElementById('clear-search');
+    const tagFilterButtons = document.querySelectorAll('.tag-filter');
+    const sortSelect = document.getElementById('sort-select');
+    const searchSuggestionsDatalist = document.getElementById('search-suggestions');
 
+    if (!searchInput || !searchResultsContainer || !searchStatus || !noResultsDiv || !clearSearchButton || !sortSelect || !searchSuggestionsDatalist) {
+      console.error("Search elements not found.");
+      return;
+    }
+
+    const searchEngine = new EnterpriseSearchEngine();
+    const searchIntegration = new SearchIntegration();
+
+    let allDocuments = [];
+
+    // Fetch and index documents
+    console.log("Search page script loaded.");
     try {
-      console.log('Fetching search index...');
+      console.log("Fetching search index from /api/search-index...");
       const response = await fetch('/api/search-index');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
-      const documents = await response.json();
-      console.log(`Fetched ${documents.length} documents for indexing`);
-      
-      await searchClient.initialize(documents);
-      console.log('Enhanced search client initialized successfully');
-      
+      allDocuments = (await response.json()).map(doc => ({
+        ...doc,
+        pubDate: new Date(doc.pubDate),
+      }));
+      console.log("Search index fetched:", allDocuments);
+      searchEngine.indexDocuments(allDocuments);
+      console.log(`Search engine initialized with ${allDocuments.length} documents.`);
+      searchStatus.textContent = `Ready to search ${allDocuments.length} articles.`;
     } catch (error) {
-      console.error('Failed to initialize search:', error);
+      console.error("Failed to load search index:", error);
+      searchStatus.textContent = "Error loading search data.";
       return;
     }
 
-    // Handle URL parameters for initial search
+    let currentFilters = { tags: [] };
+    let currentSort = { sortBy: 'relevance', sortOrder: 'desc' };
+
+    const performSearch = () => {
+      const query = searchInput.value;
+      console.log("Performing search with query:", query, "filters:", currentFilters, "sort:", currentSort);
+      const results = searchEngine.search(query, currentFilters, currentSort);
+      console.log("Search results from engine:", results);
+      displayResults(results, query);
+    };
+
+    const displayResults = (results, query) => {
+      console.log("Displaying results:", results, "for query:", query);
+      searchResultsContainer.innerHTML = '';
+      if (results.length === 0 && query.length > 0) {
+        noResultsDiv.classList.remove('hidden');
+        searchStatus.textContent = '';
+        console.log("No results found.");
+      } else {
+        noResultsDiv.classList.add('hidden');
+        searchStatus.textContent = `Found ${results.length} results for "${query}".`;
+        results.forEach(result => {
+          console.log("Appending result:", result);
+          console.log("Result URL:", result.url);
+          const resultElement = document.createElement('div');
+          resultElement.innerHTML = `
+            <a href="${result.url}" class="block p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">${result.highlightedTitle || result.title}</h3>
+              <p class="text-gray-600 dark:text-gray-400">${result.highlightedDescription || result.description}</p>
+            </a>
+          `;
+          searchResultsContainer.appendChild(resultElement);
+        });
+      }
+    };
+
+    const fetchSuggestions = async (query) => {
+      console.log("Fetching suggestions for query:", query);
+      if (query.length < 2) {
+        searchSuggestionsDatalist.innerHTML = '';
+        console.log("Query too short for suggestions.");
+        return;
+      }
+      try {
+        const response = await fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}&lang=${lang}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const suggestions = await response.json();
+        console.log("Suggestions fetched:", suggestions);
+        searchSuggestionsDatalist.innerHTML = '';
+        suggestions.forEach(suggestion => {
+          const option = document.createElement('option');
+          option.value = suggestion;
+          searchSuggestionsDatalist.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Failed to fetch suggestions:", error);
+      }
+    };
+
+    searchInput.addEventListener('input', () => {
+      console.log("Search input changed.");
+      performSearch();
+      fetchSuggestions(searchInput.value);
+    });
+
+    tagFilterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        console.log("Tag filter clicked:", button.dataset.tag);
+        tagFilterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const tag = button.dataset.tag;
+        currentFilters.tags = tag === 'all' ? [] : [tag];
+        performSearch();
+      });
+    });
+
+    sortSelect.addEventListener('change', () => {
+      console.log("Sort option changed:", sortSelect.value);
+      const [sortBy, sortOrder] = sortSelect.value.split('-');
+      currentSort = { sortBy, sortOrder };
+      performSearch();
+    });
+
+    clearSearchButton.addEventListener('click', () => {
+      console.log("Clear search button clicked.");
+      searchInput.value = '';
+      currentFilters.tags = [];
+      tagFilterButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.tag-filter[data-tag="all"]').classList.add('active');
+      currentSort = { sortBy: 'relevance', sortOrder: 'desc' };
+      sortSelect.value = 'relevance-desc';
+      performSearch();
+      searchSuggestionsDatalist.innerHTML = ''; // Clear suggestions on clear
+    });
+
+    // Initial search on page load if there's a query param
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get('q');
     const initialTag = urlParams.get('tag');
 
     if (initialQuery) {
-      const searchInput = document.getElementById('main-search-input');
-      if (searchInput) {
-        searchInput.value = initialQuery;
-        const results = await searchClient.search(initialQuery, {
-          tags: initialTag ? [initialTag] : []
-        });
-        searchClient.displayResults(results);
-      }
+      console.log("Initial query from URL param:", initialQuery);
+      searchInput.value = initialQuery;
     }
-
-    // Handle tag filtering
-    const tagFilterButtons = document.querySelectorAll('.tag-filter');
-    let currentFilters = { tags: initialTag ? [initialTag] : [] };
-    let currentSort = { sortBy: 'hybrid', sortOrder: 'desc' };
-
-    // Update active tag filter
     if (initialTag) {
-      const targetButton = document.querySelector(`.tag-filter[data-tag="${initialTag}"]`);
-      if (targetButton) {
-        tagFilterButtons.forEach(btn => btn.classList.remove('active'));
-        targetButton.classList.add('active');
-      }
+      console.log("Initial tag from URL param:", initialTag);
+      currentFilters.tags = [initialTag];
+      document.querySelector(`.tag-filter[data-tag="${initialTag}"]`).classList.add('active');
     }
-
-    tagFilterButtons.forEach(button => {
-      button.addEventListener('click', async () => {
-        tagFilterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        
-        const tag = button.dataset.tag;
-        currentFilters.tags = tag === 'all' ? [] : [tag];
-        
-        const searchInput = document.getElementById('main-search-input');
-        const query = searchInput ? searchInput.value : '';
-        
-        if (query) {
-          const results = await searchClient.search(query, { 
-            ...currentFilters, 
-            ...currentSort 
-          });
-          searchClient.displayResults(results);
-        }
-      });
-    });
-
-    // Handle sort options
-    const sortSelect = document.getElementById('sort-select');
-    if (sortSelect) {
-      // Add new sort options
-      const existingOptions = sortSelect.innerHTML;
-      sortSelect.innerHTML = `
-        <option value="hybrid-desc">Best Match</option>
-        <option value="relevance-desc">Most Relevant</option>
-        <option value="semantic-desc">Semantic Match</option>
-        <option value="date-desc">Newest First</option>
-        <option value="date-asc">Oldest First</option>
-        <option value="title-asc">Title A-Z</option>
-        <option value="title-desc">Title Z-A</option>
-      `;
-      sortSelect.value = 'hybrid-desc';
-      
-      sortSelect.addEventListener('change', async () => {
-        const [sortBy, sortOrder] = sortSelect.value.split('-');
-        currentSort = { sortBy, sortOrder };
-        
-        const searchInput = document.getElementById('main-search-input');
-        const query = searchInput ? searchInput.value : '';
-        
-        if (query) {
-          const results = await searchClient.search(query, {
-            ...currentFilters,
-            ...currentSort
-          });
-          searchClient.displayResults(results);
-        }
-      });
+    if (initialQuery || initialTag) {
+      console.log("Performing initial search.");
+      performSearch();
     }
-
-    // Performance optimization - cleanup on page unload
-    window.addEventListener('beforeunload', () => {
-      searchClient.optimizePerformance();
-    });
-
-    // Expose search insights to console for debugging
-    window.searchInsights = () => {
-      console.log('Search Insights:', searchClient.getInsights());
-    };
-
-    console.log('Enhanced search page loaded successfully');
-    console.log('Try Ctrl/Cmd + K to focus search, or type "searchInsights()" in console for analytics');
   });
 </script>
