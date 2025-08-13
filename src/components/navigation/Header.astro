@@ -26,10 +26,10 @@ const currentPath = Astro.url.pathname;
         />
       </div>
       <div class="flex items-center">
-        <SearchToggle />
+        <SearchToggle client:idle />
         <HeaderUtilities />
       </div>
     </div>
   </nav>
 </header>
-<MobileMenu />
+<MobileMenu client:idle />
