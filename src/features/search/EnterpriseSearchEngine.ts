@@ -10,7 +10,7 @@ export interface SearchableDocument {
   content?: string;
   tags: string[];
   url: string;
-  pubDate: Date | string | number;
+  pubDate: Date;
   author?: string;
   category?: string;
   lang: string;
@@ -109,21 +109,7 @@ class EnterpriseSearchEngine {
    * Index documents for fast searching
    */
   indexDocuments(documents: SearchableDocument[]): void {
-    this.documents = documents.map(doc => {
-      let pubDate: Date;
-      if (doc.pubDate instanceof Date) {
-        pubDate = doc.pubDate;
-      } else {
-        pubDate = new Date(doc.pubDate);
-        if (isNaN(pubDate.getTime())) {
-          pubDate = new Date(0); // Fallback for invalid dates
-        }
-      }
-      return {
-        ...doc,
-        pubDate: pubDate,
-      } as SearchableDocument;
-    });
+    this.documents = documents;
     this.buildSearchIndex();
     this.buildTagIndex();
     this.buildTitleIndex();
@@ -419,28 +405,7 @@ class EnterpriseSearchEngine {
           doc.description.substring(0, 150) +
           (doc.description.length > 150 ? "..." : ""),
       }))
-      .sort((a, b) => {
-        let dateA: Date;
-        if (a.pubDate === null || a.pubDate === undefined) {
-          dateA = new Date(0);
-        } else if (a.pubDate instanceof Date) {
-          dateA = a.pubDate;
-        } else {
-          dateA = new Date(a.pubDate);
-        }
-
-        let dateB: Date;
-        if (b.pubDate === null || b.pubDate === undefined) {
-          dateB = new Date(0);
-        } else if (b.pubDate instanceof Date) {
-          dateB = b.pubDate;
-        } else {
-          dateB = new Date(b.pubDate);
-        }
-        console.log("getFilteredDocuments sort: dateA", dateA, "typeof dateA", typeof dateA, "instanceof Date", dateA instanceof Date);
-        console.log("getFilteredDocuments sort: dateB", dateB, "typeof dateB", typeof dateB, "instanceof Date", dateB instanceof Date);
-        return dateB.getTime() - dateA.getTime();
-      })
+      .sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime())
       .slice(0, maxResults);
   }
 
@@ -470,17 +435,8 @@ class EnterpriseSearchEngine {
     }
 
     // Boost recent content
-    let effectivePubDate: Date;
-    if (doc.pubDate === null || doc.pubDate === undefined) {
-      effectivePubDate = new Date(0); // Default for null/undefined
-    } else if (doc.pubDate instanceof Date) {
-      effectivePubDate = doc.pubDate;
-    } else {
-      effectivePubDate = new Date(doc.pubDate);
-    }
-
     const daysSincePublished =
-      (Date.now() - effectivePubDate.getTime()) / (1000 * 60 * 60 * 24);
+      (Date.now() - doc.pubDate.getTime()) / (1000 * 60 * 60 * 24);
     if (daysSincePublished < 30) {
       score += 1;
     }
@@ -547,28 +503,8 @@ class EnterpriseSearchEngine {
       if (!filters.tags.some((tag) => doc.tags.includes(tag))) return false;
     }
 
-    if (filters.dateFrom) {
-      let docPubDate: Date;
-      if (doc.pubDate === null || doc.pubDate === undefined) {
-        docPubDate = new Date(0);
-      } else if (doc.pubDate instanceof Date) {
-        docPubDate = doc.pubDate;
-      } else {
-        docPubDate = new Date(doc.pubDate);
-      }
-      if (docPubDate < filters.dateFrom) return false;
-    }
-    if (filters.dateTo) {
-      let docPubDate: Date;
-      if (doc.pubDate === null || doc.pubDate === undefined) {
-        docPubDate = new Date(0);
-      } else if (doc.pubDate instanceof Date) {
-        docPubDate = doc.pubDate;
-      } else {
-        docPubDate = new Date(doc.pubDate);
-      }
-      if (docPubDate > filters.dateTo) return false;
-    }
+    if (filters.dateFrom && doc.pubDate < filters.dateFrom) return false;
+    if (filters.dateTo && doc.pubDate > filters.dateTo) return false;
 
     if (
       filters.author &&
@@ -598,24 +534,7 @@ class EnterpriseSearchEngine {
           comparison = a.title.localeCompare(b.title);
           break;
         case "date":
-          let dateA: Date;
-          if (a.pubDate === null || a.pubDate === undefined) {
-            dateA = new Date(0);
-          } else if (a.pubDate instanceof Date) {
-            dateA = a.pubDate;
-          } else {
-            dateA = new Date(a.pubDate);
-          }
-
-          let dateB: Date;
-          if (b.pubDate === null || b.pubDate === undefined) {
-            dateB = new Date(0);
-          } else if (b.pubDate instanceof Date) {
-            dateB = b.pubDate;
-          } else {
-            dateB = new Date(b.pubDate);
-          }
-          comparison = dateA.getTime() - dateB.getTime();
+          comparison = a.pubDate.getTime() - b.pubDate.getTime();
           break;
         case "popularity":
           // Could be based on view count, likes, etc.
