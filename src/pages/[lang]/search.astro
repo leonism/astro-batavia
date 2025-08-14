@@ -85,7 +85,7 @@ const initialPosts = [];
     // Initialize enhanced search client
     const searchClient = new EnhancedSearchClient({
       searchInputId: 'main-search-input',
-      resultsContainerId: 'search-results',
+      resultsContainerId: 'results-container',
       statusElementId: 'search-status',
       noResultsElementId: 'no-results',
       debounceMs: 150,
@@ -200,10 +200,11 @@ const initialPosts = [];
 
     // Performance optimization - cleanup on page unload
     window.addEventListener('beforeunload', () => {
-      searchClient.optimizePerformance();
+      searchClient.searchEngine.optimizePerformance();
     });
 
-    // Expose search insights to console for debugging
+    // Expose search client and insights to console for debugging
+    window.searchClient = searchClient;
     window.searchInsights = () => {
       console.log('Search Insights:', searchClient.getInsights());
     };
