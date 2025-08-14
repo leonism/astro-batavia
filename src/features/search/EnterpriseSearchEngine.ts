@@ -222,7 +222,26 @@ class EnterpriseSearchEngine {
     });
 
     return suggestions
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => {
+        let dateA: Date;
+        if (a.pubDate === null || a.pubDate === undefined) {
+          dateA = new Date(0);
+        } else if (a.pubDate instanceof Date) {
+          dateA = a.pubDate;
+        } else {
+          dateA = new Date(a.pubDate);
+        }
+
+        let dateB: Date;
+        if (b.pubDate === null || b.pubDate === undefined) {
+          dateB = new Date(0);
+        } else if (b.pubDate instanceof Date) {
+          dateB = b.pubDate;
+        } else {
+          dateB = new Date(b.pubDate);
+        }
+        return dateB.getTime() - dateA.getTime();
+      })
       .slice(0, limit)
       .filter(
         (suggestion, index, arr) =>
