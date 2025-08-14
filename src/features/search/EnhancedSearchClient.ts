@@ -224,6 +224,8 @@ class EnhancedSearchClient {
     const suggestions = this.elements.suggestionsContainer?.children;
     const results = this.elements.resultsContainer?.querySelectorAll('.search-result');
     
+    console.log('Keyboard navigation - Key:', event.key, 'Results found:', results?.length, 'Suggestions:', suggestions?.length);
+    
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
@@ -252,14 +254,14 @@ class EnhancedSearchClient {
         break;
         
       case 'Home':
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
           event.preventDefault();
           this.navigateToFirst(suggestions, results);
         }
         break;
         
       case 'End':
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
           event.preventDefault();
           this.navigateToLast(suggestions, results);
         }

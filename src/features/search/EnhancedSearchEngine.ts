@@ -128,6 +128,19 @@ class EnhancedSearchEngine {
     popularQueries: new Map<string, number>()
   };
 
+  // Analytics tracking
+  private analytics = {
+    totalSearches: 0,
+    totalClicks: 0,
+    totalSearchTime: 0,
+    cacheHits: 0,
+    queryFrequency: new Map<string, number>(),
+    clickTracking: new Map<string, number>()
+  };
+
+  // Search cache separate from main cache
+  private searchCache: Map<string, SearchResult[]> = new Map();
+
   constructor() {
     this.initializeSynonyms();
     if (typeof window !== 'undefined') {
@@ -319,28 +332,6 @@ class EnhancedSearchEngine {
     };
   }
 
-  /**
-   * Clear cache and optimize performance
-   */
-  optimizePerformance(): void {
-    // Clear old cache entries
-    if (this.cache.size > 100) {
-      const entries = Array.from(this.cache.entries());
-      this.cache.clear();
-      // Keep the 50 most recent entries
-      entries.slice(-50).forEach(([key, value]) => {
-        this.cache.set(key, value);
-      });
-    }
-
-    // Clear suggestion cache
-    if (this.suggestionCache.size > 50) {
-      this.suggestionCache.clear();
-    }
-
-    // Garbage collect unused indexes
-    this.cleanupIndexes();
-  }
 
   // Private methods
   
@@ -945,6 +936,60 @@ class EnhancedSearchEngine {
 
   private escapeRegex(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  /**
+   * Track result click for analytics
+   */
+  trackResultClick(query: string, resultId: string): void {
+    if (!this.analytics.clickTracking) {
+      this.analytics.clickTracking = new Map();
+    }
+    
+    const key = `${query}:${resultId}`;
+    const currentCount = this.analytics.clickTracking.get(key) || 0;
+    this.analytics.clickTracking.set(key, currentCount + 1);
+    
+    this.analytics.totalClicks++;
+    console.log(`Tracked click: ${query} -> ${resultId}`);
+  }
+
+  /**
+   * Get search insights for analytics
+   */
+  getSearchInsights() {
+    return {
+      totalSearches: this.analytics.totalSearches,
+      totalClicks: this.analytics.totalClicks,
+      averageSearchTime: this.analytics.totalSearchTime / Math.max(1, this.analytics.totalSearches),
+      cacheHitRate: this.analytics.cacheHits / Math.max(1, this.analytics.totalSearches),
+      popularQueries: Array.from(this.analytics.queryFrequency.entries())
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 10),
+      clickThroughRate: this.analytics.totalClicks / Math.max(1, this.analytics.totalSearches)
+    };
+  }
+
+  /**
+   * Optimize performance by clearing old cache entries
+   */
+  optimizePerformance(): void {
+    // Clear old cache entries if cache is too large
+    if (this.searchCache.size > 1000) {
+      // Keep only the most recent 500 entries
+      const entries = Array.from(this.searchCache.entries());
+      this.searchCache.clear();
+      entries.slice(-500).forEach(([key, value]) => {
+        this.searchCache.set(key, value);
+      });
+      console.log('Search cache optimized - reduced to 500 entries');
+    }
+
+    // Reset analytics if they get too large
+    if (this.analytics.queryFrequency.size > 1000) {
+      this.analytics.queryFrequency.clear();
+      console.log('Query frequency analytics reset');
+    }
   }
 }
 
