@@ -10,7 +10,6 @@
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "allowJs": true,
     "checkJs": true,
     "resolveJsonModule": true,
     "noEmit": true,
@@ -21,5 +20,4 @@
     }
   },
   "include": ["src/**/*", "astro.config.mjs"],
-  "exclude": ["node_modules", "dist", "src/pages/search.astro", "src/pages/[lang]/search.astro", "src/components/ui/SearchBox.astro", "src/pages/blog/index.astro", "src/pages/about.astro"]
 }
