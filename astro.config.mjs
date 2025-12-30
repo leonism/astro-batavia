@@ -6,6 +6,9 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
+import { loadEnv } from 'vite';
+
+const { SENTRY_AUTH_TOKEN } = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '');
 
 // https://astro.build/config
 export default defineConfig({
@@ -32,7 +35,12 @@ export default defineConfig({
       },
       customPages: ['/rss.xml'],
     }),
-    sentry(),
+    sentry({
+      sourceMapsUploadOptions: {
+        enabled: !!SENTRY_AUTH_TOKEN,
+        authToken: SENTRY_AUTH_TOKEN,
+      },
+    }),
     spotlightjs(),
     htmlMinifier(),
   ],
