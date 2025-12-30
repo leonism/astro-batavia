@@ -1,0 +1,84 @@
+---
+---
+<div
+  id="page-transition-skeleton"
+  transition:persist
+  class="fixed inset-0 z-[9999] pointer-events-none transition-opacity duration-300 opacity-0 hidden bg-white dark:bg-slate-900"
+  aria-hidden="true"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24 animate-pulse">
+    <!-- Header Skeleton -->
+    <div class="h-8 w-48 bg-gray-200 dark:bg-gray-800 rounded mb-8"></div>
+
+    <!-- Hero Section Skeleton -->
+    <div class="w-full h-64 md:h-96 bg-gray-200 dark:bg-gray-800 rounded-xl mb-12"></div>
+
+    <!-- Content Grid Skeleton -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Sidebar/Left Col -->
+      <div class="hidden md:block col-span-1 space-y-4">
+        <div class="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded"></div>
+        <div class="h-4 w-3/4 bg-gray-200 dark:bg-gray-800 rounded"></div>
+        <div class="h-4 w-5/6 bg-gray-200 dark:bg-gray-800 rounded"></div>
+        <div class="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded mt-8"></div>
+        <div class="h-4 w-2/3 bg-gray-200 dark:bg-gray-800 rounded"></div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-span-1 md:col-span-2 space-y-6">
+        <div class="h-8 w-3/4 bg-gray-200 dark:bg-gray-800 rounded mb-4"></div>
+        <div class="space-y-3">
+          <div class="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded"></div>
+          <div class="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded"></div>
+          <div class="h-4 w-5/6 bg-gray-200 dark:bg-gray-800 rounded"></div>
+        </div>
+        <div class="w-full h-48 bg-gray-200 dark:bg-gray-800 rounded-lg mt-6"></div>
+        <div class="space-y-3 mt-6">
+          <div class="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded"></div>
+          <div class="h-4 w-11/12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+          <div class="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Use a self-executing function to avoid global scope pollution
+  (() => {
+    let skeletonTimeout: ReturnType<typeof setTimeout>;
+
+    function showSkeleton() {
+      const skeleton = document.getElementById('page-transition-skeleton');
+      if (skeleton) {
+        clearTimeout(skeletonTimeout);
+        skeleton.classList.remove('hidden');
+        // Force reflow
+        void skeleton.offsetWidth;
+        skeleton.classList.remove('opacity-0');
+      }
+    }
+
+    function hideSkeleton() {
+      const skeleton = document.getElementById('page-transition-skeleton');
+      if (skeleton) {
+        skeleton.classList.add('opacity-0');
+        skeletonTimeout = setTimeout(() => {
+          skeleton.classList.add('hidden');
+        }, 300);
+      }
+    }
+
+    // Astro View Transition Events
+    document.addEventListener('astro:before-preparation', showSkeleton);
+    document.addEventListener('astro:after-swap', () => {
+      // Ensure skeleton is visible immediately after swap if it was showing
+      const skeleton = document.getElementById('page-transition-skeleton');
+      if (skeleton) {
+        skeleton.classList.remove('hidden');
+        skeleton.classList.remove('opacity-0');
+      }
+    });
+    document.addEventListener('astro:page-load', hideSkeleton);
+  })();
+</script>
