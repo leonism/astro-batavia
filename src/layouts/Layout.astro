@@ -7,6 +7,7 @@ import BackToTop from '@/components/ui/BackToTop.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import BackToTopScript from '@/components/common/BackToTopScript.astro';
 import EnhancedSearchOverlay from '@/components/search/EnhancedSearchOverlay.astro';
+import SkeletonLoader from '@/components/ui/SkeletonLoader.astro';
 import { GoogleTagmanager, GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import '@/styles/global.css';
 import '@/styles/enhanced-search.css';
@@ -164,5 +165,6 @@ const {
     <BackToTop />
     <BackToTopScript />
     <EnhancedSearchOverlay />
+    <SkeletonLoader />
   </body>
 </html>
