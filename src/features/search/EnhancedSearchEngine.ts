@@ -955,22 +955,6 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Get search insights for analytics
-   */
-  getSearchInsights() {
-    return {
-      totalSearches: this.analytics.totalSearches,
-      totalClicks: this.analytics.totalClicks,
-      averageSearchTime: this.analytics.totalSearchTime / Math.max(1, this.analytics.totalSearches),
-      cacheHitRate: this.analytics.cacheHits / Math.max(1, this.analytics.totalSearches),
-      popularQueries: Array.from(this.analytics.queryFrequency.entries())
-        .sort(([,a], [,b]) => b - a)
-        .slice(0, 10),
-      clickThroughRate: this.analytics.totalClicks / Math.max(1, this.analytics.totalSearches)
-    };
-  }
-
-  /**
    * Optimize performance by clearing old cache entries
    */
   optimizePerformance(): void {
