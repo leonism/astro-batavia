@@ -357,3 +357,8 @@ html {
 .animate-bounce {
   animation: bounce 1s infinite;
 }
+
+/* Prevent scroll when mobile nav is open */
+body.mobile-nav-open {
+  overflow: hidden;
+}
