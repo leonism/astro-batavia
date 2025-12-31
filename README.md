@@ -2,7 +2,7 @@
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
 
-  [![Astro](https://img.shields.io/badge/Astro-5.10.1-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
+  [![Astro](https://img.shields.io/badge/Astro-5.12.7-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
   [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
@@ -63,7 +63,11 @@
 - **TypeScript**: Full type safety across the codebase
 - **Component Architecture**: Modular and reusable components
 - **Hot Reload**: Fast development with Astro's dev server
-- **Build Optimization**: Automatic compression and minification
+- **Advanced Build Optimization**: 
+    - **Enterprise-Grade HTML Minification**: Custom integration with `html-minifier-terser` using multi-core processing.
+    - **Asset Compression**: Automatic Gzip and Brotli compression for production builds.
+    - **Granular Control**: Configurable build tools for fine-tuning optimization settings.
+    - **Detailed Build Reports**: Comprehensive reports on file sizes and compression savings.
 
 ## 🛠️ Tech Stack
 
