@@ -6,9 +6,10 @@ import os from 'os';
 import { performance } from 'perf_hooks';
 
 /**
+ * @param {import('html-minifier-terser').Options} [userOptions]
  * @returns {import('astro').AstroIntegration}
  */
-export default function htmlMinifier() {
+export default function htmlMinifier(userOptions = {}) {
   return {
     name: 'enterprise-html-minifier',
     hooks: {
@@ -33,8 +34,31 @@ export default function htmlMinifier() {
 
         const queue = [...htmlFiles];
         let processedCount = 0;
+        let totalOriginalSize = 0;
+        let totalMinifiedSize = 0;
         /** @type {{ file: string; error: Error }[]} */
         const errors = [];
+
+        const defaultOptions = {
+          collapseBooleanAttributes: true,
+          collapseWhitespace: true,
+          decodeEntities: true,
+          html5: true,
+          minifyCSS: true,
+          minifyJS: true,
+          removeAttributeQuotes: true,
+          removeComments: true,
+          removeEmptyAttributes: true,
+          removeOptionalTags: false,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          sortAttributes: true,
+          sortClassName: true,
+          useShortDoctype: true,
+        };
+
+        const minifyOptions = { ...defaultOptions, ...userOptions };
 
         const worker = async () => {
           while (queue.length > 0) {
@@ -43,23 +67,17 @@ export default function htmlMinifier() {
 
             try {
               const content = await fs.readFile(file, 'utf-8');
-              const minified = await minify(content, {
-                collapseWhitespace: true,
-                removeComments: true,
-                removeRedundantAttributes: true,
-                removeScriptTypeAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                useShortDoctype: true,
-                minifyCSS: true,
-                minifyJS: true,
-                removeEmptyAttributes: true,
-                removeOptionalTags: true,
-                sortAttributes: true,
-                sortClassName: true,
-              });
+              const originalSize = Buffer.byteLength(content, 'utf-8');
+              totalOriginalSize += originalSize;
+
+              const minified = await minify(content, minifyOptions);
+              const minifiedSize = Buffer.byteLength(minified, 'utf-8');
+              totalMinifiedSize += minifiedSize;
 
               await fs.writeFile(file, minified);
-              console.log(`✅ Minified: ${path.relative(dir.pathname, file)}`);
+              const saved = originalSize - minifiedSize;
+              const savedPercent = originalSize > 0 ? (saved / originalSize) * 100 : 0;
+              console.log(`✅ Minified: ${path.relative(dir.pathname, file)} | Saved: ${formatBytes(saved)} (${savedPercent.toFixed(2)}%)`);
             } catch (error) {
               console.error(`❌ Error minifying ${file}:`, error);
               const err = error instanceof Error ? error : new Error(String(error));
@@ -75,6 +93,8 @@ export default function htmlMinifier() {
 
         const endTime = performance.now();
         const duration = (endTime - startTime).toFixed(2);
+        const totalSaved = totalOriginalSize - totalMinifiedSize;
+        const totalSavedPercent = totalOriginalSize > 0 ? (totalSaved / totalOriginalSize) * 100 : 0;
 
         console.log('\n' + '-'.repeat(50));
         console.log('🏁 HTML Minification Summary');
@@ -82,13 +102,15 @@ export default function htmlMinifier() {
         console.log(`- Files Scanned: ${htmlFiles.length}`);
         console.log(`- Files Processed: ${processedCount}`);
         console.log(`- Files with Errors: ${errors.length}`);
+        console.log(`- Original Size: ${formatBytes(totalOriginalSize)}`);
+        console.log(`- Minified Size: ${formatBytes(totalMinifiedSize)}`);
+        console.log(`- Total Saved: ${formatBytes(totalSaved)} (${totalSavedPercent.toFixed(2)}%)`);
 
         if (errors.length > 0) {
           console.log('\n🚨 Error Details:');
           errors.forEach(e => {
             console.log(`  - File: ${e.file}\n    Error: ${e.error.message}`);
           });
-          // Throwing an error will stop the build process in Astro
           throw new Error('HTML minification failed for one or more files.');
         } else {
           console.log(`\n⏱️ Total Execution Time: ${duration}ms`);
@@ -97,4 +119,13 @@ export default function htmlMinifier() {
       },
     },
   };
+}
+
+function formatBytes(/** @type {number} */ bytes, decimals = 2) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }

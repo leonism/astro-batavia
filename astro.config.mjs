@@ -34,6 +34,10 @@ export default defineConfig({
     }),
     sentry(),
     spotlightjs(),
+    // Example of passing options:
+    // htmlMinifier({
+    //   removeComments: false,
+    // }),
     htmlMinifier(),
   ],
   i18n: {
