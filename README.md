@@ -63,7 +63,7 @@
 - **TypeScript**: Full type safety across the codebase
 - **Component Architecture**: Modular and reusable components
 - **Hot Reload**: Fast development with Astro's dev server
-- **Advanced Build Optimization**: 
+- **Advanced Build Optimization**:
     - **Enterprise-Grade HTML Minification**: Custom integration with `html-minifier-terser` using multi-core processing.
     - **Asset Compression**: Automatic Gzip and Brotli compression for production builds.
     - **Granular Control**: Configurable build tools for fine-tuning optimization settings.
@@ -72,7 +72,7 @@
 ## 🛠️ Tech Stack
 
 ### **Core Framework**
-- **[Astro 5.10.1](https://astro.build)** - Static site generator with islands architecture
+- **[Astro 5.16.6](https://astro.build)** - Static site generator with islands architecture
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript development
 - **[MDX 4.3.0](https://mdxjs.com/)** - Markdown with JSX components
 
