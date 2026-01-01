@@ -61,6 +61,16 @@ export default defineConfig({
     build: {
       minify: true,
       rollupOptions: {
+        onwarn(warning, warn) {
+          // Suppress "unused external import" warnings from Astro internals
+          if (
+            warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
+            warning.message.includes('@astrojs/internal-helpers/remote')
+          ) {
+            return;
+          }
+          warn(warning);
+        },
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
