@@ -12,7 +12,8 @@ const currentPath = Astro.url.pathname;
   class="mobile-nav-overlay fixed inset-0 bg-black/50 hidden md:hidden"
   aria-hidden="true"
   role="presentation"
-></div>
+>
+</div>
 <div
   id="mobile-menu"
   class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
@@ -55,17 +56,19 @@ const currentPath = Astro.url.pathname;
     const closeMobileMenuButton = document.getElementById("close-mobile-menu");
     const mobileNavOverlay = document.getElementById("mobile-nav-overlay");
 
-    let lastActiveElement;
+    let lastActiveElement: HTMLElement | null = null;
 
     const openMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
-      lastActiveElement = document.activeElement;
+      lastActiveElement = document.activeElement as HTMLElement | null;
       mobileMenu.classList.remove("hidden");
       mobileNavOverlay.classList.remove("hidden");
       mobileNavOverlay.setAttribute("aria-hidden", "false");
       document.body.classList.add("mobile-nav-open");
       mobileMenu.setAttribute("aria-hidden", "false");
-      mobileMenuButton.setAttribute("aria-expanded", "true");
+      if (mobileMenuButton) {
+        mobileMenuButton.setAttribute("aria-expanded", "true");
+      }
 
       const focusableElements = mobileMenu.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -73,19 +76,19 @@ const currentPath = Astro.url.pathname;
       const firstFocusableElement = focusableElements[0];
       const lastFocusableElement = focusableElements[focusableElements.length - 1];
 
-      firstFocusableElement.focus();
+      (firstFocusableElement as HTMLElement).focus();
 
       mobileMenu.addEventListener('keydown', (e) => {
         if (e.key !== 'Tab') return;
 
         if (e.shiftKey) {
           if (document.activeElement === firstFocusableElement) {
-            lastFocusableElement.focus();
+            (lastFocusableElement as HTMLElement).focus();
             e.preventDefault();
           }
         } else {
           if (document.activeElement === lastFocusableElement) {
-            firstFocusableElement.focus();
+            (firstFocusableElement as HTMLElement).focus();
             e.preventDefault();
           }
         }
@@ -99,7 +102,9 @@ const currentPath = Astro.url.pathname;
       mobileNavOverlay.classList.add("hidden");
       mobileMenu.setAttribute("aria-hidden", "true");
       mobileNavOverlay.setAttribute("aria-hidden", "true");
-      mobileMenuButton.setAttribute("aria-expanded", "false");
+      if (mobileMenuButton) {
+        mobileMenuButton.setAttribute("aria-expanded", "false");
+      }
       if (lastActiveElement) {
         (lastActiveElement as HTMLElement).focus();
       }
@@ -118,7 +123,7 @@ const currentPath = Astro.url.pathname;
     }
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !mobileMenu.classList.contains("hidden")) {
+      if (event.key === "Escape" && mobileMenu && !mobileMenu.classList.contains("hidden")) {
         closeMobileMenu();
       }
     });
