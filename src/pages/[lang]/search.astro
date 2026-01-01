@@ -111,6 +111,11 @@ const initialPosts = [];
       
     } catch (error) {
       console.error('Failed to initialize search:', error);
+      const statusElement = document.getElementById('search-status');
+      if (statusElement) {
+        statusElement.textContent = 'Failed to load search index. Please try refreshing the page.';
+        statusElement.className = 'text-red-600 dark:text-red-400';
+      }
       return;
     }
 
