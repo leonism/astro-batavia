@@ -2,25 +2,32 @@
 
 ---
 
-<script is:inline>
-  const backToTopButton = document.getElementById("back-to-top");
+<script>
+  document.addEventListener("astro:page-load", () => {
+    if (window.backToTopInitialized) {
+      return;
+    }
+    window.backToTopInitialized = true;
 
-  if (backToTopButton) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 200) {
-        backToTopButton.classList.remove("opacity-0", "pointer-events-none");
-        backToTopButton.classList.add("opacity-100", "pointer-events-auto");
-      } else {
-        backToTopButton.classList.remove("opacity-100", "pointer-events-auto");
-        backToTopButton.classList.add("opacity-0", "pointer-events-none");
-      }
-    });
+    const backToTopButton = document.getElementById("back-to-top");
 
-    backToTopButton.addEventListener("click", () => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
+    if (backToTopButton) {
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 200) {
+          backToTopButton.classList.remove("opacity-0", "pointer-events-none");
+          backToTopButton.classList.add("opacity-100", "pointer-events-auto");
+        } else {
+          backToTopButton.classList.remove("opacity-100", "pointer-events-auto");
+          backToTopButton.classList.add("opacity-0", "pointer-events-none");
+        }
       });
-    });
-  }
+
+      backToTopButton.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+    }
+  });
 </script>
