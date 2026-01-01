@@ -3,7 +3,7 @@
  * Features: Debouncing, accessibility, instant search, progressive enhancement
  */
 
-import EnhancedSearchEngine, { SearchResult, SearchSuggestion } from './EnhancedSearchEngine.js';
+import EnhancedSearchEngine, { SearchResult, SearchSuggestion } from './EnhancedSearchEngine.ts';
 
 interface SearchClientConfig {
   searchInputId: string;
