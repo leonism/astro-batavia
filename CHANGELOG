@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-01-01
+
+### Fixed
+
+- **fix(search, back-to-top):** Resolved issues with the production build where search and back-to-top functionalities were conflicting with view transitions.
+
+## [1.0.2] - 2026-01-01
+
+### Changed
+
+- **deps:** Updated Astro to the latest stable version (5.16.6).
+- **feat(mobile-nav):** Prevented the site from scrolling when the mobile navigation is open.
+
+### Fixed
+
+- **fix(mobile-nav):** Ensured the mobile navigation pane closes when clicking anywhere outside of it.
+
 ## [1.0.1] - 2025-12-31
 
 ### Added
@@ -22,14 +39,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **fix(build):** Corrected a typo in the `<ViewTransitions />` component name in `src/layouts/Layout.astro` that was causing build failures.
 - **fix(build):** Disabled the `removeOptionalTags` option in the `html-minifier` integration to prevent the removal of essential tags like `<head>` from the HTML output.
-
-## [1.0.2] - 2026-01-01
-
-### Changed
-
-- **deps:** Updated Astro to the latest stable version (5.16.6).
-- **feat(mobile-nav):** Prevented the site from scrolling when the mobile navigation is open.
-
-### Fixed
-
-- **fix(mobile-nav):** Ensured the mobile navigation pane closes when clicking anywhere outside of it.
