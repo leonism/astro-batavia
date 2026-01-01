@@ -26,11 +26,12 @@ export default defineConfig({
       i18n: {
         defaultLocale: 'en',
         locales: {
+          en: 'en-US',
           es: 'es-ES',
           ja: 'ja-JP',
         },
       },
-      customPages: ['/rss.xml'],
+      customPages: ['https://astro-batavia.pages.dev/rss.xml'],
     }),
     sentry(),
     spotlightjs(),
