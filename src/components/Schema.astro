@@ -1,0 +1,69 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  date?: string | Date;
+  image?: string;
+  type?: 'website' | 'article' | 'blog';
+  author?: string;
+}
+
+const {
+  title,
+  description,
+  date,
+  image,
+  type = 'website',
+  author = 'Astro Batavia'
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const imageUrl = image ? new URL(image, siteUrl).href : new URL('/og-default.jpg', siteUrl).href;
+
+let schema: Record<string, any> = {
+  "@context": "https://schema.org",
+};
+
+if (type === 'article' || type === 'blog') {
+  schema = {
+    ...schema,
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "image": imageUrl,
+    "datePublished": date ? new Date(date).toISOString() : new Date().toISOString(),
+    "author": {
+      "@type": "Person",
+      "name": author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Astro Batavia",
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL('/favicon.svg', siteUrl).href
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl
+    }
+  };
+} else {
+  schema = {
+    ...schema,
+    "@type": "WebSite",
+    "name": title,
+    "description": description,
+    "url": siteUrl,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${siteUrl}?q={search_term_string}`,
+      "query-input": "required name=search_term_string"
+    }
+  };
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

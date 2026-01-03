@@ -1,8 +1,4 @@
 User-agent: *
-Allow: /
+Disallow:
 
-# Sitemap
 Sitemap: https://astro-batavia.pages.dev/sitemap-index.xml
-
-# Disallow admin area
-Disallow: /admin/
