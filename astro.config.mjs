@@ -11,6 +11,7 @@ import htmlMinifier from './src/integrations/html-minifier.mjs';
 export default defineConfig({
   output: 'static',
   site: 'https://astro-batavia.pages.dev',
+  trailingSlash: 'ignore',
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',

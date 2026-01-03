@@ -1,8 +1,9 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import { SEO } from 'astro-seo';
+import Schema from '../components/Schema.astro';
 import Header from '@/components/navigation/Header.astro';
 import Footer from '@/components/footer/Footer.astro';
-import SEO from '@/components/common/SEO.astro';
 import BackToTop from '@/components/ui/BackToTop.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import BackToTopScript from '@/components/common/BackToTopScript.astro';
@@ -16,149 +17,104 @@ export interface Props {
   title: string;
   description?: string;
   image?: string;
-  noindex?: boolean;
+  articleDate?: string | Date;
+  type?: 'website' | 'article';
   lang?: string;
-  canonical?: string;
-  type?: 'website' | 'article' | 'blog';
-  publishedTime?: string;
-  modifiedTime?: string;
+  // Retaining some extras for compatibility
   author?: string;
-  authorUrl?: string;
-  authorImage?: string;
   tags?: string[];
-  category?: string;
-  readingTime?: number;
-  wordCount?: number;
-  excerpt?: string;
-  breadcrumbs?: Array<{ name: string; url: string }>;
-  organization?: {
-    name: string;
-    url: string;
-    logo: string;
-    sameAs?: string[];
-  };
-  video?: {
-    url: string;
-    thumbnail: string;
-    description?: string;
-    duration?: string;
-  };
-  product?: {
-    name: string;
-    brand?: string;
-    price?: string;
-    currency?: string;
-    availability?: string;
-  };
+  canonical?: string;
 }
 
 const {
   title,
   description = 'A modern multi-language blog built with Astro.js',
   image,
-  noindex = false,
-  lang = 'en',
-  canonical,
+  articleDate,
   type = 'website',
-  publishedTime,
-  modifiedTime,
+  lang = 'en',
   author,
-  authorUrl,
-  authorImage,
-  tags = [],
-  category,
-  readingTime,
-  wordCount,
-  excerpt,
-  breadcrumbs = [],
-  organization,
-  video,
-  product,
+  tags,
+  canonical,
 } = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
+const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
+const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/og-default.svg', siteUrl).href;
 ---
 
 <!doctype html>
-<html
-  lang={lang}
-  class="scroll-smooth">
+<html lang={lang} class="scroll-smooth">
   <head>
-    <meta
-      name="google-site-verification" content="4gfaIH2OWHM7myPC6DUCLQOn3pWbrHMRoa6SEBQPpd0"
-    />
-    <meta
-      charset="UTF-8" />
-    <meta
-      name="description"
-      content={description}
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/favicon.svg"
-    />
-    <meta
-      name="generator"
-      content={Astro.generator}
-    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
 
-    <!-- Preconnect to external domains -->
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
+    <GoogleTagmanager id="GTM-5BH6SQST" />
 
-    <!-- Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- SEO Component -->
+    <!-- Semantic Head Management via astro-seo -->
     <SEO
       title={title}
       description={description}
-      image={image}
-      noindex={noindex}
-      canonical={canonical}
-      lang={lang}
-      type={type}
-      publishedTime={publishedTime}
-      modifiedTime={modifiedTime}
-      author={author}
-      authorUrl={authorUrl}
-      authorImage={authorImage}
-      tags={tags}
-      category={category}
-      readingTime={readingTime?.toString()}
-      wordCount={wordCount}
-      excerpt={excerpt}
-      breadcrumbs={breadcrumbs}
-      organization={organization}
-      video={video}
-      product={product}
+      canonical={canonicalURL}
+      openGraph={{
+        basic: {
+          title: title,
+          type: type,
+          image: resolvedImage,
+        },
+        optional: {
+          description: description,
+          siteName: "Astro Batavia",
+          locale: lang === 'en' ? 'en_US' : lang,
+        },
+        article: type === 'article' ? {
+          publishedTime: articleDate ? new Date(articleDate).toISOString() : undefined,
+          authors: author ? [author] : undefined,
+          tags: tags,
+        } : undefined,
+      }}
+      twitter={{
+        card: "summary_large_image",
+        title: title,
+        image: resolvedImage,
+        description: description,
+        creator: "@astrobatavia"
+      }}
+      extend={{
+        link: [
+          { rel: "icon", href: "/favicon.svg" },
+          { rel: "sitemap", href: "/sitemap-index.xml" }
+        ],
+        meta: [
+          { name: "viewport", content: "width=device-width, initial-scale=1" },
+        ],
+      }}
     />
+
+    <!-- Structured Data -->
+    <Schema
+      title={title}
+      description={description}
+      date={articleDate}
+      image={resolvedImage}
+      type={type}
+      author={author}
+    />
+
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
     <ThemeInitializer />
     <ViewTransitions />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/favicon.svg"
-    />
-    <GoogleTagmanager id="GTM-5BH6SQST" />
   </head>
-  <body
-    class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
+  <body class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black">Skip to content</a>
     <GoogleTagmanagerNoscript id="GTM-5BH6SQST" />
+
     <div id="app" class="flex flex-col md:min-h-full lg:min-h-screen">
       <Header />
       <main role="main" id="main-content" class="flex-1 pt-16">
@@ -166,6 +122,7 @@ const {
       </main>
       <Footer />
     </div>
+
     <BackToTop />
     <BackToTopScript />
     <EnhancedSearchOverlay />
