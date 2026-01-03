@@ -35,11 +35,9 @@ export default defineConfig({
     }),
     sentry(),
     spotlightjs(),
-    // Example of passing options:
-    // htmlMinifier({
-    //   removeComments: false,
-    // }),
-    htmlMinifier(),
+    htmlMinifier({
+      removeComments: true,
+    }),
   ],
   i18n: {
     defaultLocale: 'en',
