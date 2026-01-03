@@ -4,8 +4,11 @@ export interface Props {
   description: string;
   date?: string | Date;
   image?: string;
+  imageAlt?: string;
   type?: 'website' | 'article' | 'blog';
   author?: string;
+  authorUrl?: string;
+  modifiedTime?: string | Date;
 }
 
 const {
@@ -13,8 +16,11 @@ const {
   description,
   date,
   image,
+  imageAlt,
   type = 'website',
-  author = 'Astro Batavia'
+  author = 'Astro Batavia',
+  authorUrl,
+  modifiedTime
 } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
@@ -31,15 +37,24 @@ if (type === 'article' || type === 'blog') {
     "@type": "BlogPosting",
     "headline": title,
     "description": description,
-    "image": imageUrl,
+    "url": canonicalUrl,
+    "image": {
+      "@type": "ImageObject",
+      "url": imageUrl,
+      "caption": imageAlt || title,
+      "representativeOfPage": "true"
+    },
     "datePublished": date ? new Date(date).toISOString() : new Date().toISOString(),
+    "dateModified": modifiedTime ? new Date(modifiedTime).toISOString() : (date ? new Date(date).toISOString() : new Date().toISOString()),
     "author": {
       "@type": "Person",
-      "name": author
+      "name": author,
+      ...(authorUrl && { "url": authorUrl })
     },
     "publisher": {
       "@type": "Organization",
       "name": "Astro Batavia",
+      "url": siteUrl,
       "logo": {
         "@type": "ImageObject",
         "url": new URL('/favicon.svg', siteUrl).href

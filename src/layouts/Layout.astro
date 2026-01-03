@@ -22,8 +22,17 @@ export interface Props {
   lang?: string;
   // Retaining some extras for compatibility
   author?: string;
+  authorUrl?: string;
+  imageAlt?: string;
   tags?: string[];
   canonical?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  readingTime?: number;
+  wordCount?: number;
+  excerpt?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  organization?: any;
 }
 
 const {
@@ -34,8 +43,17 @@ const {
   type = 'website',
   lang = 'en',
   author,
+  authorUrl,
+  imageAlt,
   tags,
   canonical,
+  publishedTime,
+  modifiedTime,
+  readingTime,
+  wordCount,
+  excerpt,
+  breadcrumbs,
+  organization,
 } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
@@ -99,8 +117,11 @@ const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/og-defaul
       description={description}
       date={articleDate}
       image={resolvedImage}
+      imageAlt={imageAlt}
       type={type}
       author={author}
+      authorUrl={authorUrl}
+      modifiedTime={modifiedTime}
     />
 
     <!-- Preconnect & Fonts -->
