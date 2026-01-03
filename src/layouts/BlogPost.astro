@@ -14,7 +14,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
   headings: { depth: number; slug: string; text: string }[];
 };
 
-const { title, description, pubDate, editDate: updatedDate, heroImage, author, tags, slug, readingTime, headings } = Astro.props;
+const { title, description, pubDate, editDate: updatedDate, heroImage, heroImageAlt, author, authorURL, tags, slug, readingTime, headings } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -69,11 +69,14 @@ const relatedPosts = allLangPosts
   title={title}
   description={description}
   image={heroImage}
+  imageAlt={heroImageAlt}
   lang={lang}
   type="article"
   publishedTime={pubDate.toISOString()}
   modifiedTime={updatedDate?.toISOString()}
   author={author}
+  authorUrl={authorURL}
+  articleDate={pubDate}
   tags={tags || []}
   readingTime={readingTime ? parseInt(readingTime.replace(/\D/g, '')) : undefined}
   wordCount={undefined}
