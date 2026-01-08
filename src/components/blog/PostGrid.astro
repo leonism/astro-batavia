@@ -1,13 +1,13 @@
 ---
 import BlogCard from "@/components/blog/BlogCard.astro";
-import type { Post } from "@/features/blog/blogData";
+import type { CollectionEntry } from "astro:content";
 import { useTranslations } from "@/i18n/utils";
 import { languages } from "@/i18n/ui";
 
 type LanguageKey = keyof typeof languages;
 
 interface Props {
-  posts: Post[];
+  posts: CollectionEntry<"blog">[];
   lang: LanguageKey;
 }
 

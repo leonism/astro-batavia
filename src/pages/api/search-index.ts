@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { getPostUrl } from "@/i18n/utils";
 import EnterpriseSearchEngine from "../../features/search/EnterpriseSearchEngine";
 
 export const GET: APIRoute = async () => {
@@ -8,18 +9,21 @@ export const GET: APIRoute = async () => {
       return !data.draft;
     });
 
-    const documents = allBlogPosts.map((post) => ({
-      id: post.id,
-      title: post.data.title,
-      description: post.data.description,
-      content: post.body,
-      tags: post.data.tags || [],
-      url: `/${post.slug}`,
-      pubDate: post.data.pubDate,
-      author: post.data.author,
-      lang: post.slug.split('/')[0], // Assuming slug format like 'en/blog/post-title'
-      slug: post.slug.split('/').slice(2).join('/'), // Get everything after 'en/blog/'
-    }));
+    const documents = allBlogPosts.map((post) => {
+      const lang = post.slug.split('/')[0];
+      return {
+        id: post.id,
+        title: post.data.title,
+        description: post.data.description,
+        content: post.body,
+        tags: post.data.tags || [],
+        url: getPostUrl(post.slug, lang),
+        pubDate: post.data.pubDate,
+        author: post.data.author,
+        lang: lang,
+        slug: post.slug.split('/').slice(1).join('/'),
+      };
+    });
 
     const searchEngine = new EnterpriseSearchEngine();
     searchEngine.indexDocuments(documents);

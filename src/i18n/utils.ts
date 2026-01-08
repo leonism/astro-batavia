@@ -15,14 +15,14 @@ export function useTranslations(lang: keyof typeof ui) {
 
 export function getLocalizedPath(path: string, lang: string) {
   if (lang === defaultLang) {
-    if (path === "/") {
-      return "/";
-    } else {
-      return `/${lang}${path}`;
-    }
-  } else {
-    return `/${lang}${path}`;
+    return path;
   }
+  return `/${lang}${path.startsWith('/') ? path : '/' + path}`;
+}
+
+export function getPostUrl(slug: string, lang: string) {
+  const slugWithoutLang = slug.split('/').slice(1).join('/');
+  return getLocalizedPath(`/blog/${slugWithoutLang}`, lang);
 }
 
 export function removeLocaleFromPath(path: string) {

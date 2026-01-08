@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatDate, useTranslations } from "@/i18n/utils";
+import { formatDate, useTranslations, getLocalizedPath } from "@/i18n/utils";
 import type { ui } from "@/i18n/ui";
 
 export interface Props {
@@ -12,7 +12,7 @@ export interface Props {
 
 const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
 const t = useTranslations(lang as keyof typeof ui);
-const postUrl = `/${post.slug}`;
+const postUrl = getLocalizedPath(`/blog/${post.slug.split('/').slice(1).join('/')}`, lang);
 
 const excerpt = showExcerpt
   ? post.data.description || post.body.slice(0, isFeatured ? 300 : 150) + "..."
@@ -55,7 +55,7 @@ const excerptClasses = [
       <a href={postUrl} tabindex="-1" aria-hidden="true">
         <img
           src={post.data.heroImage}
-          alt={post.data.heroAlt || post.data.title}
+          alt={post.data.heroImageAlt || post.data.title}
           width={600}
           height={400}
           class={imageClasses}

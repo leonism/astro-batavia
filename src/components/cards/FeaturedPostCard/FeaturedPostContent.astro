@@ -8,11 +8,10 @@ import PostTags from "./PostTags.astro";
 interface Props {
   post: CollectionEntry<"blog">;
   index: number;
-  authorImage: string;
-  authorSlug: string;
+  lang: string;
 }
 
-const { post, index, authorImage, authorSlug } = Astro.props;
+const { post, index, lang } = Astro.props;
 ---
 
 <div
@@ -20,11 +19,12 @@ const { post, index, authorImage, authorSlug } = Astro.props;
   <div class="z-10 space-y-2">
     <PostMeta
       post={post}
-      
+      lang={lang}
     />
     <PostTitle
       post={post}
       index={index}
+      lang={lang}
     />
     <PostDescription
       post={post}

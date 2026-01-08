@@ -21,6 +21,7 @@ const blog = defineCollection({
     comment: z.boolean().optional(),
     robots: z.string().trim().optional(),
     canonicalURL: z.string().trim().optional(),
+    readingTime: z.string().optional(),
   }),
 });
 

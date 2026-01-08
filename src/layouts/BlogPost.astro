@@ -37,7 +37,7 @@ let nextPostData: { url: string; title: string } | undefined = undefined;
 if (currentIndex !== -1) {
   if (currentIndex > 0) {
     const prev = sortedLangPosts[currentIndex - 1];
-    const prevSlugWithoutLang = prev.slug.replace(/^(en|es|ja)\/blog\//g, '');
+    const prevSlugWithoutLang = prev.slug.split('/').slice(1).join('/');
     const prevUrl = getLocalizedPath(`/blog/${prevSlugWithoutLang}`, lang);
     previousPostData = {
       url: prevUrl,
@@ -46,7 +46,7 @@ if (currentIndex !== -1) {
   }
   if (currentIndex < sortedLangPosts.length - 1) {
     const next = sortedLangPosts[currentIndex + 1];
-    const nextSlugWithoutLang = next.slug.replace(/^(en|es|ja)\/blog\//g, '');
+    const nextSlugWithoutLang = next.slug.split('/').slice(1).join('/');
     const nextUrl = getLocalizedPath(`/blog/${nextSlugWithoutLang}`, lang);
     nextPostData = {
       url: nextUrl,
@@ -119,7 +119,7 @@ const relatedPosts = allLangPosts
           <div class="mb-8 rounded-lg overflow-hidden">
             <Picture
               src={heroImage}
-              alt={title}
+              alt={heroImageAlt || title}
               width={1200}
               height={600}
               class="w-full h-64 sm:h-80 lg:h-96 object-cover"

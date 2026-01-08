@@ -3,18 +3,18 @@ import type { CollectionEntry } from "astro:content";
 import FeaturedPostImage from "./FeaturedPostCard/FeaturedPostImage.astro";
 import FeaturedPostOverlay from "./FeaturedPostCard/FeaturedPostOverlay.astro";
 import FeaturedPostContent from "./FeaturedPostCard/FeaturedPostContent.astro";
+import { getLangFromUrl, getPostUrl } from "@/i18n/utils";
 
 interface Props {
   post: CollectionEntry<"blog">;
   index: number;
-  authorImage: string;
-  authorSlug: string;
 }
 
-const { post, index, authorImage, authorSlug } = Astro.props;
+const { post, index } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
 
-// Fix double /blog/ issue - post.slug already contains the full path
-const postUrl = `/${post.slug}`;
+// Fix double /blog/ issue - use helper
+const postUrl = getPostUrl(post.slug, lang);
 ---
 
 <article
@@ -30,7 +30,7 @@ const postUrl = `/${post.slug}`;
   <FeaturedPostContent
     post={post}
     index={index}
-    
+    lang={lang}
   />
   <a
     href={postUrl}

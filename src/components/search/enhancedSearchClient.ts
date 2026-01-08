@@ -1,7 +1,7 @@
-import EnterpriseSearchEngine, { 
-  type SearchResult, 
-  type SearchFilters, 
-  type SearchSuggestion 
+import EnterpriseSearchEngine, {
+  type SearchResult,
+  type SearchFilters,
+  type SearchSuggestion
 } from '../../features/search/EnterpriseSearchEngine';
 
 interface CategoryInfo {
@@ -78,7 +78,7 @@ class EnhancedSearchUI {
       this.allDocuments = await response.json();
       this.searchEngine.indexDocuments(this.allDocuments);
       console.log(`Enhanced search engine initialized with ${this.allDocuments.length} documents.`);
-      
+
       // Initialize suggestions
       this.initializeSuggestions();
     } catch (error) {
@@ -95,7 +95,7 @@ class EnhancedSearchUI {
     // Overlay controls
     const openButton = document.getElementById('open-search-overlay');
     const closeButton = document.getElementById('close-search-overlay');
-    
+
     openButton?.addEventListener('click', () => this.openSearchOverlay());
     closeButton?.addEventListener('click', () => this.closeSearchOverlay());
 
@@ -168,7 +168,7 @@ class EnhancedSearchUI {
     this.updateFilters(results);
 
     // Display results
-    this.searchResultsContainer.innerHTML = results.map((result, index) => 
+    this.searchResultsContainer.innerHTML = results.map((result, index) =>
       this.createResultCard(result, index)
     ).join('');
 
@@ -177,7 +177,7 @@ class EnhancedSearchUI {
   }
 
   private createResultCard(result: SearchResult, index: number): string {
-    const tags = result.tags.slice(0, 3).map(tag => 
+    const tags = result.tags.slice(0, 3).map(tag =>
       `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">${tag}</span>`
     ).join('');
 
@@ -186,7 +186,7 @@ class EnhancedSearchUI {
     const pubDate = new Date(result.pubDate).toLocaleDateString();
 
     return `
-      <div class="search-result-item p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200 cursor-pointer" data-index="${index}" data-url="/${result.lang}/blog/${result.slug}">
+      <div class="search-result-item p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200 cursor-pointer" data-index="${index}" data-url="${result.lang === 'en' ? '' : '/' + result.lang}/blog/${result.slug}">
         <div class="flex items-start space-x-4">
           <div class="flex-shrink-0">
             <div class="w-16 h-16 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center">
@@ -235,14 +235,14 @@ class EnhancedSearchUI {
 
   private updateFilters(results: SearchResult[]): void {
     const categories = new Map<string, number>();
-    
+
     results.forEach(result => {
       if (result.category) {
         categories.set(result.category, (categories.get(result.category) || 0) + 1);
       }
     });
 
-    const filterButtons = Array.from(categories.entries()).map(([category, count]) => 
+    const filterButtons = Array.from(categories.entries()).map(([category, count]) =>
       `<button class="filter-btn px-3 py-1 text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:border-primary-500 dark:hover:border-primary-400 transition-colors" data-filter="category" data-value="${category}">
         ${category} (${count})
       </button>`
@@ -288,8 +288,8 @@ class EnhancedSearchUI {
     // Show fallback suggestions
     const suggestions = this.searchEngine.getSuggestions(query, 5);
     const fallbackContainer = document.getElementById('search-suggestions-fallback')!;
-    
-    fallbackContainer.innerHTML = suggestions.map(suggestion => 
+
+    fallbackContainer.innerHTML = suggestions.map(suggestion =>
       `<button class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" onclick="document.getElementById('search-input').value='${suggestion.text}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         ${suggestion.text}
       </button>`
@@ -311,7 +311,7 @@ class EnhancedSearchUI {
 
     // Populate categories
     const categoriesContainer = document.getElementById('categories-list')!;
-    categoriesContainer.innerHTML = categories.map(cat => 
+    categoriesContainer.innerHTML = categories.map(cat =>
       `<button class="suggestion-item px-3 py-1 text-sm rounded-full transition-colors ${cat.color}" onclick="document.getElementById('search-input').value='category:${cat.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         ${cat.name} (${cat.count})
       </button>`
@@ -319,7 +319,7 @@ class EnhancedSearchUI {
 
     // Populate tags
     const tagsContainer = document.getElementById('tags-list')!;
-    tagsContainer.innerHTML = tags.slice(0, 10).map(tag => 
+    tagsContainer.innerHTML = tags.slice(0, 10).map(tag =>
       `<button class="suggestion-item px-3 py-1 text-sm rounded-full transition-colors ${tag.color}" onclick="document.getElementById('search-input').value='${tag.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         # ${tag.name}
       </button>`
@@ -327,7 +327,7 @@ class EnhancedSearchUI {
 
     // Populate authors
     const authorsContainer = document.getElementById('authors-list')!;
-    authorsContainer.innerHTML = authors.map(author => 
+    authorsContainer.innerHTML = authors.map(author =>
       `<button class="suggestion-item px-3 py-1 text-sm bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors" onclick="document.getElementById('search-input').value='author:${author.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         ${author.name}
       </button>`
@@ -335,7 +335,7 @@ class EnhancedSearchUI {
 
     // Populate popular searches
     const popularContainer = document.getElementById('popular-searches-list')!;
-    popularContainer.innerHTML = popularSearches.map(search => 
+    popularContainer.innerHTML = popularSearches.map(search =>
       `<button class="suggestion-item flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors w-full text-left" onclick="document.getElementById('search-input').value='${search.query}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -411,7 +411,7 @@ class EnhancedSearchUI {
 
   private handleKeyboardNavigation(e: KeyboardEvent): void {
     const visibleResults = this.searchResultsContainer.querySelectorAll('.search-result-item');
-    
+
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -472,7 +472,7 @@ class EnhancedSearchUI {
     this.searchOverlay.setAttribute('aria-hidden', 'false');
     this.searchInput.focus();
     document.body.style.overflow = 'hidden';
-    
+
     if (this.currentQuery.length === 0) {
       this.showSuggestions();
     }
@@ -485,7 +485,7 @@ class EnhancedSearchUI {
     this.currentQuery = '';
     this.keyboardFocusIndex = -1;
     document.body.style.overflow = '';
-    
+
     // Clear results and show suggestions
     this.showSuggestions();
     this.searchResultsContainer.innerHTML = '';
@@ -499,4 +499,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for potential external use
 export default EnhancedSearchUI;
-
