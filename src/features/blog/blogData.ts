@@ -1,26 +1,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 
 // Define a type for a blog post for better type safety
-export interface Post {
-  id: string;
-  slug: string;
-  body: string;
-  collection: "blog";
-  data: {
-    title: string;
-    description: string;
-    pubDate: Date;
-    updatedDate?: Date;
-    heroImage?: string;
-    tags?: string[];
-    draft?: boolean;
-  };
-  render: () => Promise<{
-    Content: unknown;
-    headings: { depth: number; slug: string; text: string }[];
-    remarkPluginFrontmatter: Record<string, unknown>;
-  }>;
-}
+export type Post = CollectionEntry<"blog">;
 
 /**
  * Fetches all English blog posts, filters out drafts, and sorts them by publication date.

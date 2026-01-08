@@ -1,12 +1,14 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getPostUrl } from "@/i18n/utils";
 
 interface Props {
   post: CollectionEntry<"blog">;
   index: number;
+  lang: string;
 }
 
-const { post, index } = Astro.props;
+const { post, index, lang } = Astro.props;
 ---
 
 <h2
@@ -19,7 +21,7 @@ const { post, index } = Astro.props;
   ]}
   aria-level={index === 0 ? 1 : 2}>
   <a
-    href={`/${post.slug}`}
+    href={getPostUrl(post.slug, lang)}
     class="hover:text-primary-200 focus:text-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors duration-200 line-clamp-2 sm:line-clamp-none"
     aria-describedby={`featured-post-desc-${post.slug}`}>
     {post.data.title}

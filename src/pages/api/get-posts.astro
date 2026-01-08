@@ -1,10 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import BlogCard from '@/components/blog/BlogCard.astro';
+import { getPostUrl } from '@/i18n/utils';
 
-import { getCollection, type CollectionEntry } from 'astro:content';
-
-export async function get({ request }: { request: Request }) {
+export const GET = async ({ request }: { request: Request }) => {
   try {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get('page') || '1', 10);
@@ -26,7 +24,7 @@ export async function get({ request }: { request: Request }) {
     const postsToDisplay = sortedPosts.slice(startIndex, startIndex + postsPerPage);
 
     const postsData = postsToDisplay.map(post => ({
-      url: `/${post.slug.replace(/^(en\/)?/, '')}`,
+      url: getPostUrl(post.slug, lang),
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
@@ -37,6 +35,7 @@ export async function get({ request }: { request: Request }) {
     }));
 
     return new Response(JSON.stringify(postsData), {
+      status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
