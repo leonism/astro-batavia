@@ -15,34 +15,26 @@ interface StaticPath {
 }
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog', ({ id, data }: { id: string, data: any }) => !id.startsWith('en/') && !data.draft);
+  const allPosts = await getCollection('blog', ({ id, data }: { id: string, data: any }) => id.startsWith('en/') && !data.draft);
 
-  const paths: StaticPath[] = [];
-
-  // Generate paths for all languages
-  allPosts.forEach((post: CollectionEntry<'blog'>) => {
+  return allPosts.map((post: CollectionEntry<'blog'>) => {
     const parts = post.id.split('/');
-    const lang = parts[0];
+    // parts[0] is 'en', parts[1] is 'blog' or the actual slug
     const slugPart = parts[1] === 'blog' ? parts.slice(2).join('/') : parts.slice(1).join('/');
-
-    // Remove the file extension (.mdx or .md) from the slug part
     const finalSlug = slugPart.replace(/\.(mdx?)$/, '');
 
-    paths.push({
+    return {
       params: {
-        lang: lang,
-        slug: finalSlug // Use the carefully constructed slug
+        slug: finalSlug
       },
       props: post,
-    });
+    };
   });
-
-  return paths;
 }
 
 type Props = CollectionEntry<'blog'>;
 
-const { lang } = Astro.params;
+const lang = "en";
 
 // Validate language
 if (!lang || !isValidLanguage(lang)) {

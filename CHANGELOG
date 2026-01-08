@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2026-01-08
+
+### Added
+
+- **feat(nav):** Overhauled the mobile navigation with a premium enterprise design featuring glassmorphism, decorative gradients, and smooth slide-in animations.
+- **feat(nav):** Integrated high-quality icons into the mobile navigation links for improved visual hierarchy.
+- **feat(nav):** Added a fixed "Start Reading" CTA within the mobile menu to drive user engagement.
+
+### Fixed
+
+- **fix(i18n):** Resolved the "double blog" path nesting issue (e.g., `/blog/blog/`) by refining `getStaticPaths` and the `getPostUrl` utility.
+- **fix(i18n):** Implemented hybrid routing: the homepage remains at the root (`/`) while English contents are correctly prefixed with `/en/`.
+- **fix(i18n):** Centralized URL generation across `BlogCard`, `RelatedArticles`, and `BlogPostNavigation` using the updated `getPostUrl` helper.
+- **fix(search):** Synchronized search results to use pre-calculated API URLs, eliminating client-side path reconstruction errors.
+
 ## [1.0.4] - 2026-01-01
 
 ### Added

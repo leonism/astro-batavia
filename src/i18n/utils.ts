@@ -14,15 +14,25 @@ export function useTranslations(lang: keyof typeof ui) {
 }
 
 export function getLocalizedPath(path: string, lang: string) {
-  if (lang === defaultLang) {
-    return path;
+  // Special case: English home page stays at root
+  if (lang === 'en' && (path === '/' || path === '')) {
+    return '/';
   }
-  return `/${lang}${path.startsWith('/') ? path : '/' + path}`;
+  const cleanPath = path.startsWith('/') ? path : '/' + path;
+  return `/${lang}${cleanPath}`;
 }
 
 export function getPostUrl(slug: string, lang: string) {
-  const slugWithoutLang = slug.split('/').slice(1).join('/');
-  return getLocalizedPath(`/blog/${slugWithoutLang}`, lang);
+  // slug usually is "lang/slug-content" or "lang/blog/slug-content"
+  const parts = slug.split('/');
+  const slugWithoutLang = parts.slice(1).join('/');
+
+  // Check if the slug already includes the 'blog' segment to avoid double /blog/blog/
+  const path = slugWithoutLang.startsWith('blog/')
+    ? `/${slugWithoutLang}`
+    : `/blog/${slugWithoutLang}`;
+
+  return getLocalizedPath(path, lang);
 }
 
 export function removeLocaleFromPath(path: string) {
