@@ -1,14 +1,14 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import Picture from "@/components/ui/Picture.astro";
+import { formatDate } from "@/i18n/utils";
 
 interface Props {
   post: CollectionEntry<"blog">;
-  authorImage: string;
-  authorSlug: string;
+  lang: string;
 }
 
-const { post, authorImage, authorSlug } = Astro.props;
+const { post, lang } = Astro.props;
 ---
 
 <div class="flex items-center gap-3 text-sm text-blue-200 sm:gap-2">
@@ -48,12 +48,6 @@ const { post, authorImage, authorSlug } = Astro.props;
         d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
       ></path>
     </svg>
-    {
-      new Date(post.data.pubDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
-    }
+    {formatDate(post.data.pubDate, lang)}
   </time>
 </div>

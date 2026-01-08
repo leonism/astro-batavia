@@ -37,6 +37,7 @@ export const ui = {
     "blog.description":
       "Discover insights, tutorials, and stories from our community of developers and creators.",
     "blog.readMore": "Read more",
+    "blog.readMoreAbout": "Read more about",
     "blog.readTime": "min read",
     "blog.publishedOn": "Published on",
     "blog.by": "by",
@@ -173,6 +174,7 @@ export const ui = {
     "blog.description":
       "Descubre perspectivas, tutoriales e historias de nuestra comunidad de desarrolladores y creadores.",
     "blog.readMore": "Leer más",
+    "blog.readMoreAbout": "Leer más sobre",
     "blog.readTime": "min de lectura",
     "blog.publishedOn": "Publicado el",
     "blog.by": "por",
@@ -310,6 +312,7 @@ export const ui = {
     "blog.description":
       "開発者とクリエイターのコミュニティからの洞察、チュートリアル、ストーリーを発見。",
     "blog.readMore": "続きを読む",
+    "blog.readMoreAbout": "詳細を読む:",
     "blog.readTime": "分で読める",
     "blog.publishedOn": "公開日",
     "blog.by": "著者",
