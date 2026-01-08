@@ -1,35 +1,42 @@
 ---
 import HeaderNavLinks from "./HeaderNavLinks.astro";
-import { getLangFromUrl } from "@/i18n/utils";
+import { getLangFromUrl, useTranslations, getLocalizedPath } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
 
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const currentPath = Astro.url.pathname;
+const t = useTranslations(lang);
 ---
 
 <div
   id="mobile-nav-overlay"
-  class="mobile-nav-overlay fixed inset-0 bg-black/50 hidden md:hidden"
+  class="mobile-nav-overlay fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
   aria-hidden="true"
   role="presentation"
 >
 </div>
 <div
   id="mobile-menu"
-  class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 z-50 shadow-lg p-6 hidden md:hidden"
+  class="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl z-50 shadow-2xl translate-x-full transition-transform duration-500 ease-out flex flex-col md:hidden border-l border-white/20 dark:border-slate-800/50"
   aria-modal="true"
   aria-label="Mobile menu"
   role="dialog"
   aria-hidden="true"
 >
-  <div class="flex justify-end mb-4">
+  <!-- Decorative Header Gradient -->
+  <div class="absolute top-0 right-0 -z-10 w-full h-40 bg-gradient-to-br from-blue-600/10 via-indigo-600/5 to-transparent dark:from-blue-500/10 dark:via-indigo-500/5"></div>
+
+  <header class="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800">
+    <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+      Navigation
+    </div>
     <button
       id="close-mobile-menu"
-      class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+      class="group p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 transition-all duration-300"
       aria-label="Close mobile menu"
     >
       <svg
-        class="h-6 w-6"
+        class="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -43,10 +50,23 @@ const currentPath = Astro.url.pathname;
         ></path>
       </svg>
     </button>
-  </div>
-  <div class="flex flex-col gap-4">
+  </header>
+
+  <nav class="flex-1 overflow-y-auto p-6 flex flex-col gap-2">
     <HeaderNavLinks lang={lang} currentPath={currentPath} variant="mobile" />
-  </div>
+  </nav>
+
+  <footer class="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+    <a
+      href={getLocalizedPath("/blog", lang)}
+      class="flex items-center justify-center gap-3 w-full py-4 text-center font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-95 transition-all duration-300"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+      </svg>
+      {t("home.hero.startReading")}
+    </a>
+  </footer>
 </div>
 
 <script>
@@ -61,9 +81,10 @@ const currentPath = Astro.url.pathname;
     const openMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
       lastActiveElement = document.activeElement as HTMLElement | null;
-      mobileMenu.classList.remove("hidden");
-      mobileNavOverlay.classList.remove("hidden");
-      mobileNavOverlay.setAttribute("aria-hidden", "false");
+      mobileMenu.classList.remove("translate-x-full");
+      mobileNavOverlay.classList.remove("pointer-events-none");
+      mobileNavOverlay.classList.add("opacity-100");
+
       document.body.classList.add("mobile-nav-open");
       mobileMenu.setAttribute("aria-hidden", "false");
       if (mobileMenuButton) {
@@ -98,8 +119,10 @@ const currentPath = Astro.url.pathname;
     const closeMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
       document.body.classList.remove("mobile-nav-open");
-      mobileMenu.classList.add("hidden");
-      mobileNavOverlay.classList.add("hidden");
+      mobileMenu.classList.add("translate-x-full");
+      mobileNavOverlay.classList.add("pointer-events-none");
+      mobileNavOverlay.classList.remove("opacity-100");
+
       mobileMenu.setAttribute("aria-hidden", "true");
       mobileNavOverlay.setAttribute("aria-hidden", "true");
       if (mobileMenuButton) {
@@ -123,9 +146,14 @@ const currentPath = Astro.url.pathname;
     }
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && mobileMenu && !mobileMenu.classList.contains("hidden")) {
+      if (event.key === "Escape" && mobileMenu && !mobileMenu.classList.contains("translate-x-full")) {
         closeMobileMenu();
       }
+    });
+
+    // Close menu when clicking a link
+    mobileMenu?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
     });
   });
 </script>

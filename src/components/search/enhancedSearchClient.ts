@@ -186,7 +186,7 @@ class EnhancedSearchUI {
     const pubDate = new Date(result.pubDate).toLocaleDateString();
 
     return `
-      <div class="search-result-item p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200 cursor-pointer" data-index="${index}" data-url="${result.lang === 'en' ? '' : '/' + result.lang}/blog/${result.slug}">
+      <div class="search-result-item p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200 cursor-pointer" data-index="${index}" data-url="${result.url}">
         <div class="flex items-start space-x-4">
           <div class="flex-shrink-0">
             <div class="w-16 h-16 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center">
