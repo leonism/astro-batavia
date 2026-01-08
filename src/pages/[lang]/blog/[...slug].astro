@@ -15,7 +15,7 @@ interface StaticPath {
 }
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog', ({ data }: { data: CollectionEntry<'blog'>['data'] }) => !data.draft);
+  const allPosts = await getCollection('blog', ({ id, data }: { id: string, data: any }) => !id.startsWith('en/') && !data.draft);
 
   const paths: StaticPath[] = [];
 
@@ -23,7 +23,7 @@ export async function getStaticPaths() {
   allPosts.forEach((post: CollectionEntry<'blog'>) => {
     const parts = post.id.split('/');
     const lang = parts[0];
-    const slugPart = parts.slice(1).join('/');
+    const slugPart = parts[1] === 'blog' ? parts.slice(2).join('/') : parts.slice(1).join('/');
 
     // Remove the file extension (.mdx or .md) from the slug part
     const finalSlug = slugPart.replace(/\.(mdx?)$/, '');

@@ -4,7 +4,7 @@ import Layout from './Layout.astro';
 import Picture from '@/components/ui/Picture.astro';
 import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
 import ShareButtons from '@/components/blog/ShareButtons.astro';
-import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
+import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath, getPostUrl } from '@/i18n/utils';
 import RelatedArticles from '@/components/blog/RelatedArticles.astro';
 import TableOfContents from '@/components/blog/TableOfContents.astro';
 
@@ -37,19 +37,15 @@ let nextPostData: { url: string; title: string } | undefined = undefined;
 if (currentIndex !== -1) {
   if (currentIndex > 0) {
     const prev = sortedLangPosts[currentIndex - 1];
-    const prevSlugWithoutLang = prev.slug.split('/').slice(1).join('/');
-    const prevUrl = getLocalizedPath(`/blog/${prevSlugWithoutLang}`, lang);
     previousPostData = {
-      url: prevUrl,
+      url: getPostUrl(prev.slug, lang),
       title: prev.data.title,
     };
   }
   if (currentIndex < sortedLangPosts.length - 1) {
     const next = sortedLangPosts[currentIndex + 1];
-    const nextSlugWithoutLang = next.slug.split('/').slice(1).join('/');
-    const nextUrl = getLocalizedPath(`/blog/${nextSlugWithoutLang}`, lang);
     nextPostData = {
-      url: nextUrl,
+      url: getPostUrl(next.slug, lang),
       title: next.data.title,
     };
   }
