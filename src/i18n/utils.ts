@@ -90,7 +90,7 @@ export function slugifyTag(tag: string) {
     .trim()
     .replace(/\s+/g, '-')
     .replace(/\//g, '-')
-    .replace(/[!"#$%&'()*+,.:;<=>?@\[\\\]^`{|}~]/g, '') // Remove common symbols except hyphen
+    .replace(/[!"#$%&'()*+,.:;<=>?@\[\\\]^`{|}~]/g, '') // Remove symbols but keep letters/numbers (inc. non-ASCII)
     .replace(/--+/g, '-')
     .replace(/^-+/, '')
     .replace(/-+$/, '');
