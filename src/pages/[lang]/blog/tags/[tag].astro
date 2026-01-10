@@ -8,18 +8,26 @@ import { ui } from '@/i18n/ui';
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
   const uniqueTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
-  const validTags = uniqueTags.filter(tag => tag && tag.trim().length > 0);
   const languages = ['es', 'ja']; // en is handled separately
 
-  return languages.flatMap(lang =>
-    validTags.map(tag => ({
-      params: {
-        lang,
-        tag: slugifyTag(tag)
-      },
-      props: { tag }
-    }))
-  );
+  return languages.flatMap(lang => {
+    const allPaths = uniqueTags
+      .map(tag => ({
+        params: { lang, tag: slugifyTag(tag) },
+        props: { tag }
+      }))
+      .filter(path => path.params.tag.length > 0);
+
+    // Group by slug to prevent duplicates per language
+    const pathMap = new Map();
+    allPaths.forEach(p => {
+      if (!pathMap.has(p.params.tag)) {
+        pathMap.set(p.params.tag, p);
+      }
+    });
+
+    return Array.from(pathMap.values());
+  });
 }
 
 const { tag } = Astro.props;
