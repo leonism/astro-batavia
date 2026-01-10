@@ -11,18 +11,22 @@ export async function getStaticPaths() {
   const languages = ['es', 'ja']; // en is handled separately
 
   return languages.flatMap(lang => {
-    const paths = uniqueTags
-      .map(tag => {
-        const slug = slugifyTag(tag);
-        return {
-          params: { lang, tag: slug },
-          props: { tag }
-        };
-      })
+    const allPaths = uniqueTags
+      .map(tag => ({
+        params: { lang, tag: slugifyTag(tag) },
+        props: { tag }
+      }))
       .filter(path => path.params.tag.length > 0);
 
-    // Eliminate duplicate slugs per language
-    return Array.from(new Map(paths.map(p => [p.params.tag, p])).values());
+    // Group by slug to prevent duplicates per language
+    const pathMap = new Map();
+    allPaths.forEach(p => {
+      if (!pathMap.has(p.params.tag)) {
+        pathMap.set(p.params.tag, p);
+      }
+    });
+
+    return Array.from(pathMap.values());
   });
 }
 
