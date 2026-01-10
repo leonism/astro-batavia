@@ -1,4 +1,5 @@
 import { ui, defaultLang } from './ui';
+export { ui, defaultLang };
 import type { TranslationKey } from './types';
 
 export function getLangFromUrl(url: URL) {
@@ -9,16 +10,26 @@ export function getLangFromUrl(url: URL) {
 
 export function useTranslations(lang: keyof typeof ui) {
   return function t(key: TranslationKey) {
-    return ui[lang][key] || ui[defaultLang][key];
+    if (!ui[lang]) {
+      console.warn(`Translation language "${lang}" not found, falling back to "${defaultLang}"`);
+      return ui[defaultLang][key] || key;
+    }
+    return ui[lang][key] || ui[defaultLang][key] || key;
   }
 }
 
 export function getLocalizedPath(path: string, lang: string) {
+  const cleanPath = path.startsWith('/') ? path : '/' + path;
+
+  // Special case: Search page is unified and language-agnostic in the URL
+  if (cleanPath === '/search') {
+    return '/search';
+  }
+
   // Special case: English home page stays at root
   if (lang === 'en' && (path === '/' || path === '')) {
     return '/';
   }
-  const cleanPath = path.startsWith('/') ? path : '/' + path;
   return `/${lang}${cleanPath}`;
 }
 

@@ -186,46 +186,35 @@ class EnhancedSearchUI {
     const pubDate = new Date(result.pubDate).toLocaleDateString();
 
     return `
-      <div class="search-result-item p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200 cursor-pointer" data-index="${index}" data-url="${result.url}">
-        <div class="flex items-start space-x-4">
-          <div class="flex-shrink-0">
-            <div class="w-16 h-16 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="search-result-item p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-lg transition-all duration-300 cursor-pointer group" data-index="${index}" data-url="${result.url}">
+        <div class="flex flex-col space-y-3">
+          ${result.heroImage ? `
+            <div class="w-full h-32 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 shadow-sm group-hover:scale-[1.01] transition-transform duration-300">
+              <img src="${result.heroImage}" alt="${result.title}" class="w-full h-full object-cover" />
+            </div>
+          ` : `
+            <div class="w-full h-24 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center shadow-sm">
+              <svg class="w-10 h-10 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
               </svg>
             </div>
-          </div>
-          <div class="flex-1 min-w-0">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
+          `}
+
+          <div class="flex-1 min-w-0 space-y-2">
+            <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
               ${result.highlightedTitle || result.title}
             </h3>
-            <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
+            <p class="text-gray-600 dark:text-gray-400 text-xs leading-relaxed line-clamp-2">
               ${result.highlightedDescription || result.description}
             </p>
-            <div class="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400 mb-2">
-              <span class="flex items-center">
-                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
-                ${author}
+
+            <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-gray-100 dark:border-gray-800 mt-2">
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-primary-50 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-800">
+                ${result.lang}
               </span>
-              <span class="flex items-center">
-                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                ${pubDate}
-              </span>
-              ${readingTime ? `
-                <span class="flex items-center">
-                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                  ${readingTime}
-                </span>
-              ` : ''}
-            </div>
-            <div class="flex flex-wrap gap-1">
-              ${tags}
+              <div class="flex gap-1">
+                ${tags}
+              </div>
             </div>
           </div>
         </div>

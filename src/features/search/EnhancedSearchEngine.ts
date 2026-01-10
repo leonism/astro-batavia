@@ -16,6 +16,7 @@ export interface SearchableDocument {
   lang: string;
   slug: string;
   readingTime?: number;
+  heroImage?: string;
 }
 
 export interface SearchResult extends SearchableDocument {
@@ -157,7 +158,7 @@ class EnhancedSearchEngine {
   /**
    * Index documents with enhanced semantic analysis
    */
-  indexDocuments(documents: SearchableDocument[]): void {
+  async indexDocuments(documents: SearchableDocument[]): Promise<void> {
     const startTime = performance.now();
 
     this.documents = documents.map(doc => ({
@@ -169,16 +170,16 @@ class EnhancedSearchEngine {
     this.clearIndexes();
 
     // Build multiple indexes in parallel for better performance
-    Promise.all([
+    await Promise.all([
       this.buildSearchIndex(),
       this.buildTagIndex(),
       this.buildTitleIndex(),
       this.buildSemanticIndex(),
       this.buildNgramIndex(),
       this.buildPhraseIndex()
-    ]).then(() => {
-      console.log(`Indexing completed in ${performance.now() - startTime}ms`);
-    });
+    ]);
+
+    console.log(`Indexing completed in ${performance.now() - startTime}ms`);
   }
 
   /**
