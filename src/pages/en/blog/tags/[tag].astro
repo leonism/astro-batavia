@@ -7,12 +7,21 @@ import { useTranslations, slugifyTag } from '@/i18n/utils';
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
   const uniqueTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
-  const validTags = uniqueTags.filter(tag => tag && tag.trim().length > 0);
 
-  return validTags.map(tag => ({
-    params: { tag: slugifyTag(tag) },
-    props: { tag }
-  }));
+  const paths = uniqueTags
+    .map(tag => {
+      const slug = slugifyTag(tag);
+      return {
+        params: { tag: slug },
+        props: { tag }
+      };
+    })
+    .filter(path => path.params.tag.length > 0);
+
+  // Eliminate duplicate slugs
+  const uniquePaths = Array.from(new Map(paths.map(p => [p.params.tag, p])).values());
+
+  return uniquePaths;
 }
 
 const { tag } = Astro.props;
