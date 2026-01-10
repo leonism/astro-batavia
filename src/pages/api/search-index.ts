@@ -22,13 +22,10 @@ export const GET: APIRoute = async () => {
         author: post.data.author,
         lang: lang,
         slug: post.slug.split('/').slice(1).join('/'),
+        heroImage: post.data.heroImage,
       };
     });
 
-    const searchEngine = new EnterpriseSearchEngine();
-    searchEngine.indexDocuments(documents);
-
-    // For simplicity, we're re-indexing on each request.
     // In a production environment, you'd want to pre-build this index
     // or use a persistent search service.
 

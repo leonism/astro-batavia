@@ -4,23 +4,9 @@ import SearchInputForm from '@/components/search/SearchInputForm.astro';
 import SearchFilters from '@/components/search/SearchFilters.astro';
 import SearchResults from '@/components/search/SearchResults.astro';
 import { getCollection } from 'astro:content';
-import { useTranslations, isValidLanguage } from '@/i18n/utils';
+import { useTranslations, defaultLang } from '@/i18n/utils';
 
-export async function getStaticPaths() {
-  return [
-    { params: { lang: "en" } },
-    { params: { lang: "es" } },
-    { params: { lang: "ja" } }
-  ];
-}
-
-const { lang } = Astro.params;
-
-// Validate language
-if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect("/404");
-}
-
+const lang = defaultLang;
 const t = useTranslations(lang);
 
 // Fetch all posts to get unique tags for filtering
@@ -28,7 +14,7 @@ const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))].sort();
 
 // Initial posts for display (empty, will be populated by client-side JS)
-const initialPosts = [];
+const initialPosts: any[] = [];
 ---
 
 <Layout
@@ -44,7 +30,7 @@ const initialPosts = [];
       <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-4">
         {t('search.pageDescription')}
       </p>
-      
+
       <!-- Keyboard Navigation Instructions -->
       <details class="max-w-2xl mx-auto mb-6">
         <summary class="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded px-2 py-1">
@@ -76,12 +62,13 @@ const initialPosts = [];
   </div>
 </Layout>
 
-<script type="module">
-  import EnhancedSearchClient from '/src/features/search/EnhancedSearchClient.ts';
+<script>
+  // @ts-nocheck
+  import EnhancedSearchClient from '../features/search/EnhancedSearchClient';
 
   document.addEventListener('astro:page-load', async () => {
     console.log('Enhanced search page loading...');
-    
+
     // Initialize enhanced search client
     const searchClient = new EnhancedSearchClient({
       searchInputId: 'main-search-input',
@@ -102,13 +89,13 @@ const initialPosts = [];
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const documents = await response.json();
       console.log(`Fetched ${documents.length} documents for indexing`);
-      
+
       await searchClient.initialize(documents);
       console.log('Enhanced search client initialized successfully');
-      
+
     } catch (error) {
       console.error('Failed to initialize search:', error);
       const statusElement = document.getElementById('search-status');
@@ -153,22 +140,43 @@ const initialPosts = [];
       button.addEventListener('click', async () => {
         tagFilterButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-        
-        const tag = button.dataset.tag;
-        currentFilters.tags = tag === 'all' ? [] : [tag];
-        
+
+        const tag = button.dataset?.tag;
+        currentFilters.tags = (tag === 'all' || !tag) ? [] : [tag];
+
         const searchInput = document.getElementById('main-search-input');
         const query = searchInput ? searchInput.value : '';
-        
+
         if (query) {
-          const results = await searchClient.search(query, { 
-            ...currentFilters, 
-            ...currentSort 
+          const results = await searchClient.search(query, {
+            ...currentFilters,
+            ...currentSort
           });
           searchClient.displayResults(results);
         }
       });
     });
+
+    // Handle language options
+    const langSelect = document.getElementById('lang-select');
+    if (langSelect) {
+      langSelect.addEventListener('change', async () => {
+        const selectedLang = langSelect.value;
+        // Note: Language is now filtered in search options directly
+        // The search client handles language automatically based on URL
+
+        const searchInput = document.getElementById('main-search-input');
+        const query = searchInput ? searchInput.value : '';
+
+        if (query) {
+          const results = await searchClient.search(query, {
+            ...currentFilters,
+            ...currentSort
+          });
+          searchClient.displayResults(results);
+        }
+      });
+    }
 
     // Handle sort options
     const sortSelect = document.getElementById('sort-select');
@@ -185,14 +193,14 @@ const initialPosts = [];
         <option value="title-desc">Title Z-A</option>
       `;
       sortSelect.value = 'hybrid-desc';
-      
+
       sortSelect.addEventListener('change', async () => {
         const [sortBy, sortOrder] = sortSelect.value.split('-');
         currentSort = { sortBy, sortOrder };
-        
+
         const searchInput = document.getElementById('main-search-input');
         const query = searchInput ? searchInput.value : '';
-        
+
         if (query) {
           const results = await searchClient.search(query, {
             ...currentFilters,
@@ -205,7 +213,7 @@ const initialPosts = [];
 
     // Performance optimization - cleanup on page unload
     window.addEventListener('beforeunload', () => {
-      searchClient.searchEngine.optimizePerformance();
+      searchClient.optimizePerformance();
     });
 
     // Expose search client and insights to console for debugging
