@@ -964,20 +964,7 @@ class EnhancedSearchEngine {
       .trim();
   }
 
-  private stripMarkdown(text: string): string {
-    if (!text) return '';
-    return text
-      .replace(/!\[(.*?)\]\(.*?\)/g, '') // Images
-      .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Links
-      .replace(/#{1,6}\s+(.*)/g, '$1') // Headers
-      .replace(/(\*\*|__)(.*?)\1/g, '$2') // Bold
-      .replace(/(\*|_)(.*?)\1/g, '$2') // Italic
-      .replace(/`{3}[\s\S]*?`{3}/g, '') // Code blocks
-      .replace(/`(.+?)`/g, '$1') // Inline code
-      .replace(/^\s*>\s+(.*)/g, '$1') // Blockquotes
-      .replace(/\n+/g, ' ') // Normalize newlines
-      .trim();
-  }
+
 
   /**
    * Track result click for analytics
