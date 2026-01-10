@@ -4,7 +4,7 @@ import Layout from './Layout.astro';
 import Picture from '@/components/ui/Picture.astro';
 import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
 import ShareButtons from '@/components/blog/ShareButtons.astro';
-import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath, getPostUrl } from '@/i18n/utils';
+import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath, getPostUrl, slugifyTag } from '@/i18n/utils';
 import RelatedArticles from '@/components/blog/RelatedArticles.astro';
 import TableOfContents from '@/components/blog/TableOfContents.astro';
 
@@ -169,7 +169,7 @@ const relatedPosts = allLangPosts
             <div class="flex flex-wrap gap-2">
               {tags.map((tag: string) => (
                 <a
-                  href={getLocalizedPath(`/blog/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`, lang)}
+                  href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
                   class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors duration-200"
                 >
                   #{tag}
