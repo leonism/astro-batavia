@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2026-01-11
+
+### Added
+
+- **feat(authors):** Implemented a dedicated `authors` content collection with schema validation and initial team data.
+- **feat(blog):** Enabled static tag pages for all languages (`/en/blog/tags/[tag]`, `/[lang]/blog/tags/[tag]`) for better SEO and sitemap indexing.
+- **feat(blog):** Implemented client-side "Load More" functionality for the blog index, enabling seamless loading of additional articles without full page reloads.
+
+### Fixed
+
+- **fix(search):** Resolved a duplicate method definition (`stripMarkdown`) in `EnhancedSearchEngine.ts` that was causing build warnings.
+- **fix(search):** Removed unused test file `EnhancedSearchEngine.test.ts`.
+- **fix(blog):** Corrected the blog tags link generation to point to the new static tag pages instead of using query parameters, ensuring distinct URLs for each tag view.
+- **fix(api):** Updated the `/api/get-posts` endpoint to return server-rendered HTML fragments (using `BlogCard`) instead of JSON, aligning with the client-side consumption model.
 ## [1.0.6] - 2026-01-10
 
 ### Changed
