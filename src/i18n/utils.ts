@@ -83,3 +83,14 @@ export function getAvailableLanguages() {
 export function isValidLanguage(lang: string): lang is keyof typeof ui {
   return lang in ui;
 }
+
+export function slugifyTag(tag: string) {
+  return tag
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/\//g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+}
