@@ -87,9 +87,10 @@ export function isValidLanguage(lang: string): lang is keyof typeof ui {
 export function slugifyTag(tag: string) {
   return tag
     .toLowerCase()
+    .trim()
     .replace(/\s+/g, '-')
     .replace(/\//g, '-')
-    .replace(/[^\w-]+/g, '')
+    .replace(/[!"#$%&'()*+,.:;<=>?@\[\\\]^`{|}~]/g, '') // Remove common symbols except hyphen
     .replace(/--+/g, '-')
     .replace(/^-+/, '')
     .replace(/-+$/, '');
