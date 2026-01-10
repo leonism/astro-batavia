@@ -1,6 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import { SEO } from 'astro-seo';
+import SEO from '@/components/common/SEO.astro';
 import Schema from '@/components/common/Schema.astro';
 import Header from '@/components/navigation/Header.astro';
 import Footer from '@/components/footer/Footer.astro';
@@ -58,7 +58,7 @@ const {
 
 const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
-const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/og-default.svg', siteUrl).href;
+const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/images/og-default.svg', siteUrl).href;
 ---
 
 <!doctype html>
@@ -66,49 +66,28 @@ const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/og-defaul
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     <GoogleTagmanager id="GTM-5BH6SQST" />
-
-    <!-- Semantic Head Management via astro-seo -->
+    <!-- Custom SEO Component -->
     <SEO
       title={title}
       description={description}
+      image={resolvedImage}
       canonical={canonicalURL}
-      openGraph={{
-        basic: {
-          title: title,
-          type: type,
-          image: resolvedImage,
-        },
-        optional: {
-          description: description,
-          siteName: "Astro Batavia",
-          locale: lang === 'en' ? 'en_US' : lang,
-        },
-        article: type === 'article' ? {
-          publishedTime: articleDate ? new Date(articleDate).toISOString() : undefined,
-          authors: author ? [author] : undefined,
-          tags: tags,
-        } : undefined,
-      }}
-      twitter={{
-        card: "summary_large_image",
-        title: title,
-        image: resolvedImage,
-        description: description,
-        creator: "@astrobatavia"
-      }}
-      extend={{
-        link: [
-          { rel: "icon", href: "/favicon.svg" },
-          { rel: "sitemap", href: "/sitemap-index.xml" }
-        ],
-        meta: [
-          { name: "viewport", content: "width=device-width, initial-scale=1" },
-        ],
-      }}
+      type={type}
+      lang={lang}
+      publishedTime={publishedTime || (articleDate ? new Date(articleDate).toISOString() : undefined)}
+      modifiedTime={modifiedTime}
+      author={author}
+      authorUrl={authorUrl}
+      tags={tags}
+      readingTime={readingTime?.toString()}
+      wordCount={wordCount}
+      excerpt={excerpt}
+      breadcrumbs={breadcrumbs}
+      organization={organization}
     />
 
     <!-- Structured Data -->
