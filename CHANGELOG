@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **fix(search):** Removed unused test file `EnhancedSearchEngine.test.ts`.
 - **fix(blog):** Corrected the blog tags link generation to point to the new static tag pages instead of using query parameters, ensuring distinct URLs for each tag view.
 - **fix(api):** Updated the `/api/get-posts` endpoint to return server-rendered HTML fragments (using `BlogCard`) instead of JSON, aligning with the client-side consumption model.
-- **fix(blog):** Resolved "Missing parameter: tag" build error by enhancing `slugifyTag` to support non-ASCII characters and filtering out empty slugs in `getStaticPaths`.
+- **fix(blog):** Resolved "Missing parameter: tag" build error by enhancing `slugifyTag` to support international characters and ensuring `getStaticPaths` filters out empty slugs.
 ## [1.0.6] - 2026-01-10
 
 ### Changed
