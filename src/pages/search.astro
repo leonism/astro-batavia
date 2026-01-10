@@ -160,6 +160,7 @@ const initialPosts: any[] = [];
     // Handle language options
     const langSelect = document.getElementById('lang-select');
     if (langSelect) {
+      langSelect.value = 'all'; // Ensure UI shows "All Languages" by default
       langSelect.addEventListener('change', async () => {
         const selectedLang = langSelect.value;
         // Note: Language is now filtered in search options directly
@@ -171,7 +172,8 @@ const initialPosts: any[] = [];
         if (query) {
           const results = await searchClient.search(query, {
             ...currentFilters,
-            ...currentSort
+            ...currentSort,
+            lang: selectedLang
           });
           searchClient.displayResults(results);
         }
