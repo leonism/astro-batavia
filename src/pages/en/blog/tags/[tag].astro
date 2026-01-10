@@ -2,7 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
-import { useTranslations } from '@/i18n/utils';
+import { useTranslations, slugifyTag } from '@/i18n/utils';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
@@ -10,7 +10,7 @@ export async function getStaticPaths() {
   const validTags = uniqueTags.filter(tag => tag && tag.trim().length > 0);
 
   return validTags.map(tag => ({
-    params: { tag: tag.toLowerCase().replace(/\s+/g, '-') },
+    params: { tag: slugifyTag(tag) },
     props: { tag }
   }));
 }
@@ -25,7 +25,7 @@ const posts = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>
   if (!data.tags) return false;
 
   // Check if any tag matches the slugified version (in case of case sensitivity or spaces)
-  return data.tags.some(t => t.toLowerCase().replace(/\s+/g, '-') === Astro.params.tag);
+  return data.tags.some(t => slugifyTag(t) === Astro.params.tag);
 });
 
 // Sort posts by publication date (newest first)
