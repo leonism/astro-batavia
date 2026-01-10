@@ -25,6 +25,7 @@ export interface SearchResult extends SearchableDocument {
   highlightedTitle?: string;
   highlightedDescription?: string;
   highlightedContent?: string;
+  highlightedExcerpt?: string;
   excerpt?: string;
   semanticScore?: number;
   contextualRelevance?: number;
@@ -404,6 +405,9 @@ class EnhancedSearchEngine {
         if (options.enableHighlighting) {
           result.highlightedTitle = this.highlightText(doc.title, query);
           result.highlightedDescription = this.highlightText(doc.description, query);
+          if (result.excerpt) {
+            result.highlightedExcerpt = this.highlightText(result.excerpt, query);
+          }
           if (doc.content) {
             result.highlightedContent = this.highlightText(
               doc.content.substring(0, 300),
@@ -729,7 +733,7 @@ class EnhancedSearchEngine {
 
   private generateSmartExcerpt(doc: SearchableDocument, query: string): string {
     const queryWords = this.extractWords(query);
-    const content = doc.content || doc.description;
+    const content = this.stripMarkdown(doc.content || doc.description);
 
     // Find the best sentence containing query terms
     const sentences = content.split(/[.!?]+/);
@@ -836,7 +840,7 @@ class EnhancedSearchEngine {
       .replace(/[^\w\s+#]/g, " ")
       .split(/\s+/)
       .filter(word => word.length >= 2 && !this.stopWords.has(word))
-      .slice(0, 50); // Limit to prevent performance issues
+      .filter(word => word.length >= 2 && !this.stopWords.has(word));
   }
 
   private normalizeQuery(query: string): string {
@@ -872,7 +876,7 @@ class EnhancedSearchEngine {
     if (filters.dateTo && new Date(doc.pubDate) > filters.dateTo) return false;
     if (filters.author && doc.author && !doc.author.toLowerCase().includes(filters.author.toLowerCase())) return false;
     if (filters.category && doc.category !== filters.category) return false;
-    if (filters.lang && doc.lang !== filters.lang) return false;
+    if (filters.lang && filters.lang !== 'all' && doc.lang !== filters.lang) return false;
     return true;
   }
 
@@ -943,6 +947,36 @@ class EnhancedSearchEngine {
 
   private escapeRegex(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  private stripMarkdown(text: string): string {
+    if (!text) return '';
+    return text
+      .replace(/!\[(.*?)\]\(.*?\)/g, '') // Images
+      .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Links
+      .replace(/#{1,6}\s+(.*)/g, '$1') // Headers
+      .replace(/(\*\*|__)(.*?)\1/g, '$2') // Bold
+      .replace(/(\*|_)(.*?)\1/g, '$2') // Italic
+      .replace(/`{3}[\s\S]*?`{3}/g, '') // Code blocks
+      .replace(/`(.+?)`/g, '$1') // Inline code
+      .replace(/^\s*>\s+(.*)/g, '$1') // Blockquotes
+      .replace(/\n+/g, ' ') // Normalize newlines
+      .trim();
+  }
+
+  private stripMarkdown(text: string): string {
+    if (!text) return '';
+    return text
+      .replace(/!\[(.*?)\]\(.*?\)/g, '') // Images
+      .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Links
+      .replace(/#{1,6}\s+(.*)/g, '$1') // Headers
+      .replace(/(\*\*|__)(.*?)\1/g, '$2') // Bold
+      .replace(/(\*|_)(.*?)\1/g, '$2') // Italic
+      .replace(/`{3}[\s\S]*?`{3}/g, '') // Code blocks
+      .replace(/`(.+?)`/g, '$1') // Inline code
+      .replace(/^\s*>\s+(.*)/g, '$1') // Blockquotes
+      .replace(/\n+/g, ' ') // Normalize newlines
+      .trim();
   }
 
   /**

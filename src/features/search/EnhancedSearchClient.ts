@@ -71,7 +71,7 @@ class EnhancedSearchClient {
       selectedResultIndex: -1,
       lastSearchTime: 0,
       hasResults: false,
-      currentLang: window.location.pathname === '/search' ? 'all' : (document.documentElement.lang || 'en')
+      currentLang: 'all' // Always search across all languages by default
     };
 
     this.searchEngine = new EnhancedSearchEngine();
@@ -118,9 +118,9 @@ class EnhancedSearchClient {
         ...options
       };
 
-      // If lang is explicitly 'all' in options, remove it
-      if (options.lang === 'all') {
-        searchFilters.lang = undefined;
+      // Ensure language is correctly handled
+      if (searchFilters.lang === 'all' || options.lang === 'all') {
+        searchFilters.lang = 'all';
       }
 
       const results = this.searchEngine.search(query, searchFilters, {
@@ -483,7 +483,7 @@ class EnhancedSearchClient {
     const excerpt = document.createElement('p');
     excerpt.id = `result-excerpt-${index}`;
     excerpt.className = 'text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3';
-    excerpt.innerHTML = result.highlightedDescription || result.description;
+    excerpt.innerHTML = result.highlightedExcerpt || result.excerpt || result.highlightedDescription || result.description;
 
     const meta = document.createElement('div');
     meta.id = `result-meta-${index}`;
