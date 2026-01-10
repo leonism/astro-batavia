@@ -8,10 +8,11 @@ import { ui } from '@/i18n/ui';
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
   const uniqueTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+  const validTags = uniqueTags.filter(tag => tag && tag.trim().length > 0);
   const languages = ['es', 'ja']; // en is handled separately
 
   return languages.flatMap(lang =>
-    uniqueTags.map(tag => ({
+    validTags.map(tag => ({
       params: {
         lang,
         tag: tag.toLowerCase().replace(/\s+/g, '-')
