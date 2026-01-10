@@ -60,7 +60,6 @@ const {
   breadcrumbs = [],
   organization,
   video,
-  product,
 } = Astro.props;
 
 const siteTitle = 'Astro Batavia';
@@ -74,7 +73,7 @@ const finalExcerpt = excerpt || description;
 const defaultOrganization = {
   name: 'Astro Batavia',
   url: siteUrl,
-  logo: `${siteUrl}/images/logo.png`,
+  logo: `${siteUrl}/images/og-default.svg`,
   sameAs: [
     'https://twitter.com/astrobatavia',
     'https://github.com/astrobatavia',
@@ -261,6 +260,10 @@ const alternateUrls = getAlternateUrls();
 <meta
   property="og:locale"
   content={hreflangMap[lang as keyof typeof hreflangMap]}
+/>
+<meta
+  property="og:logo"
+  content={siteUrl + '/images/og-default.svg'}
 />
 {
   authorImage && (
