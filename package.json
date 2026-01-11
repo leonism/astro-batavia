@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "astro dev",
-    "build": "astro build && node scripts/compress.js",
+    "build": "astro build && tsx scripts/compress.ts",
     "build:only": "astro build",
-    "compress": "node scripts/compress.js",
+    "compress": "tsx scripts/compress.ts",
     "preview": "astro preview"
   },
   "keywords": [],
@@ -46,6 +46,7 @@
     "rollup-plugin-brotli": "^3.1.0",
     "rollup-plugin-gzip": "^4.1.1",
     "terser": "^5.43.1",
+    "tsx": "^4.21.0",
     "vite-plugin-imagemin": "^0.6.1"
   }
 }
