@@ -6,6 +6,7 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
+import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -61,6 +62,7 @@ export default defineConfig({
       },
       entryLimit: 10000,
     }),
+    sitemapStyler(),
     sentry(),
     spotlightjs(),
     htmlMinifier({
