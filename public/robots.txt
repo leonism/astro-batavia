@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://astro-batavia.pages.dev/sitemap-index.xml
+Sitemap: https://astro-batavia.pages.dev/sitemap-0.xml
