@@ -15,6 +15,7 @@ export async function GET(context: APIContext) {
   const rssUrl = new URL('rss.xml', site).href;
 
   return rss({
+    stylesheet: '/rss.xsl',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     site: site,
