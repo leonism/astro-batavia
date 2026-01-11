@@ -11,6 +11,9 @@ dist/
 .output/
 .astro/
 
+# frontmatter.json
+.frontmatter.json
+
 # Local env files
 .env
 .env.*.local
