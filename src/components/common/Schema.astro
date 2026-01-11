@@ -1,4 +1,8 @@
 ---
+import { imageSize } from 'image-size';
+import path from 'path';
+import fs from 'fs';
+
 export interface Props {
   title: string;
   description: string;
@@ -27,23 +31,42 @@ const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev'
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const imageUrl = image ? new URL(image, siteUrl).href : new URL('/og-default.jpg', siteUrl).href;
 
+let imageDimensions = null;
+if (image) {
+  const imagePath = path.join(process.cwd(), 'public', image);
+  if (fs.existsSync(imagePath)) {
+    try {
+      imageDimensions = imageSize(imagePath);
+    } catch (e) {
+      console.error(`Error getting image dimensions for ${imagePath}:`, e);
+    }
+  }
+}
+
 let schema: Record<string, any> = {
   "@context": "https://schema.org",
 };
 
 if (type === 'article' || type === 'blog') {
+  let imageSchema: Record<string, any> = {
+    "@type": "ImageObject",
+    "url": imageUrl,
+    "caption": imageAlt || title,
+    "representativeOfPage": "true"
+  };
+
+  if (imageDimensions) {
+    imageSchema.width = imageDimensions.width;
+    imageSchema.height = imageDimensions.height;
+  }
+
   schema = {
     ...schema,
     "@type": "BlogPosting",
     "headline": title,
     "description": description,
     "url": canonicalUrl,
-    "image": {
-      "@type": "ImageObject",
-      "url": imageUrl,
-      "caption": imageAlt || title,
-      "representativeOfPage": "true"
-    },
+    "image": imageSchema,
     "datePublished": date ? new Date(date).toISOString() : new Date().toISOString(),
     "dateModified": modifiedTime ? new Date(modifiedTime).toISOString() : (date ? new Date(date).toISOString() : new Date().toISOString()),
     "author": {
