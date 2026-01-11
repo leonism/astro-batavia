@@ -87,13 +87,13 @@ export function isValidLanguage(lang: string): lang is keyof typeof ui {
 export function slugifyTag(tag: string) {
   return tag
     .toLowerCase()
-    .normalize('NFD') // Normalize Unicode characters to decompose combined characters
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (e.g., accents)
+    .normalize('NFD') // Decompose combined characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritic marks
     .trim()
     .replace(/\s+/g, '-') // Replace spaces with hyphens
     .replace(/\//g, '-') // Replace slashes with hyphens
-    .replace(/[^a-z0-9-]/g, '') // Remove all non-alphanumeric, non-hyphen characters (including remaining non-ASCII)
-    .replace(/--+/g, '-') // Replace multiple hyphens with a single one
+    .replace(/[!"#$%&'()*+,.:;<=>?@\[\\\]^`{|}~]/g, '') // Remove symbols
+    .replace(/--+/g, '-') // Replace multiple hyphens
     .replace(/^-+/, '') // Remove leading hyphens
     .replace(/-+$/, ''); // Remove trailing hyphens
 }
