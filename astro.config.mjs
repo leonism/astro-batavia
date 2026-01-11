@@ -32,7 +32,34 @@ export default defineConfig({
           ja: 'ja-JP',
         },
       },
-      customPages: ['https://astro-batavia.pages.dev/rss.xml'],
+      filter: (page) => !page.includes('/api/'),
+      serialize(item) {
+        // Remove trailing slash for comparison if it exists
+        const url = item.url.endsWith('/') ? item.url.slice(0, -1) : item.url;
+        const baseUrl = 'https://astro-batavia.pages.dev';
+
+        if (url === baseUrl || url === `${baseUrl}/es` || url === `${baseUrl}/ja`) {
+          // @ts-ignore
+          item.changefreq = 'daily';
+          item.priority = 1.0;
+        } else if (url.includes('/blog/')) {
+          // @ts-ignore
+          item.changefreq = 'weekly';
+          item.priority = 0.8;
+        } else if (url.includes('/tags/')) {
+          // @ts-ignore
+          item.changefreq = 'weekly';
+          item.priority = 0.6;
+        } else {
+          // @ts-ignore
+          item.changefreq = 'monthly';
+          item.priority = 0.5;
+        }
+
+        item.lastmod = new Date().toISOString().split('T')[0];
+        return item;
+      },
+      entryLimit: 10000,
     }),
     sentry(),
     spotlightjs(),

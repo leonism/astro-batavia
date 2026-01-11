@@ -29,7 +29,7 @@ For SEO professionals, this “**Zero-Click**” reality has created a paradox w
 
 Consequently, the strategic imperative has shifted. We are no longer fighting primarily for a “**ranking**” (a position on a list) but for a **“citation”**, inclusion in the AI’s synthesis of the truth. To survive this shift, marketing teams must radically reconfigure their technical stack. The tools we have used for a decade, **Google Analytics 4 (GA4), Google Tag Manager (GTM)**, and **Google Search Console (GSC)**, are still relevant, but their roles have fundamentally changed:
 
-- **Google Search Console (GSC)** has evolved from a traffic monitor into an **Entity Health Monitor**. As noted by Pansofic Solutions, GSC now serves as a “*visibility governance platform*,” tracking whether AI models perceive your brand as a trusted source and measuring impressions in AI overviews even when clicks don’t occur.5
+- **Google Search Console (GSC)** has evolved from a traffic monitor into an **Entity Health Monitor**. As noted by Pansofic Solutions, GSC now serves as a “*visibility governance platform*,” tracking whether AI models perceive your brand as a trusted source and measuring impressions in AI overviews even when clicks don’t occur.
 - **Google Tag Manager (GTM)** must migrate from the browser to the **Server-Side**. With browser privacy restrictions and ad blockers becoming the norm, **server-side tagging** is now essential to protect data quality and ensure compliance, as emphasized in guides by e-CENS and Analytify.
 - **Google Analytics 4 (GA4)** must move beyond counting “*sessions*” to modeling **Predictive User Value**. As traffic volume drops, the intent of the remaining clicks skyrockets. According to Analytics Mates, success in 2026 requires using GA4’s AI-driven predictive metrics to identify high-value users rather than just focusing on aggregate volume.
 
@@ -51,9 +51,9 @@ To accurately measure the “**AI Tax**” on your organic traffic, you must iso
 
 **Implementation:**
 
-1. Navigate to the **Performance** report in GSC.
-2. Create a new **Query** filter and select **Custom (Regex)**.
-3. Apply the following pattern to isolate “**AI-Vulnerable**”
+ 1. Navigate to the **Performance** report in GSC.
+ 2. Create a new **Query** filter and select **Custom (Regex)**.
+ 3. Apply the following pattern to isolate “**AI-Vulnerable**”
 
 ```nix
 queries:*^(who|what|where|when|why|how|which|can|does|do|will|is|are|vs|versus|best|top|review|guide|tutorial|difference|between|define|definition|meaning|examples)$*
