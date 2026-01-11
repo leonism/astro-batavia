@@ -23,7 +23,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/tailwind": "6.0.2",
     "@digi4care/astro-google-tagmanager": "^1.6.0",
-    "@sentry/astro": "^9.23.0",
+    "@sentry/astro": "^10.32.1",
     "@spotlightjs/astro": "^3.2.3",
     "@tailwindcss/typography": "^0.5.16",
     "astro": "5.16.6",
