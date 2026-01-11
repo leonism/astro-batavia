@@ -5,8 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.13] - 2026-01-11
+## [1.0.14] - 2026-01-11
 
+### Fixed
+
+- **fix(blog):** Resolved a 404 error on tag pages with non-ASCII characters (e.g., Japanese tags). The `slugifyTag` utility was updated to correctly handle Unicode characters, ensuring that tag links generate valid, accessible URLs instead of leading to broken pages.
+
+## [1.0.13] - 2026-01-11
 ### Added
 
 - **feat(ci):** Enhanced the GitHub Pages deployment workflow (`.github/workflows/static.yml`) to include proper build steps (`npm install`, `npm run build`), Node.js setup, and caching, ensuring that the Astro project is correctly built before deployment.
