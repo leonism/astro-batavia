@@ -5,8 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.11] - 2026-01-11
+## [1.0.12] - 2026-01-11
 
+### Added
+
+- **feat(seo):** Enhanced the JSON-LD schema for blog posts to include `width` and `height` properties for the `heroImage`. This provides more detailed image metadata to search engines, improving the potential for rich snippet representation.
+
+### Changed
+
+- **build(deps):** Added the `image-size` package to `devDependencies` to dynamically read image dimensions during the build process.
+
+## [1.0.11] - 2026-01-11
 ### Fixed
 
 - **fix(sitemap):** Resolved an issue where non-ASCII characters in blog tags were incorrectly URL-encoded in the sitemap (e.g., `%E3%82%A2...`). The `slugifyTag` utility now correctly transliterates and sanitizes tags to create clean, readable URLs.
