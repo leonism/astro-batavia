@@ -5,8 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.12] - 2026-01-11
+## [1.0.13] - 2026-01-11
 
+### Added
+
+- **feat(ci):** Enhanced the GitHub Pages deployment workflow (`.github/workflows/static.yml`) to include proper build steps (`npm install`, `npm run build`), Node.js setup, and caching, ensuring that the Astro project is correctly built before deployment.
+- **feat(ci):** Implemented a comprehensive Pull Request (PR) workflow (`.github/workflows/pr-check.yml`) that automates linting, formatting checks, and build verification for all incoming pull requests, improving code quality and stability.
+- **feat(ci):** Introduced a Link Checker workflow (`.github/workflows/link-checker.yml`) to automatically scan for and report broken links within the codebase on a weekly schedule and on pushes to `main`.
+- **feat(ci):** Configured Dependabot (`.github/dependabot.yml`) to automatically manage and update npm package dependencies and GitHub Actions dependencies, enhancing project security and maintainability.
+
+### Changed
+
+- **build(scripts)::** Added `lint` and `format:check` scripts to `package.json` to standardize code quality checks, supporting the new PR CI workflow.
+
+## [1.0.12] - 2026-01-11
 ### Added
 
 - **feat(seo):** Enhanced the JSON-LD schema for blog posts to include `width` and `height` properties for the `heroImage`. This provides more detailed image metadata to search engines, improving the potential for rich snippet representation.

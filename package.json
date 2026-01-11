@@ -9,7 +9,9 @@
     "build": "astro build && tsx scripts/compress.ts",
     "build:only": "astro build",
     "compress": "tsx scripts/compress.ts",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "lint": "eslint .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "Gemika Haziq Nugroho",
