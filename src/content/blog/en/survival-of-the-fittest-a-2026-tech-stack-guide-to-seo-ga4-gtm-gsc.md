@@ -158,7 +158,7 @@ By querying your combined data, you can bucket your content into four categories
 1. **The AI Opportunity (High Impressions, Low Traffic):** These pages are likely appearing in AI Overviews or snippets but not earning clicks. *Action:* Optimize the title/H1 for brand lift, the user sees you, so ensure the message is clear even without a click.
 2. **The UX Gap (High Traffic, Low Conversion):** Users are clicking, but leaving. *Action:* Audit page speed (Core Web Vitals) and offer alignment.
 3. **The Hidden Gem (Low Impressions, High Conversion):** These pages convert incredibly well but are invisible. *Action:* Build internal links and refresh content to signal freshness to the algorithm.
-4. **The Dead Weight (Low Impressions, Low Traffic):** *Action:* Prune or merge. In 2026, “content rot” hurts your overall domain authority.
+4. **The Dead Weight (Low Impressions, Low Traffic):** *Action:* Prune or merge. In 2026, “*content rot*” hurts your overall domain authority.
 
 ### **5.2 Looker Studio: The “AI Share of Voice” Dashboard**
 

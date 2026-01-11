@@ -6,7 +6,7 @@ categories: ["Blog"]
 description: "AI回答エンジン時代にSEOで勝ち残るためには、従来ツールの根本的な再定義が必要です。GA4は予測分析エンジンへ、GTMはサーバーサイドのデータ要塞へ、GSCはAI可視性レーダーへ進化させ、引用（Citation）を獲得する技術スタックを構築する方法を解説します"
 keywords: ["GA4", "GTM", "GSC", "AI"]
 author: "Gerry Leo Nugroho"
-authorImage: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+authorImage: "https://pbs.twimg.com/profile_images/512988635503669248/cSOfDMzY_400x400.jpeg"
 authorURL: "https://astro-batavia.pages.dev/authors/gerry-leo-nugroho"
 pubDate: 2026-01-11T00:00:00.000Z
 editDate: 2026-01-11T00:00:00.000Z
