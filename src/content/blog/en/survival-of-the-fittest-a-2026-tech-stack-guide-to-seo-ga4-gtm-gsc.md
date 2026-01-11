@@ -3,7 +3,7 @@ title: "Survival of the Fittest: A 2026 Tech Stack Guide to SEO (GA4, GTM, & GSC
 slug: "en/blog/survival-of-the-fittest-a-2026-tech-stack-guide-to-seo-ga4-gtm-gsc"
 lang: "en"
 categories: ["Blog"]
-description: "Explore how 5G networks are transforming industries with ultra-fast speeds, low latency, and massive connectivity for IoT, autonomous systems, and smart cities."
+description: "By 2026, the digital marketing industry has faced a hard truth: the era of “Ten Blue Links” is effectively over."
 keywords: ["GA4", "GTM", "GSC", "AI"]
 author: "Gerry Leo Nugroho"
 authorImage: "https://pbs.twimg.com/profile_images/512988635503669248/cSOfDMzY_400x400.jpeg"
