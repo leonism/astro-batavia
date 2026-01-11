@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.9] - 2026-01-11
+
+### Added
+
+- **feat(rss):** Enhanced the RSS feed to resolve validation errors and improve interoperability.
+  - Added `atom:link` with `rel="self"` to satisfy [W3C validator](https://validator.w3.org/feed/) requirements.
+  - Added support for featured images using the Media RSS (`media:content`) namespace.
+  - Added `<language>` and `<lastBuildDate>` tags for better feed reader support.
+  - Implemented automatic sorting (newest first) and draft filtering for RSS items.
+- **feat(seo):** Improved sitemap technical SEO for better crawling efficiency and priority.
+  - Added `priority` and `changefreq` logic to guide search engines on crawling cadence (Home: 1.0, Blog: 0.8).
+  - Implemented `lastmod` with a search-engine-friendly `YYYY-MM-DD` format.
+  - Added filters to exclude non-HTML API routes from the sitemap.
+  - Optimized the sitemap structure with an increased `entryLimit` to ensure consolidation.
+
+### Fixed
+
+- **fix(seo):** Resolved "Sitemap could not be read" errors in GSC by excluding `/api/` routes and standardizing date formats.
+- **fix(dx):** Suppressed TypeScript Enum assignment warnings in `astro.config.mjs` to maintain a clean development environment.
+
 ## [1.0.8] - 2026-01-11
 
 ### Added
