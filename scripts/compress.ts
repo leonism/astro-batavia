@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs';
-import path from 'path';
+import * as path from 'path';
 import zlib from 'zlib';
 import { promisify } from 'util';
 import { performance } from 'perf_hooks';
@@ -17,7 +17,7 @@ const SUPPORTED_EXTENSIONS = new Set([
 const DEFAULT_DIST_DIR = 'dist';
 
 // Runs gzip and brotli in parallel for a single file's data
-async function compressData(data) {
+async function compressData(data: Buffer) {
   const gzipPromise = gzip(data, { level: zlib.constants.Z_BEST_COMPRESSION });
   const brotliPromise = brotliCompress(data, {
     params: {
@@ -30,7 +30,7 @@ async function compressData(data) {
 }
 
 // Finds all files matching the supported extensions using glob
-async function getCompressibleFiles(dir) {
+async function getCompressibleFiles(dir: string) {
   const extensions = Array.from(SUPPORTED_EXTENSIONS).map(ext => ext.substring(1));
   const pattern = `**/*.{${extensions.join(',')}}`;
   // Use glob for faster file discovery
@@ -63,7 +63,7 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
   const queue = [...files];
   let compressedVariants = 0;
   let filesProcessed = 0;
-  const allErrors = [];
+  const allErrors: Array<{ filePath: string; error: string }> = [];
 
   const worker = async () => {
     while (true) {
@@ -85,12 +85,12 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
           const relativePath = path.relative(process.cwd(), filePath);
           console.log(`✅ Compressed: ${relativePath} (.gz, .br)`);
         }
-        
+
         compressedVariants += 2;
 
-      } catch (err) {
+      } catch (err: unknown) {
         console.error(`❌ Failed to compress: ${filePath}`, err);
-        allErrors.push({ filePath, error: err.message });
+        allErrors.push({ filePath, error: err instanceof Error ? err.message : String(err) });
       } finally {
         filesProcessed++;
         const progress = ((filesProcessed / files.length) * 100).toFixed(0);
@@ -113,14 +113,14 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
   console.log(`- Files Scanned & Processed: ${filesProcessed}`);
   console.log(`- Compressed Variants Created: ${compressedVariants}`);
   console.log(`- Errors: ${allErrors.length}`);
-  
+
   if (allErrors.length > 0) {
     console.log('\n🚨 Error Details:');
     allErrors.forEach(e => {
       console.log(`  - File: ${e.filePath}\n    Error: ${e.error}`);
     });
   }
-  
+
   console.log(`\n⏱️  Total Execution Time: ${duration}ms`);
   console.log('-'.repeat(50));
 
