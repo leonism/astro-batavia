@@ -1,19 +1,51 @@
-<!-- Back to Top Button -->
+<!-- Back to Top Button with Scroll Progress -->
 <button
   id="back-to-top"
   aria-label="Back to top"
   title="Back to top"
-  class="fixed bottom-6 right-6 p-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-opacity duration-300 opacity-0 pointer-events-none z-50">
+  class="group fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 rounded-full shadow-lg transition-all duration-300 opacity-0 invisible translate-y-4 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+>
+  <!-- Progress Ring SVG -->
+  <svg class="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+    <!-- Track -->
+    <circle
+      class="text-gray-100 dark:text-gray-700"
+      stroke="currentColor"
+      stroke-width="4"
+      fill="none"
+      cx="50"
+      cy="50"
+      r="46"
+    />
+    <!-- Progress -->
+    <circle
+      id="progress-path"
+      class="text-blue-600 dark:text-blue-400 transition-all duration-75 ease-out"
+      stroke="currentColor"
+      stroke-width="4"
+      stroke-linecap="round"
+      fill="none"
+      cx="50"
+      cy="50"
+      r="46"
+      pathLength="1" 
+      stroke-dasharray="1"
+      stroke-dashoffset="1"
+    />
+  </svg>
+
+  <!-- Arrow Icon -->
   <svg
-    class="w-6 h-6"
+    class="relative w-6 h-6 transition-transform duration-300 group-hover:-translate-y-1"
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path
       stroke-linecap="round"
       stroke-linejoin="round"
-      stroke-width="2"
+      stroke-width="2.5"
       d="M5 15l7-7 7 7"
     ></path>
   </svg>
