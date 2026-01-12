@@ -19,5 +19,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "astro.config.mjs", "scripts/**/*"],
+  "include": ["src/**/*", "astro.config.mjs", "scripts/**/*", "eslint.config.js"],
 }

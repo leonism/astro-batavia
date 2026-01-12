@@ -4,15 +4,10 @@
 
 <script>
   document.addEventListener("astro:page-load", () => {
-    if (window.backToTopInitialized) {
-      return;
-    }
-    window.backToTopInitialized = true;
-
     const backToTopButton = document.getElementById("back-to-top");
 
     if (backToTopButton) {
-      window.addEventListener("scroll", () => {
+      const handleScroll = () => {
         if (window.scrollY > 200) {
           backToTopButton.classList.remove("opacity-0", "pointer-events-none");
           backToTopButton.classList.add("opacity-100", "pointer-events-auto");
@@ -20,14 +15,26 @@
           backToTopButton.classList.remove("opacity-100", "pointer-events-auto");
           backToTopButton.classList.add("opacity-0", "pointer-events-none");
         }
-      });
+      };
 
-      backToTopButton.addEventListener("click", () => {
+      const handleClick = () => {
         window.scrollTo({
           top: 0,
           behavior: "smooth",
         });
-      });
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      backToTopButton.addEventListener("click", handleClick);
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          window.removeEventListener("scroll", handleScroll);
+          backToTopButton.removeEventListener("click", handleClick);
+        },
+        { once: true }
+      );
     }
   });
 </script>
