@@ -5,15 +5,30 @@
 <script>
   document.addEventListener("astro:page-load", () => {
     const backToTopButton = document.getElementById("back-to-top");
+    const progressPath = document.getElementById("progress-path") as SVGPathElement | null;
 
     if (backToTopButton) {
-      const handleScroll = () => {
-        if (window.scrollY > 200) {
-          backToTopButton.classList.remove("opacity-0", "pointer-events-none");
-          backToTopButton.classList.add("opacity-100", "pointer-events-auto");
+      const updateProgress = () => {
+        // Calculate scroll progress
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
+        
+        // Update progress circle
+        if (progressPath) {
+          // pathLength="1" is set in the SVG, so dashoffset corresponds to remaining path
+          // 1 = empty, 0 = full
+          const drawLength = Math.max(0, Math.min(1, scrollPercent));
+          progressPath.style.strokeDashoffset = (1 - drawLength).toString();
+        }
+
+        // Toggle visibility
+        if (scrollTop > 200) {
+          backToTopButton.classList.remove("opacity-0", "invisible", "translate-y-4");
+          backToTopButton.classList.add("opacity-100", "visible", "translate-y-0");
         } else {
-          backToTopButton.classList.remove("opacity-100", "pointer-events-auto");
-          backToTopButton.classList.add("opacity-0", "pointer-events-none");
+          backToTopButton.classList.remove("opacity-100", "visible", "translate-y-0");
+          backToTopButton.classList.add("opacity-0", "invisible", "translate-y-4");
         }
       };
 
@@ -24,13 +39,17 @@
         });
       };
 
-      window.addEventListener("scroll", handleScroll);
+      // Initial check
+      updateProgress();
+
+      // Event listeners
+      window.addEventListener("scroll", updateProgress, { passive: true });
       backToTopButton.addEventListener("click", handleClick);
 
       document.addEventListener(
         "astro:before-swap",
         () => {
-          window.removeEventListener("scroll", handleScroll);
+          window.removeEventListener("scroll", updateProgress);
           backToTopButton.removeEventListener("click", handleClick);
         },
         { once: true }
