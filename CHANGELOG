@@ -10,7 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **fix(ui):** Resolved an issue where the "Back to Top" button only functioned on the homepage. Updated `BackToTopScript.astro` to correctly handle Astro's View Transitions by re-initializing event listeners on every page load and cleaning them up before swaps.
+<<<<<<< HEAD
 - **fix(lint):** Fixed ESLint and Prettier configuration errors by adding missing dependencies (`eslint`, `prettier`, `prettier-plugin-astro`, `prettier-plugin-tailwindcss`), correctly configuring Node.js globals, and removing unused imports in `tailwind.config.mjs`.
+=======
+- **fix(lint):** Fixed ESLint configuration errors by adding `eslint.config.js` to `tsconfig.json`, correctly configuring Node.js globals, and removing unused imports in `tailwind.config.mjs`.
+>>>>>>> c97498bb22213716725a8bcf74006c2c6c4dd6bb
 
 ## [1.0.14] - 2026-01-11
 
