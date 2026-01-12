@@ -39,7 +39,7 @@
     "@types/html-minifier-terser": "^7.0.2",
     "csso": "^5.0.5",
     "eslint": "^9.39.2",
-    "glob": "^11.0.3",
+    "glob": "^13.0.0",
     "globals": "^17.0.0",
     "html-minifier-terser": "^7.2.0",
     "image-size": "^2.0.2",
