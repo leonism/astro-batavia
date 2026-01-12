@@ -10,6 +10,7 @@
   <!-- Additional new badges below -->
   [![Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare_Pages-F38020?style=flat&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
   [![Vercel](https://img.shields.io/badge/Preview-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://vercel.com/)
+  [![Netlify Status](https://api.netlify.com/api/v1/badges/7e052926-bd01-4269-be91-b2a98ccdce35/deploy-status)](https://app.netlify.com/projects/astro-batavia/deploys)
   [![Multilingual](https://img.shields.io/badge/Multilingual-Yes-0A7E07?style=flat)](#)
   [![Dark Mode](https://img.shields.io/badge/Dark_Mode-Enabled-000000?style=flat)](#)
 </div>
