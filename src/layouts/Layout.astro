@@ -58,7 +58,9 @@ const {
 
 const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
-const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/images/og-default.svg', siteUrl).href;
+const resolvedImage = image
+  ? new URL(image, siteUrl).href
+  : new URL('/images/og-default.svg', siteUrl).href;
 ---
 
 <!doctype html>
@@ -67,8 +69,7 @@ const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/images/og
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-
+    <link rel="sitemap" href="/sitemap-0.xml" />
     <GoogleTagmanager id="GTM-5BH6SQST" />
     <!-- Custom SEO Component -->
     <SEO
@@ -78,7 +79,8 @@ const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/images/og
       canonical={canonicalURL}
       type={type}
       lang={lang}
-      publishedTime={publishedTime || (articleDate ? new Date(articleDate).toISOString() : undefined)}
+      publishedTime={publishedTime ||
+        (articleDate ? new Date(articleDate).toISOString() : undefined)}
       modifiedTime={modifiedTime}
       author={author}
       authorUrl={authorUrl}
@@ -106,14 +108,24 @@ const resolvedImage = image ? new URL(image, siteUrl).href : new URL('/images/og
     <!-- Preconnect & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <ThemeInitializer />
     <ViewTransitions />
   </head>
-  <body class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black">Skip to content</a>
+  <body
+    class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white"
+  >
     <GoogleTagmanagerNoscript id="GTM-5BH6SQST" />
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+    >
+      Skip to content
+    </a>
 
     <div id="app" class="flex flex-col md:min-h-full lg:min-h-screen">
       <Header />
