@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.18] - 2026-01-13
+
+### Added
+
+- **feat(footer):** Enhanced the footer bottom bar with rounded, hover-responsive buttons for **RSS** (`/rss.xml`) and **Sitemap** (`/sitemap-0.xml`).
+- **feat(i18n):** Added missing `footer.rights_reserved` translation keys across English, Spanish, and Japanese locales.
+
+### Changed
+
+- **refactor(config):** Centralized the Google Tag Manager ID (`GTM_ID`) and all `SOCIAL_LINKS` into `src/consts.ts` for easier management.
+- **refactor(search):** Upgraded the search implementation to utilize the advanced `EnhancedSearchEngine`, enabling semantic clustering and improved relevance scoring.
+- **refactor(seo):** Optimized `SEO.astro` logic to prevent duplicate site titles in the browser tab. Cleaned up redundant site title suffixes from all page components.
+- **build(node):** Upgraded Node.js requirement to version **24** in `.node-version`, `.nvmrc`, and `package.json` to comply with Vercel deployment standards.
+- **style(ui):** Replaced the legacy Twitter icon with the modern **X** icon in `FooterBrand.astro`.
+
+### Fixed
+
+- **fix(footer):** Cleaned up the footer bottom bar by removing redundant social links and ensuring the copyright notice year is dynamically generated.
+
 ## [1.0.17] - 2026-01-13
 
 ### Added

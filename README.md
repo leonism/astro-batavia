@@ -410,6 +410,16 @@ jobs:
 
 ## 🔧 Configuration
 
+### **Global Constants**
+
+The project utilizes `src/consts.ts` to centralize site-wide configuration. This file populates the majority of configurable variables used across components and layouts:
+
+- **Core Site Data**: `SITE_TITLE`, `SITE_DESCRIPTION`, `SITE_URL`, and `SITE_EMAIL`.
+- **Analytics**: `GTM_ID` (Google Tag Manager) is now managed here.
+- **I18n Defaults**: `DEFAULT_LOCALE` and the `LOCALES` map.
+- **Social Links**: Centralized links for GitHub, X (formerly Twitter), LinkedIn, etc., in the `SOCIAL_LINKS` object.
+- **System Logic**: Pagination limits and default author information.
+
 ### **Environment Variables**
 
 Create a `.env` file in the root directory:
