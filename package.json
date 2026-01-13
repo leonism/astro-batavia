@@ -16,6 +16,9 @@
   "keywords": [],
   "author": "Gemika Haziq Nugroho",
   "license": "ISC",
+  "engines": {
+    "node": ">=24"
+  },
   "description": "",
   "dependencies": {
     "@astrojs/mdx": "4.3.13",
