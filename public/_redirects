@@ -80,3 +80,5 @@
 /ja/blog/robotic-process-automation /ja/blog/robotic-process-automation/ 308!
 /ja/blog/low-code-development-platforms /ja/blog/low-code-development-platforms/ 308!
 /en/blog/microservices-architecture /en/blog/microservices-architecture/ 308!
+
+https://www.astro-batavia.pages.dev/:splat https://astro-batavia.pages.dev/:splat 301!
