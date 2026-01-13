@@ -13,6 +13,25 @@ export interface Props {
   author?: string;
   authorUrl?: string;
   modifiedTime?: string | Date;
+  breadcrumbs?: { name: string; url: string }[];
+  faqs?: { question: string; answer: string }[];
+  review?: {
+    itemReviewed?: {
+      name: string;
+      image?: string;
+      description?: string;
+    };
+    author?: string;
+    ratingValue?: number;
+    bestRating?: number;
+    worstRating?: number;
+    reviewBody?: string;
+  };
+  license?: string;
+  acquireLicensePage?: string;
+  creditText?: string;
+  copyrightNotice?: string;
+  creator?: string;
 }
 
 const {
@@ -24,7 +43,15 @@ const {
   type = 'website',
   author = 'Astro Batavia',
   authorUrl,
-  modifiedTime
+  modifiedTime,
+  breadcrumbs,
+  faqs,
+  review,
+  license,
+  acquireLicensePage,
+  creditText,
+  copyrightNotice,
+  creator
 } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
@@ -43,25 +70,33 @@ if (image) {
   }
 }
 
-let schema: Record<string, any> = {
-  "@context": "https://schema.org",
+const graph: Record<string, any>[] = [];
+
+let imageSchema: Record<string, any> = {
+  "@type": "ImageObject",
+  "url": imageUrl,
+  "caption": imageAlt || title,
+  "representativeOfPage": "true"
 };
 
-if (type === 'article' || type === 'blog') {
-  let imageSchema: Record<string, any> = {
-    "@type": "ImageObject",
-    "url": imageUrl,
-    "caption": imageAlt || title,
-    "representativeOfPage": "true"
+if (imageDimensions) {
+  imageSchema.width = imageDimensions.width;
+  imageSchema.height = imageDimensions.height;
+}
+
+if (license) imageSchema.license = license;
+if (acquireLicensePage) imageSchema.acquireLicensePage = acquireLicensePage;
+if (creditText) imageSchema.creditText = creditText;
+if (copyrightNotice) imageSchema.copyrightNotice = copyrightNotice;
+if (creator) {
+  imageSchema.creator = {
+    "@type": "Person",
+    "name": creator
   };
+}
 
-  if (imageDimensions) {
-    imageSchema.width = imageDimensions.width;
-    imageSchema.height = imageDimensions.height;
-  }
-
-  schema = {
-    ...schema,
+if (type === 'article' || type === 'blog') {
+  graph.push({
     "@type": "BlogPosting",
     "headline": title,
     "description": description,
@@ -87,10 +122,9 @@ if (type === 'article' || type === 'blog') {
       "@type": "WebPage",
       "@id": canonicalUrl
     }
-  };
+  });
 } else {
-  schema = {
-    ...schema,
+  graph.push({
     "@type": "WebSite",
     "name": title,
     "description": description,
@@ -100,8 +134,62 @@ if (type === 'article' || type === 'blog') {
       "target": `${siteUrl}?q={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
-  };
+  });
 }
+
+if (breadcrumbs && breadcrumbs.length > 0) {
+  graph.push({
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": crumb.name,
+      "item": crumb.url
+    }))
+  });
+}
+
+if (faqs && faqs.length > 0) {
+  graph.push({
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  });
+}
+
+if (review) {
+  graph.push({
+    "@type": "Review",
+    "itemReviewed": {
+      "@type": "Thing",
+      "name": review.itemReviewed?.name || title,
+      "description": review.itemReviewed?.description,
+      "image": review.itemReviewed?.image
+    },
+    "author": {
+      "@type": "Person",
+      "name": review.author || author
+    },
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": review.ratingValue,
+      "bestRating": review.bestRating || 5,
+      "worstRating": review.worstRating || 1
+    },
+    "reviewBody": review.reviewBody
+  });
+}
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": graph
+};
 ---
 
 <script type="application/ld+json" set:html={JSON.stringify(schema)} />
