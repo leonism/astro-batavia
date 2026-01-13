@@ -1,6 +1,6 @@
 ---
-import { getLocalizedPath } from "@/i18n/utils";
-import type { LanguageKey } from "@/i18n/types";
+import { getLocalizedPath } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
 export interface Link {
   href: string;
   text: string;
@@ -18,7 +18,8 @@ const { title, links, lang } = Astro.props;
 <div class="my-0" role="navigation" aria-labelledby={`${title.toLowerCase()}-links`}>
   <h3
     id={`${title.toLowerCase()}-links`}
-    class="text-sm mt-7 font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">
+    class="mb-4 mt-7 text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100"
+  >
     {title}
   </h3>
   <ul class="space-y-2" role="list">
@@ -26,13 +27,12 @@ const { title, links, lang } = Astro.props;
       links.map((link) => (
         <li>
           <a
-            href={
-              link.isLocalized ? getLocalizedPath(link.href, lang) : link.href
-            }
-            target={link.isExternal ? "_blank" : undefined}
-            rel={link.isExternal ? "noopener noreferrer" : undefined}
+            href={link.isLocalized ? getLocalizedPath(link.href, lang) : link.href}
+            target={link.isExternal ? '_blank' : undefined}
+            rel={link.isExternal ? 'noopener noreferrer' : undefined}
             aria-label={link.isExternal ? `${link.text} (opens in a new tab)` : undefined}
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+            class="text-gray-600 transition-colors duration-200 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
+          >
             {link.text}
           </a>
         </li>
