@@ -1,8 +1,8 @@
-import EnterpriseSearchEngine, {
+import EnhancedSearchEngine, {
   type SearchResult,
   type SearchFilters,
   type SearchSuggestion
-} from '../../features/search/EnterpriseSearchEngine';
+} from '../../features/search/EnhancedSearchEngine';
 
 interface CategoryInfo {
   name: string;
@@ -22,7 +22,7 @@ interface AuthorInfo {
 }
 
 class EnhancedSearchUI {
-  private searchEngine: EnterpriseSearchEngine;
+  private searchEngine: EnhancedSearchEngine;
   private allDocuments: any[] = [];
   private currentQuery: string = '';
   private currentFilters: SearchFilters = {};
@@ -44,7 +44,7 @@ class EnhancedSearchUI {
   private searchTime!: HTMLElement;
 
   constructor() {
-    this.searchEngine = new EnterpriseSearchEngine();
+    this.searchEngine = new EnhancedSearchEngine();
     this.initializeElements();
     this.setupEventListeners();
     this.loadSearchIndex();

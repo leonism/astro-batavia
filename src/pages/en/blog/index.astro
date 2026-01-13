@@ -56,7 +56,7 @@ const pageProps = {
 
 <Layout
   {...pageProps}
-  title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''} | Astro Batavia`}
+  title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''}`}
   description={currentTag
     ? (lang === 'es' ? `Explora artículos sobre ${currentTag} en nuestro blog de tecnología y desarrollo web.` : lang === 'ja' ? `${currentTag}に関する技術とウェブ開発のブログ記事をご覧ください。` : `Explore articles about ${currentTag} on our technology and web development blog.`)
     : (lang === 'es'

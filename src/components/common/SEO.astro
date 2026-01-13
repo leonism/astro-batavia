@@ -65,7 +65,7 @@ const {
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SOCIAL_LINKS, SITE_AUTHOR } from '@/consts';
 
 const siteTitle = SITE_TITLE;
-const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 const siteUrl = (Astro.site?.href || SITE_URL).replace(/\/$/, '');
 const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.svg`;
 const canonicalUrl = canonical || Astro.url.href;
