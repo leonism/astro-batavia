@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.17] - 2026-01-13
+
+### Added
+
+- **feat(seo):** Implemented advanced JSON-LD structured data support including **Breadcrumbs**, **FAQPage**, and **Review** snippets, directly generated from blog post frontmatter.
+- **feat(seo):** Enhanced `ImageObject` schema with comprehensive metadata support (`license`, `acquireLicensePage`, `creditText`, `creator`, `copyrightNotice`) to maximize visibility in Google Images rich results.
+- **feat(content):** Extended the blog content schema in `src/content/config.ts` to include optional fields for `faqs` and `reviews`.
+
+### Changed
+
+- **refactor(components):** Refactored `src/components/common/Schema.astro` to utilize the JSON-LD `@graph` node structure, enabling modular and efficient stacking of multiple schema types.
+
 ## [1.0.16] - 2026-01-13
 
 ### Fixed
