@@ -62,22 +62,24 @@ const {
   video,
 } = Astro.props;
 
-const siteTitle = 'Astro Batavia';
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SOCIAL_LINKS, SITE_AUTHOR } from '@/consts';
+
+const siteTitle = SITE_TITLE;
 const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
-const siteUrl = (Astro.site?.href || 'https://astro-batavia.pages.dev').replace(/\/$/, '');
+const siteUrl = (Astro.site?.href || SITE_URL).replace(/\/$/, '');
 const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.svg`;
 const canonicalUrl = canonical || Astro.url.href;
 
 // Enhanced meta data
-const finalExcerpt = excerpt || description;
+const finalExcerpt = excerpt || description || SITE_DESCRIPTION;
 const defaultOrganization = {
-  name: 'Astro Batavia',
+  name: SITE_TITLE,
   url: siteUrl,
   logo: `${siteUrl}/images/og-default.svg`,
   sameAs: [
-    'https://twitter.com/astrobatavia',
-    'https://github.com/astrobatavia',
-    'https://linkedin.com/company/astrobatavia',
+    SOCIAL_LINKS.X,
+    SOCIAL_LINKS.github,
+    SOCIAL_LINKS.linkedin,
   ],
 };
 const orgData = organization || defaultOrganization;
@@ -354,7 +356,7 @@ const alternateUrls = getAlternateUrls();
 />
 <meta
   name="twitter:site"
-  content="@yoursitehandle"
+  content="@AstroBatavia"
 />
 {
   author && (

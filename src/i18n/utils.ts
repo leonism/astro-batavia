@@ -1,20 +1,21 @@
 import { ui, defaultLang } from './ui';
 export { ui, defaultLang };
 import type { TranslationKey } from './types';
+import { DEFAULT_LOCALE } from '../consts';
 
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split('/');
   if (lang in ui) return lang as keyof typeof ui;
-  return defaultLang;
+  return DEFAULT_LOCALE;
 }
 
 export function useTranslations(lang: keyof typeof ui) {
   return function t(key: TranslationKey) {
     if (!ui[lang]) {
-      console.warn(`Translation language "${lang}" not found, falling back to "${defaultLang}"`);
-      return ui[defaultLang][key] || key;
+      console.warn(`Translation language "${lang}" not found, falling back to "${DEFAULT_LOCALE}"`);
+      return ui[DEFAULT_LOCALE][key] || key;
     }
-    return ui[lang][key] || ui[defaultLang][key] || key;
+    return ui[lang][key] || ui[DEFAULT_LOCALE][key] || key;
   }
 }
 
@@ -27,7 +28,7 @@ export function getLocalizedPath(path: string, lang: string) {
   }
 
   // Special case: English home page stays at root
-  if (lang === 'en' && (path === '/' || path === '')) {
+  if (lang === DEFAULT_LOCALE && (path === '/' || path === '')) {
     return '/';
   }
   return `/${lang}${cleanPath}`;
@@ -59,10 +60,10 @@ export function getLanguageFromPath(path: string): string {
   if (segments[1] && segments[1] in ui) {
     return segments[1];
   }
-  return defaultLang;
+  return DEFAULT_LOCALE;
 }
 
-export function formatDate(date: Date, lang: string = defaultLang): string {
+export function formatDate(date: Date, lang: string = DEFAULT_LOCALE): string {
   const locales = {
     en: 'en-US',
     es: 'es-ES',

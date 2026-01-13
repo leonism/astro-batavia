@@ -1,6 +1,7 @@
 ---
 import { useTranslations } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
+import { SITE_TITLE, SOCIAL_LINKS } from "@/consts";
 
 interface Props {
   lang: LanguageKey;
@@ -31,7 +32,7 @@ const t = useTranslations(lang);
       </path>
     </svg>
     <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">
-      Astro Batavia
+      {SITE_TITLE}
     </h2>
   </div>
 
@@ -43,7 +44,7 @@ const t = useTranslations(lang);
     <!-- GitHub -->
     <li>
       <a
-        href="https://github.com"
+        href={SOCIAL_LINKS.github}
         target="_blank"
         rel="noopener noreferrer"
         class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
@@ -64,18 +65,18 @@ const t = useTranslations(lang);
     <!-- Twitter/X -->
     <li>
       <a
-        href="https://twitter.com"
+        href={SOCIAL_LINKS.X}
         target="_blank"
         rel="noopener noreferrer"
         class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
-        aria-label="Twitter">
+        aria-label="X">
         <svg
           class="w-5 h-5"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true">
           <path
-            d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+            d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153zM17.61 20.644h2.039L6.486 3.24H4.298l13.312 17.404z"
           ></path>
         </svg>
       </a>
@@ -83,7 +84,7 @@ const t = useTranslations(lang);
     <!-- LinkedIn -->
     <li>
       <a
-        href="https://linkedin.com"
+        href={SOCIAL_LINKS.linkedin}
         target="_blank"
         rel="noopener noreferrer"
         class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
@@ -104,7 +105,7 @@ const t = useTranslations(lang);
     <!-- YouTube -->
     <li>
       <a
-        href="https://youtube.com"
+        href={SOCIAL_LINKS.youtube}
         target="_blank"
         rel="noopener noreferrer"
         class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
@@ -125,7 +126,7 @@ const t = useTranslations(lang);
     <!-- Instagram -->
     <li>
       <a
-        href="https://instagram.com"
+        href={SOCIAL_LINKS.instagram}
         target="_blank"
         rel="noopener noreferrer"
         class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
@@ -146,7 +147,7 @@ const t = useTranslations(lang);
     <!-- TikTok -->
     <li>
       <a
-        href="https://tiktok.com"
+        href={SOCIAL_LINKS.instagram}
         target="_blank"
         rel="noopener noreferrer"
         class="flex items-center justify-center w-10 h-10 mr-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
