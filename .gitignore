@@ -50,7 +50,7 @@ bun.lockb
 .idea/
 *.sublime-project
 *.sublime-workspace
-
+GEMINI.md
 
 # System
 Thumbs.db
