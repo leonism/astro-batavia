@@ -10,6 +10,7 @@ import BackToTopScript from '@/components/common/BackToTopScript.astro';
 import EnhancedSearchOverlay from '@/components/search/EnhancedSearchOverlay.astro';
 import SkeletonLoader from '@/components/ui/SkeletonLoader.astro';
 import { GoogleTagmanager, GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
+import { GTM_ID } from '@/consts';
 import '@/styles/global.css';
 import '@/styles/enhanced-search.css';
 
@@ -33,6 +34,13 @@ export interface Props {
   excerpt?: string;
   breadcrumbs?: Array<{ name: string; url: string }>;
   organization?: any;
+  faqs?: Array<{ question: string; answer: string }>;
+  review?: any;
+  license?: string;
+  acquireLicensePage?: string;
+  creditText?: string;
+  copyrightNotice?: string;
+  creator?: string;
 }
 
 const {
@@ -54,6 +62,13 @@ const {
   excerpt,
   breadcrumbs,
   organization,
+  faqs,
+  review,
+  license,
+  acquireLicensePage,
+  creditText,
+  copyrightNotice,
+  creator,
 } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
@@ -70,7 +85,7 @@ const resolvedImage = image
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <link rel="sitemap" href="/sitemap-0.xml" />
-    <GoogleTagmanager id="GTM-5BH6SQST" />
+    <GoogleTagmanager id={GTM_ID} />
     <!-- Custom SEO Component -->
     <SEO
       title={title}
@@ -103,6 +118,14 @@ const resolvedImage = image
       author={author}
       authorUrl={authorUrl}
       modifiedTime={modifiedTime}
+      breadcrumbs={breadcrumbs}
+      faqs={faqs}
+      review={review}
+      license={license}
+      acquireLicensePage={acquireLicensePage}
+      creditText={creditText}
+      copyrightNotice={copyrightNotice}
+      creator={creator}
     />
 
     <!-- Preconnect & Fonts -->
@@ -119,7 +142,7 @@ const resolvedImage = image
   <body
     class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white"
   >
-    <GoogleTagmanagerNoscript id="GTM-5BH6SQST" />
+    <GoogleTagmanagerNoscript id={GTM_ID} />
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-black"
