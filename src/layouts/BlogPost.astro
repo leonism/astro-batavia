@@ -14,7 +14,27 @@ type Props = CollectionEntry<'blog'>['data'] & {
   headings: { depth: number; slug: string; text: string }[];
 };
 
-const { title, description, pubDate, editDate: updatedDate, heroImage, heroImageAlt, author, authorURL, tags, slug, readingTime, headings } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  editDate: updatedDate,
+  heroImage,
+  heroImageAlt,
+  author,
+  authorURL,
+  tags,
+  slug,
+  readingTime,
+  headings,
+  faqs,
+  review,
+  license,
+  acquireLicensePage,
+  creditText,
+  copyrightNotice,
+  creator
+} = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -92,6 +112,13 @@ const relatedPosts = allLangPosts
       "https://linkedin.com/company/astro-batavia"
     ]
   }}
+  faqs={faqs}
+  review={review}
+  license={license}
+  acquireLicensePage={acquireLicensePage}
+  creditText={creditText}
+  copyrightNotice={copyrightNotice}
+  creator={creator}
 >
   <main id="main-content">
     <article role="article" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
