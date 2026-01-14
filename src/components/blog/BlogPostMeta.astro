@@ -1,0 +1,102 @@
+---
+import { formatDate } from '@/i18n/utils';
+
+interface Props {
+  author: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  readingTime?: string;
+  lang: string;
+  t: (key: any) => string;
+}
+
+const { author, pubDate, updatedDate, readingTime, lang, t } = Astro.props;
+---
+
+<div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+  <div class="flex items-center">
+    <svg
+      class="mr-2 h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+      >
+      </path>
+    </svg>
+    <span>{author}</span>
+  </div>
+
+  <div class="flex items-center">
+    <svg
+      class="mr-2 h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+      >
+      </path>
+    </svg>
+    <time datetime={pubDate.toISOString()}>
+      {t('blog.publishedOn')} {formatDate(pubDate, lang)}
+    </time>
+  </div>
+
+  {
+    updatedDate && (
+      <div class="flex items-center">
+        <svg
+          class="mr-2 h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+        <time datetime={updatedDate.toISOString()}>
+          Updated {formatDate(updatedDate, lang)}
+        </time>
+      </div>
+    )
+  }
+
+  {
+    readingTime && (
+      <div class="flex items-center">
+        <svg
+          class="mr-2 h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>{readingTime}</span>
+      </div>
+    )
+  }
+</div>
