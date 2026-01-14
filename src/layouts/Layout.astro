@@ -1,7 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
 import SEO from '@/components/seo/SEO.astro';
-import Schema from '@/components/common/Schema.astro';
+import Schema from '@/components/seo/Schema.astro';
 import NavigationHeader from '@/components/navigation/NavigationHeader.astro';
 import Footer from '@/components/footer/Footer.astro';
 import BackToTop from '@/components/ui/BackToTop.astro';
@@ -44,8 +44,8 @@ export interface Props {
 }
 
 const {
-  title,
-  description = 'A modern multi-language blog built with Astro.js',
+  title = 'SITE_TITLE',
+  description = 'SITE_DESCRIPTION',
   image,
   articleDate,
   type = 'website',
@@ -71,7 +71,7 @@ const {
   creator,
 } = Astro.props;
 
-const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
+const siteUrl = Astro.site ? Astro.site.href : 'SITE_URL';
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
 const resolvedImage = image
   ? new URL(image, siteUrl).href

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **refactor(seo):** Relocated `Schema.astro` to `src/components/seo/` to centralize all structured data and meta tag logic.
 - **refactor(seo):** Modularized `SEO.astro` into functional sub-components (`BasicMetaTags`, `OpenGraphMetaTags`, `TwitterMetaTags`, etc.) and relocated to `src/components/seo/`.
 - **refactor(nav):** Renamed and standardized navigation components with `Navigation` prefix (e.g., `NavigationHeader`, `NavigationMobileMenu`) for better consistency.
 - **refactor(blog):** Standardized blog components with `Blog` prefix (e.g., `BlogCard`, `BlogTagFilter`, `BlogTableOfContents`) and moved navigation components to `src/components/blog/`.
