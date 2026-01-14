@@ -10,67 +10,149 @@ const { fullTitle, description, imageUrl, siteTitle } = Astro.props;
 ---
 
 <!-- LinkedIn Specific -->
-<meta property="linkedin:owner" content="your-linkedin-company-id" />
+<meta
+  property="linkedin:owner"
+  content="your-linkedin-company-id"
+/>
 
 <!-- WhatsApp Specific -->
-<meta property="whatsapp:title" content={fullTitle} />
-<meta property="whatsapp:description" content={description} />
-<meta property="whatsapp:image" content={imageUrl} />
+<meta
+  property="whatsapp:title"
+  content={fullTitle}
+/>
+<meta
+  property="whatsapp:description"
+  content={description}
+/>
+<meta
+  property="whatsapp:image"
+  content={imageUrl}
+/>
 
 <!-- Telegram Specific -->
-<meta property="telegram:channel" content="@yourchannel" />
+<meta
+  property="telegram:channel"
+  content="SOCIAL_LINKS.telegram"
+/>
 
 <!-- Pinterest Specific -->
-<meta name="pinterest-rich-pin" content="true" />
-<meta property="pinterest:description" content={description} />
+<meta
+  name="pinterest-rich-pin"
+  content="true"
+/>
+<meta
+  property="pinterest:description"
+  content={description}
+/>
 
 <!-- Apple Specific -->
-<meta name="apple-mobile-web-app-title" content={siteTitle} />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta
+  name="apple-mobile-web-app-title"
+  content={siteTitle}
+/>
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+/>
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+/>
 
 <!-- Microsoft Specific -->
-<meta name="msapplication-TileColor" content="#000000" />
-<meta name="msapplication-TileImage" content={imageUrl} />
-<meta name="msapplication-config" content="/browserconfig.xml" />
+<meta
+  name="msapplication-TileColor"
+  content="#000000"
+/>
+<meta
+  name="msapplication-TileImage"
+  content={imageUrl}
+/>
+<meta
+  name="msapplication-config"
+  content="/browserconfig.xml"
+/>
 
 <!-- Performance & Security Headers -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="referrer" content="strict-origin-when-cross-origin" />
-<meta name="format-detection" content="telephone=no" />
-<meta name="theme-color" content="#000000" />
-<meta name="color-scheme" content="light dark" />
+<meta
+  http-equiv="X-UA-Compatible"
+  content="IE=edge"
+/>
+<meta
+  name="referrer"
+  content="strict-origin-when-cross-origin"
+/>
+<meta
+  name="format-detection"
+  content="telephone=no"
+/>
+<meta
+  name="theme-color"
+  content="#000000"
+/>
+<meta
+  name="color-scheme"
+  content="light dark"
+/>
 
 <!-- Preconnect to external domains -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preconnect" href="https://www.google-analytics.com" />
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+/>
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+/>
+<link
+  rel="preconnect"
+  href="https://www.google-analytics.com"
+/>
 
 <!-- DNS Prefetch -->
-<link rel="dns-prefetch" href="//www.google-analytics.com" />
-<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link
+  rel="dns-prefetch"
+  href="//www.google-analytics.com"
+/>
+<link
+  rel="dns-prefetch"
+  href="//fonts.googleapis.com"
+/>
 
 <!-- Accessibility -->
-<meta name="accessibility" content="WCAG 2.1 AA compliant" />
+<meta
+  name="accessibility"
+  content="WCAG 2.1 AA compliant"
+/>
 
 <!-- Content Security Policy (Basic) -->
 
 <meta
-
   http-equiv="Content-Security-Policy"
-
   content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://analytics.ahrefs.com blob: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://analytics.ahrefs.com ws://localhost:* http://localhost:* ws://127.0.0.1:* http://127.0.0.1:*; worker-src 'self' blob: data:;"
-
 />
 
 <!-- Additional Meta Tags -->
-<meta name="theme-color" content="#3b82f6" />
-<meta name="msapplication-TileColor" content="#3b82f6" />
+<meta
+  name="theme-color"
+  content="#3b82f6"
+/>
+<meta
+  name="msapplication-TileColor"
+  content="#3b82f6"
+/>
 <meta
   name="apple-mobile-web-app-status-bar-style"
   content="black"
   name="apple-mobile-web-app-capable"
   content="yes"
 />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta
+  name="mobile-web-app-capable"
+  content="yes"
+/>
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black"
+/>
