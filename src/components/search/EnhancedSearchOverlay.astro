@@ -1,5 +1,10 @@
 ---
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import SearchOverlayInput from './SearchOverlayInput.astro';
+import SearchOverlaySuggestions from './SearchOverlaySuggestions.astro';
+import SearchOverlayResults from './SearchOverlayResults.astro';
+import SearchOverlayNoResults from './SearchOverlayNoResults.astro';
+import SearchOverlayFooter from './SearchOverlayFooter.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -14,7 +19,6 @@ const t = useTranslations(lang);
 >
   <h2 id="search-overlay-title" class="sr-only">Search</h2>
 
-  <!-- Close Button -->
   <button
     id="close-search-overlay"
     class="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 z-10"
@@ -26,115 +30,11 @@ const t = useTranslations(lang);
   </button>
 
   <div class="w-full max-w-4xl mx-auto">
-    <!-- Search Input Section -->
-    <div class="relative mb-6">
-      <div class="relative">
-        <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search posts, categories, tags..."
-          class="block w-full pl-12 pr-24 py-4 text-lg border-2 border-gray-200 dark:border-gray-600 rounded-xl leading-6 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all duration-300 shadow-lg hover:shadow-xl"
-          autocomplete="off"
-          spellcheck="false"
-        />
-        <div class="absolute inset-y-0 right-0 pr-4 flex items-center space-x-2 flex-nowrap">
-          <div id="search-performance" class="text-sm text-gray-400 hidden">
-            <span id="search-time">0ms</span>
-          </div>
-
-          <!-- Search Shortcuts -->
-          <div class="hidden md:flex items-center space-x-1 text-xs text-gray-400">
-            <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded border">ESC</kbd>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Search Suggestions Section -->
-    <div id="search-suggestions" class="mb-6">
-      <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">Start typing to search...</div>
-
-      <!-- Categories -->
-      <div id="categories-section" class="mb-4">
-        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">CATEGORIES</h3>
-        <div id="categories-list" class="flex flex-wrap gap-2">
-          <!-- Categories will be populated dynamically -->
-        </div>
-      </div>
-
-      <!-- Tags -->
-      <div id="tags-section" class="mb-4">
-        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">TAGS</h3>
-        <div id="tags-list" class="flex flex-wrap gap-2">
-          <!-- Tags will be populated dynamically -->
-        </div>
-      </div>
-
-      <!-- Authors -->
-      <div id="authors-section" class="mb-4">
-        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">AUTHORS</h3>
-        <div id="authors-list" class="flex flex-wrap gap-2">
-          <!-- Authors will be populated dynamically -->
-        </div>
-      </div>
-
-      <!-- Popular Searches -->
-      <div id="popular-searches-section" class="mb-4">
-        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">POPULAR SEARCHES</h3>
-        <div id="popular-searches-list" class="space-y-1">
-          <!-- Popular searches will be populated dynamically -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Search Results Section -->
-    <div id="search-results-section" class="hidden">
-      <!-- Results Header -->
-      <div id="results-header" class="flex items-center justify-between mb-4">
-        <div id="results-count" class="text-sm text-gray-600 dark:text-gray-400"></div>
-        <div id="results-filters" class="flex flex-wrap gap-2">
-          <!-- Filter buttons will be populated dynamically -->
-        </div>
-      </div>
-
-      <!-- Results Container -->
-      <div id="search-results-container" class="space-y-4 max-h-96 overflow-y-auto">
-        <!-- Search results will be dynamically inserted here -->
-      </div>
-    </div>
-
-    <!-- No Results Section -->
-    <div id="no-results-section" class="hidden text-center py-8">
-      <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-      </svg>
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No results found</h3>
-      <p class="text-gray-600 dark:text-gray-400 mb-4">Try adjusting your search or browse by category</p>
-      <div id="search-suggestions-fallback" class="flex flex-wrap justify-center gap-2">
-        <!-- Fallback suggestions will be populated dynamically -->
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
-      <div class="flex items-center space-x-4">
-        <span class="flex items-center">
-          <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded mr-1">↑↓</kbd>
-          Navigate
-        </span>
-        <span class="flex items-center">
-          <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded mr-1">↵</kbd>
-          Select
-        </span>
-      </div>
-      <div class="flex items-center">
-        <span class="mr-2">Search powered by</span>
-        <span class="font-medium text-primary-600 dark:text-primary-400">Enterprise Search</span>
-      </div>
-    </div>
+    <SearchOverlayInput />
+    <SearchOverlaySuggestions />
+    <SearchOverlayResults />
+    <SearchOverlayNoResults />
+    <SearchOverlayFooter />
   </div>
 </section>
 

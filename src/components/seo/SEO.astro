@@ -129,7 +129,6 @@ const hreflangMap = {
 const getAlternateUrls = () => {
   const currentPath = Astro.url.pathname;
   const pathWithoutLang = currentPath.replace(/^\/(en|es|ja)/, '') || '/';
-
   return {
     en: pathWithoutLang === '/' ? siteUrl : `${siteUrl}${pathWithoutLang}`,
     es: `${siteUrl}/es${pathWithoutLang}`,
