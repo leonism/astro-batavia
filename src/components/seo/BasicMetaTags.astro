@@ -1,0 +1,38 @@
+---
+interface Props {
+  fullTitle: string;
+  description: string;
+  tags: string[];
+  author?: string;
+  category?: string;
+  readingTime?: string;
+  wordCount?: number;
+  finalExcerpt?: string;
+  noindex: boolean;
+  canonicalUrl: string;
+}
+
+const {
+  fullTitle,
+  description,
+  tags,
+  author,
+  category,
+  readingTime,
+  wordCount,
+  finalExcerpt,
+  noindex,
+  canonicalUrl,
+} = Astro.props;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+{tags.length > 0 && <meta name="keywords" content={tags.join(', ')} />}
+{author && <meta name="author" content={author} />}
+{category && <meta name="article:section" content={category} />}
+{readingTime && <meta name="reading-time" content={`${readingTime} minutes`} />}
+{wordCount && <meta name="word-count" content={wordCount.toString()} />}
+{finalExcerpt && finalExcerpt !== description && <meta name="excerpt" content={finalExcerpt} />}
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<link rel="canonical" href={canonicalUrl} />

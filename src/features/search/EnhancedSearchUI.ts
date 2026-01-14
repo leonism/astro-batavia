@@ -1,8 +1,7 @@
 import EnhancedSearchEngine, {
   type SearchResult,
-  type SearchFilters,
-  type SearchSuggestion
-} from '../../features/search/EnhancedSearchEngine';
+  type SearchFilters
+} from './EnhancedSearchEngine';
 
 interface CategoryInfo {
   name: string;
@@ -21,7 +20,7 @@ interface AuthorInfo {
   count: number;
 }
 
-class EnhancedSearchUI {
+export class EnhancedSearchUI {
   private searchEngine: EnhancedSearchEngine;
   private allDocuments: any[] = [];
   private currentQuery: string = '';
@@ -180,10 +179,6 @@ class EnhancedSearchUI {
     const tags = result.tags.slice(0, 3).map(tag =>
       `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">${tag}</span>`
     ).join('');
-
-    const readingTime = result.readingTime ? `${result.readingTime} min read` : '';
-    const author = result.author || 'Unknown Author';
-    const pubDate = new Date(result.pubDate).toLocaleDateString();
 
     return `
       <div class="search-result-item p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-lg transition-all duration-300 cursor-pointer group" data-index="${index}" data-url="${result.url}">
@@ -480,11 +475,3 @@ class EnhancedSearchUI {
     this.searchResultsContainer.innerHTML = '';
   }
 }
-
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  new EnhancedSearchUI();
-});
-
-// Export for potential external use
-export default EnhancedSearchUI;

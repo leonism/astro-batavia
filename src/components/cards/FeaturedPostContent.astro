@@ -1,9 +1,9 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import PostMeta from "./PostMeta.astro";
-import PostTitle from "./PostTitle.astro";
-import PostDescription from "./PostDescription.astro";
-import PostTags from "./PostTags.astro";
+import FeaturedPostMeta from "./FeaturedPostMeta.astro";
+import FeaturedPostTitle from "./FeaturedPostTitle.astro";
+import FeaturedPostDescription from "./FeaturedPostDescription.astro";
+import FeaturedPostTags from "./FeaturedPostTags.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -17,19 +17,19 @@ const { post, index, lang } = Astro.props;
 <div
   class="relative flex h-full flex-col justify-end text-white p-4 sm:p-8 md:p-10 lg:p-12">
   <div class="z-10 space-y-2">
-    <PostMeta
+    <FeaturedPostMeta
       post={post}
       lang={lang}
     />
-    <PostTitle
+    <FeaturedPostTitle
       post={post}
       index={index}
       lang={lang}
     />
-    <PostDescription
+    <FeaturedPostDescription
       post={post}
       index={index}
     />
-    <PostTags tags={post.data.tags} />
+    <FeaturedPostTags tags={post.data.tags} />
   </div>
 </div>

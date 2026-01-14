@@ -3,7 +3,7 @@
  * Features: Debouncing, accessibility, instant search, progressive enhancement
  */
 
-import EnhancedSearchEngine, { SearchResult, SearchSuggestion } from './EnhancedSearchEngine.ts';
+import EnhancedSearchEngine, { SearchResult, SearchSuggestion } from './EnhancedSearchEngine';
 
 declare const gtag: (...args: any[]) => void;
 
@@ -31,7 +31,7 @@ interface SearchState {
   currentLang: string;
 }
 
-class EnhancedSearchClient {
+export class EnhancedSearchClient {
   private searchEngine: EnhancedSearchEngine;
   private config: SearchClientConfig;
   private state: SearchState;
@@ -1042,5 +1042,3 @@ class EnhancedSearchClient {
     });
   }
 }
-
-export default EnhancedSearchClient;

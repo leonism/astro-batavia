@@ -1,0 +1,192 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SOCIAL_LINKS } from '@/consts';
+import {
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+  generateWebsiteSchema,
+} from '../../utils/jsonLd';
+
+import BasicMetaTags from './BasicMetaTags.astro';
+import OpenGraphMetaTags from './OpenGraphMetaTags.astro';
+import TwitterMetaTags from './TwitterMetaTags.astro';
+import HreflangTags from './HreflangTags.astro';
+import FaviconLinks from './FaviconLinks.astro';
+import OtherMetaTags from './OtherMetaTags.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  canonical?: string;
+  lang?: string;
+  type?: 'website' | 'article' | 'blog' | 'profile';
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  authorUrl?: string;
+  authorImage?: string;
+  tags?: string[];
+  category?: string;
+  readingTime?: string;
+  wordCount?: number;
+  excerpt?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  organization?: {
+    name: string;
+    url: string;
+    logo: string;
+    sameAs?: string[];
+  };
+  video?: {
+    url: string;
+    thumbnail: string;
+    duration?: string;
+    description?: string;
+  };
+}
+
+const {
+  title,
+  description,
+  image,
+  noindex = false,
+  canonical,
+  lang = 'en',
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  author,
+  authorUrl,
+  authorImage,
+  tags = [],
+  category,
+  readingTime,
+  wordCount,
+  excerpt,
+  breadcrumbs = [],
+  organization,
+  video,
+} = Astro.props;
+
+const siteTitle = SITE_TITLE;
+const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
+const siteUrl = (Astro.site?.href || SITE_URL).replace(/\/$/, '');
+const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.svg`;
+const canonicalUrl = canonical || Astro.url.href;
+
+// Enhanced meta data
+const finalExcerpt = excerpt || description || SITE_DESCRIPTION;
+const defaultOrganization = {
+  name: SITE_TITLE,
+  url: siteUrl,
+  logo: `${siteUrl}/images/og-default.svg`,
+  sameAs: [SOCIAL_LINKS.X, SOCIAL_LINKS.github, SOCIAL_LINKS.linkedin],
+};
+const orgData = organization || defaultOrganization;
+
+// Generate JSON-LD structured data
+const generateJsonLd = () => {
+  const schemas = [];
+
+  if (type === 'website') {
+    schemas.push(generateWebsiteSchema({ siteTitle, siteUrl }));
+  }
+
+  if (type === 'article' || type === 'blog') {
+    schemas.push(
+      generateArticleSchema({
+        title,
+        description,
+        image: imageUrl,
+        publishedTime,
+        modifiedTime,
+        author,
+        authorUrl,
+        organization: orgData,
+        canonical: canonicalUrl,
+      }),
+    );
+  }
+
+  if (breadcrumbs.length > 0) {
+    schemas.push(generateBreadcrumbSchema(breadcrumbs));
+  }
+
+  return JSON.stringify(schemas);
+};
+
+const jsonLdData = generateJsonLd();
+
+// Language mappings
+const hreflangMap = {
+  en: 'en-US',
+  es: 'es-ES',
+  ja: 'ja-JP',
+};
+
+// Get alternate language URLs
+const getAlternateUrls = () => {
+  const currentPath = Astro.url.pathname;
+  const pathWithoutLang = currentPath.replace(/^\/(en|es|ja)/, '') || '/';
+
+  return {
+    en: pathWithoutLang === '/' ? siteUrl : `${siteUrl}${pathWithoutLang}`,
+    es: `${siteUrl}/es${pathWithoutLang}`,
+    ja: `${siteUrl}/ja${pathWithoutLang}`,
+  };
+};
+
+const alternateUrls = getAlternateUrls();
+---
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" set:html={jsonLdData} />
+
+<BasicMetaTags
+  fullTitle={fullTitle}
+  description={description}
+  tags={tags}
+  author={author}
+  category={category}
+  readingTime={readingTime}
+  wordCount={wordCount}
+  finalExcerpt={finalExcerpt}
+  noindex={noindex}
+  canonicalUrl={canonicalUrl}
+/>
+
+<OpenGraphMetaTags
+  type={type}
+  fullTitle={fullTitle}
+  description={description}
+  imageUrl={imageUrl}
+  canonicalUrl={canonicalUrl}
+  siteUrl={siteUrl}
+  locale={hreflangMap[lang as keyof typeof hreflangMap]}
+  authorImage={authorImage}
+  video={video}
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  author={author}
+  tags={tags}
+/>
+
+<TwitterMetaTags
+  fullTitle={fullTitle}
+  description={description}
+  imageUrl={imageUrl}
+  title={title}
+  author={author}
+  video={video}
+/>
+
+<OtherMetaTags
+  fullTitle={fullTitle}
+  description={description}
+  imageUrl={imageUrl}
+  siteTitle={siteTitle}
+/>
+
+<HreflangTags alternateUrls={alternateUrls} hreflangMap={hreflangMap} />
+<FaviconLinks />

@@ -1,12 +1,13 @@
 ---
+import { SITE_TITLE, SITE_URL } from '@/consts';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 import Picture from '@/components/ui/Picture.astro';
-import BlogPostNavigation from '@/components/navigation/BlogPostNavigation.astro';
-import ShareButtons from '@/components/blog/ShareButtons.astro';
+import BlogNextPrevNavigation from '@/components/blog/BlogPrevNextNavigation.astro';
+import BlogShareButtons from '@/components/blog/BlogShareButtons.astro';
 import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath, getPostUrl, slugifyTag } from '@/i18n/utils';
-import RelatedArticles from '@/components/blog/RelatedArticles.astro';
-import TableOfContents from '@/components/blog/TableOfContents.astro';
+import BlogRelatedArticles from '@/components/blog/BlogRelatedArticles.astro';
+import BlogTableOfContents from '@/components/blog/BlogTableOfContents.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
@@ -98,14 +99,14 @@ const relatedPosts = allLangPosts
   wordCount={undefined}
   excerpt={description}
   breadcrumbs={[
-    { name: t('nav.home'), url: getLocalizedPath('/', lang) },
-    { name: t('nav.blog'), url: getLocalizedPath('/blog', lang) },
-    { name: title, url: Astro.url.pathname }
+    { name: t('nav.home'), url: new URL(getLocalizedPath('/', lang), Astro.site).href },
+    { name: t('nav.blog'), url: new URL(getLocalizedPath('/blog', lang), Astro.site).href },
+    { name: title, url: Astro.url.href },
   ]}
   organization={{
-    name: "Astro Batavia",
-    url: "https://astro-batavia.vercel.app",
-    logo: "https://astro-batavia.vercel.app/favicon.svg",
+    name: SITE_TITLE,
+    url: SITE_URL,
+    logo: new URL('/favicon.svg', SITE_URL).href,
     sameAs: [
       "https://github.com/leonism",
       "https://twitter.com/gerryleonugroho",
@@ -208,7 +209,7 @@ const relatedPosts = allLangPosts
       </header>
 
       {headings.length > 0 && (
-        <TableOfContents headings={headings} lang={lang} />
+        <BlogTableOfContents headings={headings} lang={lang} />
       )}
 
       <!-- Article content -->
@@ -217,17 +218,17 @@ const relatedPosts = allLangPosts
       </div>
 
       <!-- Share Buttons -->
-      <ShareButtons title={title} url={Astro.url.href} />
+      <BlogShareButtons title={title} url={Astro.url.href} />
 
       <!-- Article Navigation -->
-      <BlogPostNavigation
+      <BlogNextPrevNavigation
         previousPostData={previousPostData}
         nextPostData={nextPostData}
         lang={lang}
       />
 
       <!-- Related Articles -->
-      <RelatedArticles relatedPosts={relatedPosts} lang={lang} />
+      <BlogRelatedArticles relatedPosts={relatedPosts} lang={lang} />
     </article>
   </main>
 </Layout>

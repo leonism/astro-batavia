@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.19] - 2026-01-14
+
+### Added
+
+- **feat(search):** Introduced `EnhancedSearchUI` to modularize search overlay logic and improved client-side initialization.
+
+### Changed
+
+- **refactor(seo):** Modularized `SEO.astro` into functional sub-components (`BasicMetaTags`, `OpenGraphMetaTags`, `TwitterMetaTags`, etc.) and relocated to `src/components/seo/`.
+- **refactor(nav):** Renamed and standardized navigation components with `Navigation` prefix (e.g., `NavigationHeader`, `NavigationMobileMenu`) for better consistency.
+- **refactor(blog):** Standardized blog components with `Blog` prefix (e.g., `BlogCard`, `BlogTagFilter`, `BlogTableOfContents`) and moved navigation components to `src/components/blog/`.
+- **refactor(cards):** Standardized Featured Post components and moved them to the root `src/components/cards/` directory.
+- **refactor(ui):** Relocated `BackToTopScript.astro` to `src/components/ui/` and renamed `FeatureCard.astro` to `FeaturedCard.astro`.
+- **refactor(search):** Moved search client scripts to `src/features/search/` and standardized on named exports for better bundling reliability.
+
+### Fixed
+
+- **fix(security):** Updated Content Security Policy (CSP) to allow `unsafe-inline` styles and Ahrefs analytics, resolving blocked resources in dev and production.
+- **fix(search):** Resolved `TypeError` related to missing `getPopularSearches` and fixed search index loading issues by improving script bundling.
+- **fix(i18n):** Corrected several import paths and component definitions across refactored navigation and SEO modules.
+
 ## [1.0.18] - 2026-01-13
 
 ### Added
@@ -49,11 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **fix(ui):** Resolved an issue where the "Back to Top" button only functioned on the homepage. Updated `BackToTopScript.astro` to correctly handle Astro's View Transitions by re-initializing event listeners on every page load and cleaning them up before swaps.
-<<<<<<< HEAD
 - **fix(lint):** Fixed ESLint and Prettier configuration errors by adding missing dependencies (`eslint`, `prettier`, `prettier-plugin-astro`, `prettier-plugin-tailwindcss`), correctly configuring Node.js globals, and removing unused imports in `tailwind.config.mjs`.
-=======
-- **fix(lint):** Fixed ESLint configuration errors by adding `eslint.config.js` to `tsconfig.json`, correctly configuring Node.js globals, and removing unused imports in `tailwind.config.mjs`.
->>>>>>> c97498bb22213716725a8bcf74006c2c6c4dd6bb
 
 ## [1.0.14] - 2026-01-11
 
