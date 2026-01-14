@@ -1,20 +1,16 @@
 ---
 import { SITE_TITLE, SITE_URL } from '@/consts';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
-import Picture from '@/components/ui/Picture.astro';
 import BlogNextPrevNavigation from '@/components/blog/BlogPrevNextNavigation.astro';
 import BlogShareButtons from '@/components/blog/BlogShareButtons.astro';
-import {
-  formatDate,
-  getLangFromUrl,
-  useTranslations,
-  getLocalizedPath,
-  getPostUrl,
-  slugifyTag,
-} from '@/i18n/utils';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
 import BlogRelatedArticles from '@/components/blog/BlogRelatedArticles.astro';
 import BlogTableOfContents from '@/components/blog/BlogTableOfContents.astro';
+import BlogPostMeta from '@/components/blog/BlogPostMeta.astro';
+import BlogPostTags from '@/components/blog/BlogPostTags.astro';
+import BlogPostHero from '@/components/blog/BlogPostHero.astro';
+import { getSortedPostsByLang, getPostNavigation, getRelatedPosts } from '@/features/blog/blogData';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   slug: string;
@@ -43,52 +39,14 @@ const {
   copyrightNotice,
   creator,
 } = Astro.props;
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Fetch all posts for the current language to find next/previous
-const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>) => {
-  return entry.slug.startsWith(`${lang}/`) && !entry.data.draft;
-});
-
-// Sort posts by publication date (ascending for easier next/prev indexing)
-const sortedLangPosts = allLangPosts.sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
-    new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime(),
-);
-
-const currentPostCollectionSlug = slug;
-const currentIndex = sortedLangPosts.findIndex(
-  (post: CollectionEntry<'blog'>) => post.slug === currentPostCollectionSlug,
-);
-
-let previousPostData: { url: string; title: string } | undefined = undefined;
-let nextPostData: { url: string; title: string } | undefined = undefined;
-
-if (currentIndex !== -1) {
-  if (currentIndex > 0) {
-    const prev = sortedLangPosts[currentIndex - 1];
-    previousPostData = {
-      url: getPostUrl(prev.slug, lang),
-      title: prev.data.title,
-    };
-  }
-  if (currentIndex < sortedLangPosts.length - 1) {
-    const next = sortedLangPosts[currentIndex + 1];
-    nextPostData = {
-      url: getPostUrl(next.slug, lang),
-      title: next.data.title,
-    };
-  }
-}
-
-// Related articles logic
-const currentPostTags = tags || [];
-const relatedPosts = allLangPosts
-  .filter((post) => post.slug !== currentPostCollectionSlug) // Exclude current post
-  .filter((post) => post.data.tags && post.data.tags.some((tag) => currentPostTags.includes(tag))) // Filter by common tags
-  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()) // Sort by newest
-  .slice(0, 3); // Limit to 3 related articles
+// Data fetching and logic moved to features/blog/blogData.ts
+const allLangPosts = await getSortedPostsByLang(lang);
+const { previousPostData, nextPostData } = getPostNavigation(allLangPosts, slug, lang);
+const relatedPosts = getRelatedPosts(allLangPosts, slug, tags);
 ---
 
 <Layout
@@ -105,7 +63,6 @@ const relatedPosts = allLangPosts
   articleDate={pubDate}
   tags={tags || []}
   readingTime={readingTime ? parseInt(readingTime.replace(/\D/g, '')) : undefined}
-  wordCount={undefined}
   excerpt={description}
   breadcrumbs={[
     { name: t('nav.home'), url: new URL(getLocalizedPath('/', lang), Astro.site).href },
@@ -150,8 +107,7 @@ const relatedPosts = allLangPosts
               stroke-linejoin="round"
               stroke-width="2"
               d="M15 19l-7-7 7-7"
-            >
-            </path>
+            />
           </svg>
           {t('blog.back-to-blog')}
         </a>
@@ -159,149 +115,37 @@ const relatedPosts = allLangPosts
 
       <!-- Article header -->
       <header class="mb-8">
-        {
-          heroImage && (
-            <div class="mb-8 overflow-hidden rounded-lg">
-              <Picture
-                src={heroImage}
-                alt={heroImageAlt || title}
-                width={1200}
-                height={600}
-                class="h-64 w-full object-cover sm:h-80 lg:h-96"
-                loading="eager"
-                decoding="async"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-              />
-            </div>
-          )
-        }
+        <BlogPostHero {heroImage} {heroImageAlt} {title} />
 
-        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-          <div class="flex items-center">
-            <svg
-              class="mr-2 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              >
-              </path>
-            </svg>
-            <span>{author}</span>
-          </div>
+        <BlogPostMeta
+          {author}
+          {pubDate}
+          {updatedDate}
+          {readingTime}
+          {lang}
+          {t}
+        />
 
-          <div class="flex items-center">
-            <svg
-              class="mr-2 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              >
-              </path>
-            </svg>
-            <time datetime={pubDate.toISOString()}>
-              {t('blog.publishedOn')}
-              {formatDate(pubDate, lang)}
-            </time>
-          </div>
-
-          {
-            updatedDate && (
-              <div class="flex items-center">
-                <svg
-                  class="mr-2 h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                <time datetime={updatedDate.toISOString()}>
-                  Updated {formatDate(updatedDate, lang)}
-                </time>
-              </div>
-            )
-          }
-
-          {
-            readingTime && (
-              <div class="flex items-center">
-                <svg
-                  class="mr-2 h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span>{readingTime}</span>
-              </div>
-            )
-          }
-        </div>
-
-        {
-          tags && tags.length > 0 && (
-            <div class="mt-6" role="group" aria-label="Article tags">
-              <div class="flex flex-wrap gap-2">
-                {tags.map((tag: string) => (
-                  <a
-                    href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
-                    class="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800"
-                  >
-                    #{tag}
-                  </a>
-                ))}
-              </div>
-            </div>
-          )
-        }
+        <BlogPostTags tags={tags || []} {lang} />
       </header>
 
-      {headings.length > 0 && <BlogTableOfContents headings={headings} lang={lang} />}
+      {headings.length > 0 && <BlogTableOfContents {headings} {lang} />}
 
       <!-- Article content -->
       <div class="prose prose-lg max-w-none dark:prose-invert">
         <slot />
       </div>
 
-      <!-- Share Buttons -->
-      <BlogShareButtons title={title} url={Astro.url.href} />
+      <!-- Footer elements -->
+      <BlogShareButtons {title} url={Astro.url.href} />
 
-      <!-- Article Navigation -->
       <BlogNextPrevNavigation
-        previousPostData={previousPostData}
-        nextPostData={nextPostData}
-        lang={lang}
+        {previousPostData}
+        {nextPostData}
+        {lang}
       />
 
-      <!-- Related Articles -->
-      <BlogRelatedArticles relatedPosts={relatedPosts} lang={lang} />
+      <BlogRelatedArticles {relatedPosts} {lang} />
     </article>
   </main>
 </Layout>

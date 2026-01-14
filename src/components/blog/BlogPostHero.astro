@@ -1,0 +1,28 @@
+---
+import Picture from '@/components/ui/Picture.astro';
+
+interface Props {
+  heroImage?: string;
+  heroImageAlt?: string;
+  title: string;
+}
+
+const { heroImage, heroImageAlt, title } = Astro.props;
+---
+
+{
+  heroImage && (
+    <div class="mb-8 overflow-hidden rounded-lg">
+      <Picture
+        src={heroImage}
+        alt={heroImageAlt || title}
+        width={1200}
+        height={600}
+        class="h-64 w-full object-cover sm:h-80 lg:h-96"
+        loading="eager"
+        decoding="async"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+      />
+    </div>
+  )
+}
