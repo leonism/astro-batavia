@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.23] - 2026-01-14
+
+### Changed
+
+- **refactor(layout):** Significantly refactored `Layout.astro` for better readability and modularity.
+  - Extracted `<head>` logic into `src/components/seo/BaseHead.astro`.
+  - Extracted global body widgets and scripts into `src/components/ui/GlobalWidgets.astro`.
+  - Simplified the main layout template by delegating head and script management.
+
 ## [1.0.22] - 2026-01-14
 
 ### Changed
