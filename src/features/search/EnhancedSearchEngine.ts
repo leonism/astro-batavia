@@ -325,6 +325,16 @@ class EnhancedSearchEngine {
   }
 
   /**
+   * Get popular search terms
+   */
+  getPopularSearches(limit: number = 10): { query: string; count: number }[] {
+    return Array.from(this.performanceMetrics.popularQueries.entries())
+      .map(([query, count]) => ({ query, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, limit);
+  }
+
+  /**
    * Get search insights and analytics
    */
   getSearchInsights() {
