@@ -1,17 +1,17 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { formatDate, useTranslations, getPostUrl, getLocalizedPath, slugifyTag } from "@/i18n/utils";
-import type { ui } from "@/i18n/ui";
+import type { LanguageKey } from "@/i18n/types";
 
 export interface Props {
   post: CollectionEntry<"blog">;
-  lang: keyof typeof ui | string;
+  lang: LanguageKey;
   showExcerpt?: boolean;
   isFeatured?: boolean;
 }
 
 const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
-const t = useTranslations(lang as keyof typeof ui);
+const t = useTranslations(lang);
 const postUrl = getPostUrl(post.slug, lang);
 
 const excerpt = showExcerpt
