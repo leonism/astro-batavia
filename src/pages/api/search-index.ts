@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { getPostUrl } from "@/i18n/utils";
-import EnterpriseSearchEngine from "../../features/search/EnterpriseSearchEngine";
 
 export const GET: APIRoute = async () => {
   try {
