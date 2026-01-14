@@ -1,5 +1,5 @@
 ---
-import HeaderNavLinks from "./HeaderNavLinks.astro";
+import NavigationHeaderNavLinks from "./NavigationHeaderNavLinks.astro";
 import { getLangFromUrl, useTranslations, getLocalizedPath } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
 
@@ -53,7 +53,7 @@ const t = useTranslations(lang);
   </header>
 
   <nav class="flex-1 overflow-y-auto p-6 flex flex-col gap-2">
-    <HeaderNavLinks lang={lang} currentPath={currentPath} variant="mobile" />
+    <NavigationHeaderNavLinks lang={lang} currentPath={currentPath} variant="mobile" />
   </nav>
 
   <footer class="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
