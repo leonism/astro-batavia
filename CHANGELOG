@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.20] - 2026-01-14
+
+### Added
+
+- **feat(blog):** Integrated `remark-reading-time` plugin to automatically calculate and display reading time for all blog posts.
+
+### Changed
+
+- **refactor(seo):** Enhanced `Schema.astro` with generic placeholders and improved attribute handling for better multi-environment flexibility.
+- **refactor(blog):** Standardized formatting and modernized logic in `BlogPost.astro` and blog routing pages.
+- **refactor(layout):** Updated global `Layout.astro` to improve canonical URL resolution and default Open Graph image handling.
+
+### Removed
+
+- **chore(cleanup):** Removed legacy and redundant components (e.g., `BlogStats`, `BlogLoadMoreButton`, `EnterpriseSearchEngine`, `tagFiltering`) following the recent architecture overhaul to reduce technical debt and streamline the codebase.
+
 ## [1.0.19] - 2026-01-14
 
 ### Added

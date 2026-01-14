@@ -81,6 +81,7 @@ export default defineConfig({
       theme: 'github-dark',
       wrap: true,
     },
+    remarkPlugins: [remarkReadingTime],
   },
   vite: {
     optimizeDeps: {

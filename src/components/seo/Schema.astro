@@ -51,12 +51,12 @@ const {
   acquireLicensePage,
   creditText,
   copyrightNotice,
-  creator
+  creator,
 } = Astro.props;
 
-const siteUrl = Astro.site ? Astro.site.href : 'https://astro-batavia.pages.dev';
+const siteUrl = Astro.site ? Astro.site.href : 'SITE_URL';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const imageUrl = image ? new URL(image, siteUrl).href : new URL('/og-default.jpg', siteUrl).href;
+const imageUrl = image ? new URL(image, siteUrl).href : new URL('/favicon-32x32.png', siteUrl).href;
 
 let imageDimensions = null;
 if (image) {
@@ -73,10 +73,10 @@ if (image) {
 const graph: Record<string, any>[] = [];
 
 let imageSchema: Record<string, any> = {
-  "@type": "ImageObject",
-  "url": imageUrl,
-  "caption": imageAlt || title,
-  "representativeOfPage": "true"
+  '@type': 'ImageObject',
+  url: imageUrl,
+  caption: imageAlt || title,
+  representativeOfPage: 'true',
 };
 
 if (imageDimensions) {
@@ -90,105 +90,109 @@ if (creditText) imageSchema.creditText = creditText;
 if (copyrightNotice) imageSchema.copyrightNotice = copyrightNotice;
 if (creator) {
   imageSchema.creator = {
-    "@type": "Person",
-    "name": creator
+    '@type': 'Person',
+    name: creator,
   };
 }
 
 if (type === 'article' || type === 'blog') {
   graph.push({
-    "@type": "BlogPosting",
-    "headline": title,
-    "description": description,
-    "url": canonicalUrl,
-    "image": imageSchema,
-    "datePublished": date ? new Date(date).toISOString() : new Date().toISOString(),
-    "dateModified": modifiedTime ? new Date(modifiedTime).toISOString() : (date ? new Date(date).toISOString() : new Date().toISOString()),
-    "author": {
-      "@type": "Person",
-      "name": author,
-      ...(authorUrl && { "url": authorUrl })
+    '@type': 'BlogPosting',
+    headline: title,
+    description: description,
+    url: canonicalUrl,
+    image: imageSchema,
+    datePublished: date ? new Date(date).toISOString() : new Date().toISOString(),
+    dateModified: modifiedTime
+      ? new Date(modifiedTime).toISOString()
+      : date
+        ? new Date(date).toISOString()
+        : new Date().toISOString(),
+    author: {
+      '@type': 'Person',
+      name: author,
+      ...(authorUrl && { url: authorUrl }),
     },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Astro Batavia",
-      "url": siteUrl,
-      "logo": {
-        "@type": "ImageObject",
-        "url": new URL('/favicon.svg', siteUrl).href
-      }
+    publisher: {
+      '@type': 'Organization',
+      name: 'SITE_TITLE',
+      url: siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: new URL('/favicon.svg', siteUrl).href,
+      },
     },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": canonicalUrl
-    }
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
   });
 } else {
   graph.push({
-    "@type": "WebSite",
-    "name": title,
-    "description": description,
-    "url": siteUrl,
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": `${siteUrl}?q={search_term_string}`,
-      "query-input": "required name=search_term_string"
-    }
+    '@type': 'WebSite',
+    name: title,
+    description: description,
+    url: siteUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${siteUrl}?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
   });
 }
 
 if (breadcrumbs && breadcrumbs.length > 0) {
   graph.push({
-    "@type": "BreadcrumbList",
-    "itemListElement": breadcrumbs.map((crumb, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "name": crumb.name,
-      "item": crumb.url
-    }))
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
   });
 }
 
 if (faqs && faqs.length > 0) {
   graph.push({
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
   });
 }
 
 if (review) {
   graph.push({
-    "@type": "Review",
-    "itemReviewed": {
-      "@type": "Thing",
-      "name": review.itemReviewed?.name || title,
-      "description": review.itemReviewed?.description,
-      "image": review.itemReviewed?.image
+    '@type': 'Review',
+    itemReviewed: {
+      '@type': 'Thing',
+      name: review.itemReviewed?.name || title,
+      description: review.itemReviewed?.description,
+      image: review.itemReviewed?.image,
     },
-    "author": {
-      "@type": "Person",
-      "name": review.author || author
+    author: {
+      '@type': 'Person',
+      name: review.author || author,
     },
-    "reviewRating": {
-      "@type": "Rating",
-      "ratingValue": review.ratingValue,
-      "bestRating": review.bestRating || 5,
-      "worstRating": review.worstRating || 1
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: review.ratingValue,
+      bestRating: review.bestRating || 5,
+      worstRating: review.worstRating || 1,
     },
-    "reviewBody": review.reviewBody
+    reviewBody: review.reviewBody,
   });
 }
 
 const schema = {
-  "@context": "https://schema.org",
-  "@graph": graph
+  '@context': 'https://schema.org',
+  '@graph': graph,
 };
 ---
 
