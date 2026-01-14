@@ -42,10 +42,11 @@ if (!lang || !isValidLanguage(lang)) {
 }
 
 const post = Astro.props;
-const { Content, headings = [] } = await post.render();
+const { Content, headings = [], remarkPluginFrontmatter } = await post.render();
+const readingTime = remarkPluginFrontmatter?.readingTime;
 console.log('Extracted headings:', headings);
 ---
 
-<BlogPost {...post.data} slug={post.slug} headings={headings}>
+<BlogPost {...post.data} slug={post.slug} headings={headings} readingTime={readingTime}>
   <Content />
 </BlogPost>

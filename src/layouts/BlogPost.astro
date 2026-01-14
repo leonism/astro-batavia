@@ -5,7 +5,14 @@ import Layout from './Layout.astro';
 import Picture from '@/components/ui/Picture.astro';
 import BlogNextPrevNavigation from '@/components/blog/BlogPrevNextNavigation.astro';
 import BlogShareButtons from '@/components/blog/BlogShareButtons.astro';
-import { formatDate, getLangFromUrl, useTranslations, getLocalizedPath, getPostUrl, slugifyTag } from '@/i18n/utils';
+import {
+  formatDate,
+  getLangFromUrl,
+  useTranslations,
+  getLocalizedPath,
+  getPostUrl,
+  slugifyTag,
+} from '@/i18n/utils';
 import BlogRelatedArticles from '@/components/blog/BlogRelatedArticles.astro';
 import BlogTableOfContents from '@/components/blog/BlogTableOfContents.astro';
 
@@ -34,7 +41,7 @@ const {
   acquireLicensePage,
   creditText,
   copyrightNotice,
-  creator
+  creator,
 } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -46,11 +53,14 @@ const allLangPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>
 
 // Sort posts by publication date (ascending for easier next/prev indexing)
 const sortedLangPosts = allLangPosts.sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime()
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+    new Date(a.data.pubDate).getTime() - new Date(b.data.pubDate).getTime(),
 );
 
 const currentPostCollectionSlug = slug;
-const currentIndex = sortedLangPosts.findIndex((post: CollectionEntry<'blog'>) => post.slug === currentPostCollectionSlug);
+const currentIndex = sortedLangPosts.findIndex(
+  (post: CollectionEntry<'blog'>) => post.slug === currentPostCollectionSlug,
+);
 
 let previousPostData: { url: string; title: string } | undefined = undefined;
 let nextPostData: { url: string; title: string } | undefined = undefined;
@@ -75,11 +85,10 @@ if (currentIndex !== -1) {
 // Related articles logic
 const currentPostTags = tags || [];
 const relatedPosts = allLangPosts
-  .filter(post => post.slug !== currentPostCollectionSlug) // Exclude current post
-  .filter(post => post.data.tags && post.data.tags.some(tag => currentPostTags.includes(tag))) // Filter by common tags
+  .filter((post) => post.slug !== currentPostCollectionSlug) // Exclude current post
+  .filter((post) => post.data.tags && post.data.tags.some((tag) => currentPostTags.includes(tag))) // Filter by common tags
   .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()) // Sort by newest
   .slice(0, 3); // Limit to 3 related articles
-
 ---
 
 <Layout
@@ -108,10 +117,10 @@ const relatedPosts = allLangPosts
     url: SITE_URL,
     logo: new URL('/favicon.svg', SITE_URL).href,
     sameAs: [
-      "https://github.com/leonism",
-      "https://twitter.com/gerryleonugroho",
-      "https://linkedin.com/company/astro-batavia"
-    ]
+      'https://github.com/leonism',
+      'https://twitter.com/gerryleonugroho',
+      'https://linkedin.com/company/astro-batavia',
+    ],
   }}
   faqs={faqs}
   review={review}
@@ -122,16 +131,27 @@ const relatedPosts = allLangPosts
   creator={creator}
 >
   <main id="main-content">
-    <article role="article" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
+    <article role="article" class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <!-- Back to blog link -->
       <div class="mb-8">
         <a
           href={getLocalizedPath('/blog', lang)}
-          class="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
+          class="inline-flex items-center text-primary-600 transition-colors duration-200 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
         >
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          <svg
+            class="mr-2 h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            >
+            </path>
           </svg>
           {t('blog.back-to-blog')}
         </a>
@@ -139,78 +159,131 @@ const relatedPosts = allLangPosts
 
       <!-- Article header -->
       <header class="mb-8">
-        {heroImage && (
-          <div class="mb-8 rounded-lg overflow-hidden">
-            <Picture
-              src={heroImage}
-              alt={heroImageAlt || title}
-              width={1200}
-              height={600}
-              class="w-full h-64 sm:h-80 lg:h-96 object-cover"
-              loading="eager"
-              decoding="async"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-            />
-          </div>
-        )}
+        {
+          heroImage && (
+            <div class="mb-8 overflow-hidden rounded-lg">
+              <Picture
+                src={heroImage}
+                alt={heroImageAlt || title}
+                width={1200}
+                height={600}
+                class="h-64 w-full object-cover sm:h-80 lg:h-96"
+                loading="eager"
+                decoding="async"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+              />
+            </div>
+          )
+        }
 
         <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
           <div class="flex items-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            <svg
+              class="mr-2 h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              >
+              </path>
             </svg>
             <span>{author}</span>
           </div>
 
           <div class="flex items-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            <svg
+              class="mr-2 h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              >
+              </path>
             </svg>
             <time datetime={pubDate.toISOString()}>
-              {t('blog.publishedOn')} {formatDate(pubDate, lang)}
+              {t('blog.publishedOn')}
+              {formatDate(pubDate, lang)}
             </time>
           </div>
 
-          {updatedDate && (
-            <div class="flex items-center">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-              </svg>
-              <time datetime={updatedDate.toISOString()}>
-                Updated {formatDate(updatedDate, lang)}
-              </time>
-            </div>
-          )}
+          {
+            updatedDate && (
+              <div class="flex items-center">
+                <svg
+                  class="mr-2 h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                <time datetime={updatedDate.toISOString()}>
+                  Updated {formatDate(updatedDate, lang)}
+                </time>
+              </div>
+            )
+          }
 
-          {readingTime && (
-            <div class="flex items-center">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              <span>{readingTime}</span>
-            </div>
-          )}
+          {
+            readingTime && (
+              <div class="flex items-center">
+                <svg
+                  class="mr-2 h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{readingTime}</span>
+              </div>
+            )
+          }
         </div>
 
-        {tags && tags.length > 0 && (
-          <div class="mt-6" role="group" aria-label="Article tags">
-            <div class="flex flex-wrap gap-2">
-              {tags.map((tag: string) => (
-                <a
-                  href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors duration-200"
-                >
-                  #{tag}
-                </a>
-              ))}
+        {
+          tags && tags.length > 0 && (
+            <div class="mt-6" role="group" aria-label="Article tags">
+              <div class="flex flex-wrap gap-2">
+                {tags.map((tag: string) => (
+                  <a
+                    href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
+                    class="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800"
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }
       </header>
 
-      {headings.length > 0 && (
-        <BlogTableOfContents headings={headings} lang={lang} />
-      )}
+      {headings.length > 0 && <BlogTableOfContents headings={headings} lang={lang} />}
 
       <!-- Article content -->
       <div class="prose prose-lg max-w-none dark:prose-invert">
