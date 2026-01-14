@@ -75,7 +75,7 @@ const siteUrl = Astro.site ? Astro.site.href : 'SITE_URL';
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
 const resolvedImage = image
   ? new URL(image, siteUrl).href
-  : new URL('/images/og-default.svg', siteUrl).href;
+  : new URL('/og-default.png', siteUrl).href;
 ---
 
 <!doctype html>
