@@ -1,0 +1,125 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import SEO from './SEO.astro';
+import Schema from './Schema.astro';
+import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
+import { GoogleTagmanager } from '@digi4care/astro-google-tagmanager';
+import { GTM_ID } from '@/consts';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  articleDate?: string | Date;
+  type?: 'website' | 'article';
+  lang?: string;
+  author?: string;
+  authorUrl?: string;
+  imageAlt?: string;
+  tags?: string[];
+  canonical?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  readingTime?: number;
+  wordCount?: number;
+  excerpt?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  organization?: any;
+  faqs?: Array<{ question: string; answer: string }>;
+  review?: any;
+  license?: string;
+  acquireLicensePage?: string;
+  creditText?: string;
+  copyrightNotice?: string;
+  creator?: string;
+}
+
+const {
+  title = 'SITE_TITLE',
+  description = 'SITE_DESCRIPTION',
+  image,
+  articleDate,
+  type = 'website',
+  lang = 'en',
+  author,
+  authorUrl,
+  imageAlt,
+  tags,
+  canonical,
+  publishedTime,
+  modifiedTime,
+  readingTime,
+  wordCount,
+  excerpt,
+  breadcrumbs,
+  organization,
+  faqs,
+  review,
+  license,
+  acquireLicensePage,
+  creditText,
+  copyrightNotice,
+  creator,
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.href : 'SITE_URL';
+const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
+const resolvedImage = image
+  ? new URL(image, siteUrl).href
+  : new URL('/og-default.png', siteUrl).href;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
+<link rel="sitemap" href="/sitemap-0.xml" />
+<GoogleTagmanager id={GTM_ID} />
+
+<SEO
+  title={title}
+  description={description}
+  image={resolvedImage}
+  canonical={canonicalURL}
+  type={type}
+  lang={lang}
+  publishedTime={publishedTime || (articleDate ? new Date(articleDate).toISOString() : undefined)}
+  modifiedTime={modifiedTime}
+  author={author}
+  authorUrl={authorUrl}
+  tags={tags}
+  readingTime={readingTime?.toString()}
+  wordCount={wordCount}
+  excerpt={excerpt}
+  breadcrumbs={breadcrumbs}
+  organization={organization}
+/>
+
+<Schema
+  title={title}
+  description={description}
+  date={articleDate}
+  image={resolvedImage}
+  imageAlt={imageAlt}
+  type={type}
+  author={author}
+  authorUrl={authorUrl}
+  modifiedTime={modifiedTime}
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+  review={review}
+  license={license}
+  acquireLicensePage={acquireLicensePage}
+  creditText={creditText}
+  copyrightNotice={copyrightNotice}
+  creator={creator}
+/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+
+<ThemeInitializer />
+<ViewTransitions />
