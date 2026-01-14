@@ -2,6 +2,7 @@
 import { imageSize } from 'image-size';
 import path from 'path';
 import fs from 'fs';
+import { SITE_TITLE, SITE_URL, SITE_AUTHOR } from '@/consts';
 
 export interface Props {
   title: string;
@@ -41,7 +42,7 @@ const {
   image,
   imageAlt,
   type = 'website',
-  author = 'Astro Batavia',
+  author = SITE_AUTHOR.name,
   authorUrl,
   modifiedTime,
   breadcrumbs,
@@ -54,7 +55,7 @@ const {
   creator,
 } = Astro.props;
 
-const siteUrl = Astro.site ? Astro.site.href : 'SITE_URL';
+const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const imageUrl = image ? new URL(image, siteUrl).href : new URL('/favicon-32x32.png', siteUrl).href;
 
@@ -63,7 +64,7 @@ if (image) {
   const imagePath = path.join(process.cwd(), 'public', image);
   if (fs.existsSync(imagePath)) {
     try {
-      imageDimensions = imageSize(imagePath);
+      imageDimensions = imageSize(fs.readFileSync(imagePath));
     } catch (e) {
       console.error(`Error getting image dimensions for ${imagePath}:`, e);
     }
@@ -115,7 +116,7 @@ if (type === 'article' || type === 'blog') {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'SITE_TITLE',
+      name: SITE_TITLE,
       url: siteUrl,
       logo: {
         '@type': 'ImageObject',
@@ -196,4 +197,7 @@ const schema = {
 };
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+/>
