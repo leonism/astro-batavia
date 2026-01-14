@@ -1,15 +1,9 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import SEO from '@/components/seo/SEO.astro';
-import Schema from '@/components/seo/Schema.astro';
+import BaseHead from '@/components/seo/BaseHead.astro';
 import NavigationHeader from '@/components/navigation/NavigationHeader.astro';
 import Footer from '@/components/footer/Footer.astro';
-import BackToTop from '@/components/ui/BackToTop.astro';
-import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
-import BackToTopScript from '@/components/ui/BackToTopScript.astro';
-import EnhancedSearchOverlay from '@/components/search/EnhancedSearchOverlay.astro';
-import SkeletonLoader from '@/components/ui/SkeletonLoader.astro';
-import { GoogleTagmanager, GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
+import GlobalWidgets from '@/components/ui/GlobalWidgets.astro';
+import { GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID } from '@/consts';
 import '@/styles/global.css';
 import '@/styles/enhanced-search.css';
@@ -21,7 +15,6 @@ export interface Props {
   articleDate?: string | Date;
   type?: 'website' | 'article';
   lang?: string;
-  // Retaining some extras for compatibility
   author?: string;
   authorUrl?: string;
   imageAlt?: string;
@@ -43,106 +36,17 @@ export interface Props {
   creator?: string;
 }
 
-const {
-  title = 'SITE_TITLE',
-  description = 'SITE_DESCRIPTION',
-  image,
-  articleDate,
-  type = 'website',
-  lang = 'en',
-  author,
-  authorUrl,
-  imageAlt,
-  tags,
-  canonical,
-  publishedTime,
-  modifiedTime,
-  readingTime,
-  wordCount,
-  excerpt,
-  breadcrumbs,
-  organization,
-  faqs,
-  review,
-  license,
-  acquireLicensePage,
-  creditText,
-  copyrightNotice,
-  creator,
-} = Astro.props;
-
-const siteUrl = Astro.site ? Astro.site.href : 'SITE_URL';
-const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
-const resolvedImage = image
-  ? new URL(image, siteUrl).href
-  : new URL('/og-default.png', siteUrl).href;
+const { lang = 'en' } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={lang} class="scroll-smooth">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="sitemap" href="/sitemap-0.xml" />
-    <GoogleTagmanager id={GTM_ID} />
-    <!-- Custom SEO Component -->
-    <SEO
-      title={title}
-      description={description}
-      image={resolvedImage}
-      canonical={canonicalURL}
-      type={type}
-      lang={lang}
-      publishedTime={publishedTime ||
-        (articleDate ? new Date(articleDate).toISOString() : undefined)}
-      modifiedTime={modifiedTime}
-      author={author}
-      authorUrl={authorUrl}
-      tags={tags}
-      readingTime={readingTime?.toString()}
-      wordCount={wordCount}
-      excerpt={excerpt}
-      breadcrumbs={breadcrumbs}
-      organization={organization}
-    />
-
-    <!-- Structured Data -->
-    <Schema
-      title={title}
-      description={description}
-      date={articleDate}
-      image={resolvedImage}
-      imageAlt={imageAlt}
-      type={type}
-      author={author}
-      authorUrl={authorUrl}
-      modifiedTime={modifiedTime}
-      breadcrumbs={breadcrumbs}
-      faqs={faqs}
-      review={review}
-      license={license}
-      acquireLicensePage={acquireLicensePage}
-      creditText={creditText}
-      copyrightNotice={copyrightNotice}
-      creator={creator}
-    />
-
-    <!-- Preconnect & Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <ThemeInitializer />
-    <ViewTransitions />
+    <BaseHead {...Astro.props} />
   </head>
-  <body
-    class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white"
-  >
+  <body class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
     <GoogleTagmanagerNoscript id={GTM_ID} />
+
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-black"
@@ -150,7 +54,7 @@ const resolvedImage = image
       Skip to content
     </a>
 
-    <div id="app" class="flex flex-col md:min-h-full lg:min-h-screen">
+    <div id="app" class="flex min-h-screen flex-col">
       <NavigationHeader />
       <main role="main" id="main-content" class="flex-1 pt-16">
         <slot />
@@ -158,9 +62,6 @@ const resolvedImage = image
       <Footer />
     </div>
 
-    <BackToTop />
-    <BackToTopScript />
-    <EnhancedSearchOverlay />
-    <SkeletonLoader />
+    <GlobalWidgets />
   </body>
 </html>
