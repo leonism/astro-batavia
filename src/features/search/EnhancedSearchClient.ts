@@ -1,13 +1,24 @@
 /**
- * Enhanced Search Client for Astro Batavia
- * Features: Debouncing, accessibility, instant search, progressive enhancement
+ * @file Enhanced Search Client
+ * @description Client-side controller for the search UI.
+ * Handles DOM events, debouncing, keyboard navigation, and accessibility.
+ *
+ * Astro.js Tip: Even though Astro is "Zero-JS by default", we use client-side
+ * scripts for interactive features like instant search. This client
+ * progressively enhances a standard search form.
  */
 
-import EnhancedSearchEngine, { SearchResult, SearchSuggestion } from './EnhancedSearchEngine';
+import EnhancedSearchEngine, {
+  type SearchResult,
+  type SearchSuggestion,
+} from './EnhancedSearchEngine';
 import { SEARCH_MAX_SUGGESTIONS } from '../../consts';
 
 declare const gtag: (...args: any[]) => void;
 
+/**
+ * Configuration for the Search Client.
+ */
 interface SearchClientConfig {
   searchInputId: string;
   resultsContainerId: string;
@@ -22,6 +33,9 @@ interface SearchClientConfig {
   enableAnalytics?: boolean;
 }
 
+/**
+ * Internal state of the search client.
+ */
 interface SearchState {
   isSearching: boolean;
   currentQuery: string;
@@ -32,10 +46,15 @@ interface SearchState {
   currentLang: string;
 }
 
+/**
+ * The EnhancedSearchClient class manages the search UI and interactions.
+ */
 export class EnhancedSearchClient {
   private searchEngine: EnhancedSearchEngine;
   private config: SearchClientConfig;
   private state: SearchState;
+
+  // DOM Elements cache
   private elements: {
     searchInput?: HTMLInputElement;
     resultsContainer?: HTMLElement;
@@ -59,10 +78,11 @@ export class EnhancedSearchClient {
       debounceMs: 150,
       minQueryLength: 1,
       maxSuggestions: SEARCH_MAX_SUGGESTIONS,
+      // Junior Dev Tip: Feature detection for browser-specific APIs (like Voice Search)
       enableVoiceSearch: 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window,
       enableKeyboardNavigation: true,
       enableAnalytics: true,
-      ...config
+      ...config,
     };
 
     this.state = {
@@ -72,7 +92,7 @@ export class EnhancedSearchClient {
       selectedResultIndex: -1,
       lastSearchTime: 0,
       hasResults: false,
-      currentLang: 'all' // Always search across all languages by default
+      currentLang: 'all', // Default to searching across all languages
     };
 
     this.searchEngine = new EnhancedSearchEngine();
@@ -83,7 +103,8 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Initialize the search system with documents
+   * Initializes the search client with document data.
+   * @param documents Array of searchable articles/pages.
    */
   async initialize(documents: any[]): Promise<void> {
     try {
@@ -98,10 +119,13 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Perform search with enhanced features
+   * Executes a search and updates the UI state.
+   * @param query The search term.
+   * @param options Additional search filters or overrides.
    */
   async search(query: string, options: any = {}): Promise<SearchResult[]> {
-    // Cancel any ongoing search
+    // Junior Dev Tip: Aborting previous requests prevents "race conditions"
+    // where an older search finishes after a newer one.
     if (this.currentAbortController) {
       this.currentAbortController.abort();
     }
@@ -116,10 +140,9 @@ export class EnhancedSearchClient {
 
       const searchFilters = {
         lang: this.state.currentLang === 'all' ? undefined : this.state.currentLang,
-        ...options
+        ...options,
       };
 
-      // Ensure language is correctly handled
       if (searchFilters.lang === 'all' || options.lang === 'all') {
         searchFilters.lang = 'all';
       }
@@ -129,7 +152,7 @@ export class EnhancedSearchClient {
         typoTolerance: true,
         phraseMatching: true,
         semanticBoost: 1.3,
-        ...options
+        ...options,
       });
 
       const searchTime = performance.now() - startTime;
@@ -142,7 +165,6 @@ export class EnhancedSearchClient {
       }
 
       return results;
-
     } catch (error) {
       if (error instanceof Error && error.name !== 'AbortError') {
         console.error('Search error:', error);
@@ -195,7 +217,7 @@ export class EnhancedSearchClient {
 
     // Announce results to screen readers
     this.announceToScreenReader(
-      `Found ${results.length} search results for "${this.state.currentQuery}"`
+      `Found ${results.length} search results for "${this.state.currentQuery}"`,
     );
   }
 
@@ -234,7 +256,14 @@ export class EnhancedSearchClient {
     const suggestions = this.elements.suggestionsContainer?.children;
     const results = this.elements.resultsContainer?.querySelectorAll('.search-result');
 
-    console.log('Keyboard navigation - Key:', event.key, 'Results found:', results?.length, 'Suggestions:', suggestions?.length);
+    console.log(
+      'Keyboard navigation - Key:',
+      event.key,
+      'Results found:',
+      results?.length,
+      'Suggestions:',
+      suggestions?.length,
+    );
 
     switch (event.key) {
       case 'ArrowDown':
@@ -282,20 +311,25 @@ export class EnhancedSearchClient {
   /**
    * Navigate down through suggestions and results
    */
-  private navigateDown(suggestions: HTMLCollection | undefined, results: NodeListOf<Element> | undefined): void {
-    const hasActiveSuggestions = suggestions && suggestions.length > 0 &&
+  private navigateDown(
+    suggestions: HTMLCollection | undefined,
+    results: NodeListOf<Element> | undefined,
+  ): void {
+    const hasActiveSuggestions =
+      suggestions &&
+      suggestions.length > 0 &&
       !this.elements.suggestionsContainer?.classList.contains('hidden');
 
     if (hasActiveSuggestions) {
       this.state.selectedSuggestionIndex = Math.min(
         this.state.selectedSuggestionIndex + 1,
-        suggestions.length - 1
+        suggestions.length - 1,
       );
       this.updateSuggestionSelection();
     } else if (results && results.length > 0) {
       this.state.selectedResultIndex = Math.min(
         this.state.selectedResultIndex + 1,
-        results.length - 1
+        results.length - 1,
       );
       this.updateResultSelection(results);
     }
@@ -304,21 +338,20 @@ export class EnhancedSearchClient {
   /**
    * Navigate up through suggestions and results
    */
-  private navigateUp(suggestions: HTMLCollection | undefined, results: NodeListOf<Element> | undefined): void {
-    const hasActiveSuggestions = suggestions && suggestions.length > 0 &&
+  private navigateUp(
+    suggestions: HTMLCollection | undefined,
+    results: NodeListOf<Element> | undefined,
+  ): void {
+    const hasActiveSuggestions =
+      suggestions &&
+      suggestions.length > 0 &&
       !this.elements.suggestionsContainer?.classList.contains('hidden');
 
     if (hasActiveSuggestions) {
-      this.state.selectedSuggestionIndex = Math.max(
-        this.state.selectedSuggestionIndex - 1,
-        -1
-      );
+      this.state.selectedSuggestionIndex = Math.max(this.state.selectedSuggestionIndex - 1, -1);
       this.updateSuggestionSelection();
     } else if (results && results.length > 0) {
-      this.state.selectedResultIndex = Math.max(
-        this.state.selectedResultIndex - 1,
-        -1
-      );
+      this.state.selectedResultIndex = Math.max(this.state.selectedResultIndex - 1, -1);
       this.updateResultSelection(results);
     }
   }
@@ -326,19 +359,27 @@ export class EnhancedSearchClient {
   /**
    * Handle Enter key for suggestions and results
    */
-  private handleEnterKey(suggestions: HTMLCollection | undefined, results: NodeListOf<Element> | undefined): void {
-    const hasActiveSuggestions = suggestions && suggestions.length > 0 &&
+  private handleEnterKey(
+    suggestions: HTMLCollection | undefined,
+    results: NodeListOf<Element> | undefined,
+  ): void {
+    const hasActiveSuggestions =
+      suggestions &&
+      suggestions.length > 0 &&
       !this.elements.suggestionsContainer?.classList.contains('hidden');
 
     if (hasActiveSuggestions && this.state.selectedSuggestionIndex >= 0) {
       const selectedElement = suggestions[this.state.selectedSuggestionIndex] as HTMLElement;
-      const suggestionText = selectedElement.querySelector('button')?.textContent || selectedElement.textContent || '';
+      const suggestionText =
+        selectedElement.querySelector('button')?.textContent || selectedElement.textContent || '';
       this.selectSuggestion(suggestionText);
     } else if (results && results.length > 0 && this.state.selectedResultIndex >= 0) {
       const selectedResult = results[this.state.selectedResultIndex] as HTMLElement;
       const link = selectedResult.querySelector('a') as HTMLAnchorElement;
       if (link) {
-        this.announceToScreenReader(`Opening article: ${link.getAttribute('aria-describedby') || 'Selected article'}`);
+        this.announceToScreenReader(
+          `Opening article: ${link.getAttribute('aria-describedby') || 'Selected article'}`,
+        );
         link.click();
       }
     }
@@ -348,20 +389,30 @@ export class EnhancedSearchClient {
    * Handle Escape key
    */
   private handleEscapeKey(): void {
-    if (this.elements.suggestionsContainer && !this.elements.suggestionsContainer.classList.contains('hidden')) {
+    if (
+      this.elements.suggestionsContainer &&
+      !this.elements.suggestionsContainer.classList.contains('hidden')
+    ) {
       this.clearSuggestions();
     } else {
       this.elements.searchInput?.blur();
       this.state.selectedResultIndex = -1;
-      this.updateResultSelection(this.elements.resultsContainer?.querySelectorAll('.search-result') || []);
+      this.updateResultSelection(
+        this.elements.resultsContainer?.querySelectorAll('.search-result') || [],
+      );
     }
   }
 
   /**
    * Navigate to first item
    */
-  private navigateToFirst(suggestions: HTMLCollection | undefined, results: NodeListOf<Element> | undefined): void {
-    const hasActiveSuggestions = suggestions && suggestions.length > 0 &&
+  private navigateToFirst(
+    suggestions: HTMLCollection | undefined,
+    results: NodeListOf<Element> | undefined,
+  ): void {
+    const hasActiveSuggestions =
+      suggestions &&
+      suggestions.length > 0 &&
       !this.elements.suggestionsContainer?.classList.contains('hidden');
 
     if (hasActiveSuggestions) {
@@ -376,8 +427,13 @@ export class EnhancedSearchClient {
   /**
    * Navigate to last item
    */
-  private navigateToLast(suggestions: HTMLCollection | undefined, results: NodeListOf<Element> | undefined): void {
-    const hasActiveSuggestions = suggestions && suggestions.length > 0 &&
+  private navigateToLast(
+    suggestions: HTMLCollection | undefined,
+    results: NodeListOf<Element> | undefined,
+  ): void {
+    const hasActiveSuggestions =
+      suggestions &&
+      suggestions.length > 0 &&
       !this.elements.suggestionsContainer?.classList.contains('hidden');
 
     if (hasActiveSuggestions) {
@@ -414,7 +470,7 @@ export class EnhancedSearchClient {
         resultElement.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
-          inline: 'nearest'
+          inline: 'nearest',
         });
 
         // Focus management for screen readers
@@ -422,7 +478,7 @@ export class EnhancedSearchClient {
         if (link) {
           link.focus({ preventScroll: true });
           this.announceToScreenReader(
-            `Result ${index + 1} of ${resultsArray.length}: ${link.getAttribute('aria-label') || 'Article'}`
+            `Result ${index + 1} of ${resultsArray.length}: ${link.getAttribute('aria-label') || 'Article'}`,
           );
         }
       }
@@ -430,9 +486,8 @@ export class EnhancedSearchClient {
 
     // Update search input ARIA attributes
     if (this.elements.searchInput && resultsArray.length > 0) {
-      const selectedId = this.state.selectedResultIndex >= 0
-        ? `result-${this.state.selectedResultIndex}`
-        : '';
+      const selectedId =
+        this.state.selectedResultIndex >= 0 ? `result-${this.state.selectedResultIndex}` : '';
       this.elements.searchInput.setAttribute('aria-activedescendant', selectedId);
       this.elements.searchInput.setAttribute('aria-expanded', 'true');
     }
@@ -443,7 +498,8 @@ export class EnhancedSearchClient {
    */
   private createResultElement(result: SearchResult, index: number): HTMLElement {
     const article = document.createElement('article');
-    article.className = 'search-result p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 focus-within:ring-2 focus-within:ring-primary-500';
+    article.className =
+      'search-result p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 focus-within:ring-2 focus-within:ring-primary-500';
     article.setAttribute('role', 'article');
     article.setAttribute('aria-labelledby', `result-title-${index}`);
     article.setAttribute('aria-describedby', `result-excerpt-${index}`);
@@ -456,7 +512,8 @@ export class EnhancedSearchClient {
     // Add Image on top if available
     if (result.heroImage) {
       const imgContainer = document.createElement('div');
-      imgContainer.className = 'w-full h-48 mb-4 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-transform duration-300 group-hover:scale-[1.02]';
+      imgContainer.className =
+        'w-full h-48 mb-4 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-transform duration-300 group-hover:scale-[1.02]';
       const img = document.createElement('img');
       img.src = result.heroImage;
       img.alt = result.title;
@@ -478,13 +535,18 @@ export class EnhancedSearchClient {
 
     const title = document.createElement('h3');
     title.id = `result-title-${index}`;
-    title.className = 'text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200';
+    title.className =
+      'text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200';
     title.innerHTML = result.highlightedTitle || result.title;
 
     const excerpt = document.createElement('p');
     excerpt.id = `result-excerpt-${index}`;
     excerpt.className = 'text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3';
-    excerpt.innerHTML = result.highlightedExcerpt || result.excerpt || result.highlightedDescription || result.description;
+    excerpt.innerHTML =
+      result.highlightedExcerpt ||
+      result.excerpt ||
+      result.highlightedDescription ||
+      result.description;
 
     const meta = document.createElement('div');
     meta.id = `result-meta-${index}`;
@@ -492,7 +554,8 @@ export class EnhancedSearchClient {
 
     // Add language indicator
     const langTag = document.createElement('span');
-    langTag.className = 'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800';
+    langTag.className =
+      'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800';
     langTag.textContent = result.lang;
     meta.appendChild(langTag);
 
@@ -510,9 +573,10 @@ export class EnhancedSearchClient {
       tagsContainer.className = 'flex flex-wrap gap-1.5';
       tagsContainer.setAttribute('aria-label', 'Article tags');
 
-      result.tags.slice(0, 3).forEach(tag => {
+      result.tags.slice(0, 3).forEach((tag) => {
         const tagElement = document.createElement('span');
-        tagElement.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700';
+        tagElement.className =
+          'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700';
         tagElement.textContent = `#${tag}`;
         tagsContainer.appendChild(tagElement);
       });
@@ -533,7 +597,8 @@ export class EnhancedSearchClient {
    */
   private createSuggestionElement(suggestion: SearchSuggestion, index: number): HTMLElement {
     const li = document.createElement('li');
-    li.className = 'suggestion-item px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-150';
+    li.className =
+      'suggestion-item px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-150';
     li.setAttribute('role', 'option');
     li.setAttribute('aria-selected', 'false');
     li.setAttribute('id', `suggestion-${index}`);
@@ -677,7 +742,8 @@ export class EnhancedSearchClient {
       return;
     }
 
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
 
     recognition.continuous = false;
@@ -707,7 +773,6 @@ export class EnhancedSearchClient {
         this.announceToScreenReader('Voice search started. Please speak now.');
       });
     }
-
   }
 
   /**
@@ -737,11 +802,18 @@ export class EnhancedSearchClient {
    * Initialize DOM elements
    */
   private initializeElements(): void {
-    this.elements.searchInput = document.getElementById(this.config.searchInputId) as HTMLInputElement;
-    this.elements.resultsContainer = document.getElementById(this.config.resultsContainerId) || undefined;
-    this.elements.suggestionsContainer = document.getElementById(this.config.suggestionsContainerId || 'search-suggestions') || undefined;
-    this.elements.statusElement = document.getElementById(this.config.statusElementId || 'search-status') || undefined;
-    this.elements.noResultsElement = document.getElementById(this.config.noResultsElementId || 'no-results') || undefined;
+    this.elements.searchInput = document.getElementById(
+      this.config.searchInputId,
+    ) as HTMLInputElement;
+    this.elements.resultsContainer =
+      document.getElementById(this.config.resultsContainerId) || undefined;
+    this.elements.suggestionsContainer =
+      document.getElementById(this.config.suggestionsContainerId || 'search-suggestions') ||
+      undefined;
+    this.elements.statusElement =
+      document.getElementById(this.config.statusElementId || 'search-status') || undefined;
+    this.elements.noResultsElement =
+      document.getElementById(this.config.noResultsElementId || 'no-results') || undefined;
 
     // Setup suggestions container if it doesn't exist
     if (!this.elements.suggestionsContainer && this.elements.searchInput) {
@@ -767,7 +839,8 @@ export class EnhancedSearchClient {
 
     const container = document.createElement('ul');
     container.id = 'search-suggestions';
-    container.className = 'absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-b-lg shadow-lg max-h-64 overflow-y-auto z-50 hidden';
+    container.className =
+      'absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-b-lg shadow-lg max-h-64 overflow-y-auto z-50 hidden';
     container.setAttribute('role', 'listbox');
     container.setAttribute('aria-label', 'Search suggestions');
 
@@ -797,9 +870,10 @@ export class EnhancedSearchClient {
 
     // Update ARIA attributes
     if (this.elements.searchInput) {
-      const selectedId = this.state.selectedSuggestionIndex >= 0
-        ? `suggestion-${this.state.selectedSuggestionIndex}`
-        : '';
+      const selectedId =
+        this.state.selectedSuggestionIndex >= 0
+          ? `suggestion-${this.state.selectedSuggestionIndex}`
+          : '';
       this.elements.searchInput.setAttribute('aria-activedescendant', selectedId);
     }
   }
@@ -963,7 +1037,7 @@ export class EnhancedSearchClient {
         search_term: query,
         result_count: resultCount,
         search_time: searchTime,
-        language: this.state.currentLang
+        language: this.state.currentLang,
       });
     }
 
@@ -982,7 +1056,7 @@ export class EnhancedSearchClient {
         search_term: query,
         result_id: resultId,
         result_position: position,
-        language: this.state.currentLang
+        language: this.state.currentLang,
       });
     }
   }
@@ -993,7 +1067,7 @@ export class EnhancedSearchClient {
   getInsights() {
     return {
       ...this.searchEngine.getSearchInsights(),
-      clientState: { ...this.state }
+      clientState: { ...this.state },
     };
   }
 
@@ -1035,7 +1109,7 @@ export class EnhancedSearchClient {
     }
 
     // Clean up event listeners
-    Object.values(this.elements).forEach(element => {
+    Object.values(this.elements).forEach((element) => {
       if (element) {
         element.removeEventListener('input', this.debouncedSearch as any);
         element.removeEventListener('keydown', this.handleKeyboardNavigation as any);

@@ -1,53 +1,53 @@
 ---
-import { getLangFromUrl, useTranslations, getLocalizedPath } from "@/i18n/utils";
-import type { LanguageKey } from "@/i18n/types";
-import FooterBrand from "@/components/footer/FooterBrand.astro";
-import FooterLinks, { type Link } from "@/components/footer/FooterLinks.astro";
-import FooterBottomBar from "@/components/footer/FooterBottomBar.astro";
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
+import FooterBrand from '@/components/footer/FooterBrand.astro';
+import FooterLinks, { type Link } from '@/components/footer/FooterLinks.astro';
+import FooterBottomBar from '@/components/footer/FooterBottomBar.astro';
 
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const t = useTranslations(lang);
 const currentYear = new Date().getFullYear();
 const navigationLinks: Link[] = [
-  { href: getLocalizedPath("/", lang), text: t("nav.home"), isLocalized: false },
-  { href: getLocalizedPath("/blog", lang), text: t("nav.blog"), isLocalized: false },
-  { href: getLocalizedPath("/services", lang), text: t("nav.services"), isLocalized: false },
-  { href: getLocalizedPath("/about", lang), text: t("nav.about"), isLocalized: false },
-  { href: "/search", text: t("nav.search"), isLocalized: false },
+  { href: getLocalizedPath('/', lang), text: t('nav.home'), isLocalized: false },
+  { href: getLocalizedPath('/blog', lang), text: t('nav.blog'), isLocalized: false },
+  { href: getLocalizedPath('/services', lang), text: t('nav.services'), isLocalized: false },
+  { href: getLocalizedPath('/about', lang), text: t('nav.about'), isLocalized: false },
+  { href: '/search', text: t('nav.search'), isLocalized: false },
 ];
 const legalLinks: Link[] = [
-  { href: getLocalizedPath("/contact", lang), text: t("footer.links.contact"), isLocalized: false },
+  { href: getLocalizedPath('/contact', lang), text: t('footer.links.contact'), isLocalized: false },
   {
-    href: getLocalizedPath("/cookies", lang),
-    text: t("footer.links.cookies"),
+    href: getLocalizedPath('/cookies', lang),
+    text: t('footer.links.cookies'),
     isLocalized: false,
   },
   {
-    href: getLocalizedPath("/privacy", lang),
-    text: t("footer.links.privacy"),
+    href: getLocalizedPath('/privacy', lang),
+    text: t('footer.links.privacy'),
     isLocalized: false,
   },
   {
-    href: getLocalizedPath("/terms", lang),
-    text: t("footer.links.terms"),
+    href: getLocalizedPath('/terms', lang),
+    text: t('footer.links.terms'),
     isLocalized: false,
   },
 ];
 const resourceLinks: Link[] = [
-  { href: "https://astro.build", text: "Astro.js", isExternal: true },
-  { href: "https://tailwindcss.com", text: "Tailwind CSS", isExternal: true },
-  { href: "https://decapcms.org", text: "Decap CMS", isExternal: true },
+  { href: 'https://astro.build', text: 'Astro.js', isExternal: true },
+  { href: 'https://tailwindcss.com', text: 'Tailwind CSS', isExternal: true },
+  { href: 'https://decapcms.org', text: 'Decap CMS', isExternal: true },
 ];
 ---
 
 <footer
-  class="bg-gray-50 dark:bg-slate-900/80 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300"
+  class="border-t border-gray-200 bg-gray-50 transition-colors duration-300 dark:border-gray-700 dark:bg-slate-900/80"
   role="contentinfo"
   aria-labelledby="footer-heading"
 >
   <h2 id="footer-heading" class="sr-only">Footer</h2>
-  <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-5 justify-around">
+  <div class="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 justify-around md:grid-cols-5">
       <FooterBrand lang={lang} />
       <FooterLinks
         title="Navigation"
@@ -61,16 +61,8 @@ const resourceLinks: Link[] = [
         lang={lang}
         aria-label="External resources"
       />
-      <FooterLinks
-        title="Legal"
-        links={legalLinks}
-        lang={lang}
-        aria-label="Legal information"
-      />
+      <FooterLinks title="Legal" links={legalLinks} lang={lang} aria-label="Legal information" />
     </div>
-    <FooterBottomBar
-      lang={lang}
-      currentYear={currentYear}
-    />
+    <FooterBottomBar lang={lang} currentYear={currentYear} />
   </div>
 </footer>

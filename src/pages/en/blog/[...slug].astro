@@ -1,4 +1,3 @@
-export const prerender = true;
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '@/layouts/BlogPost.astro';
@@ -16,7 +15,10 @@ interface StaticPath {
 }
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog', ({ id, data }: { id: string, data: any }) => id.startsWith('en/') && !data.draft);
+  const allPosts = await getCollection(
+    'blog',
+    ({ id, data }: { id: string; data: any }) => id.startsWith('en/') && !data.draft,
+  );
 
   return allPosts.map((post: CollectionEntry<'blog'>) => {
     const parts = post.id.split('/');
@@ -26,7 +28,7 @@ export async function getStaticPaths() {
 
     return {
       params: {
-        slug: finalSlug
+        slug: finalSlug,
       },
       props: post,
     };

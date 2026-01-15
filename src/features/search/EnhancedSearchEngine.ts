@@ -1,8 +1,16 @@
 /**
- * Enhanced Search Engine for Astro Batavia
- * Features: Semantic search, instant results, accessibility, debouncing, caching
+ * @file Enhanced Search Engine
+ * @description A high-performance, client-side search engine for Astro Batavia.
+ * Features: Semantic search, fuzzy matching, typo tolerance, and intelligent ranking.
+ *
+ * Junior Dev Tip: This engine uses "Inverted Indexes" to make searching
+ * blazing fast. Instead of looping through every document, we look up
+ * words in a pre-built map of word-to-document relationships.
  */
 
+/**
+ * Interface representing a document that can be indexed by the engine.
+ */
 export interface SearchableDocument {
   id: string;
   title: string;
@@ -19,6 +27,9 @@ export interface SearchableDocument {
   heroImage?: string;
 }
 
+/**
+ * Extends SearchableDocument with search-specific metadata.
+ */
 export interface SearchResult extends SearchableDocument {
   relevanceScore: number;
   matchedFields: string[];
@@ -31,6 +42,9 @@ export interface SearchResult extends SearchableDocument {
   contextualRelevance?: number;
 }
 
+/**
+ * Filter options for search queries.
+ */
 export interface SearchFilters {
   tags?: string[];
   dateFrom?: Date;
@@ -38,10 +52,13 @@ export interface SearchFilters {
   author?: string;
   category?: string;
   lang?: string;
-  sortBy?: "relevance" | "date" | "title" | "semantic" | "hybrid";
-  sortOrder?: "asc" | "desc";
+  sortBy?: 'relevance' | 'date' | 'title' | 'semantic' | 'hybrid';
+  sortOrder?: 'asc' | 'desc';
 }
 
+/**
+ * Options to tune search engine behavior.
+ */
 export interface SearchOptions {
   fuzzyThreshold?: number;
   maxResults?: number;
@@ -54,21 +71,31 @@ export interface SearchOptions {
   phraseMatching?: boolean;
 }
 
+/**
+ * Represents a search suggestion.
+ */
 export interface SearchSuggestion {
   text: string;
-  type: "query" | "tag" | "title" | "semantic" | "completion";
+  type: 'query' | 'tag' | 'title' | 'semantic' | 'completion';
   score: number;
   description?: string;
   category?: string;
 }
 
+/**
+ * Groups related terms together for semantic understanding.
+ */
 interface SemanticCluster {
   terms: string[];
   weight: number;
   category: string;
 }
 
+/**
+ * The core search engine class.
+ */
 class EnhancedSearchEngine {
+  // Document storage and indexes
   private documents: SearchableDocument[] = [];
   private searchIndex: Map<string, Set<number>> = new Map();
   private tagIndex: Map<string, Set<number>> = new Map();
@@ -77,55 +104,164 @@ class EnhancedSearchEngine {
   private cache: Map<string, SearchResult[]> = new Map();
   private suggestionCache: Map<string, SearchSuggestion[]> = new Map();
 
-  // Enhanced indexes for better performance
+  // Advanced indexes for better matching
   private ngramIndex: Map<string, Set<number>> = new Map();
   private phraseIndex: Map<string, Set<number>> = new Map();
   private synonymIndex: Map<string, string[]> = new Map();
 
-  // Semantic clusters for better understanding
+  /**
+   * Semantic clusters help the engine understand context.
+   * If a user searches for 'AI', they might also be interested in 'Machine Learning'.
+   */
   private semanticClusters: SemanticCluster[] = [
     {
-      terms: ['ai', 'artificial intelligence', 'machine learning', 'ml', 'deep learning', 'neural network', 'genai', 'llm'],
+      terms: [
+        'ai',
+        'artificial intelligence',
+        'machine learning',
+        'ml',
+        'deep learning',
+        'neural network',
+        'genai',
+        'llm',
+      ],
       weight: 1.2,
-      category: 'technology'
+      category: 'technology',
     },
     {
-      terms: ['web', 'frontend', 'backend', 'fullstack', 'javascript', 'typescript', 'react', 'vue', 'angular', 'nextjs', 'astro'],
+      terms: [
+        'web',
+        'frontend',
+        'backend',
+        'fullstack',
+        'javascript',
+        'typescript',
+        'react',
+        'vue',
+        'angular',
+        'nextjs',
+        'astro',
+      ],
       weight: 1.1,
-      category: 'development'
+      category: 'development',
     },
     {
-      terms: ['blockchain', 'cryptocurrency', 'bitcoin', 'ethereum', 'defi', 'smart contract', 'web3'],
+      terms: [
+        'blockchain',
+        'cryptocurrency',
+        'bitcoin',
+        'ethereum',
+        'defi',
+        'smart contract',
+        'web3',
+      ],
       weight: 1.1,
-      category: 'blockchain'
+      category: 'blockchain',
     },
     {
-      terms: ['cloud', 'aws', 'azure', 'gcp', 'serverless', 'microservices', 'kubernetes', 'docker', 'devops'],
+      terms: [
+        'cloud',
+        'aws',
+        'azure',
+        'gcp',
+        'serverless',
+        'microservices',
+        'kubernetes',
+        'docker',
+        'devops',
+      ],
       weight: 1.1,
-      category: 'cloud'
+      category: 'cloud',
     },
     {
-      terms: ['mobile', 'ios', 'android', 'app development', 'native', 'react native', 'flutter', 'kotlin', 'swift'],
+      terms: [
+        'mobile',
+        'ios',
+        'android',
+        'app development',
+        'native',
+        'react native',
+        'flutter',
+        'kotlin',
+        'swift',
+      ],
       weight: 1.0,
-      category: 'mobile'
+      category: 'mobile',
     },
     {
-      terms: ['security', 'cybersecurity', 'encryption', 'vulnerability', 'penetration testing', 'security audit', 'auth'],
+      terms: [
+        'security',
+        'cybersecurity',
+        'encryption',
+        'vulnerability',
+        'penetration testing',
+        'security audit',
+        'auth',
+      ],
       weight: 1.2,
-      category: 'security'
+      category: 'security',
     },
     {
       terms: ['vr', 'ar', 'xr', 'virtual reality', 'augmented reality', 'metaverse', 'immersive'],
       weight: 1.1,
-      category: 'immersive'
-    }
+      category: 'immersive',
+    },
   ];
 
   private stopWords = new Set([
-    "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by",
-    "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "do", "does", "did",
-    "will", "would", "could", "should", "may", "might", "can", "must", "shall", "ought",
-    "it", "if", "as", "my", "me", "so", "up", "out", "no", "not", "how", "why", "what", "who", "when", "where"
+    'the',
+    'a',
+    'an',
+    'and',
+    'or',
+    'but',
+    'in',
+    'on',
+    'at',
+    'to',
+    'for',
+    'of',
+    'with',
+    'by',
+    'is',
+    'are',
+    'was',
+    'were',
+    'be',
+    'been',
+    'being',
+    'have',
+    'has',
+    'had',
+    'do',
+    'does',
+    'did',
+    'will',
+    'would',
+    'could',
+    'should',
+    'may',
+    'might',
+    'can',
+    'must',
+    'shall',
+    'ought',
+    'it',
+    'if',
+    'as',
+    'my',
+    'me',
+    'so',
+    'up',
+    'out',
+    'no',
+    'not',
+    'how',
+    'why',
+    'what',
+    'who',
+    'when',
+    'where',
   ]);
 
   // Performance tracking
@@ -133,7 +269,7 @@ class EnhancedSearchEngine {
     searchCount: 0,
     avgSearchTime: 0,
     cacheHitRate: 0,
-    popularQueries: new Map<string, number>()
+    popularQueries: new Map<string, number>(),
   };
 
   // Analytics tracking
@@ -143,7 +279,7 @@ class EnhancedSearchEngine {
     totalSearchTime: 0,
     cacheHits: 0,
     queryFrequency: new Map<string, number>(),
-    clickTracking: new Map<string, number>()
+    clickTracking: new Map<string, number>(),
   };
 
   // Search cache separate from main cache
@@ -157,40 +293,38 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Index documents with enhanced semantic analysis
+   * Processes and indexes a list of documents.
+   * This should be called once when the application starts.
    */
   async indexDocuments(documents: SearchableDocument[]): Promise<void> {
     const startTime = performance.now();
 
-    this.documents = documents.map(doc => ({
+    this.documents = documents.map((doc) => ({
       ...doc,
-      pubDate: this.normalizePubDate(doc.pubDate)
+      pubDate: this.normalizePubDate(doc.pubDate),
     }));
 
-    // Clear existing indexes
+    // Clear existing indexes before rebuilding
     this.clearIndexes();
 
-    // Build multiple indexes in parallel for better performance
+    // Building multiple indexes in parallel to save time
     await Promise.all([
       this.buildSearchIndex(),
       this.buildTagIndex(),
       this.buildTitleIndex(),
       this.buildSemanticIndex(),
       this.buildNgramIndex(),
-      this.buildPhraseIndex()
+      this.buildPhraseIndex(),
     ]);
 
     console.log(`Indexing completed in ${performance.now() - startTime}ms`);
   }
 
   /**
-   * Enhanced search with semantic understanding and typo tolerance
+   * Performs a search with the given query and options.
+   * Uses caching for performance.
    */
-  search(
-    query: string,
-    filters: SearchFilters = {},
-    options: SearchOptions = {}
-  ): SearchResult[] {
+  search(query: string, filters: SearchFilters = {}, options: SearchOptions = {}): SearchResult[] {
     const startTime = performance.now();
 
     const {
@@ -201,38 +335,34 @@ class EnhancedSearchEngine {
       semanticBoost = 1.2,
       contextualBoost = 1.1,
       typoTolerance = true,
-      phraseMatching = true
+      phraseMatching = true,
     } = options;
 
-    // Validate and normalize query
+    // Normalize query to lowercase and trim spaces
     const normalizedQuery = this.normalizeQuery(query);
     if (!normalizedQuery || normalizedQuery.length < minQueryLength) {
       return this.getFilteredDocuments(filters, maxResults);
     }
 
-    // Check cache first
+    // Performance Optimization: Check cache first
     const cacheKey = this.getCacheKey(normalizedQuery, filters, options);
     if (this.cache.has(cacheKey)) {
       this.updatePerformanceMetrics(normalizedQuery, performance.now() - startTime, true);
       return this.cache.get(cacheKey)!.slice(0, maxResults);
     }
 
-    // Perform enhanced search
-    const results = this.performEnhancedSearch(
-      normalizedQuery,
-      filters,
-      {
-        fuzzyThreshold,
-        enableHighlighting,
-        maxResults,
-        semanticBoost,
-        contextualBoost,
-        typoTolerance,
-        phraseMatching
-      }
-    );
+    // Core search logic
+    const results = this.performEnhancedSearch(normalizedQuery, filters, {
+      fuzzyThreshold,
+      enableHighlighting,
+      maxResults,
+      semanticBoost,
+      contextualBoost,
+      typoTolerance,
+      phraseMatching,
+    });
 
-    // Cache results
+    // Update cache and metrics
     this.cache.set(cacheKey, results);
     this.updatePerformanceMetrics(normalizedQuery, performance.now() - startTime, false);
 
@@ -240,7 +370,9 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Get intelligent search suggestions with context awareness
+   * Generates intelligent search suggestions based on a partial query.
+   * @param partialQuery The text entered by the user so far.
+   * @param limit Maximum number of suggestions to return.
    */
   getSuggestions(partialQuery: string, limit: number = 8): SearchSuggestion[] {
     if (partialQuery.length < 2) return [];
@@ -254,33 +386,34 @@ class EnhancedSearchEngine {
     const queryLower = partialQuery.toLowerCase();
 
     // 1. Query completions based on popular searches
+    // Junior Dev Tip: This rewards common queries, making the search feel "smarter".
     this.performanceMetrics.popularQueries.forEach((count, query) => {
       if (query.toLowerCase().startsWith(queryLower) && query !== partialQuery) {
         suggestions.push({
           text: query,
-          type: "completion",
+          type: 'completion',
           score: count + (query.toLowerCase() === queryLower ? 10 : 0),
-          description: `${count} searches`
+          description: `${count} searches`,
         });
       }
     });
 
     // 2. Title suggestions with semantic relevance
-    this.documents.forEach(doc => {
+    this.documents.forEach((doc) => {
       const titleLower = doc.title.toLowerCase();
       if (titleLower.includes(queryLower)) {
         const semanticScore = this.calculateSemanticRelevance(partialQuery, doc.title);
         suggestions.push({
           text: doc.title,
-          type: "title",
+          type: 'title',
           score: this.calculateSuggestionScore(doc.title, queryLower) + semanticScore,
-          description: doc.description.substring(0, 80) + "...",
-          category: doc.category
+          description: doc.description.substring(0, 80) + '...',
+          category: doc.category,
         });
       }
     });
 
-    // 3. Tag suggestions with clustering
+    // 3. Tag suggestions
     const tagSuggestions = new Map<string, number>();
     this.tagIndex.forEach((docIndices, tag) => {
       if (tag.toLowerCase().includes(queryLower)) {
@@ -291,33 +424,35 @@ class EnhancedSearchEngine {
     tagSuggestions.forEach((count, tag) => {
       suggestions.push({
         text: tag,
-        type: "tag",
-        score: this.calculateSuggestionScore(tag, queryLower) + (count / 10),
+        type: 'tag',
+        score: this.calculateSuggestionScore(tag, queryLower) + count / 10,
         description: `${count} articles`,
-        category: "tag"
+        category: 'tag',
       });
     });
 
-    // 4. Semantic suggestions
-    this.semanticClusters.forEach(cluster => {
-      cluster.terms.forEach(term => {
+    // 4. Semantic suggestions (clusters)
+    this.semanticClusters.forEach((cluster) => {
+      cluster.terms.forEach((term) => {
         if (term.includes(queryLower) && term !== partialQuery) {
           suggestions.push({
             text: term,
-            type: "semantic",
+            type: 'semantic',
             score: this.calculateSuggestionScore(term, queryLower) * cluster.weight,
             description: `Related to ${cluster.category}`,
-            category: cluster.category
+            category: cluster.category,
           });
         }
       });
     });
 
+    // Sort by score and remove duplicates
     const finalSuggestions = suggestions
       .sort((a, b) => b.score - a.score)
       .slice(0, limit)
-      .filter((suggestion, index, arr) =>
-        arr.findIndex(s => s.text.toLowerCase() === suggestion.text.toLowerCase()) === index
+      .filter(
+        (suggestion, index, arr) =>
+          arr.findIndex((s) => s.text.toLowerCase() === suggestion.text.toLowerCase()) === index,
       );
 
     this.suggestionCache.set(cacheKey, finalSuggestions);
@@ -325,34 +460,8 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Get popular search terms
+   * Internal method that orchestrates the multi-stage search process.
    */
-  getPopularSearches(limit: number = 10): { query: string; count: number }[] {
-    return Array.from(this.performanceMetrics.popularQueries.entries())
-      .map(([query, count]) => ({ query, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, limit);
-  }
-
-  /**
-   * Get search insights and analytics
-   */
-  getSearchInsights() {
-    return {
-      ...this.performanceMetrics,
-      totalDocuments: this.documents.length,
-      indexSize: this.searchIndex.size,
-      cacheSize: this.cache.size,
-      topQueries: Array.from(this.performanceMetrics.popularQueries.entries())
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 10)
-        .map(([query, count]) => ({ query, count }))
-    };
-  }
-
-
-  // Private methods
-
   private performEnhancedSearch(
     query: string,
     filters: SearchFilters,
@@ -364,15 +473,15 @@ class EnhancedSearchEngine {
       contextualBoost: number;
       typoTolerance: boolean;
       phraseMatching: boolean;
-    }
+    },
   ): SearchResult[] {
     const queryWords = this.extractWords(query);
     const candidateScores = new Map<number, number>();
 
     // 1. Exact word matches
-    queryWords.forEach(word => {
+    queryWords.forEach((word) => {
       if (this.searchIndex.has(word)) {
-        this.searchIndex.get(word)!.forEach(index => {
+        this.searchIndex.get(word)!.forEach((index) => {
           candidateScores.set(index, (candidateScores.get(index) || 0) + 3);
         });
       }
@@ -401,7 +510,10 @@ class EnhancedSearchEngine {
       const doc = this.documents[index];
       if (this.matchesFilters(doc, filters)) {
         const relevanceScore = this.calculateEnhancedRelevance(doc, query, baseScore, options);
-        const semanticScore = this.calculateSemanticRelevance(query, doc.title + " " + doc.description);
+        const semanticScore = this.calculateSemanticRelevance(
+          query,
+          doc.title + ' ' + doc.description,
+        );
 
         const result: SearchResult = {
           ...doc,
@@ -409,7 +521,7 @@ class EnhancedSearchEngine {
           semanticScore,
           contextualRelevance: this.calculateContextualRelevance(doc, query),
           matchedFields: this.getMatchedFields(doc, query),
-          excerpt: this.generateSmartExcerpt(doc, query)
+          excerpt: this.generateSmartExcerpt(doc, query),
         };
 
         if (options.enableHighlighting) {
@@ -419,10 +531,7 @@ class EnhancedSearchEngine {
             result.highlightedExcerpt = this.highlightText(result.excerpt, query);
           }
           if (doc.content) {
-            result.highlightedContent = this.highlightText(
-              doc.content.substring(0, 300),
-              query
-            );
+            result.highlightedContent = this.highlightText(doc.content.substring(0, 300), query);
           }
         }
 
@@ -430,19 +539,28 @@ class EnhancedSearchEngine {
       }
     });
 
-    return this.sortResultsIntelligently(results, filters.sortBy || "relevance", filters.sortOrder || "desc");
+    return this.sortResultsIntelligently(
+      results,
+      filters.sortBy || 'relevance',
+      filters.sortOrder || 'desc',
+    );
   }
 
+  /**
+   * Adds scores for fuzzy word matches (typo tolerance).
+   * Junior Dev Tip: This uses the Levenshtein distance algorithm to find
+   * words that are "close" to the query, even if they aren't exact.
+   */
   private addFuzzyMatches(
     queryWords: string[],
     candidateScores: Map<number, number>,
-    threshold: number
+    threshold: number,
   ): void {
-    queryWords.forEach(word => {
+    queryWords.forEach((word) => {
       this.searchIndex.forEach((indices, indexedWord) => {
         const similarity = this.calculateSimilarity(word, indexedWord);
         if (similarity >= threshold && similarity < 1.0) {
-          indices.forEach(index => {
+          indices.forEach((index) => {
             candidateScores.set(index, (candidateScores.get(index) || 0) + similarity * 2);
           });
         }
@@ -450,25 +568,23 @@ class EnhancedSearchEngine {
     });
   }
 
-  private addPhraseMatches(query: string, candidateScores: Map<number, number>): void {
-    if (this.phraseIndex.has(query)) {
-      this.phraseIndex.get(query)!.forEach(index => {
-        candidateScores.set(index, (candidateScores.get(index) || 0) + 5);
-      });
-    }
-  }
-
+  /**
+   * Adds scores for semantic matches based on clusters.
+   */
   private addSemanticMatches(
     query: string,
     candidateScores: Map<number, number>,
-    boost: number
+    boost: number,
   ): void {
-    this.semanticClusters.forEach(cluster => {
-      if (cluster.terms.some(term => query.toLowerCase().includes(term))) {
-        cluster.terms.forEach(term => {
+    this.semanticClusters.forEach((cluster) => {
+      if (cluster.terms.some((term) => query.toLowerCase().includes(term))) {
+        cluster.terms.forEach((term) => {
           if (this.semanticIndex.has(term)) {
-            this.semanticIndex.get(term)!.forEach(index => {
-              candidateScores.set(index, (candidateScores.get(index) || 0) + (boost * cluster.weight));
+            this.semanticIndex.get(term)!.forEach((index) => {
+              candidateScores.set(
+                index,
+                (candidateScores.get(index) || 0) + boost * cluster.weight,
+              );
             });
           }
         });
@@ -476,22 +592,15 @@ class EnhancedSearchEngine {
     });
   }
 
-  private addNgramMatches(query: string, candidateScores: Map<number, number>): void {
-    const ngrams = this.generateNgrams(query, 3);
-    ngrams.forEach(ngram => {
-      if (this.ngramIndex.has(ngram)) {
-        this.ngramIndex.get(ngram)!.forEach(index => {
-          candidateScores.set(index, (candidateScores.get(index) || 0) + 0.5);
-        });
-      }
-    });
-  }
-
+  /**
+   * Calculates a comprehensive relevance score for a document.
+   * Considers title matches, tags, recency, and contextual factors.
+   */
   private calculateEnhancedRelevance(
     doc: SearchableDocument,
     query: string,
     baseScore: number,
-    options: any
+    options: any,
   ): number {
     let score = baseScore;
     const queryLower = query.toLowerCase();
@@ -499,36 +608,37 @@ class EnhancedSearchEngine {
     // Title boost (highest priority)
     if (doc.title.toLowerCase().includes(queryLower)) {
       score += 8;
-      // Extra boost for title starting with query
+      // Extra bonus if the title starts with the query
       if (doc.title.toLowerCase().startsWith(queryLower)) {
         score += 4;
       }
     }
 
-    // Tag matching
-    doc.tags.forEach(tag => {
+    // Tag matching (medium priority)
+    doc.tags.forEach((tag) => {
       if (tag.toLowerCase().includes(queryLower)) {
         score += 6;
         if (tag.toLowerCase() === queryLower) {
-          score += 3; // Exact tag match
+          score += 3; // Exact tag match bonus
         }
       }
     });
 
-    // Description relevance
+    // Description relevance (lower priority)
     if (doc.description.toLowerCase().includes(queryLower)) {
       score += 4;
     }
 
-    // Recency boost
-    const daysSincePublished = (Date.now() - new Date(doc.pubDate).getTime()) / (1000 * 60 * 60 * 24);
+    // Recency boost: Fresh content is often more relevant
+    const daysSincePublished =
+      (Date.now() - new Date(doc.pubDate).getTime()) / (1000 * 60 * 60 * 24);
     if (daysSincePublished < 30) {
       score += 2;
     } else if (daysSincePublished < 90) {
       score += 1;
     }
 
-    // Reading time penalty for very long articles
+    // Content length penalty: Extremely long articles might be less relevant for quick searches
     if (doc.readingTime && doc.readingTime > 20) {
       score -= 0.5;
     }
@@ -541,12 +651,12 @@ class EnhancedSearchEngine {
     const queryLower = query.toLowerCase();
     const textLower = text.toLowerCase();
 
-    this.semanticClusters.forEach(cluster => {
-      const queryMatchesCluster = cluster.terms.some(term =>
-        queryLower.includes(term) || this.calculateSimilarity(queryLower, term) > 0.8
+    this.semanticClusters.forEach((cluster) => {
+      const queryMatchesCluster = cluster.terms.some(
+        (term) => queryLower.includes(term) || this.calculateSimilarity(queryLower, term) > 0.8,
       );
-      const textMatchesCluster = cluster.terms.some(term =>
-        textLower.includes(term) || this.calculateSimilarity(textLower, term) > 0.8
+      const textMatchesCluster = cluster.terms.some(
+        (term) => textLower.includes(term) || this.calculateSimilarity(textLower, term) > 0.8,
       );
 
       if (queryMatchesCluster && textMatchesCluster) {
@@ -562,8 +672,8 @@ class EnhancedSearchEngine {
     const queryWords = this.extractWords(query);
 
     // Check for contextual word relationships
-    queryWords.forEach(queryWord => {
-      doc.tags.forEach(tag => {
+    queryWords.forEach((queryWord) => {
+      doc.tags.forEach((tag) => {
         if (this.areWordsRelated(queryWord, tag)) {
           score += 0.5;
         }
@@ -576,54 +686,58 @@ class EnhancedSearchEngine {
   private areWordsRelated(word1: string, word2: string): boolean {
     // Simple related word detection - can be enhanced with NLP libraries
     const relatedPairs = [
-      ['javascript', 'typescript'], ['react', 'vue'], ['frontend', 'backend'],
-      ['ai', 'machine learning'], ['blockchain', 'cryptocurrency'], ['cloud', 'serverless']
+      ['javascript', 'typescript'],
+      ['react', 'vue'],
+      ['frontend', 'backend'],
+      ['ai', 'machine learning'],
+      ['blockchain', 'cryptocurrency'],
+      ['cloud', 'serverless'],
     ];
 
-    return relatedPairs.some(pair =>
-      (pair.includes(word1.toLowerCase()) && pair.includes(word2.toLowerCase()))
+    return relatedPairs.some(
+      (pair) => pair.includes(word1.toLowerCase()) && pair.includes(word2.toLowerCase()),
     );
   }
 
   private sortResultsIntelligently(
     results: SearchResult[],
     sortBy: string,
-    sortOrder: string
+    sortOrder: string,
   ): SearchResult[] {
     return results.sort((a, b) => {
       let comparison = 0;
 
       switch (sortBy) {
-        case "semantic":
+        case 'semantic':
           comparison = (b.semanticScore || 0) - (a.semanticScore || 0);
           break;
-        case "hybrid":
-          const aHybrid = (a.relevanceScore * 0.6) + ((a.semanticScore || 0) * 0.4);
-          const bHybrid = (b.relevanceScore * 0.6) + ((b.semanticScore || 0) * 0.4);
+        case 'hybrid':
+          const aHybrid = a.relevanceScore * 0.6 + (a.semanticScore || 0) * 0.4;
+          const bHybrid = b.relevanceScore * 0.6 + (b.semanticScore || 0) * 0.4;
           comparison = bHybrid - aHybrid;
           break;
-        case "date":
+        case 'date':
           comparison = new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
           break;
-        case "title":
+        case 'title':
           comparison = a.title.localeCompare(b.title);
           break;
         default:
           comparison = b.relevanceScore - a.relevanceScore;
       }
 
-      return sortOrder === "desc" ? comparison : -comparison;
+      return sortOrder === 'desc' ? comparison : -comparison;
     });
   }
 
   private buildSearchIndex(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
         const words = this.extractWords(
-          `${doc.title} ${doc.description} ${doc.content || ""} ${doc.tags.join(" ")}`
+          `${doc.title} ${doc.description} ${doc.content || ''} ${doc.tags.join(' ')}`,
         );
 
-        words.forEach(word => {
+        words.forEach((word) => {
           if (!this.searchIndex.has(word)) {
             this.searchIndex.set(word, new Set());
           }
@@ -635,11 +749,12 @@ class EnhancedSearchEngine {
   }
 
   private buildSemanticIndex(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
-        this.semanticClusters.forEach(cluster => {
-          cluster.terms.forEach(term => {
-            const content = `${doc.title} ${doc.description} ${doc.content || ""} ${doc.tags.join(" ")}`.toLowerCase();
+        this.semanticClusters.forEach((cluster) => {
+          cluster.terms.forEach((term) => {
+            const content =
+              `${doc.title} ${doc.description} ${doc.content || ''} ${doc.tags.join(' ')}`.toLowerCase();
             if (content.includes(term)) {
               if (!this.semanticIndex.has(term)) {
                 this.semanticIndex.set(term, new Set());
@@ -654,12 +769,12 @@ class EnhancedSearchEngine {
   }
 
   private buildNgramIndex(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
         const text = `${doc.title} ${doc.description}`.toLowerCase();
         const ngrams = this.generateNgrams(text, 3);
 
-        ngrams.forEach(ngram => {
+        ngrams.forEach((ngram) => {
           if (!this.ngramIndex.has(ngram)) {
             this.ngramIndex.set(ngram, new Set());
           }
@@ -671,13 +786,13 @@ class EnhancedSearchEngine {
   }
 
   private buildPhraseIndex(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
         const text = `${doc.title} ${doc.description}`.toLowerCase();
         // Extract 2-4 word phrases
         for (let phraseLength = 2; phraseLength <= 4; phraseLength++) {
           const phrases = this.extractPhrases(text, phraseLength);
-          phrases.forEach(phrase => {
+          phrases.forEach((phrase) => {
             if (!this.phraseIndex.has(phrase)) {
               this.phraseIndex.set(phrase, new Set());
             }
@@ -690,9 +805,9 @@ class EnhancedSearchEngine {
   }
 
   private buildTagIndex(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
-        doc.tags.forEach(tag => {
+        doc.tags.forEach((tag) => {
           const normalizedTag = tag.toLowerCase();
           if (!this.tagIndex.has(normalizedTag)) {
             this.tagIndex.set(normalizedTag, new Set());
@@ -705,10 +820,10 @@ class EnhancedSearchEngine {
   }
 
   private buildTitleIndex(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
         const words = this.extractWords(doc.title);
-        words.forEach(word => {
+        words.forEach((word) => {
           if (!this.titleIndex.has(word)) {
             this.titleIndex.set(word, new Set());
           }
@@ -732,7 +847,7 @@ class EnhancedSearchEngine {
     const phrases: string[] = [];
 
     for (let i = 0; i <= words.length - length; i++) {
-      const phrase = words.slice(i, i + length).join(" ");
+      const phrase = words.slice(i, i + length).join(' ');
       if (phrase.length > 3 && !this.stopWords.has(phrase)) {
         phrases.push(phrase);
       }
@@ -747,12 +862,12 @@ class EnhancedSearchEngine {
 
     // Find the best sentence containing query terms
     const sentences = content.split(/[.!?]+/);
-    let bestSentence = "";
+    let bestSentence = '';
     let maxMatches = 0;
 
-    sentences.forEach(sentence => {
-      const matches = queryWords.filter(word =>
-        sentence.toLowerCase().includes(word.toLowerCase())
+    sentences.forEach((sentence) => {
+      const matches = queryWords.filter((word) =>
+        sentence.toLowerCase().includes(word.toLowerCase()),
       ).length;
 
       if (matches > maxMatches) {
@@ -762,10 +877,10 @@ class EnhancedSearchEngine {
     });
 
     if (bestSentence && bestSentence.length > 50) {
-      return bestSentence.substring(0, 200) + (bestSentence.length > 200 ? "..." : "");
+      return bestSentence.substring(0, 200) + (bestSentence.length > 200 ? '...' : '');
     }
 
-    return doc.description.substring(0, 150) + (doc.description.length > 150 ? "..." : "");
+    return doc.description.substring(0, 150) + (doc.description.length > 150 ? '...' : '');
   }
 
   private setupKeyboardShortcuts(): void {
@@ -802,7 +917,8 @@ class EnhancedSearchEngine {
   private updatePerformanceMetrics(query: string, searchTime: number, cacheHit: boolean): void {
     this.performanceMetrics.searchCount++;
     this.performanceMetrics.avgSearchTime =
-      (this.performanceMetrics.avgSearchTime * (this.performanceMetrics.searchCount - 1) + searchTime) /
+      (this.performanceMetrics.avgSearchTime * (this.performanceMetrics.searchCount - 1) +
+        searchTime) /
       this.performanceMetrics.searchCount;
 
     if (cacheHit) {
@@ -830,27 +946,33 @@ class EnhancedSearchEngine {
     // Remove entries that point to non-existent documents
     const validIndices = new Set(Array.from({ length: this.documents.length }, (_, i) => i));
 
-    [this.searchIndex, this.tagIndex, this.titleIndex, this.semanticIndex, this.ngramIndex, this.phraseIndex]
-      .forEach(index => {
-        index.forEach((docIndices, key) => {
-          const filteredIndices = new Set([...docIndices].filter(i => validIndices.has(i)));
-          if (filteredIndices.size === 0) {
-            index.delete(key);
-          } else {
-            index.set(key, filteredIndices);
-          }
-        });
+    [
+      this.searchIndex,
+      this.tagIndex,
+      this.titleIndex,
+      this.semanticIndex,
+      this.ngramIndex,
+      this.phraseIndex,
+    ].forEach((index) => {
+      index.forEach((docIndices, key) => {
+        const filteredIndices = new Set([...docIndices].filter((i) => validIndices.has(i)));
+        if (filteredIndices.size === 0) {
+          index.delete(key);
+        } else {
+          index.set(key, filteredIndices);
+        }
       });
+    });
   }
 
   // Utility methods from base class with enhancements
   private extractWords(text: string): string[] {
     return text
       .toLowerCase()
-      .replace(/[^\w\s+#]/g, " ")
+      .replace(/[^\w\s+#]/g, ' ')
       .split(/\s+/)
-      .filter(word => word.length >= 2 && !this.stopWords.has(word))
-      .filter(word => word.length >= 2 && !this.stopWords.has(word));
+      .filter((word) => word.length >= 2 && !this.stopWords.has(word))
+      .filter((word) => word.length >= 2 && !this.stopWords.has(word));
   }
 
   private normalizeQuery(query: string): string {
@@ -869,22 +991,27 @@ class EnhancedSearchEngine {
 
   private getFilteredDocuments(filters: SearchFilters, maxResults: number): SearchResult[] {
     return this.documents
-      .filter(doc => this.matchesFilters(doc, filters))
-      .map(doc => ({
+      .filter((doc) => this.matchesFilters(doc, filters))
+      .map((doc) => ({
         ...doc,
         relevanceScore: 0,
         matchedFields: [],
-        excerpt: doc.description.substring(0, 150) + (doc.description.length > 150 ? "..." : "")
+        excerpt: doc.description.substring(0, 150) + (doc.description.length > 150 ? '...' : ''),
       }))
       .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
       .slice(0, maxResults);
   }
 
   private matchesFilters(doc: SearchableDocument, filters: SearchFilters): boolean {
-    if (filters.tags?.length && !filters.tags.some(tag => doc.tags.includes(tag))) return false;
+    if (filters.tags?.length && !filters.tags.some((tag) => doc.tags.includes(tag))) return false;
     if (filters.dateFrom && new Date(doc.pubDate) < filters.dateFrom) return false;
     if (filters.dateTo && new Date(doc.pubDate) > filters.dateTo) return false;
-    if (filters.author && doc.author && !doc.author.toLowerCase().includes(filters.author.toLowerCase())) return false;
+    if (
+      filters.author &&
+      doc.author &&
+      !doc.author.toLowerCase().includes(filters.author.toLowerCase())
+    )
+      return false;
     if (filters.category && doc.category !== filters.category) return false;
     if (filters.lang && filters.lang !== 'all' && doc.lang !== filters.lang) return false;
     return true;
@@ -894,10 +1021,10 @@ class EnhancedSearchEngine {
     const fields: string[] = [];
     const queryLower = query.toLowerCase();
 
-    if (doc.title.toLowerCase().includes(queryLower)) fields.push("title");
-    if (doc.description.toLowerCase().includes(queryLower)) fields.push("description");
-    if (doc.tags.some(tag => tag.toLowerCase().includes(queryLower))) fields.push("tags");
-    if (doc.content?.toLowerCase().includes(queryLower)) fields.push("content");
+    if (doc.title.toLowerCase().includes(queryLower)) fields.push('title');
+    if (doc.description.toLowerCase().includes(queryLower)) fields.push('description');
+    if (doc.tags.some((tag) => tag.toLowerCase().includes(queryLower))) fields.push('tags');
+    if (doc.content?.toLowerCase().includes(queryLower)) fields.push('content');
 
     return fields;
   }
@@ -906,11 +1033,11 @@ class EnhancedSearchEngine {
     const queryWords = this.extractWords(query);
     let highlightedText = text;
 
-    queryWords.forEach(word => {
-      const regex = new RegExp(`(${this.escapeRegex(word)})`, "gi");
+    queryWords.forEach((word) => {
+      const regex = new RegExp(`(${this.escapeRegex(word)})`, 'gi');
       highlightedText = highlightedText.replace(
         regex,
-        '<mark class="search-highlight bg-yellow-200 dark:bg-yellow-800 px-1 rounded">$1</mark>'
+        '<mark class="search-highlight bg-yellow-200 dark:bg-yellow-800 px-1 rounded">$1</mark>',
       );
     });
 
@@ -928,8 +1055,14 @@ class EnhancedSearchEngine {
     return (longer.length - this.levenshteinDistance(longer, shorter)) / longer.length;
   }
 
+  /**
+   * Calculates the Levenshtein distance between two strings.
+   * Useful for fuzzy matching and typo tolerance.
+   */
   private levenshteinDistance(str1: string, str2: string): number {
-    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+    const matrix = Array(str2.length + 1)
+      .fill(null)
+      .map(() => Array(str1.length + 1).fill(null));
 
     for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
     for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
@@ -940,7 +1073,7 @@ class EnhancedSearchEngine {
         matrix[j][i] = Math.min(
           matrix[j][i - 1] + 1,
           matrix[j - 1][i] + 1,
-          matrix[j - 1][i - 1] + indicator
+          matrix[j - 1][i - 1] + indicator,
         );
       }
     }
@@ -948,17 +1081,9 @@ class EnhancedSearchEngine {
     return matrix[str2.length][str1.length];
   }
 
-  private calculateSuggestionScore(suggestion: string, query: string): number {
-    const similarity = this.calculateSimilarity(suggestion.toLowerCase(), query);
-    const startsWithBonus = suggestion.toLowerCase().startsWith(query) ? 0.5 : 0;
-    const lengthPenalty = Math.max(0, (suggestion.length - 20) / 100);
-    return similarity + startsWithBonus - lengthPenalty;
-  }
-
-  private escapeRegex(string: string): string {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
-
+  /**
+   * Cleans Markdown syntax from a string to get plain text.
+   */
   private stripMarkdown(text: string): string {
     if (!text) return '';
     return text
@@ -973,8 +1098,6 @@ class EnhancedSearchEngine {
       .replace(/\n+/g, ' ') // Normalize newlines
       .trim();
   }
-
-
 
   /**
    * Track result click for analytics

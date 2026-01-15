@@ -5,6 +5,7 @@ This guide explains how to use the enhanced SEO component with comprehensive JSO
 ## Features
 
 ### 🚀 Core SEO Features
+
 - **JSON-LD Structured Data**: Automatic generation for Articles, BlogPosts, WebPages, and Products
 - **Enhanced Open Graph**: Advanced meta tags for Facebook, LinkedIn, and other platforms
 - **Twitter Cards**: Support for summary_large_image and player cards
@@ -13,6 +14,7 @@ This guide explains how to use the enhanced SEO component with comprehensive JSO
 - **Accessibility**: WCAG 2.1 AA compliance indicators
 
 ### 📊 Structured Data Types
+
 - **Article/BlogPosting**: Full article metadata with author, publication dates, categories
 - **Organization**: Company/brand information with social media profiles
 - **BreadcrumbList**: Navigation breadcrumbs for better UX and SEO
@@ -33,25 +35,25 @@ This guide explains how to use the enhanced SEO component with comprehensive JSO
   author="John Doe"
   authorUrl="https://johndoe.dev"
   authorImage="https://johndoe.dev/avatar.jpg"
-  tags={["web-development", "javascript", "astro"]}
+  tags={['web-development', 'javascript', 'astro']}
   category="Technology"
   readingTime={5}
   wordCount={1200}
   excerpt="A comprehensive guide to modern web development practices."
   breadcrumbs={[
-    { name: "Home", url: "/" },
-    { name: "Blog", url: "/blog" },
-    { name: "My Amazing Blog Post", url: "/blog/my-amazing-post" }
+    { name: 'Home', url: '/' },
+    { name: 'Blog', url: '/blog' },
+    { name: 'My Amazing Blog Post', url: '/blog/my-amazing-post' },
   ]}
   organization={{
-    name: "Your Company",
-    url: "https://yourcompany.com",
-    logo: "https://yourcompany.com/logo.png",
+    name: 'Your Company',
+    url: 'https://yourcompany.com',
+    logo: 'https://yourcompany.com/logo.png',
     sameAs: [
-      "https://twitter.com/yourcompany",
-      "https://linkedin.com/company/yourcompany",
-      "https://github.com/yourcompany"
-    ]
+      'https://twitter.com/yourcompany',
+      'https://linkedin.com/company/yourcompany',
+      'https://github.com/yourcompany',
+    ],
   }}
 >
   <!-- Your content here -->
@@ -66,10 +68,10 @@ This guide explains how to use the enhanced SEO component with comprehensive JSO
   description="A comprehensive video tutorial on building modern web applications."
   type="article"
   video={{
-    url: "https://youtube.com/watch?v=example",
-    thumbnail: "https://img.youtube.com/vi/example/maxresdefault.jpg",
-    description: "Learn to build modern web apps from scratch",
-    duration: "PT15M30S"
+    url: 'https://youtube.com/watch?v=example',
+    thumbnail: 'https://img.youtube.com/vi/example/maxresdefault.jpg',
+    description: 'Learn to build modern web apps from scratch',
+    duration: 'PT15M30S',
   }}
 >
   <!-- Your content here -->
@@ -84,11 +86,11 @@ This guide explains how to use the enhanced SEO component with comprehensive JSO
   description="Master modern web development with our comprehensive course."
   type="website"
   product={{
-    name: "Premium Web Development Course",
-    brand: "Your Academy",
-    price: "199.99",
-    currency: "USD",
-    availability: "InStock"
+    name: 'Premium Web Development Course',
+    brand: 'Your Academy',
+    price: '199.99',
+    currency: 'USD',
+    availability: 'InStock',
   }}
 >
   <!-- Your content here -->
@@ -100,24 +102,28 @@ This guide explains how to use the enhanced SEO component with comprehensive JSO
 The enhanced SEO component automatically generates:
 
 ### Basic Meta Tags
+
 - Title, description, keywords
 - Author, category, reading time
 - Word count, excerpt
 - Robots directives
 
 ### Open Graph (Facebook, LinkedIn)
+
 - `og:type`, `og:title`, `og:description`
 - `og:image` with dimensions and alt text
 - `og:url`, `og:site_name`, `og:locale`
 - Video-specific tags when applicable
 
 ### Twitter Cards
+
 - `twitter:card` (summary_large_image or player)
 - `twitter:title`, `twitter:description`, `twitter:image`
 - `twitter:site`, `twitter:creator`
 - Player-specific tags for video content
 
 ### Platform-Specific Tags
+
 - **WhatsApp**: Custom title, description, image
 - **Telegram**: Channel information
 - **Pinterest**: Rich Pin support
@@ -125,6 +131,7 @@ The enhanced SEO component automatically generates:
 - **Microsoft**: Tile configuration
 
 ### Performance & Security
+
 - Preconnect and DNS prefetch hints
 - Content Security Policy headers
 - Theme color and color scheme
@@ -154,10 +161,7 @@ The component automatically generates rich structured data:
       "@type": "ImageObject",
       "url": "https://yourcompany.com/logo.png"
     },
-    "sameAs": [
-      "https://twitter.com/yourcompany",
-      "https://linkedin.com/company/yourcompany"
-    ]
+    "sameAs": ["https://twitter.com/yourcompany", "https://linkedin.com/company/yourcompany"]
   },
   "datePublished": "2024-01-15T10:00:00Z",
   "dateModified": "2024-01-16T14:30:00Z",
@@ -188,26 +192,31 @@ The component automatically generates rich structured data:
 ## Best Practices
 
 ### 1. Always Provide Core Metadata
+
 - Title (unique, descriptive, under 60 characters)
 - Description (compelling, under 160 characters)
 - Image (1200x630px for optimal social sharing)
 
 ### 2. Use Appropriate Content Types
+
 - `"article"` for blog posts and news articles
 - `"blog"` for blog listing pages
 - `"website"` for general pages
 
 ### 3. Optimize for Social Sharing
+
 - Provide high-quality images (1200x630px)
 - Write compelling descriptions
 - Include relevant tags and categories
 
 ### 4. Structure Your Content
+
 - Use breadcrumbs for better navigation
 - Provide reading time estimates
 - Include word counts for articles
 
 ### 5. Maintain Consistency
+
 - Use consistent organization information
 - Keep social media handles up to date
 - Ensure all URLs are absolute and correct
@@ -215,6 +224,7 @@ The component automatically generates rich structured data:
 ## Testing Your SEO
 
 ### Tools for Validation
+
 - **Google Rich Results Test**: Test structured data
 - **Facebook Sharing Debugger**: Validate Open Graph tags
 - **Twitter Card Validator**: Test Twitter Cards
@@ -222,6 +232,7 @@ The component automatically generates rich structured data:
 - **Google PageSpeed Insights**: Performance validation
 
 ### Common Issues to Check
+
 - Missing or incorrect structured data
 - Image URLs not accessible
 - Incorrect date formats
