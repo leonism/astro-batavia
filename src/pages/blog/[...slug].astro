@@ -3,8 +3,8 @@
  * @file Unified Blog Post Route
  * @description Handles rendering of all blog posts across all supported languages.
  * Standardized path: /blog/[lang]/[post-slug]
- * 
- * Astro.js Tip: Using a catch-all parameter [...slug] at the root of the blog 
+ *
+ * Astro.js Tip: Using a catch-all parameter [...slug] at the root of the blog
  * directory allows us to handle all localized posts in a single file.
  */
 
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
 
   // Handle language indices: /blog/en, /blog/es, /blog/ja
   const languages = ['en', 'es', 'ja'];
-  const langPaths = languages.map(lang => ({
+  const langPaths = languages.map((lang) => ({
     params: { slug: lang },
     props: { type: 'index', lang },
   }));
@@ -35,7 +35,15 @@ export async function getStaticPaths() {
   return [...postPaths, ...langPaths];
 }
 
-const { type, post, lang: propsLang } = Astro.props;
+const {
+  type,
+  post,
+  lang: propsLang,
+} = Astro.props as {
+  type: 'post' | 'index';
+  post: CollectionEntry<'blog'> | null;
+  lang?: string;
+};
 const { slug } = Astro.params;
 
 // For index type, we need to import and use the Index logic
@@ -51,20 +59,24 @@ if (type === 'index') {
   return Astro.redirect(`/blog?lang=${propsLang}`);
 }
 
+if (!post) {
+  return Astro.redirect('/404');
+}
+
 const lang = slug?.split('/')[0];
 if (!lang || !isValidLanguage(lang)) {
   return Astro.redirect('/404');
 }
 
-const { Content, headings = [], remarkPluginFrontmatter } = await post.render();
+const ensuredPost = post as CollectionEntry<'blog'>;
+const { Content, headings = [], remarkPluginFrontmatter } = await ensuredPost.render();
 const readingTime = remarkPluginFrontmatter?.readingTime;
 ---
 
-<BlogPost 
-  {...post.data} 
-  slug={post.slug} 
-  headings={headings} 
-  readingTime={readingTime}
->
+<BlogPost
+  {...ensuredPost.data}
+  slug={ensuredPost.slug}
+  headings={headings}
+  readingTime={readingTime}>
   <Content />
 </BlogPost>

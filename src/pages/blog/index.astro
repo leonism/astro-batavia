@@ -8,11 +8,11 @@
 import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
-import { useTranslations, isValidLanguage } from '@/i18n/utils';
-import { DEFAULT_LOCALE, PAGINATION_POSTS_PER_PAGE } from '@/consts';
+import { useTranslations, isValidLanguage, defaultLang } from '@/i18n/utils';
+import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
 const langParam = Astro.url.searchParams.get('lang');
-const lang = (langParam && isValidLanguage(langParam)) ? langParam : DEFAULT_LOCALE;
+const lang = (langParam && isValidLanguage(langParam)) ? langParam : defaultLang;
 const t = useTranslations(lang as any);
 
 // Fetch posts and filter by language if param is present
@@ -25,7 +25,7 @@ const allPosts = await getCollection('blog', ({ data, id }) => {
 });
 
 // Sort by date, newest first
-const sortedPosts = posts.sort(
+const sortedPosts = allPosts.sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
