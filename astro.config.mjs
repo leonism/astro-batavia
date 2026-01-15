@@ -11,7 +11,7 @@ import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://astro-batavia.pages.dev',
+  site: '{https://astro-batavia.pages.dev}',
   trailingSlash: 'ignore',
   integrations: [
     mdx({
@@ -63,7 +63,9 @@ export default defineConfig({
       entryLimit: 10000,
     }),
     sitemapStyler(),
-    sentry(),
+    sentry({
+      telemetry: false,
+    }),
     spotlightjs(),
     htmlMinifier({
       removeComments: true,
