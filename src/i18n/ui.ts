@@ -1,26 +1,10 @@
-/**
- * @file Internationalization (I18n) UI Strings
- * @description Centralized dictionary for all translatable strings in the application.
- * Supports English, Spanish, and Japanese.
- *
- * Astro.js Tip: Astro supports various I18n strategies. This project uses
- * a dictionary-based approach which is simple and effective for small to medium sites.
- */
-
 import { SITE_TITLE } from '../consts';
-
-/**
- * Supported languages and their display names.
- */
 export const languages = {
   en: 'English',
   es: 'Español',
   ja: '日本語',
 } as const;
 
-/**
- * The default language to use when no locale is detected or available.
- */
 export const defaultLang = 'en' as const;
 
 /**
@@ -32,7 +16,6 @@ export const ui = {
    * English Translations
    */
   en: {
-    // Navigation
     'nav.home': 'Home',
     'nav.about': 'About',
     'nav.blog': 'Blog',

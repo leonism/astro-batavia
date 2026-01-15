@@ -78,7 +78,6 @@ export class EnhancedSearchClient {
       debounceMs: 150,
       minQueryLength: 1,
       maxSuggestions: SEARCH_MAX_SUGGESTIONS,
-      // Junior Dev Tip: Feature detection for browser-specific APIs (like Voice Search)
       enableVoiceSearch: 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window,
       enableKeyboardNavigation: true,
       enableAnalytics: true,
@@ -92,7 +91,7 @@ export class EnhancedSearchClient {
       selectedResultIndex: -1,
       lastSearchTime: 0,
       hasResults: false,
-      currentLang: 'all', // Default to searching across all languages
+      currentLang: 'all',
     };
 
     this.searchEngine = new EnhancedSearchEngine();
@@ -1065,8 +1064,10 @@ export class EnhancedSearchClient {
    * Get search insights
    */
   getInsights() {
+    const anyEngine = this.searchEngine as unknown as { getSearchInsights?: () => any };
+    const engineInsights = anyEngine.getSearchInsights ? anyEngine.getSearchInsights() : {};
     return {
-      ...this.searchEngine.getSearchInsights(),
+      ...engineInsights,
       clientState: { ...this.state },
     };
   }

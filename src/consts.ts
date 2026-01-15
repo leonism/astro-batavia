@@ -48,23 +48,26 @@ export const LOCALES = {
   ja: 'ja',
 } as const;
 
-export const DEFAULT_LOCALE = SITE_METADATA.defaultLanguage;
+export type LocaleKey = keyof typeof LOCALES;
 
-/**
- * Search configuration constants.
- * These values control the behavior of the EnhancedSearch engine.
- */
-export const SEARCH_MAX_SUGGESTIONS = 8;
-export const SEARCH_DEBOUNCE_MS = 150;
+// Social & Author Defaults
+export const SITE_AUTHOR = {
+  name: 'Astro Batavia Team',
+  image: '/images/default-author.jpg', // Local fallback
+  url: 'https://astro-batavia.pages.dev/about',
+};
 
-/**
- * UI Configuration
- * Values that affect the visual representation of the site.
- */
-export const UI_CONFIG = {
-  postsPerPage: 6,
-  relatedPostsLimit: 3,
-} as const;
+export const SOCIAL_LINKS = {
+  github: 'https://www.github.com/leonism/astro-batavia',
+  X: 'https://www.x.com/AstroBatavia',
+  linkedin: 'https://www.linkedin.com/in/astrobatavia',
+  youtube: 'https://www.youtube.com/@AstroBatavia',
+  instagram: 'https://www.instagram.com/@AstroBatavia',
+  tiktok: 'https://www.tiktok.com/@AstroBatavia',
+  telegram: 'https://t.me/AstroBatavia',
+  facebook: 'https://www.facebook.com/AstroBatavia',
+};
 
-// Pagination alias for backward compatibility
-export const PAGINATION_POSTS_PER_PAGE = UI_CONFIG.postsPerPage;
+// System Logic
+export const PAGINATION_POSTS_PER_PAGE = 6;
+export const SEARCH_MAX_SUGGESTIONS = 6;
