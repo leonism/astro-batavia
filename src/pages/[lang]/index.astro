@@ -6,6 +6,7 @@ import FeaturesSection from "@/components/sections/FeaturesSection.astro";
 import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
 import NewsletterSection from "@/components/sections/NewsletterSection.astro";
 import { useTranslations, isValidLanguage } from "@/i18n/utils";
+import { SITE_TITLE } from "@/consts";
 
 export async function getStaticPaths() {
   return [{ params: { lang: "es" } }, { params: { lang: "ja" } }];
@@ -34,7 +35,7 @@ const latestPosts = sortedPosts.slice(0, 3);
 ---
 
 <Layout
-  title="Astro Batavia - Modern Multi-Language Blog"
+  title={`${SITE_TITLE} - Modern Multi-Language Blog`}
   description={t("meta.description")}
   lang={lang}>
   <HeroSection />

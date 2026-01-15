@@ -1,3 +1,5 @@
+import { SITE_TITLE } from '../consts';
+
 export const languages = {
   en: "English",
   es: "Español",
@@ -17,7 +19,7 @@ export const ui = {
     "nav.authors": "Authors",
     "nav.search": "Search",
     "nav.toggle": "Toggle navigation",
-    "footer.copyright": "© 2025 Astro Batavia. All rights reserved.",
+    "footer.copyright": `© ${new Date().getFullYear()} ${SITE_TITLE}. All rights reserved.`,
     "footer.rights_reserved": "All rights reserved.",
     "footer.builtWith": "Built with",
     "footer.poweredBy": "Powered by",
@@ -155,7 +157,7 @@ export const ui = {
     "nav.authors": "Autores",
     "nav.search": "Buscar",
     "nav.toggle": "Alternar navegación",
-    "footer.copyright": "© 2025 Astro Batavia. Todos los derechos reservados.",
+    "footer.copyright": `© ${new Date().getFullYear()} ${SITE_TITLE}. Todos los derechos reservados.`,
     "footer.rights_reserved": "Todos los derechos reservados.",
     "footer.builtWith": "Construido con",
     "footer.poweredBy": "Impulsado por",
@@ -294,7 +296,7 @@ export const ui = {
     "nav.authors": "著者",
     "nav.search": "検索",
     "nav.toggle": "ナビゲーションの切り替え",
-    "footer.copyright": "© 2025 Astro Batavia. All rights reserved.",
+    "footer.copyright": `© ${new Date().getFullYear()} ${SITE_TITLE}. All rights reserved.`,
     "footer.rights_reserved": "All rights reserved.",
     "footer.builtWith": "構築",
     "footer.poweredBy": "提供",
