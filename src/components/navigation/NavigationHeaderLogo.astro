@@ -9,23 +9,26 @@ const { lang } = Astro.props;
 ---
 
 <div class="flex items-center">
-  <a href={getLocalizedPath('/', lang)} class="group flex items-center space-x-2">
+  <a
+    href={getLocalizedPath('/', lang)}
+    class="group flex items-center space-x-2">
     <div
-      class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 transition-transform duration-300 group-hover:scale-110"
-    >
-      <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 transition-transform duration-300 group-hover:scale-110">
+      <svg
+        class="h-5 w-5 text-white"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M13 10V3L4 14h7v7l9-11h-7z"
-        >
+          d="M13 10V3L4 14h7v7l9-11h-7z">
         </path>
       </svg>
     </div>
     <span
-      class="block font-semibold leading-tight text-slate-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:text-sm md:text-xl"
-    >
+      class="block font-semibold leading-tight text-slate-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:text-sm md:text-xl">
       {SITE_TITLE}
     </span>
   </a>
