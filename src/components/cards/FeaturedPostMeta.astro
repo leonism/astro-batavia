@@ -1,10 +1,10 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import Picture from "@/components/ui/Picture.astro";
-import { formatDate } from "@/i18n/utils";
+import type { CollectionEntry } from 'astro:content';
+import Picture from '@/components/ui/Picture.astro';
+import { formatDate } from '@/i18n/utils';
 
 interface Props {
-  post: CollectionEntry<"blog">;
+  post: CollectionEntry<'blog'>;
   lang: string;
 }
 
@@ -12,26 +12,28 @@ const { post, lang } = Astro.props;
 ---
 
 <div class="flex items-center gap-3 text-sm text-blue-200 sm:gap-2">
-  <div class="flex items-center gap-2 font-medium group-author">
-    <div class="relative w-10 h-10 rounded-full overflow-hidden border-2 border-transparent group-hover/author:border-blue-400 transition-colors duration-300 avatar-gradient">
+  <div class="group-author flex items-center gap-2 font-medium">
+    <div
+      class="avatar-gradient relative h-10 w-10 overflow-hidden rounded-full border-2 border-transparent transition-colors duration-300 group-hover/author:border-blue-400"
+    >
       <Picture
-        src={post.data.authorImage || "/images/placeholder-hero.svg"}
+        src={post.data.authorImage || '/images/placeholder-hero.svg'}
         alt={post.data.author}
-        class="absolute inset-0 w-full h-full object-cover rounded-full"
+        class="absolute inset-0 h-full w-full rounded-full object-cover"
         width={40}
         height={40}
       />
     </div>
-    <span class="transition-colors duration-300 group-hover/author:text-blue-300 truncate">
+    <span class="truncate transition-colors duration-300 group-hover/author:text-blue-300">
       {post.data.author}
     </span>
   </div>
 
-  <span class="w-1 h-1 rounded-full bg-blue-200" aria-hidden="true"></span>
+  <span class="h-1 w-1 rounded-full bg-blue-200" aria-hidden="true"></span>
 
   <time
     datetime={new Date(post.data.pubDate).toISOString()}
-    class="flex items-center gap-1.5 text-blue-200/80 font-light"
+    class="flex items-center gap-1.5 font-light text-blue-200/80"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -39,14 +41,15 @@ const { post, lang } = Astro.props;
       stroke-width="1.5"
       stroke="currentColor"
       fill="none"
-      class="w-[1em] h-[1em]"
+      class="h-[1em] w-[1em]"
       aria-hidden="true"
     >
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
         d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
-      ></path>
+      >
+      </path>
     </svg>
     {formatDate(post.data.pubDate, lang)}
   </time>

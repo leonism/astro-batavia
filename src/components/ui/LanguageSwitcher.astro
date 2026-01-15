@@ -1,56 +1,46 @@
 ---
-import { languages } from "@/i18n/ui";
-import { getLangFromUrl, removeLocaleFromPath, getLocalizedPath } from "@/i18n/utils";
-import type { LanguageKey } from "@/i18n/types"; // Added this for consistency, assuming lang is LanguageKey
+import { languages } from '@/i18n/ui';
+import { getLangFromUrl, removeLocaleFromPath, getLocalizedPath } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types'; // Added this for consistency, assuming lang is LanguageKey
 
 const lang = getLangFromUrl(Astro.url) as LanguageKey; // Cast for type safety
 const currentPath = removeLocaleFromPath(Astro.url.pathname);
 ---
 
-<div
-  class="relative"
-  id="language-switcher">
+<div class="relative" id="language-switcher">
   <button
     id="language-toggle"
-    class="flex items-center space-x-2 md:mx-2 md:mr-1 px-0 py-0 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200"
+    class="flex items-center space-x-2 rounded-md px-0 py-0 text-sm font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-primary-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-primary-400 md:mx-2 md:mr-1"
     aria-haspopup="true"
-    aria-expanded="false">
-    <svg
-      class="w-4 h-4"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24">
+    aria-expanded="false"
+  >
+    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
         d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-      ></path>
+      >
+      </path>
     </svg>
     <span>{languages[lang]}</span>
     <svg
-      class="w-4 h-4 transition-transform duration-200"
+      class="h-4 w-4 transition-transform duration-200"
       id="language-chevron"
       fill="none"
       stroke="currentColor"
-      viewBox="0 0 24 24">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M19 9l-7 7-7-7"
-      >
+      viewBox="0 0 24 24"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
       </path>
     </svg>
   </button>
 
   <div
     id="language-dropdown"
-    class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-600 z-50 hidden">
-    <div
-      class="py-0"
-      role="menu"
-      aria-orientation="vertical">
+    class="absolute right-0 z-50 mt-2 hidden w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 dark:ring-gray-600"
+  >
+    <div class="py-0" role="menu" aria-orientation="vertical">
       {
         Object.entries(languages).map(([langCode, langName]) => {
           const href = getLocalizedPath(currentPath, langCode);
@@ -61,18 +51,15 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
               href={href}
               class={`block px-4 py-2 text-sm transition-colors duration-200 ${
                 isActive
-                  ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400"
+                  ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400'
+                  : 'text-gray-700 hover:bg-gray-50 hover:text-primary-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-primary-400'
               }`}
-              role="menuitem">
+              role="menuitem"
+            >
               <div class="flex items-center justify-between">
                 <span>{langName}</span>
                 {isActive && (
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -91,47 +78,44 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
 </div>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const languageToggle = document.getElementById("language-toggle");
-    const languageDropdown = document.getElementById("language-dropdown");
-    const languageChevron = document.getElementById("language-chevron");
+  document.addEventListener('astro:page-load', () => {
+    const languageToggle = document.getElementById('language-toggle');
+    const languageDropdown = document.getElementById('language-dropdown');
+    const languageChevron = document.getElementById('language-chevron');
 
     if (languageToggle && languageDropdown && languageChevron) {
-      languageToggle.addEventListener("click", (e) => {
+      languageToggle.addEventListener('click', (e) => {
         e.preventDefault();
-        const isVisible = !languageDropdown.classList.contains("hidden");
+        const isVisible = !languageDropdown.classList.contains('hidden');
         if (isVisible) {
-          languageDropdown.classList.add("hidden");
-          languageChevron.style.transform = "rotate(0deg)";
-          languageToggle.setAttribute("aria-expanded", "false");
+          languageDropdown.classList.add('hidden');
+          languageChevron.style.transform = 'rotate(0deg)';
+          languageToggle.setAttribute('aria-expanded', 'false');
         } else {
-          languageDropdown.classList.remove("hidden");
-          languageChevron.style.transform = "rotate(180deg)";
-          languageToggle.setAttribute("aria-expanded", "true");
+          languageDropdown.classList.remove('hidden');
+          languageChevron.style.transform = 'rotate(180deg)';
+          languageToggle.setAttribute('aria-expanded', 'true');
         }
       });
 
       // Close dropdown when clicking outside
-      document.addEventListener("click", (e) => {
+      document.addEventListener('click', (e) => {
         if (
           !languageToggle.contains(e.target as Node) &&
           !languageDropdown.contains(e.target as Node)
-          ) {
-          languageDropdown.classList.add("hidden");
-          languageChevron.style.transform = "rotate(0deg)";
-          languageToggle.setAttribute("aria-expanded", "false");
+        ) {
+          languageDropdown.classList.add('hidden');
+          languageChevron.style.transform = 'rotate(0deg)';
+          languageToggle.setAttribute('aria-expanded', 'false');
         }
       });
 
       // Close dropdown on escape key
-      document.addEventListener("keydown", (e) => {
-        if (
-          e.key === "Escape" &&
-          !languageDropdown.classList.contains("hidden")
-        ) {
-          languageDropdown.classList.add("hidden");
-          languageChevron.style.transform = "rotate(0deg)";
-          languageToggle.setAttribute("aria-expanded", "false");
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !languageDropdown.classList.contains('hidden')) {
+          languageDropdown.classList.add('hidden');
+          languageChevron.style.transform = 'rotate(0deg)';
+          languageToggle.setAttribute('aria-expanded', 'false');
           languageToggle.focus();
         }
       });

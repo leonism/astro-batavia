@@ -1,7 +1,7 @@
 ---
-import NavigationHeaderNavLinks from "./NavigationHeaderNavLinks.astro";
-import { getLangFromUrl, useTranslations, getLocalizedPath } from "@/i18n/utils";
-import type { LanguageKey } from "@/i18n/types";
+import NavigationHeaderNavLinks from './NavigationHeaderNavLinks.astro';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
 
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const currentPath = Astro.url.pathname;
@@ -10,33 +10,40 @@ const t = useTranslations(lang);
 
 <div
   id="mobile-nav-overlay"
-  class="mobile-nav-overlay fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+  class="mobile-nav-overlay pointer-events-none fixed inset-0 z-40 bg-slate-900/40 opacity-0 backdrop-blur-sm transition-opacity duration-300 md:hidden"
   aria-hidden="true"
   role="presentation"
 >
 </div>
 <div
   id="mobile-menu"
-  class="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl z-50 shadow-2xl translate-x-full transition-transform duration-500 ease-out flex flex-col md:hidden border-l border-white/20 dark:border-slate-800/50"
+  class="fixed right-0 top-0 z-50 flex h-full w-[85%] max-w-sm translate-x-full flex-col border-l border-white/20 bg-white/95 shadow-2xl backdrop-blur-2xl transition-transform duration-500 ease-out dark:border-slate-800/50 dark:bg-slate-900/95 md:hidden"
   aria-modal="true"
   aria-label="Mobile menu"
   role="dialog"
   aria-hidden="true"
 >
   <!-- Decorative Header Gradient -->
-  <div class="absolute top-0 right-0 -z-10 w-full h-40 bg-gradient-to-br from-blue-600/10 via-indigo-600/5 to-transparent dark:from-blue-500/10 dark:via-indigo-500/5"></div>
+  <div
+    class="absolute right-0 top-0 -z-10 h-40 w-full bg-gradient-to-br from-blue-600/10 via-indigo-600/5 to-transparent dark:from-blue-500/10 dark:via-indigo-500/5"
+  >
+  </div>
 
-  <header class="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800">
-    <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+  <header
+    class="flex items-center justify-between border-b border-slate-100 p-6 dark:border-slate-800"
+  >
+    <div
+      class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500"
+    >
       Navigation
     </div>
     <button
       id="close-mobile-menu"
-      class="group p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 transition-all duration-300"
+      class="group rounded-full bg-slate-100 p-2 text-slate-500 transition-all duration-300 hover:bg-red-50 hover:text-red-500 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-red-900/20"
       aria-label="Close mobile menu"
     >
       <svg
-        class="h-6 w-6 transform group-hover:rotate-90 transition-transform duration-300"
+        class="h-6 w-6 transform transition-transform duration-300 group-hover:rotate-90"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -47,52 +54,61 @@ const t = useTranslations(lang);
           stroke-linejoin="round"
           stroke-width="2"
           d="M6 18L18 6M6 6l12 12"
-        ></path>
+        >
+        </path>
       </svg>
     </button>
   </header>
 
-  <nav class="flex-1 overflow-y-auto p-6 flex flex-col gap-2">
+  <nav class="flex flex-1 flex-col gap-2 overflow-y-auto p-6">
     <NavigationHeaderNavLinks lang={lang} currentPath={currentPath} variant="mobile" />
   </nav>
 
-  <footer class="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+  <footer
+    class="border-t border-slate-100 bg-slate-50/50 p-6 dark:border-slate-800 dark:bg-slate-900/50"
+  >
     <a
-      href={getLocalizedPath("/blog", lang)}
-      class="flex items-center justify-center gap-3 w-full py-4 text-center font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-95 transition-all duration-300"
+      href={getLocalizedPath('/blog', lang)}
+      class="flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 py-4 text-center font-bold text-white shadow-xl shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95"
     >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 10V3L4 14h7v7l9-11h-7z"
+        >
+        </path>
       </svg>
-      {t("home.hero.startReading")}
+      {t('home.hero.startReading')}
     </a>
   </footer>
 </div>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-    const mobileMenuButton = document.getElementById("mobile-menu-button");
-    const mobileMenu = document.getElementById("mobile-menu");
-    const closeMobileMenuButton = document.getElementById("close-mobile-menu");
-    const mobileNavOverlay = document.getElementById("mobile-nav-overlay");
+  document.addEventListener('astro:page-load', () => {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
 
     let lastActiveElement: HTMLElement | null = null;
 
     const openMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
       lastActiveElement = document.activeElement as HTMLElement | null;
-      mobileMenu.classList.remove("translate-x-full");
-      mobileNavOverlay.classList.remove("pointer-events-none");
-      mobileNavOverlay.classList.add("opacity-100");
+      mobileMenu.classList.remove('translate-x-full');
+      mobileNavOverlay.classList.remove('pointer-events-none');
+      mobileNavOverlay.classList.add('opacity-100');
 
-      document.body.classList.add("mobile-nav-open");
-      mobileMenu.setAttribute("aria-hidden", "false");
+      document.body.classList.add('mobile-nav-open');
+      mobileMenu.setAttribute('aria-hidden', 'false');
       if (mobileMenuButton) {
-        mobileMenuButton.setAttribute("aria-expanded", "true");
+        mobileMenuButton.setAttribute('aria-expanded', 'true');
       }
 
       const focusableElements = mobileMenu.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
       const firstFocusableElement = focusableElements[0];
       const lastFocusableElement = focusableElements[focusableElements.length - 1];
@@ -118,15 +134,15 @@ const t = useTranslations(lang);
 
     const closeMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
-      document.body.classList.remove("mobile-nav-open");
-      mobileMenu.classList.add("translate-x-full");
-      mobileNavOverlay.classList.add("pointer-events-none");
-      mobileNavOverlay.classList.remove("opacity-100");
+      document.body.classList.remove('mobile-nav-open');
+      mobileMenu.classList.add('translate-x-full');
+      mobileNavOverlay.classList.add('pointer-events-none');
+      mobileNavOverlay.classList.remove('opacity-100');
 
-      mobileMenu.setAttribute("aria-hidden", "true");
-      mobileNavOverlay.setAttribute("aria-hidden", "true");
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      mobileNavOverlay.setAttribute('aria-hidden', 'true');
       if (mobileMenuButton) {
-        mobileMenuButton.setAttribute("aria-expanded", "false");
+        mobileMenuButton.setAttribute('aria-expanded', 'false');
       }
       if (lastActiveElement) {
         (lastActiveElement as HTMLElement).focus();
@@ -134,25 +150,29 @@ const t = useTranslations(lang);
     };
 
     if (mobileMenuButton) {
-      mobileMenuButton.addEventListener("click", openMobileMenu);
+      mobileMenuButton.addEventListener('click', openMobileMenu);
     }
 
     if (closeMobileMenuButton) {
-      closeMobileMenuButton.addEventListener("click", closeMobileMenu);
+      closeMobileMenuButton.addEventListener('click', closeMobileMenu);
     }
 
     if (mobileNavOverlay) {
-      mobileNavOverlay.addEventListener("click", closeMobileMenu);
+      mobileNavOverlay.addEventListener('click', closeMobileMenu);
     }
 
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && mobileMenu && !mobileMenu.classList.contains("translate-x-full")) {
+    document.addEventListener('keydown', (event) => {
+      if (
+        event.key === 'Escape' &&
+        mobileMenu &&
+        !mobileMenu.classList.contains('translate-x-full')
+      ) {
         closeMobileMenu();
       }
     });
 
     // Close menu when clicking a link
-    mobileMenu?.querySelectorAll('a').forEach(link => {
+    mobileMenu?.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', closeMobileMenu);
     });
   });
