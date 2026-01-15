@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { formatDate, useTranslations, getPostUrl, getLocalizedPath, slugifyTag } from "@/i18n/utils";
 import type { LanguageKey } from "@/i18n/types";
+import Picture from "@/components/ui/Picture.astro";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -55,7 +56,7 @@ const classes = {
   {post.data.heroImage && (
     <div class={classes.imageContainer}>
       <a href={postUrl} tabindex="-1" aria-hidden="true">
-        <img
+        <Picture
           src={post.data.heroImage}
           alt={post.data.heroImageAlt || post.data.title}
           width={600}

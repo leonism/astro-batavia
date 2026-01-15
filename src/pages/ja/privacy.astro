@@ -1,14 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
+import { SITE_TITLE, LOCALES } from "@/consts";
 
-const lang = "ja";
+const lang = LOCALES.ja;
 // Remove unused translation initialization since it's not being used in this file
 ---
 
 <Layout
   title="プライバシーポリシー"
-  description="Astro Bataviaが個人情報をどのように収集、使用、保護するかを学びましょう。お客様のプライバシーとデータセキュリティへのコミットメント。"
+  description={`${SITE_TITLE}が個人情報をどのように収集、使用、保護するかを学びましょう。お客様のプライバシーとデータセキュリティへのコミットメント。`}
   lang={lang}>
   <!-- TODO: Translate content to Japanese -->
   <!-- Hero Section -->

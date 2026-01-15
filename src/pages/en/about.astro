@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
 import { SITE_TITLE, LOCALES } from "@/consts";
+import Picture from "@/components/ui/Picture.astro";
 
 const lang = LOCALES.en;
 ---
@@ -43,7 +44,7 @@ const lang = LOCALES.en;
           </h2>
           <p
             class="text-lg text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-            Astro Batavia was founded with a simple yet powerful mission: to
+            {SITE_TITLE} was founded with a simple yet powerful mission: to
             democratize access to cutting-edge technology knowledge and make
             complex tech concepts accessible to everyone, regardless of their
             background or experience level.
@@ -116,10 +117,12 @@ const lang = LOCALES.en;
         <div class="relative">
           <div
             class="aspect-w-4 aspect-h-3 rounded-3xl overflow-hidden shadow-2xl">
-            <img
+            <Picture
               src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1"
               alt="Team collaboration"
               class="w-full h-full object-cover"
+              width={800}
+              height={600}
             />
           </div>
           <!-- Decorative elements -->

@@ -1,13 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
+import { SITE_TITLE, LOCALES } from "@/consts";
 
-const lang = "es";
+const lang = LOCALES.es;
 ---
 
 <Layout
   title="Política de Cookies"
-  description="Comprenda cómo Astro Batavia utiliza cookies y tecnologías similares. Sus opciones con respecto a las preferencias de cookies y la privacidad de los datos."
+  description={`Comprenda cómo ${SITE_TITLE} utiliza cookies y tecnologías similares. Sus opciones con respecto a las preferencias de cookies y la privacidad de los datos.`}
   lang={lang}>
   <!-- TODO: Translate content to Spanish -->
   <!-- Hero Section -->

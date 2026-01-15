@@ -3,8 +3,9 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
 import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils';
+import { LOCALES, PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
-const lang = "en";
+const lang = LOCALES.en;
 
 // Validate language
 if (!lang || !isValidLanguage(lang)) {
@@ -44,7 +45,7 @@ const sortedPosts = filteredPostsUnsorted.sort(
     b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const postsPerPage = 9;
+const postsPerPage = PAGINATION_POSTS_PER_PAGE;
 const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
 const postsToDisplay = sortedPosts.slice(0, postsPerPage);
 const pageProps = {

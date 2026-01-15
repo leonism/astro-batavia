@@ -1,13 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
+import { SITE_TITLE, LOCALES } from "@/consts";
 
-const lang = "en";
+const lang = LOCALES.en;
 ---
 
 <Layout
   title="Privacy Policy"
-  description="Learn how Astro Batavia collects, uses, and protects your personal information. Our commitment to your privacy and data security."
+  description={`Learn how ${SITE_TITLE} collects, uses, and protects your personal information. Our commitment to your privacy and data security.`}
   lang={lang}>
   <!-- Hero Section -->
   <section
