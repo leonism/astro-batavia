@@ -26,7 +26,6 @@ export const SITE_URL = SITE_METADATA.siteUrl;
  * Information about the site author, used for SEO and blog post metadata.
  */
 
-
 /**
  * Social media handles and URLs.
  */
@@ -62,3 +61,8 @@ export const SITE_AUTHOR = {
 // System Logic
 export const PAGINATION_POSTS_PER_PAGE = 6;
 export const SEARCH_MAX_SUGGESTIONS = 6;
+export const SEARCH_DEBOUNCE_MS = 150;
+export const UI_CONFIG = {
+  postsPerPage: PAGINATION_POSTS_PER_PAGE,
+  relatedPostsLimit: 3,
+} as const;
