@@ -175,12 +175,15 @@ Astro Batavia supports three languages out of the box with a flexible i18n syste
 
 ### **URL Structure**
 ```
-/                    → Redirects to /en/
-/en/                 → English homepage
-/es/                 → Spanish homepage
-/ja/                 → Japanese homepage
-/en/blog/my-post     → English blog post
-/es/blog/mi-post     → Spanish blog post
+/                    → Redirects to /blog?lang=en
+/blog                → Unified blog index (shows posts from all languages)
+/blog?lang=en        → English blog index
+/blog?lang=es        → Spanish blog index
+/blog?lang=ja        → Japanese blog index
+/blog/my-tag         → All posts tagged with "my-tag" (across all languages)
+/blog/en/my-post     → English blog post
+/blog/es/mi-post     → Spanish blog post
+/blog/ja/私の投稿      → Japanese blog post
 ```
 
 ### **Adding a New Language**
@@ -215,8 +218,12 @@ Astro Batavia supports three languages out of the box with a flexible i18n syste
    i18n: {
      defaultLocale: "en",
      locales: ["en", "es", "ja", "fr"], // Add new locale
+     routing: {
+       prefixDefaultLocale: false, // Ensure this is false for /blog to work as unified index
+     },
    }
    ```
+   **Important**: Remember to add redirects for old URLs in `public/_redirects` to maintain SEO.
 
 ## 📝 Content Management
 

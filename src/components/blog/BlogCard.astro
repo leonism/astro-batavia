@@ -86,7 +86,7 @@ const classes = {
         >
           {post.data.tags.slice(0, 3).map((tag: string) => (
             <a
-              href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
+              href={`/blog/${slugifyTag(tag)}`}
               class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800"
             >
               #{tag}
