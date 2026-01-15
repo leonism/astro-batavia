@@ -1,6 +1,7 @@
 ---
-import { getLocalizedPath } from "@/i18n/utils";
-import type { LanguageKey } from "@/i18n/types";
+import { getLocalizedPath } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
+import { SITE_TITLE } from '@/consts';
 interface Props {
   lang: LanguageKey;
 }
@@ -9,12 +10,12 @@ const { lang } = Astro.props;
 
 <div class="flex items-center">
   <a
-    href={getLocalizedPath("/", lang)}
-    class="flex items-center space-x-2 group">
+    href={getLocalizedPath('/', lang)}
+    class="group flex items-center space-x-2">
     <div
-      class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+      class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 transition-transform duration-300 group-hover:scale-110">
       <svg
-        class="w-5 h-5 text-white"
+        class="h-5 w-5 text-white"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24">
@@ -22,13 +23,13 @@ const { lang } = Astro.props;
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M13 10V3L4 14h7v7l9-11h-7z"
-        ></path>
+          d="M13 10V3L4 14h7v7l9-11h-7z">
+        </path>
       </svg>
     </div>
     <span
-      class="leading-tight sm:text-sm md:text-xl block font-semibold text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-      Astro Batavia
+      class="block font-semibold leading-tight text-slate-800 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:text-sm md:text-xl">
+      {SITE_TITLE}
     </span>
   </a>
 </div>

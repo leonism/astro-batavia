@@ -30,8 +30,9 @@ export const SOCIAL_LINKS = {
   instagram: 'https://www.instagram.com/@AstroBatavia',
   tiktok: 'https://www.tiktok.com/@AstroBatavia',
   telegram: 'https://t.me/AstroBatavia',
-  facebook: 'https://www.facebook.com/AstroBatavia'
+  facebook: 'https://www.facebook.com/AstroBatavia',
 };
 
 // System Logic
 export const PAGINATION_POSTS_PER_PAGE = 6;
+export const SEARCH_MAX_SUGGESTIONS = 6;
