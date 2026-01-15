@@ -57,7 +57,7 @@ export async function GET(context: APIContext) {
         title: post.data.title,
         pubDate: post.data.pubDate,
         description: post.data.description,
-        link: getPostUrl(post.slug, lang),
+        link: getPostUrl(post.slug),
         customData: mediaContent,
       };
     }),
