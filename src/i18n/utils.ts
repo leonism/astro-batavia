@@ -51,6 +51,11 @@ export function getLocalizedPath(path: string, lang: string) {
     return '/search';
   }
 
+  // New Rule: Blog related paths are unified under /blog and are not prefixed with /lang
+  if (cleanPath.startsWith('/blog')) {
+    return cleanPath;
+  }
+
   // Special case: English home page stays at root
   if (lang === DEFAULT_LOCALE && (path === '/' || path === '')) {
     return '/';
@@ -59,21 +64,15 @@ export function getLocalizedPath(path: string, lang: string) {
 }
 
 /**
- * Generates a localized URL for a blog post based on its slug and language.
+ * Generates a standardized URL for a blog post based on its slug.
+ * The slug already contains the language prefix (e.g. 'en/my-post').
  * @param slug The blog post slug.
- * @param lang The target language.
+ * @param lang The target language (used for backward compatibility if needed).
  */
-export function getPostUrl(slug: string, lang: string) {
-  // slug usually is "lang/slug-content" or "lang/blog/slug-content"
-  const parts = slug.split('/');
-  const slugWithoutLang = parts.slice(1).join('/');
-
-  // Check if the slug already includes the 'blog' segment to avoid double /blog/blog/
-  const path = slugWithoutLang.startsWith('blog/')
-    ? `/${slugWithoutLang}`
-    : `/blog/${slugWithoutLang}`;
-
-  return getLocalizedPath(path, lang);
+export function getPostUrl(slug: string, _lang?: string) {
+  // Ensure we don't have double /blog/blog/
+  const cleanSlug = slug.startsWith('blog/') ? slug.slice(5) : slug;
+  return `/blog/${cleanSlug}`;
 }
 
 /**

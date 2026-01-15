@@ -16,7 +16,7 @@ tags: ['GA4', 'GTM', 'GSC', 'AI']
 draft: false
 comment: false
 robots: 'index, follow'
-canonicalURL: 'https://astro-batavia.pages.dev/ja/blog/survival-of-the-fittest-a-2026-tech-stack-guide-to-seo-ga4-gtm-gsc'
+canonicalURL: 'https://astro-batavia.pages.dev/blog/ja/survival-of-the-fittest-a-2026-tech-stack-guide-to-seo-ga4-gtm-gsc'
 ---
 
 # 最適な者の生存：SEOのための2026年技術スタックガイド（GA4、GTM、GSC）
