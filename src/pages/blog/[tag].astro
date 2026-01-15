@@ -3,17 +3,17 @@
  * @file Unified Blog Tag Route
  * @description Handles rendering of blog posts filtered by tag across all languages.
  * Standardized path: /blog/[tag]
- *
- * Astro.js Tip: Consolidating tags into a single root-level route simplifies
- * the site architecture and makes it easier for users to discover related
+ * 
+ * Astro.js Tip: Consolidating tags into a single root-level route simplifies 
+ * the site architecture and makes it easier for users to discover related 
  * content across different languages.
  */
 
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
-import { useTranslations, slugifyTag, defaultLang } from '@/i18n/utils';
-import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
+import { useTranslations, slugifyTag } from '@/i18n/utils';
+import { DEFAULT_LOCALE, PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
 /**
  * Generates static paths for all unique tags found across all blog posts.
@@ -22,7 +22,7 @@ export async function getStaticPaths() {
   const allPosts = await getCollection('blog', ({ data }) => {
     return import.meta.env.PROD ? !data.draft : true;
   });
-
+  
   // Extract all unique tags
   const uniqueTags = [...new Set(allPosts.flatMap((post) => post.data.tags || []))];
 
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 }
 
 const { tag } = Astro.props;
-const lang = defaultLang;
+const lang = DEFAULT_LOCALE; // Use default locale for the UI
 const t = useTranslations(lang as any);
 
 // Fetch all posts matching this tag across ALL languages

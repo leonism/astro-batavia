@@ -25,20 +25,19 @@ export const SITE_URL = SITE_METADATA.siteUrl;
 /**
  * Information about the site author, used for SEO and blog post metadata.
  */
+export const SITE_AUTHOR = {
+  name: 'Gemika Haziq Nugroho',
+  image: '/images/og-default.png',
+  url: 'https://github.com/gemikahzqn',
+} as const;
 
 /**
  * Social media handles and URLs.
  */
 export const SOCIAL_LINKS = {
-  github: 'https://www.github.com/leonism/astro-batavia',
-  X: 'https://www.x.com/AstroBatavia',
-  linkedin: 'https://www.linkedin.com/in/astrobatavia',
-  youtube: 'https://www.youtube.com/@AstroBatavia',
-  instagram: 'https://www.instagram.com/@AstroBatavia',
-  tiktok: 'https://www.tiktok.com/@AstroBatavia',
-  telegram: 'https://t.me/AstroBatavia',
-  facebook: 'https://www.facebook.com/AstroBatavia',
-};
+  twitter: 'https://twitter.com/astrodotbuild',
+  github: 'https://github.com/withastro/astro',
+} as const;
 
 /**
  * Internationalization (I18n) Configuration
@@ -58,11 +57,17 @@ export const SITE_AUTHOR = {
   url: 'https://astro-batavia.pages.dev/about',
 };
 
+export const SOCIAL_LINKS = {
+  github: 'https://www.github.com/leonism/astro-batavia',
+  X: 'https://www.x.com/AstroBatavia',
+  linkedin: 'https://www.linkedin.com/in/astrobatavia',
+  youtube: 'https://www.youtube.com/@AstroBatavia',
+  instagram: 'https://www.instagram.com/@AstroBatavia',
+  tiktok: 'https://www.tiktok.com/@AstroBatavia',
+  telegram: 'https://t.me/AstroBatavia',
+  facebook: 'https://www.facebook.com/AstroBatavia',
+};
+
 // System Logic
 export const PAGINATION_POSTS_PER_PAGE = 6;
 export const SEARCH_MAX_SUGGESTIONS = 6;
-export const SEARCH_DEBOUNCE_MS = 150;
-export const UI_CONFIG = {
-  postsPerPage: PAGINATION_POSTS_PER_PAGE,
-  relatedPostsLimit: 3,
-} as const;
