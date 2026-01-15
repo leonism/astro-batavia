@@ -1,8 +1,9 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
+import { SITE_TITLE, LOCALES } from "@/consts";
 
-const lang = "en";
+const lang = LOCALES.en;
 ---
 
 <Layout
@@ -18,7 +19,7 @@ const lang = "en";
           class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
           About <span
             class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
-            >Astro Batavia</span
+            >{SITE_TITLE}</span
           >
         </h1>
         <p
@@ -349,7 +350,7 @@ const lang = "en";
       <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
         Stay updated with the latest tech insights, AI developments, and
         industry trends. Join thousands of developers and tech enthusiasts who
-        trust Astro Batavia.
+        trust {SITE_TITLE}.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a
