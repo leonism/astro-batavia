@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import Layout from '@/layouts/Layout.astro';
 import HeroSection from '@/components/sections/HeroSection.astro';
 import FeaturesSection from '@/components/sections/FeaturesSection.astro';
@@ -18,6 +19,28 @@ const t = useTranslations(lang);
   title={`${SITE_TITLE} - Modern Multi-Language Blog`}
   description={t('meta.description') as string}
   lang={lang}>
+=======
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import FeaturesSection from "@/components/sections/FeaturesSection.astro";
+import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
+import NewsletterSection from "@/components/sections/NewsletterSection.astro";
+import { useTranslations } from "@/i18n/utils";
+import { BlogService } from "@/services/BlogService";
+
+const lang = "en";
+const t = useTranslations(lang);
+
+// Get latest blog posts in English using BlogService
+const latestPosts = await BlogService.getLatestPosts("en", 3);
+---
+
+<Layout
+  title="Astro Batavia - Modern Multi-Language Blog"
+  description={t("meta.description") as string}
+  lang={lang as string}>
+  <HeroSection />
+>>>>>>> parent of f58c982 (refactor: centralize site title and search config in consts)
   <FeaturesSection />
   <FeaturedStoriesSection latestPosts={latestPosts} />
   <NewsletterSection />

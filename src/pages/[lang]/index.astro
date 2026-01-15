@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import HeroSection from '@/components/sections/HeroSection.astro';
@@ -15,6 +16,15 @@ import FeaturedStoriesSection from '@/components/sections/FeaturedStoriesSection
 import NewsletterSection from '@/components/sections/NewsletterSection.astro';
 import { useTranslations, isValidLanguage } from '@/i18n/utils';
 import { SITE_TITLE } from '@/consts';
+=======
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import FeaturesSection from "@/components/sections/FeaturesSection.astro";
+import FeaturedStoriesSection from "@/components/sections/FeaturedStoriesSection.astro";
+import NewsletterSection from "@/components/sections/NewsletterSection.astro";
+import { useTranslations, isValidLanguage } from "@/i18n/utils";
+>>>>>>> parent of f58c982 (refactor: centralize site title and search config in consts)
 
 export async function getStaticPaths() {
   return [{ params: { lang: 'es' } }, { params: { lang: 'ja' } }];
@@ -43,8 +53,13 @@ const latestPosts = sortedPosts.slice(0, 3);
 ---
 
 <Layout
+<<<<<<< HEAD
   title={`${SITE_TITLE} - Modern Multi-Language Blog`}
   description={t('meta.description')}
+=======
+  title="Astro Batavia - Modern Multi-Language Blog"
+  description={t("meta.description")}
+>>>>>>> parent of f58c982 (refactor: centralize site title and search config in consts)
   lang={lang}>
   <HeroSection />
   <FeaturesSection />
