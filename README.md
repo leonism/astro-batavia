@@ -274,7 +274,7 @@ tags: ["astro", "tutorial"]
 draft: false
 commentStatus: "open"
 robots: "index, follow"
-canonical: "https://yourdomain.com/en/blog/your-post-slug"
+canonical: "https://yourdomain.com/blog/en/your-post-slug"
 ---
 ```
 
