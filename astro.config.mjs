@@ -7,11 +7,12 @@ import sitemap from '@astrojs/sitemap';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 import sitemapStyler from './src/integrations/sitemap-styler.mjs';
+import { SITE_URL } from './src/consts.ts';
 
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: '{https://astro-batavia.pages.dev}',
+  site: SITE_URL,
   trailingSlash: 'ignore',
   integrations: [
     mdx({
