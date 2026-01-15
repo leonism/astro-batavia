@@ -1,8 +1,9 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
-import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils';
+import { useTranslations, isValidLanguage } from '@/i18n/utils';
+import { BlogService } from '@/services/BlogService';
 
 export async function getStaticPaths() {
   return [
@@ -20,40 +21,22 @@ if (!lang || !isValidLanguage(lang)) {
 
 const t = useTranslations(lang);
 
-// Get blog posts for this language
-const allPostsUnsorted = await getCollection('blog', ({ id, data }: CollectionEntry<'blog'>) => {
-  return id.startsWith(`${lang}/`) && !data.draft;
-});
-
-// Get unique tags from all posts for the current language
-const allTags = [
-  ...new Set(
-    allPostsUnsorted.flatMap(
-      (post: CollectionEntry<"blog">) => post.data.tags || []
-    )
-  ),
-].sort();
-
-// Get current tag from URL
+// Get filtered and sorted blog posts for this language
 const currentTag = Astro.url.searchParams.get("tag");
+let posts: CollectionEntry<'blog'>[];
 
-// Filter posts by current tag
-const filteredPostsUnsorted = currentTag
-  ? allPostsUnsorted.filter(
-      (post: CollectionEntry<"blog">) =>
-        post.data.tags && post.data.tags.includes(currentTag)
-    )
-  : allPostsUnsorted;
+if (currentTag) {
+  posts = await BlogService.getPostsByTag(lang, currentTag);
+} else {
+  posts = await BlogService.getPostsByLang(lang);
+}
 
-// Sort posts by publication date (newest first)
-const sortedPosts = filteredPostsUnsorted.sort(
-  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
-    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+// Get unique tags
+const allTags = await BlogService.getUniqueTags(lang);
 
 const postsPerPage = 9;
-const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
-const postsToDisplay = sortedPosts.slice(0, postsPerPage);
+const totalPages = Math.ceil(posts.length / postsPerPage);
+const postsToDisplay = posts.slice(0, postsPerPage);
 const pageProps = {
   postsPerPage,
   totalPages,
@@ -98,14 +81,14 @@ const pageProps = {
     <div class="flex flex-wrap justify-center gap-6 mb-12">
       <div class="text-center">
         <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
-          {sortedPosts.length}
+          {posts.length}
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
           {lang === 'es'
-            ? (sortedPosts.length === 1 ? 'Artículo' : 'Artículos')
+            ? (posts.length === 1 ? 'Artículo' : 'Artículos')
             : lang === 'ja'
             ? '記事'
-            : (sortedPosts.length === 1 ? 'Article' : 'Articles')
+            : (posts.length === 1 ? 'Article' : 'Articles')
           }
           {currentTag && (lang === 'es' ? ` con #${currentTag}` : lang === 'ja' ? ` (#${currentTag})` : ` with #${currentTag}`)}
         </div>
