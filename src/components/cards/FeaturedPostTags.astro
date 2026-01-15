@@ -11,10 +11,9 @@ const { tags = [] } = Astro.props;
     <div class="flex flex-wrap gap-2 pt-3">
       {tags.slice(0, 3).map((tag: string) => (
         <a
-          href={`/blog/${tag.toLowerCase()}`}
-          class="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-sm transition-colors hover:bg-white/30 sm:px-4 sm:py-2 sm:text-sm"
-          aria-label={`View all posts tagged ${tag}`}
-        >
+          href={`/blog/tags/${tag.toLowerCase()}`}
+          class="inline-flex items-center px-3 py-1 text-xs font-medium transition-colors hover:bg-white/30 bg-white/20 backdrop-blur-sm rounded-full sm:px-4 sm:py-2 sm:text-sm"
+          aria-label={`View all posts tagged ${tag}`}>
           {tag}
         </a>
       ))}

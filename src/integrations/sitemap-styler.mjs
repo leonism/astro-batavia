@@ -22,7 +22,7 @@ export default function sitemapStyler() {
             if (!content.includes('<?xml-stylesheet')) {
               content = content.replace(
                 '<?xml version="1.0" encoding="UTF-8"?>',
-                '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>',
+                '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>'
               );
             }
 

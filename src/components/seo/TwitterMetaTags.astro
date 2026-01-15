@@ -22,7 +22,14 @@ const { fullTitle, description, imageUrl, title, author, video } = Astro.props;
 <meta name="twitter:image" content={imageUrl} />
 <meta name="twitter:image:alt" content={title} />
 <meta name="twitter:site" content="@AstroBatavia" />
-{author && <meta name="twitter:creator" content={`@${author.replace(/\s+/g, '').toLowerCase()}`} />}
+{
+  author && (
+    <meta
+      name="twitter:creator"
+      content={`@${author.replace(/\s+/g, '').toLowerCase()}`}
+    />
+  )
+}
 {
   video && (
     <>

@@ -1,28 +1,13 @@
 /**
- * @file Enhanced Search Client
- * @description Client-side controller for the search UI.
- * Handles DOM events, debouncing, keyboard navigation, and accessibility.
- *
- * Astro.js Tip: Even though Astro is "Zero-JS by default", we use client-side
- * scripts for interactive features like instant search. This client
- * progressively enhances a standard search form.
+ * Enhanced Search Client for Astro Batavia
+ * Features: Debouncing, accessibility, instant search, progressive enhancement
  */
 
-<<<<<<< HEAD
-import EnhancedSearchEngine, {
-  type SearchResult,
-  type SearchSuggestion,
-} from './EnhancedSearchEngine';
-import { SEARCH_MAX_SUGGESTIONS } from '../../consts';
-=======
 import EnhancedSearchEngine, { SearchResult, SearchSuggestion } from './EnhancedSearchEngine';
->>>>>>> parent of f58c982 (refactor: centralize site title and search config in consts)
+import { SEARCH_MAX_SUGGESTIONS } from '../../consts';
 
 declare const gtag: (...args: any[]) => void;
 
-/**
- * Configuration for the Search Client.
- */
 interface SearchClientConfig {
   searchInputId: string;
   resultsContainerId: string;
@@ -37,9 +22,6 @@ interface SearchClientConfig {
   enableAnalytics?: boolean;
 }
 
-/**
- * Internal state of the search client.
- */
 interface SearchState {
   isSearching: boolean;
   currentQuery: string;
@@ -50,15 +32,10 @@ interface SearchState {
   currentLang: string;
 }
 
-/**
- * The EnhancedSearchClient class manages the search UI and interactions.
- */
 export class EnhancedSearchClient {
   private searchEngine: EnhancedSearchEngine;
   private config: SearchClientConfig;
   private state: SearchState;
-
-  // DOM Elements cache
   private elements: {
     searchInput?: HTMLInputElement;
     resultsContainer?: HTMLElement;
@@ -81,7 +58,7 @@ export class EnhancedSearchClient {
     this.config = {
       debounceMs: 150,
       minQueryLength: 1,
-      maxSuggestions: 6,
+      maxSuggestions: SEARCH_MAX_SUGGESTIONS,
       enableVoiceSearch: 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window,
       enableKeyboardNavigation: true,
       enableAnalytics: true,
@@ -95,11 +72,7 @@ export class EnhancedSearchClient {
       selectedResultIndex: -1,
       lastSearchTime: 0,
       hasResults: false,
-<<<<<<< HEAD
-      currentLang: 'all',
-=======
       currentLang: 'all' // Always search across all languages by default
->>>>>>> parent of f58c982 (refactor: centralize site title and search config in consts)
     };
 
     this.searchEngine = new EnhancedSearchEngine();
@@ -110,8 +83,7 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Initializes the search client with document data.
-   * @param documents Array of searchable articles/pages.
+   * Initialize the search system with documents
    */
   async initialize(documents: any[]): Promise<void> {
     try {
@@ -126,13 +98,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Executes a search and updates the UI state.
-   * @param query The search term.
-   * @param options Additional search filters or overrides.
+   * Perform search with enhanced features
    */
   async search(query: string, options: any = {}): Promise<SearchResult[]> {
-    // Junior Dev Tip: Aborting previous requests prevents "race conditions"
-    // where an older search finishes after a newer one.
+    // Cancel any ongoing search
     if (this.currentAbortController) {
       this.currentAbortController.abort();
     }
@@ -150,6 +119,7 @@ export class EnhancedSearchClient {
         ...options
       };
 
+      // Ensure language is correctly handled
       if (searchFilters.lang === 'all' || options.lang === 'all') {
         searchFilters.lang = 'all';
       }
@@ -1021,16 +991,9 @@ export class EnhancedSearchClient {
    * Get search insights
    */
   getInsights() {
-    const anyEngine = this.searchEngine as unknown as { getSearchInsights?: () => any };
-    const engineInsights = anyEngine.getSearchInsights ? anyEngine.getSearchInsights() : {};
     return {
-<<<<<<< HEAD
-      ...engineInsights,
-      clientState: { ...this.state },
-=======
       ...this.searchEngine.getSearchInsights(),
       clientState: { ...this.state }
->>>>>>> parent of f58c982 (refactor: centralize site title and search config in consts)
     };
   }
 

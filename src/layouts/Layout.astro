@@ -4,14 +4,12 @@ import NavigationHeader from '@/components/navigation/NavigationHeader.astro';
 import Footer from '@/components/footer/Footer.astro';
 import GlobalWidgets from '@/components/ui/GlobalWidgets.astro';
 import { GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
-// import { GTM_ID } from '@/consts'; // GTM_ID is now from environment variables
+import { GTM_ID } from '@/consts';
 import '@/styles/global.css';
 import '@/styles/enhanced-search.css';
 
-const gtmId = import.meta.env.GTM_ID;
-
 export interface Props {
-  title?: string;
+  title: string;
   description?: string;
   image?: string;
   articleDate?: string | Date;
@@ -38,27 +36,32 @@ export interface Props {
   creator?: string;
 }
 
-const { title = 'Default Page Title', lang = 'en' } = Astro.props;
+const { lang = 'en' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth">
+<html
+  lang={lang}
+  class="scroll-smooth">
   <head>
     <BaseHead {...Astro.props} />
   </head>
   <body
-    class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white"
-  >
-    <GoogleTagmanagerNoscript id={gtmId} />
+    class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-white">
+    <GoogleTagmanagerNoscript id={GTM_ID} />
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-black"
-    >
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-black">
       Skip to content
     </a>
-    <div id="app" class="flex min-h-screen flex-col">
+    <div
+      id="app"
+      class="flex min-h-screen flex-col">
       <NavigationHeader />
-      <main role="main" id="main-content" class="flex-1 pt-16">
+      <main
+        role="main"
+        id="main-content"
+        class="flex-1 pt-16">
         <slot />
       </main>
       <Footer />

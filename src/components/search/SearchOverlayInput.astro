@@ -1,35 +1,25 @@
 <div class="relative mb-6">
   <div class="relative">
-    <svg
-      class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 transform text-gray-400"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-      >
-      </path>
+    <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
     </svg>
     <input
       type="text"
       id="search-input"
       placeholder="Search posts, categories, tags..."
-      class="block w-full rounded-xl border-2 border-gray-200 bg-white py-4 pl-12 pr-24 text-lg leading-6 text-gray-900 placeholder-gray-500 shadow-lg transition-all duration-300 hover:shadow-xl focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:border-primary-400"
+      class="block w-full pl-12 pr-24 py-4 text-lg border-2 border-gray-200 dark:border-gray-600 rounded-xl leading-6 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all duration-300 shadow-lg hover:shadow-xl"
       autocomplete="off"
       spellcheck="false"
     />
-    <div class="absolute inset-y-0 right-0 flex flex-nowrap items-center space-x-2 pr-4">
-      <div id="search-performance" class="hidden text-sm text-gray-400">
+    <div class="absolute inset-y-0 right-0 pr-4 flex items-center space-x-2 flex-nowrap">
+      <div id="search-performance" class="text-sm text-gray-400 hidden">
         <span id="search-time">0ms</span>
       </div>
 
-      <div class="hidden items-center space-x-1 text-xs text-gray-400 md:flex">
-        <kbd class="rounded border bg-gray-100 px-2 py-1 dark:bg-gray-700">ESC</kbd>
+      <div class="hidden md:flex items-center space-x-1 text-xs text-gray-400">
+        <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded border">ESC</kbd>
       </div>
     </div>
   </div>
 </div>
+

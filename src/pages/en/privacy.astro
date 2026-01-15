@@ -1,7 +1,7 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import { getLocalizedPath } from '@/i18n/utils';
-import { SITE_TITLE, LOCALES } from '@/consts';
+import Layout from "@/layouts/Layout.astro";
+import { getLocalizedPath } from "@/i18n/utils";
+import { SITE_TITLE, LOCALES } from "@/consts";
 
 const lang = LOCALES.en;
 ---
@@ -9,66 +9,69 @@ const lang = LOCALES.en;
 <Layout
   title="Privacy Policy"
   description={`Learn how ${SITE_TITLE} collects, uses, and protects your personal information. Our commitment to your privacy and data security.`}
-  lang={lang}
->
+  lang={lang}>
   <!-- Hero Section -->
   <section
-    class="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
-  >
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h1 class="mb-6 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
+        <h1
+          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
           Privacy <span
-            class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
+            >Policy</span
           >
-            Policy
-          </span>
         </h1>
-        <p class="mx-auto max-w-3xl text-xl leading-relaxed text-slate-600 dark:text-slate-300">
-          Your privacy is important to us. This policy explains how we collect, use, and protect
-          your personal information.
+        <p
+          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          Your privacy is important to us. This policy explains how we collect,
+          use, and protect your personal information.
         </p>
-        <p class="mt-4 text-sm text-slate-500 dark:text-slate-500">Last updated: January 2024</p>
+        <p class="text-sm text-slate-500 dark:text-slate-500 mt-4">
+          Last updated: January 2024
+        </p>
       </div>
     </div>
   </section>
 
   <!-- Privacy Policy Content -->
-  <section class="bg-white py-16 dark:bg-slate-900">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <div class="prose prose-lg max-w-none dark:prose-invert">
+  <section class="py-16 bg-white dark:bg-slate-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-lg dark:prose-invert max-w-none">
         <h2>Information We Collect</h2>
 
         <h3>Information You Provide</h3>
         <ul>
           <li>
-            <strong>Contact Information:</strong> When you contact us, subscribe to our newsletter, or
-            create an account, we may collect your name, email address, and any other information you
-            provide.
+            <strong>Contact Information:</strong> When you contact us, subscribe
+            to our newsletter, or create an account, we may collect your name, email
+            address, and any other information you provide.
           </li>
           <li>
-            <strong>Content and Communications:</strong> We collect content you submit through our contact
-            forms, comments, or other communications with us.
+            <strong>Content and Communications:</strong> We collect content you submit
+            through our contact forms, comments, or other communications with us.
           </li>
           <li>
-            <strong>Newsletter Subscriptions:</strong> Email addresses provided for newsletter subscriptions
-            are used solely for sending our regular updates.
+            <strong>Newsletter Subscriptions:</strong> Email addresses provided for
+            newsletter subscriptions are used solely for sending our regular updates.
           </li>
         </ul>
 
         <h3>Information We Collect Automatically</h3>
         <ul>
           <li>
-            <strong>Usage Data:</strong> We collect information about how you interact with our website,
-            including pages visited, time spent, and referring websites.
+            <strong>Usage Data:</strong> We collect information about how you interact
+            with our website, including pages visited, time spent, and referring
+            websites.
           </li>
           <li>
-            <strong>Device Information:</strong> We may collect information about your device, including
-            IP address, browser type, operating system, and device identifiers.
+            <strong>Device Information:</strong> We may collect information about
+            your device, including IP address, browser type, operating system, and
+            device identifiers.
           </li>
           <li>
-            <strong>Cookies and Tracking:</strong> We use cookies and similar technologies to improve
-            your experience and analyze website usage.
+            <strong>Cookies and Tracking:</strong> We use cookies and similar technologies
+            to improve your experience and analyze website usage.
           </li>
         </ul>
 
@@ -87,30 +90,33 @@ const lang = LOCALES.en;
         <h2>Information Sharing</h2>
 
         <p>
-          We do not sell, trade, or rent your personal information to third parties. We may share
-          your information in the following circumstances:
+          We do not sell, trade, or rent your personal information to third
+          parties. We may share your information in the following circumstances:
         </p>
         <ul>
           <li>
-            <strong>Service Providers:</strong> We may share information with trusted third-party service
-            providers who help us operate our website and provide services.
+            <strong>Service Providers:</strong> We may share information with trusted
+            third-party service providers who help us operate our website and provide
+            services.
           </li>
           <li>
-            <strong>Legal Requirements:</strong> We may disclose information when required by law or to
-            protect our rights and the safety of our users.
+            <strong>Legal Requirements:</strong> We may disclose information when
+            required by law or to protect our rights and the safety of our users.
           </li>
           <li>
-            <strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets,
-            your information may be transferred as part of the transaction.
+            <strong>Business Transfers:</strong> In the event of a merger, acquisition,
+            or sale of assets, your information may be transferred as part of the
+            transaction.
           </li>
         </ul>
 
         <h2>Data Security</h2>
 
         <p>
-          We implement appropriate technical and organizational measures to protect your personal
-          information against unauthorized access, alteration, disclosure, or destruction. However,
-          no method of transmission over the internet is 100% secure.
+          We implement appropriate technical and organizational measures to
+          protect your personal information against unauthorized access,
+          alteration, disclosure, or destruction. However, no method of
+          transmission over the internet is 100% secure.
         </p>
 
         <h2>Your Rights and Choices</h2>
@@ -118,19 +124,20 @@ const lang = LOCALES.en;
         <h3>Access and Control</h3>
         <ul>
           <li>
-            <strong>Access:</strong> You can request access to the personal information we hold about
-            you.
+            <strong>Access:</strong> You can request access to the personal information
+            we hold about you.
           </li>
           <li>
-            <strong>Correction:</strong> You can request correction of inaccurate or incomplete information.
+            <strong>Correction:</strong> You can request correction of inaccurate
+            or incomplete information.
           </li>
           <li>
-            <strong>Deletion:</strong> You can request deletion of your personal information, subject
-            to certain exceptions.
+            <strong>Deletion:</strong> You can request deletion of your personal
+            information, subject to certain exceptions.
           </li>
           <li>
-            <strong>Portability:</strong> You can request a copy of your personal information in a structured
-            format.
+            <strong>Portability:</strong> You can request a copy of your personal
+            information in a structured format.
           </li>
         </ul>
 
@@ -145,18 +152,20 @@ const lang = LOCALES.en;
         <h2>Cookies and Tracking Technologies</h2>
 
         <p>
-          We use cookies and similar technologies to enhance your browsing experience. Types of
-          cookies we use include:
+          We use cookies and similar technologies to enhance your browsing
+          experience. Types of cookies we use include:
         </p>
         <ul>
           <li>
             <strong>Essential Cookies:</strong> Necessary for website functionality
           </li>
           <li>
-            <strong>Performance Cookies:</strong> Help us understand how visitors use our website
+            <strong>Performance Cookies:</strong> Help us understand how visitors
+            use our website
           </li>
           <li>
-            <strong>Functionality Cookies:</strong> Remember your preferences and settings
+            <strong>Functionality Cookies:</strong> Remember your preferences and
+            settings
           </li>
           <li>
             <strong>Targeting Cookies:</strong> Used to deliver relevant advertisements
@@ -164,62 +173,66 @@ const lang = LOCALES.en;
         </ul>
 
         <p>
-          You can control cookies through your browser settings, but disabling certain cookies may
-          affect website functionality.
+          You can control cookies through your browser settings, but disabling
+          certain cookies may affect website functionality.
         </p>
 
         <h2>Third-Party Services</h2>
 
         <p>
-          Our website may contain links to third-party websites and services. This privacy policy
-          does not apply to those external sites. We encourage you to review the privacy policies of
-          any third-party services you use.
+          Our website may contain links to third-party websites and services.
+          This privacy policy does not apply to those external sites. We
+          encourage you to review the privacy policies of any third-party
+          services you use.
         </p>
 
         <h2>Children's Privacy</h2>
 
         <p>
-          Our services are not directed to children under 13 years of age. We do not knowingly
-          collect personal information from children under 13. If we become aware that we have
-          collected such information, we will take steps to delete it promptly.
+          Our services are not directed to children under 13 years of age. We do
+          not knowingly collect personal information from children under 13. If
+          we become aware that we have collected such information, we will take
+          steps to delete it promptly.
         </p>
 
         <h2>International Data Transfers</h2>
 
         <p>
-          Your information may be transferred to and processed in countries other than your own. We
-          ensure appropriate safeguards are in place to protect your information during such
-          transfers.
+          Your information may be transferred to and processed in countries
+          other than your own. We ensure appropriate safeguards are in place to
+          protect your information during such transfers.
         </p>
 
         <h2>Data Retention</h2>
 
         <p>
-          We retain your personal information only for as long as necessary to fulfill the purposes
-          outlined in this policy, unless a longer retention period is required or permitted by law.
+          We retain your personal information only for as long as necessary to
+          fulfill the purposes outlined in this policy, unless a longer
+          retention period is required or permitted by law.
         </p>
 
         <h2>Changes to This Policy</h2>
 
         <p>
-          We may update this privacy policy from time to time. We will notify you of any material
-          changes by posting the new policy on our website and updating the "last updated" date.
-          Your continued use of our services after such changes constitutes acceptance of the
-          updated policy.
+          We may update this privacy policy from time to time. We will notify
+          you of any material changes by posting the new policy on our website
+          and updating the "last updated" date. Your continued use of our
+          services after such changes constitutes acceptance of the updated
+          policy.
         </p>
 
         <h2>Contact Us</h2>
 
         <p>
-          If you have any questions about this privacy policy or our privacy practices, please
-          contact us:
+          If you have any questions about this privacy policy or our privacy
+          practices, please contact us:
         </p>
         <ul>
           <li><strong>Email:</strong> privacy@astrobatavia.com</li>
           <li><strong>Address:</strong> San Francisco, CA, United States</li>
           <li>
             <strong>Contact Form:</strong>
-            <a href={getLocalizedPath('/contact', 'en')}>Contact Page</a>
+            <a href={getLocalizedPath("/contact", "en")}>Contact Page</a>
           </li>
         </ul>
 
@@ -227,8 +240,8 @@ const lang = LOCALES.en;
 
         <h3>European Economic Area (EEA) Residents</h3>
         <p>
-          If you are located in the EEA, you have additional rights under the General Data
-          Protection Regulation (GDPR), including:
+          If you are located in the EEA, you have additional rights under the
+          General Data Protection Regulation (GDPR), including:
         </p>
         <ul>
           <li>Right to object to processing</li>
@@ -238,34 +251,38 @@ const lang = LOCALES.en;
 
         <h3>California Residents</h3>
         <p>
-          California residents have additional rights under the California Consumer Privacy Act
-          (CCPA), including the right to know what personal information is collected and the right
-          to opt-out of the sale of personal information.
+          California residents have additional rights under the California
+          Consumer Privacy Act (CCPA), including the right to know what personal
+          information is collected and the right to opt-out of the sale of
+          personal information.
         </p>
 
         <div
-          class="my-8 rounded-xl border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20"
-        >
-          <h3 class="mb-3 text-lg font-semibold text-blue-900 dark:text-blue-100">
+          class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 my-8">
+          <h3
+            class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
             Questions About Privacy?
           </h3>
-          <p class="mb-4 text-blue-800 dark:text-blue-200">
-            We're committed to transparency and protecting your privacy. If you have any questions
-            or concerns about how we handle your data, don't hesitate to reach out.
+          <p class="text-blue-800 dark:text-blue-200 mb-4">
+            We're committed to transparency and protecting your privacy. If you
+            have any questions or concerns about how we handle your data, don't
+            hesitate to reach out.
           </p>
           <a
-            href={getLocalizedPath('/contact', 'en')}
-            class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
-          >
+            href={getLocalizedPath("/contact", "en")}
+            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
             Contact Our Privacy Team
-            <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="ml-2 w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
-              >
-              </path>
+              ></path>
             </svg>
           </a>
         </div>
@@ -276,19 +293,19 @@ const lang = LOCALES.en;
 
 <style>
   .prose h2 {
-    @apply mb-6 mt-12 text-2xl font-bold text-slate-900 first:mt-0 dark:text-white;
+    @apply text-2xl font-bold text-slate-900 dark:text-white mt-12 mb-6 first:mt-0;
   }
 
   .prose h3 {
-    @apply mb-4 mt-8 text-xl font-semibold text-slate-800 dark:text-slate-200;
+    @apply text-xl font-semibold text-slate-800 dark:text-slate-200 mt-8 mb-4;
   }
 
   .prose p {
-    @apply mb-4 leading-relaxed text-slate-600 dark:text-slate-300;
+    @apply text-slate-600 dark:text-slate-300 leading-relaxed mb-4;
   }
 
   .prose ul {
-    @apply mb-6 space-y-2;
+    @apply space-y-2 mb-6;
   }
 
   .prose li {
@@ -296,6 +313,6 @@ const lang = LOCALES.en;
   }
 
   .prose a {
-    @apply text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
+    @apply text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors;
   }
 </style>

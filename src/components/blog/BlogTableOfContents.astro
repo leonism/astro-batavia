@@ -17,23 +17,21 @@ const { headings, lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<div
-  class="toc-container mb-8 rounded-2xl bg-white/90 p-6 shadow-lg ring-1 ring-gray-200 backdrop-blur-md dark:bg-gray-900/70 dark:ring-gray-700"
->
-  <div class="group flex cursor-pointer items-center justify-between" id="toc-toggle-wrapper">
+<div class="toc-container bg-white/90 dark:bg-gray-900/70 p-6 rounded-2xl shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 backdrop-blur-md mb-8">
+  <div class="flex items-center justify-between cursor-pointer group" id="toc-toggle-wrapper">
     <div class="flex items-center gap-3">
-      <h2 class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+      <h2 class="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
         {t('blog.tableOfContents')}
       </h2>
     </div>
     <button
       type="button"
       aria-label="Toggle Table of Contents"
-      class="dark:group-hover:bg-primary-950 flex h-9 w-9 items-center justify-center rounded-full border border-primary-600 transition-colors duration-300 group-hover:bg-primary-50 dark:border-primary-400"
+      class="flex items-center justify-center w-9 h-9 border border-primary-600 dark:border-primary-400 rounded-full transition-colors duration-300 group-hover:bg-primary-50 dark:group-hover:bg-primary-950"
     >
       <svg
         id="toc-arrow-icon"
-        class="h-5 w-5 rotate-0 transform text-primary-600 transition-transform duration-300 dark:text-primary-400"
+        class="w-5 h-5 text-primary-600 dark:text-primary-400 transition-transform duration-300 transform rotate-0"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
@@ -46,20 +44,18 @@ const t = useTranslations(lang);
   </div>
 
   <nav aria-label={t('blog.tableOfContents')} class="mt-6">
-    <ul id="toc-list" class="hidden space-y-3">
-      {
-        headings.map((heading) => (
-          <li>
-            <a
-              href={`#${heading.slug}`}
-              class={`block text-gray-700 transition-all duration-200 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 depth-${heading.depth}`}
-              style={{ paddingLeft: `${(heading.depth - 2) * 1.25}rem` }}
-            >
-              {heading.text}
-            </a>
-          </li>
-        ))
-      }
+    <ul id="toc-list" class="space-y-3 hidden">
+      {headings.map((heading) => (
+        <li>
+          <a
+            href={`#${heading.slug}`}
+            class={`block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 depth-${heading.depth}`}
+            style={{ paddingLeft: `${(heading.depth - 2) * 1.25}rem` }}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
     </ul>
   </nav>
 </div>
