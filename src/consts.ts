@@ -1,47 +1,12 @@
-/**
- * @file Site Configuration Constants
- * @description Centralized configuration for the Astro Batavia project.
- * These constants are used throughout the application to maintain consistency.
- *
- * Astro.js Tip: Using a central constants file is a best practice for
- * maintaining "Single Source of Truth" in your project.
- */
+// Core Site Data
+export const SITE_TITLE = 'Astro Batavia';
+export const SITE_DESCRIPTION = 'A modern multi-language blog built with Astro.js';
+export const SITE_URL = 'https://astro-batavia.pages.dev'; // Production URL
+export const SITE_EMAIL = 'contact@astrobatavia.com';
+export const GTM_ID = 'GTM-5BH6SQST';
 
-/**
- * Site metadata used for SEO and head tags.
- */
-export const SITE_METADATA = {
-  title: 'Astro Batavia',
-  description: 'A modern, high-performance Astro.js starter template with multi-language support.',
-  defaultLanguage: 'en',
-  siteUrl: 'https://astro-batavia.pages.dev',
-} as const;
-
-// Backward compatibility aliases
-export const SITE_TITLE = SITE_METADATA.title;
-export const SITE_DESCRIPTION = SITE_METADATA.description;
-export const SITE_URL = SITE_METADATA.siteUrl;
-
-/**
- * Information about the site author, used for SEO and blog post metadata.
- */
-export const SITE_AUTHOR = {
-  name: 'Gemika Haziq Nugroho',
-  image: '/images/og-default.png',
-  url: 'https://github.com/gemikahzqn',
-} as const;
-
-/**
- * Social media handles and URLs.
- */
-export const SOCIAL_LINKS = {
-  twitter: 'https://twitter.com/astrodotbuild',
-  github: 'https://github.com/withastro/astro',
-} as const;
-
-/**
- * Internationalization (I18n) Configuration
- */
+// Internationalization
+export const DEFAULT_LOCALE = 'en';
 export const LOCALES = {
   en: 'en',
   es: 'es',
@@ -52,9 +17,10 @@ export type LocaleKey = keyof typeof LOCALES;
 
 // Social & Author Defaults
 export const SITE_AUTHOR = {
-  name: 'Astro Batavia Team',
+  name: `${SITE_TITLE} Team`,
   image: '/images/default-author.jpg', // Local fallback
-  url: 'https://astro-batavia.pages.dev/about',
+  url: `${SITE_URL}/about`,
+  email: `${SITE_EMAIL}`,
 };
 
 export const SOCIAL_LINKS = {
@@ -65,8 +31,9 @@ export const SOCIAL_LINKS = {
   instagram: 'https://www.instagram.com/@AstroBatavia',
   tiktok: 'https://www.tiktok.com/@AstroBatavia',
   telegram: 'https://t.me/AstroBatavia',
-  facebook: 'https://www.facebook.com/AstroBatavia'
+  facebook: 'https://www.facebook.com/AstroBatavia',
 };
 
 // System Logic
 export const PAGINATION_POSTS_PER_PAGE = 6;
+export const SEARCH_MAX_SUGGESTIONS = 6;

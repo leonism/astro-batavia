@@ -1,37 +1,23 @@
-/**
- * @file RSS Feed Generator
- * @description Generates an RSS 2.0 feed for the blog content.
- *
- * Astro.js Tip: The '@astrojs/rss' package makes it easy to generate
- * standards-compliant RSS feeds. This feed helps users stay updated with
- * your latest content via RSS readers.
- */
-
-import type { APIContext } from 'astro';
+import type { APIContext } from "astro";
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { SITE_METADATA } from '../consts';
-import { getPostUrl } from '@/i18n/utils';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getPostUrl } from "@/i18n/utils";
 
-/**
- * GET handler for the RSS feed.
- */
 export async function GET(context: APIContext) {
   const posts = await getCollection('blog', ({ data }) => {
-    // Junior Dev Tip: Only include published posts in your feed!
-    return !data.draft;
+    return data.draft !== true;
   });
 
-  // Sort posts by date, newest first
   posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-  const site = context.site || new URL(SITE_METADATA.siteUrl);
+  const site = context.site || new URL('https://astro-batavia.pages.dev');
   const rssUrl = new URL('rss.xml', site).href;
 
   return rss({
     stylesheet: '/rss.xsl',
-    title: SITE_METADATA.title,
-    description: SITE_METADATA.description,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     site: site,
     xmlns: {
       atom: 'http://www.w3.org/2005/Atom',
@@ -47,9 +33,10 @@ export async function GET(context: APIContext) {
       const heroImage = post.data.heroImage;
       let mediaContent = '';
 
-      // Junior Dev Tip: Adding media content allows RSS readers to display images.
       if (heroImage) {
-        const imageUrl = heroImage.startsWith('http') ? heroImage : new URL(heroImage, site).href;
+        const imageUrl = heroImage.startsWith('http')
+          ? heroImage
+          : new URL(heroImage, site).href;
         mediaContent = `<media:content url="${imageUrl}" medium="image" />`;
       }
 
@@ -57,7 +44,7 @@ export async function GET(context: APIContext) {
         title: post.data.title,
         pubDate: post.data.pubDate,
         description: post.data.description,
-        link: getPostUrl(post.slug),
+        link: getPostUrl(post.slug, lang),
         customData: mediaContent,
       };
     }),

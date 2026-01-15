@@ -1,39 +1,20 @@
-/**
- * @file Search Page Controller
- * @description Manages the search page UI, including filters, sorting, and URL state.
- *
- * Astro.js Tip: For complex client-side pages, a Controller class helps
- * organize logic that would otherwise be scattered across multiple scripts.
- */
-
 import { EnhancedSearchClient } from './EnhancedSearchClient';
 import { SORT_OPTIONS, DEFAULT_SORT, DOM_IDS, SEARCH_CONFIG } from './searchConstants';
 
-/**
- * Filter state for the search page.
- */
 interface FilterState {
   tags: string[];
   lang?: string;
 }
 
-/**
- * Sort state for the search page.
- */
 interface SortState {
   sortBy: string;
   sortOrder: string;
 }
 
-/**
- * Orchestrates the search experience on the search page.
- */
 export class SearchPageController {
   private client: EnhancedSearchClient;
   private currentFilters: FilterState;
   private currentSort: SortState;
-
-  // DOM Elements
   private sortSelect: HTMLSelectElement | null;
   private langSelect: HTMLSelectElement | null;
   private tagButtons: NodeListOf<HTMLButtonElement>;
@@ -42,15 +23,13 @@ export class SearchPageController {
     this.client = new EnhancedSearchClient(SEARCH_CONFIG);
     this.currentFilters = { tags: [] };
     this.currentSort = { ...DEFAULT_SORT };
-
+    
+    // DOM Elements
     this.sortSelect = document.getElementById(DOM_IDS.sortSelect) as HTMLSelectElement;
     this.langSelect = document.getElementById(DOM_IDS.langSelect) as HTMLSelectElement;
     this.tagButtons = document.querySelectorAll(DOM_IDS.tagFilter);
   }
 
-  /**
-   * Initializes the controller, fetches data, and sets up listeners.
-   */
   public async init(): Promise<void> {
     console.log('Enhanced search page controller initializing...');
 
@@ -59,8 +38,8 @@ export class SearchPageController {
       this.setupSortOptions();
       this.setupEventListeners();
       this.handleInitialState();
-
-      // Developer Experience: Expose for console debugging
+      
+      // Expose for debugging
       (window as any).searchClient = this.client;
       (window as any).searchInsights = () => {
         console.log('Search Insights:', this.client.getInsights());
@@ -75,7 +54,7 @@ export class SearchPageController {
   private async initializeClient(): Promise<void> {
     console.log('Fetching search index...');
     const response = await fetch('/api/search-index');
-
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -90,17 +69,17 @@ export class SearchPageController {
     if (!this.sortSelect) return;
 
     // Clear existing and populate with constant options
-    this.sortSelect.innerHTML = SORT_OPTIONS.map(
-      (option) => `<option value="${option.value}">${option.label}</option>`,
+    this.sortSelect.innerHTML = SORT_OPTIONS.map(option => 
+      `<option value="${option.value}">${option.label}</option>`
     ).join('');
-
+    
     // Set default value
     this.sortSelect.value = `${this.currentSort.sortBy}-${this.currentSort.sortOrder}`;
   }
 
   private setupEventListeners(): void {
     // Tag Filters
-    this.tagButtons.forEach((button) => {
+    this.tagButtons.forEach(button => {
       button.addEventListener('click', async () => {
         this.handleTagClick(button);
       });
@@ -110,7 +89,7 @@ export class SearchPageController {
     if (this.langSelect) {
       // Ensure UI shows "All Languages" by default initially if not set
       if (!this.langSelect.value) this.langSelect.value = 'all';
-
+      
       this.langSelect.addEventListener('change', () => {
         this.handleSearchUpdate();
       });
@@ -157,12 +136,12 @@ export class SearchPageController {
 
   private handleTagClick(clickedButton: HTMLButtonElement): void {
     // Update UI
-    this.tagButtons.forEach((btn) => btn.classList.remove('active'));
+    this.tagButtons.forEach(btn => btn.classList.remove('active'));
     clickedButton.classList.add('active');
 
     // Update State
     const tag = clickedButton.dataset?.tag;
-    this.currentFilters.tags = tag === 'all' || !tag ? [] : [tag];
+    this.currentFilters.tags = (tag === 'all' || !tag) ? [] : [tag];
 
     // Trigger Search
     this.handleSearchUpdate();
@@ -171,7 +150,7 @@ export class SearchPageController {
   private updateTagUI(activeTag: string): void {
     const targetButton = document.querySelector(`${DOM_IDS.tagFilter}[data-tag="${activeTag}"]`);
     if (targetButton) {
-      this.tagButtons.forEach((btn) => btn.classList.remove('active'));
+      this.tagButtons.forEach(btn => btn.classList.remove('active'));
       targetButton.classList.add('active');
     }
   }
@@ -183,7 +162,7 @@ export class SearchPageController {
     if (query) {
       // Get current language from select if available
       const selectedLang = this.langSelect?.value;
-
+      
       await this.performSearch(query, selectedLang);
     }
   }
@@ -192,7 +171,7 @@ export class SearchPageController {
     const searchOptions = {
       ...this.currentFilters,
       ...this.currentSort,
-      lang: lang !== 'all' ? lang : undefined,
+      lang: lang !== 'all' ? lang : undefined
     };
 
     const results = await this.client.search(query, searchOptions);

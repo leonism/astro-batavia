@@ -4,22 +4,12 @@ interface Props {
 }
 const { placeholder } = Astro.props;
 ---
-
-<div class="mx-auto mb-12 max-w-2xl">
+<div class="max-w-2xl mx-auto mb-12">
   <div class="relative">
     <!-- Search Icon -->
-    <div
-      class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-      aria-hidden="true"
-    >
+    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">
       <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-        >
-        </path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
       </svg>
     </div>
 
@@ -28,7 +18,7 @@ const { placeholder } = Astro.props;
       type="text"
       id="main-search-input"
       placeholder={placeholder}
-      class="block w-full rounded-lg border border-gray-300 bg-white py-4 pl-10 pr-28 text-lg leading-5 text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:shadow-md focus:border-transparent focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-primary-400"
+      class="block w-full pl-10 pr-28 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md focus:shadow-lg"
       autocomplete="off"
       spellcheck="false"
       autocapitalize="off"
@@ -45,23 +35,12 @@ const { placeholder } = Astro.props;
     />
 
     <!-- Right Side Controls -->
-    <div class="absolute inset-y-0 right-0 flex flex-nowrap items-center space-x-2 pr-3">
+    <div class="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2 flex-nowrap">
       <!-- Loading Indicator -->
       <div id="search-loading" class="hidden">
-        <svg
-          class="h-5 w-5 animate-spin text-primary-500"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-          </circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          >
-          </path>
+        <svg class="animate-spin h-5 w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
       </div>
 
@@ -69,18 +48,12 @@ const { placeholder } = Astro.props;
       <button
         type="button"
         id="search-clear-button"
-        class="hidden rounded-full p-1 text-gray-400 transition-colors hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:hover:text-gray-300"
+        class="hidden p-1 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         aria-label="Clear search"
         title="Clear search"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          >
-          </path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
 
@@ -88,45 +61,30 @@ const { placeholder } = Astro.props;
       <button
         type="button"
         id="voice-search-button"
-        class="hidden rounded-full p-1 text-gray-400 transition-colors hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:hover:text-gray-300"
+        class="hidden p-1 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         aria-label="Start voice search"
         title="Voice search"
       >
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-          >
-          </path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
         </svg>
       </button>
 
+
       <!-- Keyboard Shortcut Hint -->
-      <kbd
-        class="hidden items-center rounded border border-gray-300 px-2 py-1 text-xs font-medium text-gray-500 dark:border-gray-600 dark:text-gray-400 sm:inline-flex"
-        aria-label="Keyboard shortcut: Command K or Control K"
-      >
+      <kbd class="hidden sm:inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs font-medium text-gray-500 dark:text-gray-400" aria-label="Keyboard shortcut: Command K or Control K">
         ⌘K
       </kbd>
     </div>
 
     <!-- Search Help Text -->
     <div id="search-help" class="sr-only">
-      Search through articles by title, content, or tags. Use keyboard shortcuts: Ctrl+K to focus,
-      Escape to clear, Arrow keys to navigate suggestions.
+      Search through articles by title, content, or tags. Use keyboard shortcuts: Ctrl+K to focus, Escape to clear, Arrow keys to navigate suggestions.
     </div>
   </div>
 
   <!-- Search Status/Results Count -->
-  <div
-    id="search-status"
-    class="mt-4 min-h-[1.25rem] text-center text-sm text-gray-600 dark:text-gray-400"
-    role="status"
-    aria-live="polite"
-    aria-atomic="true"
-  >
+  <div id="search-status" class="text-center text-gray-600 dark:text-gray-400 mt-4 text-sm min-h-[1.25rem]" role="status" aria-live="polite" aria-atomic="true">
     <!-- Status messages will be inserted here -->
   </div>
 </div>

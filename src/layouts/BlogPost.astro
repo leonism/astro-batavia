@@ -74,7 +74,11 @@ const relatedPosts = getRelatedPosts(allLangPosts, slug, tags);
     name: SITE_TITLE,
     url: SITE_URL,
     logo: new URL('/favicon.svg', SITE_URL).href,
-    sameAs: [SOCIAL_LINKS.github, SOCIAL_LINKS.X, SOCIAL_LINKS.linkedin],
+    sameAs: [
+      SOCIAL_LINKS.github,
+      SOCIAL_LINKS.X,
+      SOCIAL_LINKS.linkedin,
+    ],
   }}
   faqs={faqs}
   review={review}
@@ -82,29 +86,27 @@ const relatedPosts = getRelatedPosts(allLangPosts, slug, tags);
   acquireLicensePage={acquireLicensePage}
   creditText={creditText}
   copyrightNotice={copyrightNotice}
-  creator={creator}
->
+  creator={creator}>
   <main id="main-content">
-    <article role="article" class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+    <article
+      role="article"
+      class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <!-- Back to blog link -->
       <div class="mb-8">
         <a
           href={getLocalizedPath('/blog', lang)}
-          class="inline-flex items-center text-primary-600 transition-colors duration-200 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-        >
+          class="inline-flex items-center text-primary-600 transition-colors duration-200 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
           <svg
             class="mr-2 h-4 w-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
+            aria-hidden="true">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            >
+              d="M15 19l-7-7 7-7">
             </path>
           </svg>
           {t('blog.back-to-blog')}
@@ -113,14 +115,35 @@ const relatedPosts = getRelatedPosts(allLangPosts, slug, tags);
 
       <!-- Article header -->
       <header class="mb-8">
-        <BlogPostHero {heroImage} {heroImageAlt} {title} />
+        <BlogPostHero
+          {heroImage}
+          {heroImageAlt}
+          {title}
+        />
 
-        <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {lang} {t} />
+        <BlogPostMeta
+          {author}
+          {pubDate}
+          {updatedDate}
+          {readingTime}
+          {lang}
+          {t}
+        />
 
-        <BlogPostTags tags={tags || []} {lang} />
+        <BlogPostTags
+          tags={tags || []}
+          {lang}
+        />
       </header>
 
-      {headings.length > 0 && <BlogTableOfContents {headings} {lang} />}
+      {
+        headings.length > 0 && (
+          <BlogTableOfContents
+            {headings}
+            {lang}
+          />
+        )
+      }
 
       <!-- Article content -->
       <div class="prose prose-lg max-w-none dark:prose-invert">
@@ -128,11 +151,21 @@ const relatedPosts = getRelatedPosts(allLangPosts, slug, tags);
       </div>
 
       <!-- Footer elements -->
-      <BlogShareButtons {title} url={Astro.url.href} />
+      <BlogShareButtons
+        {title}
+        url={Astro.url.href}
+      />
 
-      <BlogNextPrevNavigation {previousPostData} {nextPostData} {lang} />
+      <BlogNextPrevNavigation
+        {previousPostData}
+        {nextPostData}
+        {lang}
+      />
 
-      <BlogRelatedArticles {relatedPosts} {lang} />
+      <BlogRelatedArticles
+        {relatedPosts}
+        {lang}
+      />
     </article>
   </main>
 </Layout>

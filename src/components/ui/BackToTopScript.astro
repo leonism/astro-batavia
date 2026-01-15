@@ -3,9 +3,9 @@
 ---
 
 <script>
-  document.addEventListener('astro:page-load', () => {
-    const backToTopButton = document.getElementById('back-to-top');
-    const progressPath = document.getElementById('progress-path') as SVGPathElement | null;
+  document.addEventListener("astro:page-load", () => {
+    const backToTopButton = document.getElementById("back-to-top");
+    const progressPath = document.getElementById("progress-path") as SVGPathElement | null;
 
     if (backToTopButton) {
       const updateProgress = () => {
@@ -13,7 +13,7 @@
         const scrollTop = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
-
+        
         // Update progress circle
         if (progressPath) {
           // pathLength="1" is set in the SVG, so dashoffset corresponds to remaining path
@@ -24,18 +24,18 @@
 
         // Toggle visibility
         if (scrollTop > 200) {
-          backToTopButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
-          backToTopButton.classList.add('opacity-100', 'visible', 'translate-y-0');
+          backToTopButton.classList.remove("opacity-0", "invisible", "translate-y-4");
+          backToTopButton.classList.add("opacity-100", "visible", "translate-y-0");
         } else {
-          backToTopButton.classList.remove('opacity-100', 'visible', 'translate-y-0');
-          backToTopButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
+          backToTopButton.classList.remove("opacity-100", "visible", "translate-y-0");
+          backToTopButton.classList.add("opacity-0", "invisible", "translate-y-4");
         }
       };
 
       const handleClick = () => {
         window.scrollTo({
           top: 0,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       };
 
@@ -43,16 +43,16 @@
       updateProgress();
 
       // Event listeners
-      window.addEventListener('scroll', updateProgress, { passive: true });
-      backToTopButton.addEventListener('click', handleClick);
+      window.addEventListener("scroll", updateProgress, { passive: true });
+      backToTopButton.addEventListener("click", handleClick);
 
       document.addEventListener(
-        'astro:before-swap',
+        "astro:before-swap",
         () => {
-          window.removeEventListener('scroll', updateProgress);
-          backToTopButton.removeEventListener('click', handleClick);
+          window.removeEventListener("scroll", updateProgress);
+          backToTopButton.removeEventListener("click", handleClick);
         },
-        { once: true },
+        { once: true }
       );
     }
   });

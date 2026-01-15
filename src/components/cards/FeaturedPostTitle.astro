@@ -1,9 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getPostUrl } from '@/i18n/utils';
+import type { CollectionEntry } from "astro:content";
+import { getPostUrl } from "@/i18n/utils";
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: CollectionEntry<"blog">;
   index: number;
   lang: string;
 }
@@ -13,19 +13,17 @@ const { post, index, lang } = Astro.props;
 
 <h2
   id={`featured-post-title-${post.slug}`}
-  class="mb-3 font-bold leading-tight text-white"
+  class="font-bold leading-tight text-white mb-3"
   class:list={[
     index === 0
-      ? 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl lg:leading-[1.2]'
-      : 'text-xl sm:text-2xl md:text-xl lg:leading-[1.3]',
+      ? "text-2xl sm:text-3xl md:text-3xl lg:text-4xl lg:leading-[1.2]"
+      : "text-xl sm:text-2xl md:text-xl lg:leading-[1.3]",
   ]}
-  aria-level={index === 0 ? 1 : 2}
->
+  aria-level={index === 0 ? 1 : 2}>
   <a
     href={getPostUrl(post.slug, lang)}
-    class="line-clamp-2 transition-colors duration-200 hover:text-primary-200 focus:text-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-800 sm:line-clamp-none"
-    aria-describedby={`featured-post-desc-${post.slug}`}
-  >
+    class="hover:text-primary-200 focus:text-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors duration-200 line-clamp-2 sm:line-clamp-none"
+    aria-describedby={`featured-post-desc-${post.slug}`}>
     {post.data.title}
   </a>
 </h2>

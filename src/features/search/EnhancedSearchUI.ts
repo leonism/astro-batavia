@@ -1,46 +1,25 @@
-/**
- * @file Enhanced Search UI (Overlay)
- * @description Manages the search overlay experience, including categories, tags, and authors.
- *
- * Astro.js Tip: Overlays are a common UX pattern. In Astro, you can use
- * standard DOM APIs to toggle visibility and manage focus, ensuring a
- * smooth experience for keyboard and screen reader users.
- */
-
 import EnhancedSearchEngine, {
   type SearchResult,
-  type SearchFilters,
+  type SearchFilters
 } from './EnhancedSearchEngine';
 
-/**
- * Metadata for categorizing search suggestions.
- */
 interface CategoryInfo {
   name: string;
   count: number;
   color: string;
 }
 
-/**
- * Metadata for tag suggestions.
- */
 interface TagInfo {
   name: string;
   count: number;
   color: string;
 }
 
-/**
- * Metadata for author suggestions.
- */
 interface AuthorInfo {
   name: string;
   count: number;
 }
 
-/**
- * Class responsible for the search overlay UI.
- */
 export class EnhancedSearchUI {
   private searchEngine: EnhancedSearchEngine;
   private allDocuments: any[] = [];
@@ -63,9 +42,6 @@ export class EnhancedSearchUI {
   private searchPerformance!: HTMLElement;
   private searchTime!: HTMLElement;
 
-  /**
-   * Initializes the UI by finding elements and setting up listeners.
-   */
   constructor() {
     this.searchEngine = new EnhancedSearchEngine();
     this.initializeElements();
@@ -73,9 +49,6 @@ export class EnhancedSearchUI {
     this.loadSearchIndex();
   }
 
-  /**
-   * Finds all required DOM elements.
-   */
   private initializeElements(): void {
     this.searchOverlay = document.getElementById('search-overlay')!;
     this.searchInput = document.getElementById('search-input') as HTMLInputElement;
@@ -95,9 +68,6 @@ export class EnhancedSearchUI {
     }
   }
 
-  /**
-   * Fetches the search index and initializes the engine.
-   */
   private async loadSearchIndex(): Promise<void> {
     try {
       const response = await fetch('/api/search-index');
@@ -108,7 +78,7 @@ export class EnhancedSearchUI {
       this.searchEngine.indexDocuments(this.allDocuments);
       console.log(`Enhanced search engine initialized with ${this.allDocuments.length} documents.`);
 
-      // Initialize initial suggestions
+      // Initialize suggestions
       this.initializeSuggestions();
     } catch (error) {
       console.error('Failed to load search index:', error);
@@ -164,7 +134,7 @@ export class EnhancedSearchUI {
     const results = this.searchEngine.search(query, this.currentFilters, {
       maxResults: 50,
       enableHighlighting: true,
-      fuzzyThreshold: 0.7,
+      fuzzyThreshold: 0.7
     });
 
     const endTime = performance.now();
@@ -197,41 +167,33 @@ export class EnhancedSearchUI {
     this.updateFilters(results);
 
     // Display results
-    this.searchResultsContainer.innerHTML = results
-      .map((result, index) => this.createResultCard(result, index))
-      .join('');
+    this.searchResultsContainer.innerHTML = results.map((result, index) =>
+      this.createResultCard(result, index)
+    ).join('');
 
     // Add click handlers for results
     this.addResultClickHandlers();
   }
 
   private createResultCard(result: SearchResult, index: number): string {
-    const tags = result.tags
-      .slice(0, 3)
-      .map(
-        (tag) =>
-          `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">${tag}</span>`,
-      )
-      .join('');
+    const tags = result.tags.slice(0, 3).map(tag =>
+      `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">${tag}</span>`
+    ).join('');
 
     return `
       <div class="search-result-item p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-lg transition-all duration-300 cursor-pointer group" data-index="${index}" data-url="${result.url}">
         <div class="flex flex-col space-y-3">
-          ${
-            result.heroImage
-              ? `
+          ${result.heroImage ? `
             <div class="w-full h-32 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 shadow-sm group-hover:scale-[1.01] transition-transform duration-300">
               <img src="${result.heroImage}" alt="${result.title}" class="w-full h-full object-cover" />
             </div>
-          `
-              : `
+          ` : `
             <div class="w-full h-24 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center shadow-sm">
               <svg class="w-10 h-10 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
               </svg>
             </div>
-          `
-          }
+          `}
 
           <div class="flex-1 min-w-0 space-y-2">
             <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
@@ -258,25 +220,22 @@ export class EnhancedSearchUI {
   private updateFilters(results: SearchResult[]): void {
     const categories = new Map<string, number>();
 
-    results.forEach((result) => {
+    results.forEach(result => {
       if (result.category) {
         categories.set(result.category, (categories.get(result.category) || 0) + 1);
       }
     });
 
-    const filterButtons = Array.from(categories.entries())
-      .map(
-        ([category, count]) =>
-          `<button class="filter-btn px-3 py-1 text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:border-primary-500 dark:hover:border-primary-400 transition-colors" data-filter="category" data-value="${category}">
+    const filterButtons = Array.from(categories.entries()).map(([category, count]) =>
+      `<button class="filter-btn px-3 py-1 text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:border-primary-500 dark:hover:border-primary-400 transition-colors" data-filter="category" data-value="${category}">
         ${category} (${count})
-      </button>`,
-      )
-      .join('');
+      </button>`
+    ).join('');
 
     this.resultsFilters.innerHTML = filterButtons;
 
     // Add filter click handlers
-    this.resultsFilters.querySelectorAll('.filter-btn').forEach((btn) => {
+    this.resultsFilters.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', (e) => this.handleFilterClick(e));
     });
   }
@@ -287,8 +246,7 @@ export class EnhancedSearchUI {
     const filterValue = button.dataset.value;
 
     if (filterType === 'category' && filterValue) {
-      this.currentFilters.category =
-        this.currentFilters.category === filterValue ? undefined : filterValue;
+      this.currentFilters.category = this.currentFilters.category === filterValue ? undefined : filterValue;
       this.performSearch(this.currentQuery);
     }
   }
@@ -315,14 +273,11 @@ export class EnhancedSearchUI {
     const suggestions = this.searchEngine.getSuggestions(query, 5);
     const fallbackContainer = document.getElementById('search-suggestions-fallback')!;
 
-    fallbackContainer.innerHTML = suggestions
-      .map(
-        (suggestion) =>
-          `<button class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" onclick="document.getElementById('search-input').value='${suggestion.text}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
+    fallbackContainer.innerHTML = suggestions.map(suggestion =>
+      `<button class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" onclick="document.getElementById('search-input').value='${suggestion.text}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         ${suggestion.text}
-      </button>`,
-      )
-      .join('');
+      </button>`
+    ).join('');
   }
 
   private showSuggestions(): void {
@@ -340,57 +295,44 @@ export class EnhancedSearchUI {
 
     // Populate categories
     const categoriesContainer = document.getElementById('categories-list')!;
-    categoriesContainer.innerHTML = categories
-      .map(
-        (cat) =>
-          `<button class="suggestion-item px-3 py-1 text-sm rounded-full transition-colors ${cat.color}" onclick="document.getElementById('search-input').value='category:${cat.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
+    categoriesContainer.innerHTML = categories.map(cat =>
+      `<button class="suggestion-item px-3 py-1 text-sm rounded-full transition-colors ${cat.color}" onclick="document.getElementById('search-input').value='category:${cat.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         ${cat.name} (${cat.count})
-      </button>`,
-      )
-      .join('');
+      </button>`
+    ).join('');
 
     // Populate tags
     const tagsContainer = document.getElementById('tags-list')!;
-    tagsContainer.innerHTML = tags
-      .slice(0, 10)
-      .map(
-        (tag) =>
-          `<button class="suggestion-item px-3 py-1 text-sm rounded-full transition-colors ${tag.color}" onclick="document.getElementById('search-input').value='${tag.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
+    tagsContainer.innerHTML = tags.slice(0, 10).map(tag =>
+      `<button class="suggestion-item px-3 py-1 text-sm rounded-full transition-colors ${tag.color}" onclick="document.getElementById('search-input').value='${tag.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         # ${tag.name}
-      </button>`,
-      )
-      .join('');
+      </button>`
+    ).join('');
 
     // Populate authors
     const authorsContainer = document.getElementById('authors-list')!;
-    authorsContainer.innerHTML = authors
-      .map(
-        (author) =>
-          `<button class="suggestion-item px-3 py-1 text-sm bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors" onclick="document.getElementById('search-input').value='author:${author.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
+    authorsContainer.innerHTML = authors.map(author =>
+      `<button class="suggestion-item px-3 py-1 text-sm bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors" onclick="document.getElementById('search-input').value='author:${author.name}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         ${author.name}
-      </button>`,
-      )
-      .join('');
+      </button>`
+    ).join('');
 
     // Populate popular searches
     const popularContainer = document.getElementById('popular-searches-list')!;
-    popularContainer.innerHTML = popularSearches
-      .map(
-        (search) =>
-          `<button class="suggestion-item flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors w-full text-left" onclick="document.getElementById('search-input').value='${search.query}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
+    popularContainer.innerHTML = popularSearches.map(search =>
+      `<button class="suggestion-item flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors w-full text-left" onclick="document.getElementById('search-input').value='${search.query}'; document.getElementById('search-input').dispatchEvent(new Event('input'));">
         <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
         ${search.query}
         <span class="ml-auto text-xs text-gray-400">${search.count}</span>
-      </button>`,
-      )
-      .join('');
+      </button>`
+    ).join('');
   }
 
   private extractCategories(): CategoryInfo[] {
     const categoryMap = new Map<string, number>();
-    this.allDocuments.forEach((doc) => {
+    this.allDocuments.forEach(doc => {
       if (doc.category) {
         categoryMap.set(doc.category, (categoryMap.get(doc.category) || 0) + 1);
       }
@@ -407,13 +349,13 @@ export class EnhancedSearchUI {
     return Array.from(categoryMap.entries()).map(([name, count], index) => ({
       name,
       count,
-      color: colors[index % colors.length],
+      color: colors[index % colors.length]
     }));
   }
 
   private extractTags(): TagInfo[] {
     const tagMap = new Map<string, number>();
-    this.allDocuments.forEach((doc) => {
+    this.allDocuments.forEach(doc => {
       if (doc.tags) {
         doc.tags.forEach((tag: string) => {
           tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
@@ -429,17 +371,17 @@ export class EnhancedSearchUI {
     ];
 
     return Array.from(tagMap.entries())
-      .sort(([, a], [, b]) => b - a)
+      .sort(([,a], [,b]) => b - a)
       .map(([name, count], index) => ({
         name,
         count,
-        color: colors[index % colors.length],
+        color: colors[index % colors.length]
       }));
   }
 
   private extractAuthors(): AuthorInfo[] {
     const authorMap = new Map<string, number>();
-    this.allDocuments.forEach((doc) => {
+    this.allDocuments.forEach(doc => {
       if (doc.author) {
         authorMap.set(doc.author, (authorMap.get(doc.author) || 0) + 1);
       }
@@ -447,7 +389,7 @@ export class EnhancedSearchUI {
 
     return Array.from(authorMap.entries()).map(([name, count]) => ({
       name,
-      count,
+      count
     }));
   }
 

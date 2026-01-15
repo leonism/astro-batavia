@@ -1,11 +1,11 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import { defineConfig } from 'eslint/config';
+import js from "@eslint/js";
+import globals from "globals";
+import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   js.configs.recommended,
   {
-    files: ['**/*.{js,mjs,cjs}'],
+    files: ["**/*.{js,mjs,cjs}"],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -14,6 +14,6 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['node_modules/', '.astro/', 'dist/'],
+    ignores: ["node_modules/", ".astro/", "dist/"],
   },
 ]);

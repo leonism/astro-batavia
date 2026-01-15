@@ -4,40 +4,33 @@ interface Props {
 }
 const { tags } = Astro.props;
 ---
-
 <div class="mb-8">
-  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
     <!-- Tags Filter -->
     <div class="flex-1">
-      <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
         Filter by topic:
       </label>
       <div class="flex flex-wrap gap-2">
         <button
-          class="tag-filter active rounded-full border border-primary-600 bg-primary-600 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-primary-700"
+          class="tag-filter active px-3 py-1.5 text-sm font-medium rounded-full border border-primary-600 bg-primary-600 text-white hover:bg-primary-700 transition-colors duration-200"
           data-tag="all"
         >
           All Topics
         </button>
-        {
-          tags.slice(0, 10).map(
-            (
-              tag, // Show up to 10 tags for brevity
-            ) => (
-              <button
-                class="tag-filter rounded-full border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors duration-200 hover:border-primary-600 hover:text-primary-600 dark:border-gray-600 dark:text-gray-300 dark:hover:text-primary-400"
-                data-tag={tag}
-              >
-                #{tag}
-              </button>
-            ),
-          )
-        }
+        {tags.slice(0, 10).map((tag) => ( // Show up to 10 tags for brevity
+          <button
+            class="tag-filter px-3 py-1.5 text-sm font-medium rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+            data-tag={tag}
+          >
+            #{tag}
+          </button>
+        ))}
       </div>
     </div>
 
     <!-- Sort and Language Options -->
-    <div class="flex flex-col gap-4 sm:flex-row">
+    <div class="flex flex-col sm:flex-row gap-4">
       <!-- Language Filter -->
       <div class="flex flex-col gap-2">
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:sr-only">
@@ -45,7 +38,7 @@ const { tags } = Astro.props;
         </label>
         <select
           id="lang-select"
-          class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+          class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         >
           <option value="all">All Languages</option>
           <option value="en">English</option>
@@ -61,14 +54,13 @@ const { tags } = Astro.props;
         </label>
         <select
           id="sort-select"
-          class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+          class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         >
-          <option value="date-desc">Newest First</option>
-          <option value="date-asc">Oldest First</option>
-          <option value="title-asc">Title A-Z</option>
-          <option value="title-desc">Title Z-A</option>
-        </select>
-      </div>
+        <option value="date-desc">Newest First</option>
+        <option value="date-asc">Oldest First</option>
+        <option value="title-asc">Title A-Z</option>
+        <option value="title-desc">Title Z-A</option>
+      </select>
     </div>
   </div>
 </div>

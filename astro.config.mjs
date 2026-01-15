@@ -38,7 +38,7 @@ export default defineConfig({
       serialize(item) {
         // Remove trailing slash for comparison if it exists
         const url = item.url.endsWith('/') ? item.url.slice(0, -1) : item.url;
-        const baseUrl = `SITE_URL`;
+        const baseUrl = 'https://astro-batavia.pages.dev';
 
         if (url === baseUrl || url === `${baseUrl}/es` || url === `${baseUrl}/ja`) {
           // @ts-ignore
