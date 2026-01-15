@@ -1,0 +1,70 @@
+---
+/**
+ * @file Unified Blog Post Route
+ * @description Handles rendering of all blog posts across all supported languages.
+ * Standardized path: /blog/[lang]/[post-slug]
+ * 
+ * Astro.js Tip: Using a catch-all parameter [...slug] at the root of the blog 
+ * directory allows us to handle all localized posts in a single file.
+ */
+
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BlogPost from '@/layouts/BlogPost.astro';
+import { isValidLanguage } from '@/i18n/utils';
+
+/**
+ * Generates static paths for all published blog posts AND language indices.
+ */
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+
+  const postPaths = allPosts.map((post: CollectionEntry<'blog'>) => ({
+    params: { slug: post.slug },
+    props: { type: 'post', post },
+  }));
+
+  // Handle language indices: /blog/en, /blog/es, /blog/ja
+  const languages = ['en', 'es', 'ja'];
+  const langPaths = languages.map(lang => ({
+    params: { slug: lang },
+    props: { type: 'index', lang },
+  }));
+
+  return [...postPaths, ...langPaths];
+}
+
+const { type, post, lang: propsLang } = Astro.props;
+const { slug } = Astro.params;
+
+// For index type, we need to import and use the Index logic
+// Since we can't easily include another .astro file's logic here without refactoring it into a component,
+// we will handle the index rendering here or redirect.
+// Given the goal of consolidation, let's make this file a powerful orchestrator.
+
+if (type === 'index') {
+  // We can't easily render the index logic here without duplication unless we use a component.
+  // For now, let's redirect /blog/[lang] to /blog?lang=[lang] or just /blog
+  // Actually, let's keep it simple: if it's an index, we redirect to the unified /blog
+  // or show filtered results.
+  return Astro.redirect(`/blog?lang=${propsLang}`);
+}
+
+const lang = slug?.split('/')[0];
+if (!lang || !isValidLanguage(lang)) {
+  return Astro.redirect('/404');
+}
+
+const { Content, headings = [], remarkPluginFrontmatter } = await post.render();
+const readingTime = remarkPluginFrontmatter?.readingTime;
+---
+
+<BlogPost 
+  {...post.data} 
+  slug={post.slug} 
+  headings={headings} 
+  readingTime={readingTime}
+>
+  <Content />
+</BlogPost>
