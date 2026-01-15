@@ -4,6 +4,7 @@
  */
 
 import EnhancedSearchEngine, { SearchResult, SearchSuggestion } from './EnhancedSearchEngine';
+import { SEARCH_MAX_SUGGESTIONS } from '../../consts';
 
 declare const gtag: (...args: any[]) => void;
 
@@ -57,7 +58,7 @@ export class EnhancedSearchClient {
     this.config = {
       debounceMs: 150,
       minQueryLength: 1,
-      maxSuggestions: 6,
+      maxSuggestions: SEARCH_MAX_SUGGESTIONS,
       enableVoiceSearch: 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window,
       enableKeyboardNavigation: true,
       enableAnalytics: true,
