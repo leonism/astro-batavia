@@ -501,9 +501,9 @@ astro-batavia/
 │   │   ├── BlogPost.astro        # Blog post layout
 │   │   └── Layout.astro          # Base layout
 │   ├── 📁 pages/                 # Route pages
-│   │   ├── 📁 [lang]/            # Dynamic language routes
+│   │   ├── 📁 [lang]/            # Dynamic language routes (including blog)
 │   │   ├── 📁 api/               # API endpoints
-│   │   ├── 📁 blog/              # Blog pages
+│   │   ├── 📁 blog/              # Legacy blog aliases (kept empty for now)
 │   │   ├── 📁 en/                # English pages
 │   │   ├── 📁 es/                # Spanish pages
 │   │   ├── 📁 ja/                # Japanese pages

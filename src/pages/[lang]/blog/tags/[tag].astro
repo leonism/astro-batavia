@@ -8,7 +8,7 @@ import { ui } from '@/i18n/ui';
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
   const uniqueTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
-  const languages = ['es', 'ja']; // en is handled separately
+	const languages = ['en', 'es', 'ja'];
 
   return languages.flatMap(lang => {
     const allPaths = uniqueTags
