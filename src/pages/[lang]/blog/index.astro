@@ -4,6 +4,7 @@ import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
 import { useTranslations, isValidLanguage } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
+import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
 export async function getStaticPaths() {
   return [
@@ -34,7 +35,7 @@ if (currentTag) {
 // Get unique tags
 const allTags = await BlogService.getUniqueTags(lang);
 
-const postsPerPage = 9;
+const postsPerPage = PAGINATION_POSTS_PER_PAGE;
 const totalPages = Math.ceil(posts.length / postsPerPage);
 const postsToDisplay = posts.slice(0, postsPerPage);
 const pageProps = {

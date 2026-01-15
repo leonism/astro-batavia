@@ -17,9 +17,10 @@ export type LocaleKey = keyof typeof LOCALES;
 
 // Social & Author Defaults
 export const SITE_AUTHOR = {
-  name: 'Astro Batavia Team',
+  name: `${SITE_TITLE} Team`,
   image: '/images/default-author.jpg', // Local fallback
-  url: 'https://astro-batavia.pages.dev/about',
+  url: `${SITE_URL}/about`,
+  email: `${SITE_EMAIL}`,
 };
 
 export const SOCIAL_LINKS = {
@@ -30,7 +31,7 @@ export const SOCIAL_LINKS = {
   instagram: 'https://www.instagram.com/@AstroBatavia',
   tiktok: 'https://www.tiktok.com/@AstroBatavia',
   telegram: 'https://t.me/AstroBatavia',
-  facebook: 'https://www.facebook.com/AstroBatavia'
+  facebook: 'https://www.facebook.com/AstroBatavia',
 };
 
 // System Logic

@@ -1,13 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
+import { SITE_TITLE, LOCALES } from "@/consts";
 
-const lang = "ja";
+const lang = LOCALES.ja;
 ---
 
 <Layout
   title="クッキーポリシー"
-  description="Astro Bataviaがクッキーおよび類似の技術をどのように使用するかを理解してください。クッキーの好みとデータプライバシーに関するあなたの選択。"
+  description={`${SITE_TITLE}がクッキーおよび類似の技術をどのように使用するかを理解してください。クッキーの好みとデータプライバシーに関するあなたの選択。`}
   lang={lang}>
   <!-- TODO: Translate content to Japanese -->
   <!-- Hero Section -->

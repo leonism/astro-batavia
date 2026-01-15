@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.24] - 2026-01-15
+
+### Changed
+
+- **refactor(config):** Updated `astro.config.mjs` to dynamically import `SITE_URL` from `src/consts.ts`, replacing hardcoded values for better maintainability.
+- **refactor(ui):** Systematically replaced hardcoded "Astro Batavia" site titles with the `SITE_TITLE` constant in `NavigationHeaderLogo.astro` and homepage layouts (`src/pages/index.astro`, `src/pages/[lang]/index.astro`).
+- **chore(config):** Disabled Sentry telemetry in `astro.config.mjs` to prevent "Sending telemetry data" log messages.
+
+### Fixed
+
+- **style(ui):** Resolved CSS linter warnings in `BlogCard.astro` by adding the standard `line-clamp` property alongside vendor prefixes.
+
 ## [1.0.23] - 2026-01-14
 
 ### Changed

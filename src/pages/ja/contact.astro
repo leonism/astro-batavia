@@ -1,11 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-const lang = "ja";
+import { SITE_TITLE, LOCALES } from "@/consts";
+const lang = LOCALES.ja;
 ---
 
 <Layout
   title="お問い合わせ"
-  description="Astro Bataviaチームにお問い合わせください。コラボレーション、質問、フィードバックなど、皆様からのご連絡をお待ちしております。"
+  description={`${SITE_TITLE}チームにお問い合わせください。コラボレーション、質問、フィードバックなど、皆様からのご連絡をお待ちしております。`}
   lang={lang}>
   <!-- TODO: Translate content to Japanese -->
   <!-- Hero Section -->
@@ -265,7 +266,7 @@ const lang = "ja";
               <details class="group">
                 <summary
                   class="flex items-center justify-between cursor-pointer text-slate-700 dark:text-slate-300 font-medium">
-                  Astro Bataviaに貢献するにはどうすればよいですか？
+                  {SITE_TITLE}に貢献するにはどうすればよいですか？
                   <svg
                     class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"
                     fill="none"
