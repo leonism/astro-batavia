@@ -17,12 +17,6 @@ declare module '*.astro' {
   export default Component;
 }
 
-declare module '/js/blogIndexClient.js' {
-  export function initializeBlogIndex(totalPages: number, lang: string): void;
-}
-
-declare global {
-  interface Window {
-    initializeBlogIndex?: (totalPages: number, lang: string) => void;
-  }
+declare module '@/client/blogIndexClient' {
+	export function initializeBlogIndex(totalPages: number, lang: string): void;
 }
