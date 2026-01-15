@@ -9,7 +9,6 @@
 import { ui, defaultLang } from './ui';
 export { ui, defaultLang };
 import type { TranslationKey } from './types';
-import { DEFAULT_LOCALE } from '../consts';
 
 /**
  * Detects the current language based on the URL pathname.
@@ -19,7 +18,7 @@ import { DEFAULT_LOCALE } from '../consts';
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split('/');
   if (lang in ui) return lang as keyof typeof ui;
-  return DEFAULT_LOCALE as keyof typeof ui;
+  return defaultLang as keyof typeof ui;
 }
 
 /**
@@ -30,10 +29,10 @@ export function getLangFromUrl(url: URL) {
 export function useTranslations(lang: keyof typeof ui) {
   return function t(key: TranslationKey) {
     if (!ui[lang]) {
-      console.warn(`Translation language "${lang}" not found, falling back to "${DEFAULT_LOCALE}"`);
-      return (ui[DEFAULT_LOCALE as keyof typeof ui] as any)[key] || key;
+      console.warn(`Translation language "${lang}" not found, falling back to "${defaultLang}"`);
+      return (ui[defaultLang as keyof typeof ui] as any)[key] || key;
     }
-    return (ui[lang] as any)[key] || (ui[DEFAULT_LOCALE as keyof typeof ui] as any)[key] || key;
+    return (ui[lang] as any)[key] || (ui[defaultLang as keyof typeof ui] as any)[key] || key;
   };
 }
 
@@ -57,7 +56,7 @@ export function getLocalizedPath(path: string, lang: string) {
   }
 
   // Special case: English home page stays at root
-  if (lang === DEFAULT_LOCALE && (path === '/' || path === '')) {
+  if (lang === defaultLang && (path === '/' || path === '')) {
     return '/';
   }
   return `/${lang}${cleanPath}`;
@@ -94,13 +93,13 @@ export function getLanguageFromPath(path: string): string {
   if (segments[1] && segments[1] in ui) {
     return segments[1];
   }
-  return DEFAULT_LOCALE;
+  return defaultLang;
 }
 
 /**
  * Formats a date according to the specified language.
  */
-export function formatDate(date: Date, lang: string = DEFAULT_LOCALE): string {
+export function formatDate(date: Date, lang: string = defaultLang): string {
   const locales = {
     en: 'en-US',
     es: 'es-ES',
