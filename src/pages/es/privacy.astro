@@ -1,14 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
+import { SITE_TITLE, LOCALES } from "@/consts";
 
-const lang = "es";
+const lang = LOCALES.es;
 // Remove unused translation initialization since it's not being used in this file
 ---
 
 <Layout
   title="Política de Privacidad"
-  description="Descubra cómo Astro Batavia recopila, utiliza y protege su información personal. Nuestro compromiso con su privacidad y seguridad de datos."
+  description={`Descubra cómo ${SITE_TITLE} recopila, utiliza y protege su información personal. Nuestro compromiso con su privacidad y seguridad de datos.`}
   lang={lang}>
   <!-- TODO: Translate content to Spanish -->
   <!-- Hero Section -->

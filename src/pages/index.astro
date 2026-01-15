@@ -6,9 +6,9 @@ import FeaturedStoriesSection from '@/components/sections/FeaturedStoriesSection
 import NewsletterSection from '@/components/sections/NewsletterSection.astro';
 import { useTranslations } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
-import { SITE_TITLE } from '@/consts';
+import { SITE_TITLE, LOCALES } from '@/consts';
 
-const lang = 'en';
+const lang = LOCALES.en;
 const t = useTranslations(lang);
 
 // Get latest blog posts in English using BlogService

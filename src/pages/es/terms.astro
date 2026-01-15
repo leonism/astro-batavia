@@ -1,12 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
-const lang = "es";
+import { SITE_TITLE, LOCALES } from "@/consts";
+
+const lang = LOCALES.es;
 ---
 
 <Layout
   title="Términos de Servicio"
-  description="Lea nuestros términos de servicio para comprender las reglas y pautas para usar el contenido y los servicios de Astro Batavia."
+  description={`Lea nuestros términos de servicio para comprender las reglas y pautas para usar el contenido y los servicios de ${SITE_TITLE}.`}
   lang={lang}>
   <!-- TODO: Translate content to Spanish -->
   <!-- Hero Section -->
@@ -24,7 +26,7 @@ const lang = "es";
         <p
           class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
           Lea atentamente estos términos antes de utilizar nuestros servicios.
-          Al acceder a Astro Batavia, acepta estar sujeto a estos términos.
+          Al acceder a {SITE_TITLE}, acepta estar sujeto a estos términos.
         </p>
         <p class="text-sm text-slate-500 dark:text-slate-500 mt-4">
           Última actualización: Enero 2024
@@ -39,7 +41,7 @@ const lang = "es";
       <div class="prose prose-lg dark:prose-invert max-w-none">
         <h2>Aceptación de los Términos</h2>
         <p>
-          Al acceder y utilizar Astro Batavia ("nosotros", "nuestro" o
+          Al acceder y utilizar {SITE_TITLE} ("nosotros", "nuestro" o
           "nuestra"), usted acepta y se compromete a cumplir con los términos y
           disposiciones de este acuerdo. Si no está de acuerdo con lo anterior,
           no utilice este servicio.
@@ -47,7 +49,7 @@ const lang = "es";
 
         <h2>Descripción del Servicio</h2>
         <p>
-          Astro Batavia proporciona contenido, artículos, tutoriales y recursos
+          {SITE_TITLE} proporciona contenido, artículos, tutoriales y recursos
           centrados en la tecnología relacionados con el desarrollo de software,
           la inteligencia artificial y las tecnologías emergentes. Nuestros
           servicios incluyen:
@@ -97,7 +99,7 @@ const lang = "es";
 
         <h3>Nuestro Contenido</h3>
         <p>
-          Todo el contenido de Astro Batavia, incluidos artículos, gráficos,
+          Todo el contenido de {SITE_TITLE}, incluidos artículos, gráficos,
           logotipos y software, está protegido por derechos de autor y otras
           leyes de propiedad intelectual. Usted puede:
         </p>
@@ -134,7 +136,7 @@ const lang = "es";
 
         <h2>Limitación de Responsabilidad</h2>
         <p>
-          En la máxima medida permitida por la ley, Astro Batavia no será
+          En la máxima medida permitida por la ley, {SITE_TITLE} no será
           responsable de ningún daño indirecto, incidental, especial o
           consecuente que surja de su uso de nuestros servicios, incluidos,
           entre otros:
@@ -220,8 +222,7 @@ const lang = "es";
         <h3>Suscripción a Boletines</h3>
         <p>
           Al suscribirse a nuestro boletín, acepta recibir actualizaciones
-          periódicas sobre las tendencias tecnológicas y el contenido de Astro
-          Batavia. Puede darse de baja en cualquier momento utilizando el enlace
+          periódicas sobre las tendencias tecnológicas y el contenido de {SITE_TITLE}. Puede darse de baja en cualquier momento utilizando el enlace
           proporcionado en cada correo electrónico.
         </p>
 

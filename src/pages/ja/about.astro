@@ -2,7 +2,9 @@
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedPath } from "@/i18n/utils";
 import Picture from "@/components/ui/Picture.astro";
-const lang = "ja";
+import { SITE_TITLE, LOCALES } from "@/consts";
+
+const lang = LOCALES.ja;
 ---
 
 <Layout
@@ -19,7 +21,7 @@ const lang = "ja";
           class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
           <span
             class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
-            >Astro Batavia</span
+            >{SITE_TITLE}</span
           >について
         </h1>
         <p
@@ -41,8 +43,7 @@ const lang = "ja";
           </h2>
           <p
             class="text-lg text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-            Astro
-            Bataviaは、シンプルでありながら強力な使命を持って設立されました。それは、最先端のテクノロジー知識へのアクセスを民主化し、複雑な技術コンセプトを、背景や経験レベルに関係なく、誰もが利用できるようにすることです。
+            {SITE_TITLE}は、シンプルでありながら強力な使命を持って設立されました。それは、最先端のテクノロジー知識へのアクセスを民主化し、複雑な技術コンセプトを、背景や経験レベルに関係なく、誰もが利用できるようにすることです。
           </p>
           <p
             class="text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">

@@ -3,6 +3,7 @@ export const prerender = true;
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '@/layouts/BlogPost.astro';
 import { isValidLanguage } from '@/i18n/utils';
+import { LOCALES } from '@/consts';
 
 interface PathParams {
   lang: string;
@@ -34,7 +35,7 @@ export async function getStaticPaths() {
 
 type Props = CollectionEntry<'blog'>;
 
-const lang = "en";
+const lang = LOCALES.en;
 
 // Validate language
 if (!lang || !isValidLanguage(lang)) {
