@@ -77,9 +77,7 @@ export default function htmlMinifier(userOptions = {}) {
               await fs.writeFile(file, minified);
               const saved = originalSize - minifiedSize;
               const savedPercent = originalSize > 0 ? (saved / originalSize) * 100 : 0;
-              console.log(
-                `✅ Minified: ${path.relative(dir.pathname, file)} | Saved: ${formatBytes(saved)} (${savedPercent.toFixed(2)}%)`,
-              );
+              console.log(`✅ Minified: ${path.relative(dir.pathname, file)} | Saved: ${formatBytes(saved)} (${savedPercent.toFixed(2)}%)`);
             } catch (error) {
               console.error(`❌ Error minifying ${file}:`, error);
               const err = error instanceof Error ? error : new Error(String(error));
@@ -96,8 +94,7 @@ export default function htmlMinifier(userOptions = {}) {
         const endTime = performance.now();
         const duration = (endTime - startTime).toFixed(2);
         const totalSaved = totalOriginalSize - totalMinifiedSize;
-        const totalSavedPercent =
-          totalOriginalSize > 0 ? (totalSaved / totalOriginalSize) * 100 : 0;
+        const totalSavedPercent = totalOriginalSize > 0 ? (totalSaved / totalOriginalSize) * 100 : 0;
 
         console.log('\n' + '-'.repeat(50));
         console.log('🏁 HTML Minification Summary');
@@ -111,7 +108,7 @@ export default function htmlMinifier(userOptions = {}) {
 
         if (errors.length > 0) {
           console.log('\n🚨 Error Details:');
-          errors.forEach((e) => {
+          errors.forEach(e => {
             console.log(`  - File: ${e.file}\n    Error: ${e.error.message}`);
           });
           throw new Error('HTML minification failed for one or more files.');

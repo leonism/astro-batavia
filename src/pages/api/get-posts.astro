@@ -14,7 +14,7 @@ const allPostsUnsorted = await getCollection('blog', ({ id, data }) => {
 });
 
 const sortedPosts = allPostsUnsorted.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
 const postsPerPage = 9;
@@ -22,10 +22,8 @@ const startIndex = (page - 1) * postsPerPage;
 const postsToDisplay = sortedPosts.slice(startIndex, startIndex + postsPerPage);
 ---
 
-{
-  postsToDisplay.map((post) => (
-    <div class="post-item animate-fade-in">
-      <BlogCard post={post} lang={lang} />
-    </div>
-  ))
-}
+{postsToDisplay.map((post) => (
+  <div class="post-item animate-fade-in">
+    <BlogCard post={post} lang={lang} />
+  </div>
+))}

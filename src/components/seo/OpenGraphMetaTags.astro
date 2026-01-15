@@ -39,27 +39,85 @@ const {
 } = Astro.props;
 ---
 
-<meta property="og:type" content={type} />
-<meta property="og:title" content={fullTitle} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={imageUrl} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:type" content="image/jpeg" />
-<meta property="og:image:alt" content={fullTitle} />
-<meta property="og:url" content={canonicalUrl} />
-<meta property="og:site_name" content={SITE_TITLE} />
-<meta property="og:locale" content={locale} />
-<meta property="og:logo" content={siteUrl + '/favicon.svg'} />
-{authorImage && <meta property="og:image:secure_url" content={imageUrl} />}
+<meta
+  property="og:type"
+  content={type}
+/>
+<meta
+  property="og:title"
+  content={fullTitle}
+/>
+<meta
+  property="og:description"
+  content={description}
+/>
+<meta
+  property="og:image"
+  content={imageUrl}
+/>
+<meta
+  property="og:image:width"
+  content="1200"
+/>
+<meta
+  property="og:image:height"
+  content="630"
+/>
+<meta
+  property="og:image:type"
+  content="image/jpeg"
+/>
+<meta
+  property="og:image:alt"
+  content={fullTitle}
+/>
+<meta
+  property="og:url"
+  content={canonicalUrl}
+/>
+<meta
+  property="og:site_name"
+  content={SITE_TITLE}
+/>
+<meta
+  property="og:locale"
+  content={locale}
+/>
+<meta
+  property="og:logo"
+  content={siteUrl + '/favicon.svg'}
+/>
+{
+  authorImage && (
+    <meta
+      property="og:image:secure_url"
+      content={imageUrl}
+    />
+  )
+}
 {
   video && (
     <>
-      <meta property="og:video" content={video.url} />
-      <meta property="og:video:secure_url" content={video.url} />
-      <meta property="og:video:type" content="video/mp4" />
-      <meta property="og:video:width" content="1280" />
-      <meta property="og:video:height" content="720" />
+      <meta
+        property="og:video"
+        content={video.url}
+      />
+      <meta
+        property="og:video:secure_url"
+        content={video.url}
+      />
+      <meta
+        property="og:video:type"
+        content="video/mp4"
+      />
+      <meta
+        property="og:video:width"
+        content="1280"
+      />
+      <meta
+        property="og:video:height"
+        content="720"
+      />
     </>
   )
 }
@@ -67,11 +125,29 @@ const {
 {
   (type === 'article' || type === 'blog') && (
     <>
-      {publishedTime && <meta property="article:published_time" content={publishedTime} />}
-      {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
-      {author && <meta property="article:author" content={author} />}
+      {publishedTime && (
+        <meta
+          property="article:published_time"
+          content={publishedTime}
+        />
+      )}
+      {modifiedTime && (
+        <meta
+          property="article:modified_time"
+          content={modifiedTime}
+        />
+      )}
+      {author && (
+        <meta
+          property="article:author"
+          content={author}
+        />
+      )}
       {tags.map((tag: string) => (
-        <meta property="article:tag" content={tag} />
+        <meta
+          property="article:tag"
+          content={tag}
+        />
       ))}
     </>
   )

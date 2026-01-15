@@ -82,14 +82,3 @@
 /en/blog/microservices-architecture /en/blog/microservices-architecture/ 308!
 
 https://www.astro-batavia.pages.dev/:splat https://astro-batavia.pages.dev/:splat 301!
-
-# Unified Blog Redirects
-/en/blog/ /blog?lang=en 301
-/es/blog/ /blog?lang=es 301
-/ja/blog/ /blog?lang=ja 301
-/en/blog/* /blog/en/:splat 301
-/es/blog/* /blog/es/:splat 301
-/ja/blog/* /blog/ja/:splat 301
-/en/blog/tags/:tag /blog/:tag 301
-/es/blog/tags/:tag /blog/:tag 301
-/ja/blog/tags/:tag /blog/:tag 301

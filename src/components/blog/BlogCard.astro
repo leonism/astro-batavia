@@ -1,17 +1,11 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import {
-  formatDate,
-  useTranslations,
-  getPostUrl,
-  getLocalizedPath,
-  slugifyTag,
-} from '@/i18n/utils';
-import type { LanguageKey } from '@/i18n/types';
-import Picture from '@/components/ui/Picture.astro';
+import type { CollectionEntry } from "astro:content";
+import { formatDate, useTranslations, getPostUrl, getLocalizedPath, slugifyTag } from "@/i18n/utils";
+import type { LanguageKey } from "@/i18n/types";
+import Picture from "@/components/ui/Picture.astro";
 
 export interface Props {
-  post: CollectionEntry<'blog'>;
+  post: CollectionEntry<"blog">;
   lang: LanguageKey;
   showExcerpt?: boolean;
   isFeatured?: boolean;
@@ -23,8 +17,8 @@ const postUrl = getPostUrl(post.slug, lang);
 
 // Logic separated from view
 const getExcerpt = (body: string, description?: string) => {
-  if (!showExcerpt) return '';
-  return description || body.slice(0, isFeatured ? 300 : 150) + '...';
+  if (!showExcerpt) return "";
+  return description || body.slice(0, isFeatured ? 300 : 150) + "...";
 };
 
 const excerpt = getExcerpt(post.body, post.data.description);
@@ -32,74 +26,67 @@ const excerpt = getExcerpt(post.body, post.data.description);
 // CSS Classes extraction
 const classes = {
   article: [
-    'group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 flex flex-col',
-    isFeatured
-      ? 'md:flex-row md:shadow-xl md:hover:shadow-2xl md:min-h-[400px]'
-      : 'hover:shadow-lg hover:scale-[1.02] min-h-[420px] max-h-[480px]',
-  ].join(' '),
+    "group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 flex flex-col",
+    isFeatured ? "md:flex-row md:shadow-xl md:hover:shadow-2xl md:min-h-[400px]" : "hover:shadow-lg hover:scale-[1.02] min-h-[420px] max-h-[480px]",
+  ].join(" "),
   imageContainer: [
-    'overflow-hidden',
-    isFeatured ? 'md:w-1/2 md:aspect-auto h-96 md:h-full' : 'h-52',
-  ].join(' '),
+    "overflow-hidden",
+    isFeatured ? "md:w-1/2 md:aspect-auto h-96 md:h-full" : "h-52",
+  ].join(" "),
   image: [
-    'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300',
-    isFeatured ? 'md:rounded-l-lg md:rounded-r-none' : '',
-  ].join(' '),
-  content: ['p-6 flex-1 flex flex-col', isFeatured ? 'md:w-1/2 md:justify-center' : ''].join(' '),
+    "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300",
+    isFeatured ? "md:rounded-l-lg md:rounded-r-none" : "",
+  ].join(" "),
+  content: [
+    "p-6 flex-1 flex flex-col",
+    isFeatured ? "md:w-1/2 md:justify-center" : "",
+  ].join(" "),
   title: [
-    'font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200 line-clamp-2',
-    isFeatured ? 'text-2xl md:text-3xl' : 'text-xl',
-  ].join(' '),
+    "font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200 line-clamp-2",
+    isFeatured ? "text-2xl md:text-3xl" : "text-xl",
+  ].join(" "),
   excerpt: [
-    'text-gray-600 dark:text-gray-300 leading-relaxed mb-4',
-    isFeatured ? 'text-base line-clamp-4' : 'text-sm line-clamp-3',
-  ].join(' '),
+    "text-gray-600 dark:text-gray-300 leading-relaxed mb-4",
+    isFeatured ? "text-base line-clamp-4" : "text-sm line-clamp-3",
+  ].join(" "),
 };
 ---
 
 <article class={classes.article} aria-labelledby={`blog-post-title-${post.id}`}>
-  {
-    post.data.heroImage && (
-      <div class={classes.imageContainer}>
-        <a href={postUrl} tabindex="-1" aria-hidden="true">
-          <Picture
-            src={post.data.heroImage}
-            alt={post.data.heroImageAlt || post.data.title}
-            width={600}
-            height={400}
-            class={classes.image}
-            loading={isFeatured ? 'eager' : 'lazy'}
-            decoding={isFeatured ? 'auto' : 'async'}
-          />
-        </a>
-      </div>
-    )
-  }
+  {post.data.heroImage && (
+    <div class={classes.imageContainer}>
+      <a href={postUrl} tabindex="-1" aria-hidden="true">
+        <Picture
+          src={post.data.heroImage}
+          alt={post.data.heroImageAlt || post.data.title}
+          width={600}
+          height={400}
+          class={classes.image}
+          loading={isFeatured ? "eager" : "lazy"}
+          decoding={isFeatured ? "auto" : "async"}
+        />
+      </a>
+    </div>
+  )}
 
   <div class={classes.content}>
-    {
-      post.data.tags && post.data.tags.length > 0 && (
-        <div
-          class={`mb-3 flex flex-wrap gap-2 ${isFeatured ? 'md:mb-4' : ''}`}
-          role="group"
-          aria-label="Post tags"
-        >
-          {post.data.tags.slice(0, 3).map((tag: string) => (
-            <a
-              href={`/blog/${slugifyTag(tag)}`}
-              class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800"
-            >
-              #{tag}
-            </a>
-          ))}
-          {post.data.tags.length > 3 && (
-            <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-              +{post.data.tags.length - 3}
-            </span>
-          )}
-        </div>
-      )
-    }
+    {post.data.tags && post.data.tags.length > 0 && (
+      <div class={`flex flex-wrap gap-2 mb-3 ${isFeatured ? "md:mb-4" : ""}`} role="group" aria-label="Post tags">
+        {post.data.tags.slice(0, 3).map((tag: string) => (
+          <a
+            href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors duration-200"
+          >
+            #{tag}
+          </a>
+        ))}
+        {post.data.tags.length > 3 && (
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+            +{post.data.tags.length - 3}
+          </span>
+        )}
+      </div>
+    )}
 
     <h2 class={classes.title} id={`blog-post-title-${post.id}`}>
       <a href={postUrl}>
@@ -113,83 +100,35 @@ const classes = {
       <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
         <div class="flex items-center space-x-3">
           <div class="flex items-center">
-            <svg
-              class="mr-1 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              >
-              </path>
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
             <span>{post.data.author}</span>
           </div>
 
           <time datetime={post.data.pubDate.toISOString()} class="flex items-center">
-            <svg
-              class="mr-1 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              >
-              </path>
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
             {formatDate(post.data.pubDate, lang)}
           </time>
         </div>
 
-        {
-          'readingTime' in post.data && (
-            <div class="flex items-center">
-              <svg
-                class="mr-1 h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span>{post.data.readingTime}</span>
-            </div>
-          )
-        }
+        {'readingTime' in post.data && (
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>{post.data.readingTime}</span>
+          </div>
+        )}
       </div>
 
       <div class="mt-4">
-        <a
-          href={postUrl}
-          class="group inline-flex items-center justify-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-primary-700 hover:shadow-lg dark:bg-primary-500 dark:hover:bg-primary-600"
-          aria-label={`${t('blog.readMoreAbout')} ${post.data.title}`}
-        >
-          {t('blog.readMore')}
-          <svg
-            class="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-            </path>
+        <a href={postUrl} class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white font-medium text-sm rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-105 group" aria-label={`${t("blog.readMoreAbout")} ${post.data.title}`}>
+          {t("blog.readMore")}
+          <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
           </svg>
         </a>
       </div>
@@ -213,7 +152,7 @@ const classes = {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
+  
   .line-clamp-4 {
     display: -webkit-box;
     -webkit-line-clamp: 4;
