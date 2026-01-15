@@ -69,62 +69,31 @@ const siteTitle = SITE_METADATA.title;
 const siteDescription = SITE_METADATA.description;
 const siteUrl = SITE_METADATA.siteUrl;
 
-const seoTitle = pageTitle || siteTitle;
-const seoDescription = pageDescription || siteDescription;
-
 const fullTitle = pageTitle ? `${pageTitle} | ${siteTitle}` : siteTitle;
 const finalDescription = pageDescription || siteDescription;
 const finalImageUrl = image
   ? new URL(image, siteUrl).href
   : new URL('/og-default.png', siteUrl).href;
 const finalCanonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
+
 ---
 
 <meta charset="UTF-8" />
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
-<meta
-  name="generator"
-  content={Astro.generator}
-/>
-<link
-  rel="sitemap"
-  href="/sitemap-0.xml"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
+<link rel="sitemap" href="/sitemap-0.xml" />
 {gtmId && <GoogleTagmanager id={gtmId} />}
 
 <title>{fullTitle}</title>
-<meta
-  name="description"
-  content={finalDescription}
-/>
-<meta
-  name="author"
-  content={author || SITE_AUTHOR.name}
-/>
+<meta name="description" content={finalDescription} />
+<meta name="author" content={author || SITE_AUTHOR.name} />
 
-{
-  publishedTime && (
-    <meta
-      property="article:published_time"
-      content={publishedTime}
-    />
-  )
-}
-{
-  modifiedTime && (
-    <meta
-      property="article:modified_time"
-      content={modifiedTime}
-    />
-  )
-}
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
 
 <SEO
-  title={seoTitle}
-  description={seoDescription}
+  title={pageTitle}
+  description={pageDescription}
   image={finalImageUrl}
   canonical={finalCanonicalUrl}
   type={type}
@@ -142,8 +111,8 @@ const finalCanonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href
 />
 
 <Schema
-  title={seoTitle}
-  description={seoDescription}
+  title={title}
+  description={description}
   date={articleDate}
   image={finalImageUrl}
   imageAlt={imageAlt}
@@ -161,15 +130,8 @@ const finalCanonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href
   creator={creator}
 />
 
-<link
-  rel="preconnect"
-  href="https://fonts.googleapis.com"
-/>
-<link
-  rel="preconnect"
-  href="https://fonts.gstatic.com"
-  crossorigin
-/>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
   href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
   rel="stylesheet"
