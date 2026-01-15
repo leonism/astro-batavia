@@ -57,3 +57,7 @@ export function initializeBlogIndex(totalPages, lang) {
     }
   });
 }
+
+if (typeof window !== "undefined") {
+	window.initializeBlogIndex = initializeBlogIndex;
+}
