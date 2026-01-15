@@ -214,21 +214,7 @@ const pageProps = {
   </div>
 </Layout>
 
-<script src="/js/blogIndexClient.js"></script>
-
-<script>
-  document.addEventListener('astro:page-load', () => {
-    const loadMoreBtn = document.getElementById('load-more');
-    if (!loadMoreBtn || typeof window === 'undefined') return;
-
-    const totalPagesValue = loadMoreBtn.dataset.totalPages;
-    const langValue = loadMoreBtn.dataset.lang;
-    if (!totalPagesValue || !langValue) return;
-
-    const totalPages = parseInt(totalPagesValue, 10);
-    const initialize = (window as any)['initializeBlogIndex'];
-    if (typeof initialize === 'function') {
-      initialize(totalPages, langValue);
-    }
-  });
+<script
+  src="/src/client/blogIndexClient.ts"
+  type="module">
 </script>

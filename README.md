@@ -500,6 +500,7 @@ astro-batavia/
 │   ├── 📁 layouts/               # Page layouts
 │   │   ├── BlogPost.astro        # Blog post layout
 │   │   └── Layout.astro          # Base layout
+│   ├── 📁 client/                # Client-side scripts (global JS/TS)
 │   ├── 📁 pages/                 # Route pages
 │   │   ├── 📁 [lang]/            # Dynamic language routes (including blog)
 │   │   ├── 📁 api/               # API endpoints
