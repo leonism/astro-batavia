@@ -1,7 +1,7 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { getLocalizedPath } from "@/i18n/utils";
-import { SITE_TITLE, LOCALES } from "@/consts";
+import Layout from '@/layouts/Layout.astro';
+import { getLocalizedPath } from '@/i18n/utils';
+import { SITE_TITLE, LOCALES } from '@/consts';
 
 const lang = LOCALES.en;
 ---
@@ -9,48 +9,45 @@ const lang = LOCALES.en;
 <Layout
   title="Terms of Service"
   description={`Read our terms of service to understand the rules and guidelines for using ${SITE_TITLE}'s content and services.`}
-  lang={lang}>
+  lang={lang}
+>
   <!-- Hero Section -->
   <section
-    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    class="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+  >
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h1
-          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+        <h1 class="mb-6 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
           Terms of <span
-            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
-            >Service</span
+            class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
           >
+            Service
+          </span>
         </h1>
-        <p
-          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-          Please read these terms carefully before using our services. By
-          accessing {SITE_TITLE}, you agree to be bound by these terms.
+        <p class="mx-auto max-w-3xl text-xl leading-relaxed text-slate-600 dark:text-slate-300">
+          Please read these terms carefully before using our services. By accessing {SITE_TITLE},
+          you agree to be bound by these terms.
         </p>
-        <p class="text-sm text-slate-500 dark:text-slate-500 mt-4">
-          Last updated: January 2024
-        </p>
+        <p class="mt-4 text-sm text-slate-500 dark:text-slate-500">Last updated: January 2024</p>
       </div>
     </div>
   </section>
 
   <!-- Terms Content -->
-  <section class="py-16 bg-white dark:bg-slate-900">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="prose prose-lg dark:prose-invert max-w-none">
+  <section class="bg-white py-16 dark:bg-slate-900">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-lg max-w-none dark:prose-invert">
         <h2>Acceptance of Terms</h2>
         <p>
-          By accessing and using {SITE_TITLE} ("we," "us," or "our"), you
-          accept and agree to be bound by the terms and provision of this
-          agreement. If you do not agree to abide by the above, please do not
-          use this service.
+          By accessing and using {SITE_TITLE} ("we," "us," or "our"), you accept and agree to be bound
+          by the terms and provision of this agreement. If you do not agree to abide by the above, please
+          do not use this service.
         </p>
 
         <h2>Description of Service</h2>
         <p>
-          {SITE_TITLE} provides technology-focused content, articles,
-          tutorials, and resources related to software development, artificial
-          intelligence, and emerging technologies. Our services include:
+          {SITE_TITLE} provides technology-focused content, articles, tutorials, and resources related
+          to software development, artificial intelligence, and emerging technologies. Our services include:
         </p>
         <ul>
           <li>Blog articles and technical content</li>
@@ -61,8 +58,8 @@ const lang = LOCALES.en;
 
         <h2>User Accounts and Registration</h2>
         <p>
-          Some features of our service may require you to create an account.
-          When creating an account, you agree to:
+          Some features of our service may require you to create an account. When creating an
+          account, you agree to:
         </p>
         <ul>
           <li>Provide accurate and complete information</li>
@@ -74,14 +71,9 @@ const lang = LOCALES.en;
         <h2>User Content and Conduct</h2>
 
         <h3>Content Guidelines</h3>
-        <p>
-          When submitting content or participating in discussions, you agree not
-          to:
-        </p>
+        <p>When submitting content or participating in discussions, you agree not to:</p>
         <ul>
-          <li>
-            Post content that is illegal, harmful, threatening, or offensive
-          </li>
+          <li>Post content that is illegal, harmful, threatening, or offensive</li>
           <li>Infringe on intellectual property rights of others</li>
           <li>Share malware, viruses, or other harmful code</li>
           <li>Engage in spam, harassment, or abusive behavior</li>
@@ -90,24 +82,20 @@ const lang = LOCALES.en;
 
         <h3>Content Ownership</h3>
         <p>
-          You retain ownership of content you submit to us. However, by
-          submitting content, you grant us a non-exclusive, worldwide,
-          royalty-free license to use, modify, and distribute your content in
-          connection with our services.
+          You retain ownership of content you submit to us. However, by submitting content, you
+          grant us a non-exclusive, worldwide, royalty-free license to use, modify, and distribute
+          your content in connection with our services.
         </p>
 
         <h2>Intellectual Property Rights</h2>
 
         <h3>Our Content</h3>
         <p>
-          All content on {SITE_TITLE}, including articles, graphics, logos, and
-          software, is protected by copyright and other intellectual property
-          laws. You may:
+          All content on {SITE_TITLE}, including articles, graphics, logos, and software, is
+          protected by copyright and other intellectual property laws. You may:
         </p>
         <ul>
-          <li>
-            Read and share our content for personal and educational purposes
-          </li>
+          <li>Read and share our content for personal and educational purposes</li>
           <li>Link to our articles with proper attribution</li>
           <li>Quote brief excerpts with proper citation</li>
         </ul>
@@ -121,9 +109,8 @@ const lang = LOCALES.en;
 
         <h2>Disclaimer of Warranties</h2>
         <p>
-          Our services are provided "as is" without warranties of any kind. We
-          disclaim all warranties, express or implied, including but not limited
-          to:
+          Our services are provided "as is" without warranties of any kind. We disclaim all
+          warranties, express or implied, including but not limited to:
         </p>
         <ul>
           <li>Merchantability and fitness for a particular purpose</li>
@@ -134,9 +121,9 @@ const lang = LOCALES.en;
 
         <h2>Limitation of Liability</h2>
         <p>
-          To the fullest extent permitted by law, {SITE_TITLE} shall not be
-          liable for any indirect, incidental, special, or consequential damages
-          arising from your use of our services, including but not limited to:
+          To the fullest extent permitted by law, {SITE_TITLE} shall not be liable for any indirect, incidental,
+          special, or consequential damages arising from your use of our services, including but not limited
+          to:
         </p>
         <ul>
           <li>Loss of profits or revenue</li>
@@ -147,26 +134,23 @@ const lang = LOCALES.en;
 
         <h2>Privacy and Data Protection</h2>
         <p>
-          Your privacy is important to us. Our collection and use of personal
-          information is governed by our Privacy Policy, which is incorporated
-          into these terms by reference. By using our services, you consent to
-          the collection and use of your information as described in our Privacy
-          Policy.
+          Your privacy is important to us. Our collection and use of personal information is
+          governed by our Privacy Policy, which is incorporated into these terms by reference. By
+          using our services, you consent to the collection and use of your information as described
+          in our Privacy Policy.
         </p>
 
         <h2>Third-Party Links and Services</h2>
         <p>
-          Our website may contain links to third-party websites and services. We
-          are not responsible for the content, privacy practices, or terms of
-          service of these external sites. Your use of third-party services is
-          at your own risk.
+          Our website may contain links to third-party websites and services. We are not responsible
+          for the content, privacy practices, or terms of service of these external sites. Your use
+          of third-party services is at your own risk.
         </p>
 
         <h2>Termination</h2>
         <p>
-          We reserve the right to terminate or suspend your access to our
-          services at any time, with or without cause, and with or without
-          notice. Grounds for termination may include:
+          We reserve the right to terminate or suspend your access to our services at any time, with
+          or without cause, and with or without notice. Grounds for termination may include:
         </p>
         <ul>
           <li>Violation of these terms of service</li>
@@ -177,41 +161,36 @@ const lang = LOCALES.en;
 
         <h2>Modifications to Terms</h2>
         <p>
-          We reserve the right to modify these terms at any time. Changes will
-          be effective immediately upon posting on our website. Your continued
-          use of our services after any changes constitutes acceptance of the
-          modified terms.
+          We reserve the right to modify these terms at any time. Changes will be effective
+          immediately upon posting on our website. Your continued use of our services after any
+          changes constitutes acceptance of the modified terms.
         </p>
 
         <h2>Governing Law and Jurisdiction</h2>
         <p>
-          These terms are governed by the laws of California, United States,
-          without regard to conflict of law principles. Any disputes arising
-          from these terms or your use of our services shall be resolved in the
-          courts of California.
+          These terms are governed by the laws of California, United States, without regard to
+          conflict of law principles. Any disputes arising from these terms or your use of our
+          services shall be resolved in the courts of California.
         </p>
 
         <h2>Severability</h2>
         <p>
-          If any provision of these terms is found to be invalid or
-          unenforceable, the remaining provisions shall remain in full force and
-          effect. The invalid provision shall be replaced by a valid provision
-          that most closely approximates the intent of the original provision.
+          If any provision of these terms is found to be invalid or unenforceable, the remaining
+          provisions shall remain in full force and effect. The invalid provision shall be replaced
+          by a valid provision that most closely approximates the intent of the original provision.
         </p>
 
         <h2>Contact Information</h2>
-        <p>
-          If you have any questions about these terms of service, please contact
-          us:
-        </p>
+        <p>If you have any questions about these terms of service, please contact us:</p>
         <ul>
           <li><strong>Email:</strong> legal@astrobatavia.com</li>
           <li>
             <strong>Address:</strong>
-            San Francisco, CA, United States</li>
+            San Francisco, CA, United States
+          </li>
           <li>
             <strong>Contact Form:</strong>
-            <a href={getLocalizedPath("/contact", "en")}>Contact Page</a>
+            <a href={getLocalizedPath('/contact', 'en')}>Contact Page</a>
           </li>
         </ul>
 
@@ -219,50 +198,42 @@ const lang = LOCALES.en;
 
         <h3>Newsletter Subscription</h3>
         <p>
-          By subscribing to our newsletter, you agree to receive regular updates
-          about technology trends and {SITE_TITLE} content. You can unsubscribe
-          at any time using the link provided in each email.
+          By subscribing to our newsletter, you agree to receive regular updates about technology
+          trends and {SITE_TITLE} content. You can unsubscribe at any time using the link provided in
+          each email.
         </p>
 
         <h3>Guest Content Submission</h3>
-        <p>
-          If you submit guest articles or content for publication, you warrant
-          that:
-        </p>
+        <p>If you submit guest articles or content for publication, you warrant that:</p>
         <ul>
-          <li>
-            The content is original and does not infringe on third-party rights
-          </li>
+          <li>The content is original and does not infringe on third-party rights</li>
           <li>You have the authority to grant us publication rights</li>
           <li>The content complies with our editorial guidelines</li>
         </ul>
 
         <div
-          class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-6 my-8">
-          <h3
-            class="text-lg font-semibold text-amber-900 dark:text-amber-100 mb-3">
+          class="my-8 rounded-xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-900/20"
+        >
+          <h3 class="mb-3 text-lg font-semibold text-amber-900 dark:text-amber-100">
             Important Notice
           </h3>
-          <p class="text-amber-800 dark:text-amber-200 mb-4">
-            These terms constitute a legally binding agreement. Please read them
-            carefully and contact us if you have any questions before using our
-            services.
+          <p class="mb-4 text-amber-800 dark:text-amber-200">
+            These terms constitute a legally binding agreement. Please read them carefully and
+            contact us if you have any questions before using our services.
           </p>
           <a
-            href={getLocalizedPath("/contact", "en")}
-            class="inline-flex items-center px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors">
+            href={getLocalizedPath('/contact', 'en')}
+            class="inline-flex items-center rounded-lg bg-amber-600 px-4 py-2 font-medium text-white transition-colors hover:bg-amber-700"
+          >
             Contact Legal Team
-            <svg
-              class="ml-2 w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
+            <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
-              ></path>
+              >
+              </path>
             </svg>
           </a>
         </div>
@@ -273,19 +244,19 @@ const lang = LOCALES.en;
 
 <style>
   .prose h2 {
-    @apply text-2xl font-bold text-slate-900 dark:text-white mt-12 mb-6 first:mt-0;
+    @apply mb-6 mt-12 text-2xl font-bold text-slate-900 first:mt-0 dark:text-white;
   }
 
   .prose h3 {
-    @apply text-xl font-semibold text-slate-800 dark:text-slate-200 mt-8 mb-4;
+    @apply mb-4 mt-8 text-xl font-semibold text-slate-800 dark:text-slate-200;
   }
 
   .prose p {
-    @apply text-slate-600 dark:text-slate-300 leading-relaxed mb-4;
+    @apply mb-4 leading-relaxed text-slate-600 dark:text-slate-300;
   }
 
   .prose ul {
-    @apply space-y-2 mb-6;
+    @apply mb-6 space-y-2;
   }
 
   .prose li {
@@ -293,6 +264,6 @@ const lang = LOCALES.en;
   }
 
   .prose a {
-    @apply text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors;
+    @apply text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
   }
 </style>

@@ -1,24 +1,36 @@
-import { getCollection, type CollectionEntry } from "astro:content";
-import { getPostUrl } from "@/i18n/utils";
+/**
+ * @file Blog Data Utilities
+ * @description Helper functions for managing and filtering blog post data.
+ *
+ * Astro.js Tip: Keeping data fetching logic separate from your UI components
+ * makes them easier to test and reuse across different pages.
+ */
 
-// Define a type for a blog post for better type safety
-export type Post = CollectionEntry<"blog">;
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getPostUrl } from '@/i18n/utils';
+import { UI_CONFIG } from '@/consts';
 
 /**
- * Fetches all blog posts for a specific language, filters out drafts, and sorts them by publication date.
+ * Type representing a single blog post entry.
+ */
+export type Post = CollectionEntry<'blog'>;
+
+/**
+ * Fetches and sorts blog posts for a specific language.
+ * @param lang The language code (e.g., 'en', 'es', 'ja').
+ * @returns Sorted array of blog posts.
  */
 export async function getSortedPostsByLang(lang: string): Promise<Post[]> {
-  const allPosts = await getCollection("blog", (entry: Post) => {
+  const allPosts = await getCollection('blog', (entry: Post) => {
+    // Junior Dev Tip: We filter by both language prefix in the slug and the draft status.
     return entry.slug.startsWith(`${lang}/`) && !entry.data.draft;
   });
 
-  return allPosts.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-  );
+  return allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
 /**
- * Finds the previous and next posts for a given slug within a sorted array of posts.
+ * Calculates previous and next navigation data for a post.
  */
 export function getPostNavigation(posts: Post[], currentSlug: string, lang: string) {
   const sortedAsc = [...posts].sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
@@ -30,36 +42,46 @@ export function getPostNavigation(posts: Post[], currentSlug: string, lang: stri
   const next = currentIndex < sortedAsc.length - 1 ? sortedAsc[currentIndex + 1] : undefined;
 
   return {
-    previousPostData: prev ? { url: getPostUrl(prev.slug, lang), title: prev.data.title } : undefined,
-    nextPostData: next ? { url: getPostUrl(next.slug, lang), title: next.data.title } : undefined,
+    previousPostData: prev
+      ? {
+          url: getPostUrl(prev.slug, lang),
+          title: prev.data.title,
+        }
+      : undefined,
+    nextPostData: next
+      ? {
+          url: getPostUrl(next.slug, lang),
+          title: next.data.title,
+        }
+      : undefined,
   };
 }
 
 /**
- * Gets up to 3 related posts based on shared tags.
+ * Retrieves related posts based on shared tags.
  */
 export function getRelatedPosts(posts: Post[], currentSlug: string, currentTags: string[] = []) {
   return posts
     .filter((post) => post.slug !== currentSlug)
     .filter((post) => post.data.tags && post.data.tags.some((tag) => currentTags.includes(tag)))
-    .slice(0, 3);
+    .slice(0, UI_CONFIG.relatedPostsLimit);
 }
 
 /**
- * Fetches all English blog posts, filters out drafts, and sorts them by publication date.
- * @returns A promise that resolves to an array of sorted blog posts.
+ * Helper to get English posts specifically.
  */
 export async function getSortedEnglishPosts(): Promise<Post[]> {
-  return getSortedPostsByLang("en");
+  return getSortedPostsByLang('en');
 }
 
 /**
  * Extracts all unique tags from a list of posts.
- * @param posts - An array of blog posts.
- * @returns An array of unique tag strings.
  */
 export function getAllUniqueTags(posts: Post[]): string[] {
-  return [...new Set(posts.flatMap((post) => post.data.tags || []))];
+  return [...new Set(posts.flatMap((post) => post.data.tags || []))].sort();
 }
 
-export const POSTS_PER_PAGE = 9;
+/**
+ * Global pagination limit.
+ */
+export const POSTS_PER_PAGE = UI_CONFIG.postsPerPage;

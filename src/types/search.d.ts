@@ -1,14 +1,23 @@
 /**
- * Enhanced Search Type Declarations for Astro Batavia
+ * @file Search Type Declarations
+ * @description Global and module-specific types for the Enhanced Search feature.
+ *
+ * Astro.js Tip: Use .d.ts files for sharing common interfaces across
+ * different parts of your application without creating circular dependencies.
  */
 
 declare global {
   interface Window {
+    /** Global function for search debugging */
     searchInsights: () => void;
+    /** Google Analytics tag function */
     gtag?: (...args: any[]) => void;
   }
 }
 
+/**
+ * Basic document format stored in the search index.
+ */
 export interface SearchableDocument {
   id: string;
   title: string;
@@ -24,6 +33,9 @@ export interface SearchableDocument {
   readingTime?: number;
 }
 
+/**
+ * Extends the searchable document with calculated relevance scores.
+ */
 export interface SearchResult extends SearchableDocument {
   relevanceScore: number;
   matchedFields: string[];
@@ -42,8 +54,8 @@ export interface SearchFilters {
   author?: string;
   category?: string;
   lang?: string;
-  sortBy?: "relevance" | "date" | "title" | "semantic" | "hybrid";
-  sortOrder?: "asc" | "desc";
+  sortBy?: 'relevance' | 'date' | 'title' | 'semantic' | 'hybrid';
+  sortOrder?: 'asc' | 'desc';
 }
 
 export interface SearchOptions {
@@ -60,7 +72,7 @@ export interface SearchOptions {
 
 export interface SearchSuggestion {
   text: string;
-  type: "query" | "tag" | "title" | "semantic" | "completion";
+  type: 'query' | 'tag' | 'title' | 'semantic' | 'completion';
   score: number;
   description?: string;
   category?: string;
@@ -112,7 +124,7 @@ export const KEYBOARD_KEYS = {
   ESCAPE: 'Escape',
   TAB: 'Tab',
   HOME: 'Home',
-  END: 'End'
+  END: 'End',
 } as const;
 
 // Accessibility ARIA roles and attributes
@@ -123,7 +135,7 @@ export const ARIA_ROLES = {
   SEARCHBOX: 'searchbox',
   STATUS: 'status',
   REGION: 'region',
-  ARTICLE: 'article'
+  ARTICLE: 'article',
 } as const;
 
 export const ARIA_ATTRIBUTES = {
@@ -136,7 +148,7 @@ export const ARIA_ATTRIBUTES = {
   LIVE: 'aria-live',
   ATOMIC: 'aria-atomic',
   AUTOCOMPLETE: 'aria-autocomplete',
-  HASPOPUP: 'aria-haspopup'
+  HASPOPUP: 'aria-haspopup',
 } as const;
 
 export {};

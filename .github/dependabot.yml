@@ -5,21 +5,21 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: 'npm' # See documentation for possible values
+    directory: '/' # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: 'daily'
     # Add reviewers
     reviewers:
-      - "gemini-generated"
+      - 'gemini-generated'
     # Add labels for npm pull requests
     labels:
-      - "npm"
-      - "dependencies"
-  - package-ecosystem: "github-actions"
-    directory: "/"
+      - 'npm'
+      - 'dependencies'
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "daily"
+      interval: 'daily'
     labels:
-      - "github-actions"
-      - "dependencies"
+      - 'github-actions'
+      - 'dependencies'

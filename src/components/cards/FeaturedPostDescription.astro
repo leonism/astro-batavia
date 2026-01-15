@@ -1,8 +1,8 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  post: CollectionEntry<"blog">;
+  post: CollectionEntry<'blog'>;
   index: number;
 }
 
@@ -10,11 +10,10 @@ const { post, index } = Astro.props;
 ---
 
 <p
-  class="text-blue-100 leading-relaxed line-clamp-2 sm:line-clamp-none"
+  class="line-clamp-2 leading-relaxed text-blue-100 sm:line-clamp-none"
   class:list={[
-    index === 0
-      ? "text-base sm:text-lg md:text-xl max-w-2xl"
-      : "text-sm sm:text-base md:text-lg",
-  ]}>
+    index === 0 ? 'max-w-2xl text-base sm:text-lg md:text-xl' : 'text-sm sm:text-base md:text-lg',
+  ]}
+>
   {post.data.description}
 </p>

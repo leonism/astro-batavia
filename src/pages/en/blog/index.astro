@@ -9,7 +9,7 @@ const lang = LOCALES.en;
 
 // Validate language
 if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect("/404");
+  return Astro.redirect('/404');
 }
 
 const t = useTranslations(lang);
@@ -21,28 +21,23 @@ const allPostsUnsorted = await getCollection('blog', ({ id, data }: CollectionEn
 
 // Get unique tags from all posts for the current language
 const allTags = [
-  ...new Set(
-    allPostsUnsorted.flatMap(
-      (post: CollectionEntry<"blog">) => post.data.tags || []
-    )
-  ),
+  ...new Set(allPostsUnsorted.flatMap((post: CollectionEntry<'blog'>) => post.data.tags || [])),
 ].sort();
 
 // Get current tag from URL
-const currentTag = Astro.url.searchParams.get("tag");
+const currentTag = Astro.url.searchParams.get('tag');
 
 // Filter posts by current tag
 const filteredPostsUnsorted = currentTag
   ? allPostsUnsorted.filter(
-      (post: CollectionEntry<"blog">) =>
-        post.data.tags && post.data.tags.includes(currentTag)
+      (post: CollectionEntry<'blog'>) => post.data.tags && post.data.tags.includes(currentTag),
     )
   : allPostsUnsorted;
 
 // Sort posts by publication date (newest first)
 const sortedPosts = filteredPostsUnsorted.sort(
-  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
-    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
 const postsPerPage = PAGINATION_POSTS_PER_PAGE;
@@ -59,49 +54,67 @@ const pageProps = {
   {...pageProps}
   title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''}`}
   description={currentTag
-    ? (lang === 'es' ? `Explora artículos sobre ${currentTag} en nuestro blog de tecnología y desarrollo web.` : lang === 'ja' ? `${currentTag}に関する技術とウェブ開発のブログ記事をご覧ください。` : `Explore articles about ${currentTag} on our technology and web development blog.`)
-    : (lang === 'es'
+    ? lang === 'es'
+      ? `Explora artículos sobre ${currentTag} en nuestro blog de tecnología y desarrollo web.`
+      : lang === 'ja'
+        ? `${currentTag}に関する技術とウェブ開発のブログ記事をご覧ください。`
+        : `Explore articles about ${currentTag} on our technology and web development blog.`
+    : lang === 'es'
       ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
       : lang === 'ja'
-      ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-      : 'Explore our collection of articles covering web development, technology trends, and insights.'
-    )
-  }
+        ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+        : 'Explore our collection of articles covering web development, technology trends, and insights.'}
   lang={lang}
 >
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="text-center mb-12">
-      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+    <div class="mb-12 text-center">
+      <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 sm:text-5xl">
         {currentTag ? `#${currentTag}` : t('nav.blog')}
       </h1>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-        {currentTag
-          ? (lang === 'es' ? `Artículos etiquetados con #${currentTag}` : lang === 'ja' ? `#${currentTag} のタグが付いた記事` : `Articles tagged with #${currentTag}`)
-          : (lang === 'es'
-            ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
-            : lang === 'ja'
-            ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-            : 'Explore our collection of articles covering web development, technology trends, and insights.'
-          )
+      <p class="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">
+        {
+          currentTag
+            ? lang === 'es'
+              ? `Artículos etiquetados con #${currentTag}`
+              : lang === 'ja'
+                ? `#${currentTag} のタグが付いた記事`
+                : `Articles tagged with #${currentTag}`
+            : lang === 'es'
+              ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
+              : lang === 'ja'
+                ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+                : 'Explore our collection of articles covering web development, technology trends, and insights.'
         }
       </p>
     </div>
 
     <!-- Stats -->
-    <div class="flex flex-wrap justify-center gap-6 mb-12">
+    <div class="mb-12 flex flex-wrap justify-center gap-6">
       <div class="text-center">
         <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
           {sortedPosts.length}
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
-          {lang === 'es'
-            ? (sortedPosts.length === 1 ? 'Artículo' : 'Artículos')
-            : lang === 'ja'
-            ? '記事'
-            : (sortedPosts.length === 1 ? 'Article' : 'Articles')
+          {
+            lang === 'es'
+              ? sortedPosts.length === 1
+                ? 'Artículo'
+                : 'Artículos'
+              : lang === 'ja'
+                ? '記事'
+                : sortedPosts.length === 1
+                  ? 'Article'
+                  : 'Articles'
           }
-          {currentTag && (lang === 'es' ? ` con #${currentTag}` : lang === 'ja' ? ` (#${currentTag})` : ` with #${currentTag}`)}
+          {
+            currentTag &&
+              (lang === 'es'
+                ? ` con #${currentTag}`
+                : lang === 'ja'
+                  ? ` (#${currentTag})`
+                  : ` with #${currentTag}`)
+          }
         </div>
       </div>
       <div class="text-center">
@@ -110,78 +123,102 @@ const pageProps = {
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
           {
-            lang === "es"
+            lang === 'es'
               ? allTags.length === 1
-                ? "Tema"
-                : "Temas"
-              : lang === "ja"
-                ? "トピック"
+                ? 'Tema'
+                : 'Temas'
+              : lang === 'ja'
+                ? 'トピック'
                 : allTags.length === 1
-                  ? "Topic"
-                  : "Topics"
+                  ? 'Topic'
+                  : 'Topics'
           }
         </div>
       </div>
     </div>
 
-
-
-
-
     <!-- Posts Grid -->
-    {postsToDisplay.length > 0 ? (
-      <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
-          <div class="post-item animate-fade-in">
-            <BlogCard post={post} lang={lang} />
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div class="text-center py-12">
-        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-          {currentTag ? t('blog.noPostsForTag').replace('{tag}', currentTag) : t('blog.no-posts')}
-        </h3>
-        <p class="text-gray-500 dark:text-gray-400">
-          {currentTag
-            ? (lang === 'es' ? `Intenta con otra etiqueta o revisa todos los artículos.` : lang === 'ja' ? `別のタグを試すか、すべての記事を確認してください。` : `Try a different tag or check all articles.`)
-            : (lang === 'es' ? '¡Vuelve pronto para nuevo contenido!' : lang === 'ja' ? '新しいコンテンツをお楽しみに！' : 'Check back soon for new content!')
-          }
-        </p>
-      </div>
-    )}
+    {
+      postsToDisplay.length > 0 ? (
+        <div
+          id="posts-container"
+          class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+        >
+          {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
+            <div class="post-item animate-fade-in">
+              <BlogCard post={post} lang={lang} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="py-12 text-center">
+          <svg
+            class="mx-auto mb-4 h-16 w-16 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <h3 class="mb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
+            {currentTag ? t('blog.noPostsForTag').replace('{tag}', currentTag) : t('blog.no-posts')}
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400">
+            {currentTag
+              ? lang === 'es'
+                ? `Intenta con otra etiqueta o revisa todos los artículos.`
+                : lang === 'ja'
+                  ? `別のタグを試すか、すべての記事を確認してください。`
+                  : `Try a different tag or check all articles.`
+              : lang === 'es'
+                ? '¡Vuelve pronto para nuevo contenido!'
+                : lang === 'ja'
+                  ? '新しいコンテンツをお楽しみに！'
+                  : 'Check back soon for new content!'}
+          </p>
+        </div>
+      )
+    }
 
     <!-- Load More Button -->
-    {totalPages > 1 && (
-      <div class="text-center">
-        <button
-          id="load-more"
-          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200"
-          data-total-pages={totalPages}
-          data-lang={lang}
-        >
-          {lang === 'es'
-            ? 'Cargar Más Artículos'
-            : lang === 'ja'
-            ? 'もっと記事を読む'
-            : 'Load More Articles'
-          }
-          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-      </div>
-    )}
+    {
+      totalPages > 1 && (
+        <div class="text-center">
+          <button
+            id="load-more"
+            class="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-6 py-3 text-base font-medium text-white transition-all duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            data-total-pages={totalPages}
+            data-lang={lang}
+          >
+            {lang === 'es'
+              ? 'Cargar Más Artículos'
+              : lang === 'ja'
+                ? 'もっと記事を読む'
+                : 'Load More Articles'}
+            <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+        </div>
+      )
+    }
   </div>
 </Layout>
 
 <script type="module">
-  import { initializeBlogIndex } from "/js/blogIndexClient.js";
-  document.addEventListener("astro:page-load", () => {
-    const loadMoreBtn = document.getElementById("load-more");
+  import { initializeBlogIndex } from '/js/blogIndexClient.js';
+  document.addEventListener('astro:page-load', () => {
+    const loadMoreBtn = document.getElementById('load-more');
     if (loadMoreBtn) {
       const totalPages = parseInt(loadMoreBtn.dataset.totalPages);
       const lang = loadMoreBtn.dataset.lang;

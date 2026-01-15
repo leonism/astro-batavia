@@ -2,7 +2,7 @@ name: Link Checker
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   schedule:
     - cron: '0 0 * * 0' # Runs every Sunday at midnight
 
@@ -16,5 +16,5 @@ jobs:
       - name: Lychee Link Checker
         uses: lycheeverse/lychee-action@v1
         with:
-          args: "**/*.md **/*.mdx **/*.astro"
+          args: '**/*.md **/*.mdx **/*.astro'
           # For more configuration options, see https://github.com/lycheeverse/lychee-action
