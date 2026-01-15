@@ -14,51 +14,53 @@ const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
 const t = useTranslations(lang);
 const postUrl = getPostUrl(post.slug, lang);
 
-const excerpt = showExcerpt
-  ? post.data.description || post.body.slice(0, isFeatured ? 300 : 150) + "..."
-  : "";
+// Logic separated from view
+const getExcerpt = (body: string, description?: string) => {
+  if (!showExcerpt) return "";
+  return description || body.slice(0, isFeatured ? 300 : 150) + "...";
+};
 
-const articleClasses = [
-  "group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 flex flex-col",
-  isFeatured ? "md:flex-row md:shadow-xl md:hover:shadow-2xl md:min-h-[400px]" : "hover:shadow-lg hover:scale-[1.02] min-h-[420px] max-h-[480px]",
-].join(" ");
+const excerpt = getExcerpt(post.body, post.data.description);
 
-const imageContainerClasses = [
-  "overflow-hidden",
-  isFeatured ? "md:w-1/2 md:aspect-auto h-96 md:h-full" : "h-52",
-].join(" ");
-
-const imageClasses = [
-  "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300",
-  isFeatured ? "md:rounded-l-lg md:rounded-r-none" : "",
-].join(" ");
-
-const contentClasses = [
-  "p-6 flex-1 flex flex-col",
-  isFeatured ? "md:w-1/2 md:justify-center" : "",
-].join(" ");
-
-const titleClasses = [
-  "font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200 line-clamp-2",
-  isFeatured ? "text-2xl md:text-3xl" : "text-xl",
-].join(" ");
-
-const excerptClasses = [
-  "text-gray-600 dark:text-gray-300 leading-relaxed mb-4",
-  isFeatured ? "text-base line-clamp-4" : "text-sm line-clamp-3",
-].join(" ");
+// CSS Classes extraction
+const classes = {
+  article: [
+    "group bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 flex flex-col",
+    isFeatured ? "md:flex-row md:shadow-xl md:hover:shadow-2xl md:min-h-[400px]" : "hover:shadow-lg hover:scale-[1.02] min-h-[420px] max-h-[480px]",
+  ].join(" "),
+  imageContainer: [
+    "overflow-hidden",
+    isFeatured ? "md:w-1/2 md:aspect-auto h-96 md:h-full" : "h-52",
+  ].join(" "),
+  image: [
+    "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300",
+    isFeatured ? "md:rounded-l-lg md:rounded-r-none" : "",
+  ].join(" "),
+  content: [
+    "p-6 flex-1 flex flex-col",
+    isFeatured ? "md:w-1/2 md:justify-center" : "",
+  ].join(" "),
+  title: [
+    "font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200 line-clamp-2",
+    isFeatured ? "text-2xl md:text-3xl" : "text-xl",
+  ].join(" "),
+  excerpt: [
+    "text-gray-600 dark:text-gray-300 leading-relaxed mb-4",
+    isFeatured ? "text-base line-clamp-4" : "text-sm line-clamp-3",
+  ].join(" "),
+};
 ---
 
-<article class={articleClasses} aria-labelledby={`blog-post-title-${post.id}`}>
+<article class={classes.article} aria-labelledby={`blog-post-title-${post.id}`}>
   {post.data.heroImage && (
-    <div class={imageContainerClasses}>
+    <div class={classes.imageContainer}>
       <a href={postUrl} tabindex="-1" aria-hidden="true">
         <img
           src={post.data.heroImage}
           alt={post.data.heroImageAlt || post.data.title}
           width={600}
           height={400}
-          class={imageClasses}
+          class={classes.image}
           loading={isFeatured ? "eager" : "lazy"}
           decoding={isFeatured ? "auto" : "async"}
         />
@@ -66,7 +68,7 @@ const excerptClasses = [
     </div>
   )}
 
-  <div class={contentClasses}>
+  <div class={classes.content}>
     {post.data.tags && post.data.tags.length > 0 && (
       <div class={`flex flex-wrap gap-2 mb-3 ${isFeatured ? "md:mb-4" : ""}`} role="group" aria-label="Post tags">
         {post.data.tags.slice(0, 3).map((tag: string) => (
@@ -85,13 +87,13 @@ const excerptClasses = [
       </div>
     )}
 
-    <h2 class={titleClasses} id={`blog-post-title-${post.id}`}>
+    <h2 class={classes.title} id={`blog-post-title-${post.id}`}>
       <a href={postUrl}>
         {post.data.title}
       </a>
     </h2>
 
-    {showExcerpt && excerpt && <p class={excerptClasses}>{excerpt}</p>}
+    {excerpt && <p class={classes.excerpt}>{excerpt}</p>}
 
     <div class="mt-auto pt-4">
       <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
@@ -144,6 +146,13 @@ const excerptClasses = [
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
