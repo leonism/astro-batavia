@@ -1,4 +1,4 @@
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, DEFAULT_LOCALE } from '../consts';
 
 export const languages = {
   en: "English",
@@ -6,7 +6,7 @@ export const languages = {
   ja: "日本語",
 };
 
-export const defaultLang = "en";
+export const defaultLang = DEFAULT_LOCALE;
 
 export const ui = {
   en: {
