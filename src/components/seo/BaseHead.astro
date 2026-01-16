@@ -4,7 +4,7 @@ import SEO from './SEO.astro';
 import Schema from './Schema.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import { GoogleTagmanager } from '@digi4care/astro-google-tagmanager';
-import { GTM_ID } from '@/consts';
+import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from '@/consts';
 
 interface Props {
   title: string;
@@ -35,8 +35,8 @@ interface Props {
 }
 
 const {
-  title = 'SITE_TITLE',
-  description = 'SITE_DESCRIPTION',
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
   image,
   articleDate,
   type = 'website',
@@ -62,7 +62,7 @@ const {
   creator,
 } = Astro.props;
 
-const siteUrl = Astro.site ? Astro.site.href : 'SITE_URL';
+const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
 const resolvedImage = image
   ? new URL(image, siteUrl).href
