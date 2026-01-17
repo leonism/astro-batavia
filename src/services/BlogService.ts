@@ -79,4 +79,32 @@ export class BlogService {
       .filter((post) => post.data.tags && post.data.tags.some((tag) => currentTags.includes(tag)))
       .slice(0, limit);
   }
+
+  /**
+   * Generates static paths for all blog posts.
+   * Useful for [lang]/blog/[...slug].astro getStaticPaths.
+   */
+  static async getStaticPaths() {
+    const allPosts = await this.getAllPosts();
+    const paths: Array<{ params: { lang: string; slug: string }; props: BlogPost }> = [];
+
+    allPosts.forEach((post) => {
+      const parts = post.id.split('/');
+      const lang = parts[0];
+      const slugPart = parts[1] === 'blog' ? parts.slice(2).join('/') : parts.slice(1).join('/');
+
+      // Remove the file extension (.mdx or .md) from the slug part
+      const finalSlug = slugPart.replace(/\.(mdx?)$/, '');
+
+      paths.push({
+        params: {
+          lang: lang,
+          slug: finalSlug // Use the carefully constructed slug
+        },
+        props: post,
+      });
+    });
+
+    return paths;
+  }
 }

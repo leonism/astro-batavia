@@ -5,6 +5,7 @@ import Schema from './Schema.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import { GoogleTagmanager } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from '@/consts';
+import { getCanonicalURL, getOpenGraphImage } from '@/services/seo';
 
 interface Props {
   title: string;
@@ -63,10 +64,8 @@ const {
 } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
-const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
-const resolvedImage = image
-  ? new URL(image, siteUrl).href
-  : new URL('/og-default.png', siteUrl).href;
+const canonicalURL = canonical || getCanonicalURL(Astro.url.pathname, siteUrl);
+const resolvedImage = getOpenGraphImage(image, siteUrl);
 ---
 
 <meta charset="UTF-8" />
