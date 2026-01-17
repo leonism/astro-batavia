@@ -1,23 +1,21 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
 import BlogCard from '@/components/blog/BlogCard.astro';
+import { BlogService } from '@/services/BlogService';
+import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
 const url = Astro.url;
 const page = parseInt(url.searchParams.get('page') || '1', 10);
 const lang = url.searchParams.get('lang') || 'en';
 const tag = url.searchParams.get('tag');
 
-const allPostsUnsorted = await getCollection('blog', ({ id, data }) => {
-  const isLangMatch = id.startsWith(`${lang}/`);
-  const isTagMatch = tag ? data.tags?.includes(tag) : true;
-  return isLangMatch && isTagMatch && !data.draft;
-});
+let sortedPosts;
+if (tag) {
+  sortedPosts = await BlogService.getPostsByTag(lang, tag);
+} else {
+  sortedPosts = await BlogService.getPostsByLang(lang);
+}
 
-const sortedPosts = allPostsUnsorted.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
-const postsPerPage = 9;
+const postsPerPage = PAGINATION_POSTS_PER_PAGE;
 const startIndex = (page - 1) * postsPerPage;
 const postsToDisplay = sortedPosts.slice(startIndex, startIndex + postsPerPage);
 ---
