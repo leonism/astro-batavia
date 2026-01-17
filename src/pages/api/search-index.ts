@@ -1,12 +1,10 @@
 import type { APIRoute } from "astro";
-import { getCollection } from "astro:content";
 import { getPostUrl } from "@/i18n/utils";
+import { BlogService } from "@/services/BlogService";
 
 export const GET: APIRoute = async () => {
   try {
-    const allBlogPosts = await getCollection("blog", ({ data }) => {
-      return !data.draft;
-    });
+    const allBlogPosts = await BlogService.getAllPosts();
 
     const documents = allBlogPosts.map((post) => {
       const lang = post.slug.split('/')[0];
