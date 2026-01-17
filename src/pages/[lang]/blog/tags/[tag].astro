@@ -37,7 +37,8 @@ const pageProps = {
     : lang === 'ja'
       ? `${tag}に関する記事`
       : `Articles about ${tag}`}
-  lang={lang}>
+  lang={lang}
+>
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-12 text-center">
@@ -60,13 +61,11 @@ const pageProps = {
       postsToDisplay.length > 0 ? (
         <div
           id="posts-container"
-          class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+        >
           {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
             <div class="post-item animate-fade-in">
-              <BlogCard
-                post={post}
-                lang={lang as 'en' | 'es' | 'ja'}
-              />
+              <BlogCard post={post} lang={lang as 'en' | 'es' | 'ja'} />
             </div>
           ))}
         </div>

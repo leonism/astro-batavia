@@ -12,7 +12,7 @@ const t = useTranslations(lang);
 
 <section
   id="search-overlay"
-  class="fixed inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-[100] p-4 hidden"
+  class="fixed inset-0 z-[100] hidden bg-white/95 p-4 backdrop-blur-xl dark:bg-slate-900/95"
   aria-labelledby="search-overlay-title"
   role="search"
   aria-hidden="true"
@@ -21,15 +21,21 @@ const t = useTranslations(lang);
 
   <button
     id="close-search-overlay"
-    class="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 z-10"
+    class="absolute right-4 top-4 z-10 text-gray-600 transition-colors duration-200 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
     aria-label="Close search"
   >
     <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      >
+      </path>
     </svg>
   </button>
 
-  <div class="w-full max-w-4xl mx-auto">
+  <div class="mx-auto w-full max-w-4xl">
     <SearchOverlayInput />
     <SearchOverlaySuggestions />
     <SearchOverlayResults />

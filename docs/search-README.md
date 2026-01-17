@@ -5,6 +5,7 @@ A powerful, enterprise-grade search engine built for Astro Batavia with advanced
 ## Features
 
 ### 🚀 Core Search Capabilities
+
 - **Instant Search**: Sub-100ms search results with optimized indexing
 - **Fuzzy Matching**: Find results even with typos using advanced similarity algorithms
 - **Multi-field Search**: Search across titles, descriptions, content, tags, and authors
@@ -12,6 +13,7 @@ A powerful, enterprise-grade search engine built for Astro Batavia with advanced
 - **Real-time Suggestions**: Dynamic search suggestions as you type
 
 ### 🎯 Advanced Filtering
+
 - **Tag-based Filtering**: Filter by multiple tags simultaneously
 - **Date Range Filtering**: Search within specific time periods
 - **Author Filtering**: Find content by specific authors
@@ -19,6 +21,7 @@ A powerful, enterprise-grade search engine built for Astro Batavia with advanced
 - **Quick Filters**: Popular and recent content shortcuts
 
 ### 🎨 User Experience
+
 - **Voice Search**: Hands-free search using speech recognition
 - **Keyboard Shortcuts**: ⌘K (Mac) / Ctrl+K (Windows) to focus search
 - **Search History**: Track and revisit previous searches
@@ -26,6 +29,7 @@ A powerful, enterprise-grade search engine built for Astro Batavia with advanced
 - **Responsive Design**: Optimized for all device sizes
 
 ### 📊 Analytics & Performance
+
 - **Search Analytics**: Track search patterns and user behavior
 - **Performance Monitoring**: Real-time search performance metrics
 - **Caching System**: Intelligent caching for faster repeat searches
@@ -73,8 +77,8 @@ const documents = [
     author: 'John Doe',
     category: 'Tutorial',
     lang: 'en',
-    slug: 'typescript-basics'
-  }
+    slug: 'typescript-basics',
+  },
   // ... more documents
 ];
 
@@ -84,7 +88,7 @@ await searchIntegration.initialize(documents);
 // Perform a search
 const results = await searchIntegration.search('typescript', {
   tags: ['programming'],
-  sortBy: 'relevance'
+  sortBy: 'relevance',
 });
 
 console.log(`Found ${results.totalCount} results in ${results.searchTime}ms`);
@@ -104,24 +108,20 @@ const posts = await getAllPosts('en');
 
 <Layout title="Search">
   <main>
-    <EnterpriseSearchBox 
+    <EnterpriseSearchBox
       placeholder="Search articles, tags, authors..."
       enableVoiceSearch={true}
       showKeyboardShortcut={true}
       popularSearches={['JavaScript', 'React', 'TypeScript']}
     />
-    
-    <EnterpriseSearchResults 
-      posts={posts}
-      lang="en"
-      enableInfiniteScroll={true}
-    />
+
+    <EnterpriseSearchResults posts={posts} lang="en" enableInfiniteScroll={true} />
   </main>
 </Layout>
 
 <script>
   import { EnterpriseSearchClient } from '@/features/search/EnterpriseSearchClient';
-  
+
   document.addEventListener('DOMContentLoaded', async () => {
     const searchClient = new EnterpriseSearchClient();
     await searchClient.indexPosts(window.__SEARCH_DATA__ || []);
@@ -137,12 +137,12 @@ const posts = await getAllPosts('en');
 import { SearchIntegration } from '@/features/search/searchIntegration';
 
 const searchIntegration = new SearchIntegration({
-  enableAnalytics: true,        // Track search analytics
-  enableCache: true,            // Cache search results
-  enableVoiceSearch: true,      // Enable voice search
-  maxResults: 50,               // Maximum results per search
-  debounceMs: 300,              // Debounce delay for search input
-  fuzzyThreshold: 0.6           // Fuzzy matching sensitivity (0-1)
+  enableAnalytics: true, // Track search analytics
+  enableCache: true, // Cache search results
+  enableVoiceSearch: true, // Enable voice search
+  maxResults: 50, // Maximum results per search
+  debounceMs: 300, // Debounce delay for search input
+  fuzzyThreshold: 0.6, // Fuzzy matching sensitivity (0-1)
 });
 ```
 
@@ -150,8 +150,8 @@ const searchIntegration = new SearchIntegration({
 
 ```typescript
 const results = await searchIntegration.search('query', filters, {
-  limit: 20,                    // Number of results to return
-  offset: 0                     // Pagination offset
+  limit: 20, // Number of results to return
+  offset: 0, // Pagination offset
 });
 ```
 
@@ -159,13 +159,13 @@ const results = await searchIntegration.search('query', filters, {
 
 ```typescript
 const filters = {
-  tags: ['javascript', 'react'],           // Filter by tags
-  dateFrom: new Date('2024-01-01'),        // Start date
-  dateTo: new Date('2024-12-31'),          // End date
-  author: 'John Doe',                      // Filter by author
-  category: 'Tutorial',                    // Filter by category
-  sortBy: 'relevance',                     // Sort method
-  sortOrder: 'desc'                        // Sort direction
+  tags: ['javascript', 'react'], // Filter by tags
+  dateFrom: new Date('2024-01-01'), // Start date
+  dateTo: new Date('2024-12-31'), // End date
+  author: 'John Doe', // Filter by author
+  category: 'Tutorial', // Filter by category
+  sortBy: 'relevance', // Sort method
+  sortOrder: 'desc', // Sort direction
 };
 ```
 
@@ -254,11 +254,11 @@ Analytics data is stored locally using `localStorage` and includes:
 
 ```typescript
 interface SearchAnalytics {
-  query: string;              // The search query
-  timestamp: Date;            // When the search was performed
-  resultsCount: number;       // Number of results returned
-  clickedResult?: string;     // ID of clicked result (if any)
-  filters?: SearchFilters;    // Applied filters
+  query: string; // The search query
+  timestamp: Date; // When the search was performed
+  resultsCount: number; // Number of results returned
+  clickedResult?: string; // ID of clicked result (if any)
+  filters?: SearchFilters; // Applied filters
 }
 ```
 

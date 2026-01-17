@@ -7,6 +7,7 @@ The enhanced search system provides a fast, accessible, and keyboard-navigatable
 ## Features
 
 ### 🚀 Core Search Features
+
 - **Instant Search**: Real-time results as you type
 - **Semantic Matching**: Understands related terms and concepts
 - **Fuzzy Search**: Handles typos and similar spellings
@@ -15,6 +16,7 @@ The enhanced search system provides a fast, accessible, and keyboard-navigatable
 - **Advanced Filtering**: Filter by tags, dates, authors, and categories
 
 ### ⌨️ Keyboard Navigation
+
 - **Arrow Keys (↑↓)**: Navigate through suggestions and search results
 - **Enter**: Select highlighted suggestion or open selected result
 - **Escape**: Clear selections, close suggestions, or exit search
@@ -24,6 +26,7 @@ The enhanced search system provides a fast, accessible, and keyboard-navigatable
 - **Mouse + Keyboard**: Seamless interaction between input methods
 
 ### ♿ Accessibility Features
+
 - **Screen Reader Support**: Full ARIA labels and announcements
 - **High Contrast Support**: Optimized for high contrast modes
 - **Reduced Motion Support**: Respects user motion preferences
@@ -43,7 +46,7 @@ src/features/search/
 
 src/components/search/
 ├── SearchInputForm.astro        # Search input with accessibility
-├── SearchResults.astro          # Results container with ARIA support  
+├── SearchResults.astro          # Results container with ARIA support
 ├── SearchFilters.astro          # Tag and sort filtering
 └── EnhancedSearchOverlay.astro  # Search overlay modal
 
@@ -54,7 +57,9 @@ src/styles/
 ### Key Components
 
 #### EnhancedSearchClient
+
 The main client-side class that handles:
+
 - DOM element management
 - Keyboard event handling
 - Results display and navigation
@@ -62,20 +67,23 @@ The main client-side class that handles:
 - Performance monitoring
 
 #### Keyboard Navigation System
+
 ```typescript
 interface SearchState {
-  selectedSuggestionIndex: number;  // Currently selected suggestion
-  selectedResultIndex: number;     // Currently selected result
+  selectedSuggestionIndex: number; // Currently selected suggestion
+  selectedResultIndex: number; // Currently selected result
   // ... other state
 }
 ```
 
 Navigation flow:
+
 1. **Suggestions Phase**: When suggestions are visible, arrow keys navigate suggestions
 2. **Results Phase**: When suggestions are hidden, arrow keys navigate search results
 3. **Transitions**: Escape key transitions between phases
 
 #### Accessibility Implementation
+
 - **ARIA Roles**: `combobox`, `listbox`, `option`, `status`, `region`
 - **ARIA Properties**: `aria-expanded`, `aria-selected`, `aria-activedescendant`
 - **Live Regions**: Status updates and result counts
@@ -84,18 +92,20 @@ Navigation flow:
 ## Usage
 
 ### Basic Search
+
 ```typescript
 const searchClient = new EnhancedSearchClient({
   searchInputId: 'main-search-input',
   resultsContainerId: 'results-container',
   enableKeyboardNavigation: true,
-  enableAnalytics: true
+  enableAnalytics: true,
 });
 
 await searchClient.initialize(documents);
 ```
 
 ### Keyboard Navigation
+
 Users can navigate the search interface entirely with keyboard:
 
 1. **Focus Search**: Press `Ctrl/⌘ + K` to focus search input
@@ -107,6 +117,7 @@ Users can navigate the search interface entirely with keyboard:
 7. **Clear/Exit**: Press `Escape` to clear selections or exit
 
 ### Advanced Navigation
+
 - **Jump to First**: `Ctrl/⌘ + Home` - Jump to first result
 - **Jump to Last**: `Ctrl/⌘ + End` - Jump to last result
 - **Natural Tab Order**: `Tab` moves between search input, filters, and other elements
@@ -114,24 +125,26 @@ Users can navigate the search interface entirely with keyboard:
 ## CSS Classes for Styling
 
 ### Selection States
+
 ```css
 .search-result.selected {
   /* Visual styling for keyboard-selected results */
-  @apply ring-2 ring-primary-500 bg-primary-50;
+  @apply bg-primary-50 ring-2 ring-primary-500;
 }
 
-.search-result[aria-selected="true"] {
+.search-result[aria-selected='true'] {
   /* Enhanced selection state */
-  @apply ring-2 ring-primary-600 bg-primary-100;
+  @apply bg-primary-100 ring-2 ring-primary-600;
 }
 
-.suggestion-item[aria-selected="true"] {
+.suggestion-item[aria-selected='true'] {
   /* Selected suggestion styling */
   @apply bg-primary-50 text-primary-900;
 }
 ```
 
 ### Animations
+
 - **fadeInUp**: Results appear with smooth animation
 - **smooth scrolling**: Selected items scroll into view smoothly
 - **transition-all**: Smooth state transitions
@@ -139,18 +152,21 @@ Users can navigate the search interface entirely with keyboard:
 ## Accessibility Testing
 
 ### Screen Readers
+
 - ✅ VoiceOver (macOS)
 - ✅ NVDA (Windows)
 - ✅ JAWS (Windows)
 - ✅ Orca (Linux)
 
 ### Keyboard Navigation
+
 - ✅ Tab navigation
 - ✅ Arrow key navigation
 - ✅ Enter/Escape handling
 - ✅ Keyboard shortcuts
 
 ### Browser Support
+
 - ✅ Chrome/Edge (Chromium)
 - ✅ Firefox
 - ✅ Safari
@@ -159,12 +175,14 @@ Users can navigate the search interface entirely with keyboard:
 ## Performance Optimizations
 
 ### Search Performance
+
 - **Debounced Input**: 150ms debounce for search queries
 - **Cached Results**: Intelligent caching of search results
 - **Indexed Search**: Pre-built search indexes for fast lookups
 - **Abort Controllers**: Cancel pending searches when new ones start
 
 ### Navigation Performance
+
 - **Smooth Scrolling**: Native browser smooth scrolling
 - **RAF Optimizations**: RequestAnimationFrame for smooth updates
 - **Event Delegation**: Efficient event handling
@@ -173,6 +191,7 @@ Users can navigate the search interface entirely with keyboard:
 ## Analytics & Insights
 
 Track search behavior and performance:
+
 ```javascript
 // Access search insights in browser console
 searchInsights();
@@ -187,11 +206,13 @@ searchInsights();
 ## Browser Support
 
 ### Keyboard Navigation
+
 - **Modern Browsers**: Full support
 - **Legacy Browsers**: Graceful degradation
 - **Mobile**: Touch-friendly with keyboard support
 
 ### Accessibility APIs
+
 - **ARIA Support**: Full implementation
 - **Platform APIs**: Native screen reader integration
 - **High Contrast**: Media query support
@@ -199,7 +220,9 @@ searchInsights();
 ## Customization
 
 ### Keyboard Shortcuts
+
 Modify keyboard shortcuts in `EnhancedSearchClient.ts`:
+
 ```typescript
 private setupEventListeners(): void {
   document.addEventListener('keydown', (event) => {
@@ -213,12 +236,14 @@ private setupEventListeners(): void {
 ```
 
 ### Navigation Behavior
+
 Customize navigation behavior:
+
 ```typescript
 const searchClient = new EnhancedSearchClient({
-  enableKeyboardNavigation: true,    // Enable/disable navigation
-  debounceMs: 150,                   // Input debounce timing
-  maxSuggestions: 8,                 // Max suggestions shown
+  enableKeyboardNavigation: true, // Enable/disable navigation
+  debounceMs: 150, // Input debounce timing
+  maxSuggestions: 8, // Max suggestions shown
 });
 ```
 
@@ -227,25 +252,30 @@ const searchClient = new EnhancedSearchClient({
 ### Common Issues
 
 #### Keyboard Navigation Not Working
+
 1. Check `enableKeyboardNavigation` is `true`
 2. Ensure proper DOM structure with required IDs
 3. Verify CSS classes are loaded
 4. Check browser console for errors
 
 #### Accessibility Issues
+
 1. Validate ARIA attributes in browser dev tools
 2. Test with actual screen readers
 3. Check focus order and visibility
 4. Verify live region announcements
 
 #### Performance Issues
+
 1. Check search index size and complexity
 2. Monitor debounce timing
 3. Verify cache hit rates
 4. Profile keyboard event handlers
 
 ### Debug Mode
+
 Enable debug logging:
+
 ```javascript
 // In browser console
 localStorage.setItem('search-debug', 'true');
@@ -255,6 +285,7 @@ location.reload();
 ## Future Enhancements
 
 ### Planned Features
+
 - **Voice Search Integration**: Better voice command support
 - **Gesture Navigation**: Touch gesture support for mobile
 - **Search History**: Navigate through previous searches
@@ -262,6 +293,7 @@ location.reload();
 - **Advanced Filters**: More granular filtering options
 
 ### Accessibility Improvements
+
 - **Magnifier Support**: Enhanced screen magnifier compatibility
 - **Switch Control**: Support for assistive switch devices
 - **Eye Tracking**: Compatibility with eye-tracking systems

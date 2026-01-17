@@ -1,12 +1,12 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import FeaturedPostImage from "./FeaturedPostImage.astro";
-import FeaturedPostOverlay from "./FeaturedPostOverlay.astro";
-import FeaturedPostContent from "./FeaturedPostContent.astro";
-import { getLangFromUrl, getPostUrl } from "@/i18n/utils";
+import type { CollectionEntry } from 'astro:content';
+import FeaturedPostImage from './FeaturedPostImage.astro';
+import FeaturedPostOverlay from './FeaturedPostOverlay.astro';
+import FeaturedPostContent from './FeaturedPostContent.astro';
+import { getLangFromUrl, getPostUrl } from '@/i18n/utils';
 
 interface Props {
-  post: CollectionEntry<"blog">;
+  post: CollectionEntry<'blog'>;
   index: number;
 }
 
@@ -19,22 +19,17 @@ const postUrl = getPostUrl(post.slug, lang);
 
 <article
   id={`featured-post-${post.slug}`}
-  class="group relative h-64 sm:h-80 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 md:h-[400px] lg:h-[600px]"
-  class:list={[index === 0 && "lg:col-span-2 lg:row-span-2"]}
-  aria-labelledby={`featured-post-title-${post.slug}`}>
-  <FeaturedPostImage
-    heroImage={post.data.heroImage}
-    index={index}
-  />
+  class="group relative h-64 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 sm:h-80 md:h-[400px] lg:h-[600px]"
+  class:list={[index === 0 && 'lg:col-span-2 lg:row-span-2']}
+  aria-labelledby={`featured-post-title-${post.slug}`}
+>
+  <FeaturedPostImage heroImage={post.data.heroImage} index={index} />
   <FeaturedPostOverlay />
-  <FeaturedPostContent
-    post={post}
-    index={index}
-    lang={lang}
-  />
+  <FeaturedPostContent post={post} index={index} lang={lang} />
   <a
     href={postUrl}
     class="absolute inset-0 z-20"
     aria-labelledby={`featured-post-title-${post.slug}`}
-  ></a>
+  >
+  </a>
 </article>

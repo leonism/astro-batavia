@@ -42,7 +42,7 @@ export class BlogService {
     const posts = await this.getPostsByLang(lang);
     return posts.filter((post) => {
       if (!post.data.tags) return false;
-      return post.data.tags.some(t => slugifyTag(t) === tag);
+      return post.data.tags.some((t) => slugifyTag(t) === tag);
     });
   }
 
@@ -60,7 +60,9 @@ export class BlogService {
    * Gets navigation links (previous/next) for a specific post.
    */
   static getPostNavigation(posts: BlogPost[], currentSlug: string, lang: string) {
-    const sortedAsc = [...posts].sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+    const sortedAsc = [...posts].sort(
+      (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
+    );
     const currentIndex = sortedAsc.findIndex((post) => post.slug === currentSlug);
 
     if (currentIndex === -1) return { prev: undefined, next: undefined };
@@ -69,7 +71,9 @@ export class BlogService {
     const next = currentIndex < sortedAsc.length - 1 ? sortedAsc[currentIndex + 1] : undefined;
 
     return {
-      previousPostData: prev ? { url: getPostUrl(prev.slug, lang), title: prev.data.title } : undefined,
+      previousPostData: prev
+        ? { url: getPostUrl(prev.slug, lang), title: prev.data.title }
+        : undefined,
       nextPostData: next ? { url: getPostUrl(next.slug, lang), title: next.data.title } : undefined,
     };
   }
@@ -77,7 +81,12 @@ export class BlogService {
   /**
    * Gets related posts based on tags.
    */
-  static getRelatedPosts(posts: BlogPost[], currentSlug: string, currentTags: string[] = [], limit: number = 3): BlogPost[] {
+  static getRelatedPosts(
+    posts: BlogPost[],
+    currentSlug: string,
+    currentTags: string[] = [],
+    limit: number = 3,
+  ): BlogPost[] {
     return posts
       .filter((post) => post.slug !== currentSlug)
       .filter((post) => post.data.tags && post.data.tags.some((tag) => currentTags.includes(tag)))
@@ -103,7 +112,7 @@ export class BlogService {
       paths.push({
         params: {
           lang: lang,
-          slug: finalSlug // Use the carefully constructed slug
+          slug: finalSlug, // Use the carefully constructed slug
         },
         props: post,
       });
@@ -122,7 +131,7 @@ export class BlogService {
 
     for (const lang of languages) {
       const tags = await this.getUniqueTags(lang);
-      
+
       // Use a Set to ensure unique slugs per language
       const uniqueSlugs = new Set();
 
@@ -132,7 +141,7 @@ export class BlogService {
           uniqueSlugs.add(slug);
           paths.push({
             params: { lang, tag: slug },
-            props: { tag }
+            props: { tag },
           });
         }
       }

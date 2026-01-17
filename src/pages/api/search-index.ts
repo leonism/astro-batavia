@@ -1,6 +1,6 @@
-import type { APIRoute } from "astro";
-import { getPostUrl } from "@/i18n/utils";
-import { BlogService } from "@/services/BlogService";
+import type { APIRoute } from 'astro';
+import { getPostUrl } from '@/i18n/utils';
+import { BlogService } from '@/services/BlogService';
 
 export const GET: APIRoute = async () => {
   try {
@@ -29,19 +29,16 @@ export const GET: APIRoute = async () => {
     return new Response(JSON.stringify(documents), {
       status: 200,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   } catch (error) {
-    console.error("Error generating search index:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to generate search index" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    console.error('Error generating search index:', error);
+    return new Response(JSON.stringify({ error: 'Failed to generate search index' }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 };
