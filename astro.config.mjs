@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { fileURLToPath } from 'node:url';
 import sentry from '@sentry/astro';
 import spotlightjs from '@spotlightjs/astro';
 import mdx from '@astrojs/mdx';
@@ -90,11 +91,15 @@ export default defineConfig({
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
     },
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
     build: {
       minify: true,
       rollupOptions: {
         onwarn(warning, warn) {
-          // Suppress "unused external import" warnings from Astro internals
           if (
             warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
             warning.message.includes('@astrojs/internal-helpers/remote')

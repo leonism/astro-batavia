@@ -11,39 +11,58 @@ const t = useTranslations(lang);
 
 // Fetch all posts to get unique tags for filtering
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))].sort();
+const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags || []))].sort();
 
 // Initial posts for display (empty, will be populated by client-side JS)
 const initialPosts: any[] = [];
 ---
 
-<Layout
-  title={t('search.pageTitle')}
-  description={t('search.pageDescription')}
-  lang={lang}
->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <header class="text-center mb-12">
-      <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+<Layout title={t('search.pageTitle')} description={t('search.pageDescription')} lang={lang}>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <header class="mb-12 text-center">
+      <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 sm:text-5xl">
         {t('search.pageTitle')}
       </h1>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-4">
+      <p class="mx-auto mb-4 max-w-3xl text-xl text-gray-600 dark:text-gray-300">
         {t('search.pageDescription')}
       </p>
 
       <!-- Keyboard Navigation Instructions -->
-      <details class="max-w-2xl mx-auto mb-6">
-        <summary class="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded px-2 py-1">
+      <details class="mx-auto mb-6 max-w-2xl">
+        <summary
+          class="cursor-pointer rounded px-2 py-1 text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-gray-400 dark:hover:text-gray-300"
+        >
           Keyboard Navigation Help
         </summary>
-        <div class="mt-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm text-gray-600 dark:text-gray-400 text-left">
+        <div
+          class="mt-3 rounded-lg bg-gray-50 p-4 text-left text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+        >
           <ul class="space-y-2">
-            <li><kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">Ctrl/⌘ + K</kbd> Focus search input</li>
-            <li><kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">↑ ↓</kbd> Navigate through suggestions and results</li>
-            <li><kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">Enter</kbd> Select suggestion or open result</li>
-            <li><kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">Escape</kbd> Clear selections or close suggestions</li>
-            <li><kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">Tab</kbd> Navigate between interface elements</li>
-            <li><kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">Ctrl/⌘ + Home/End</kbd> Jump to first/last result</li>
+            <li>
+              <kbd class="rounded bg-gray-200 px-2 py-1 text-xs dark:bg-gray-700">Ctrl/⌘ + K</kbd> Focus
+              search input
+            </li>
+            <li>
+              <kbd class="rounded bg-gray-200 px-2 py-1 text-xs dark:bg-gray-700">↑ ↓</kbd> Navigate through
+              suggestions and results
+            </li>
+            <li>
+              <kbd class="rounded bg-gray-200 px-2 py-1 text-xs dark:bg-gray-700">Enter</kbd> Select suggestion
+              or open result
+            </li>
+            <li>
+              <kbd class="rounded bg-gray-200 px-2 py-1 text-xs dark:bg-gray-700">Escape</kbd> Clear selections
+              or close suggestions
+            </li>
+            <li>
+              <kbd class="rounded bg-gray-200 px-2 py-1 text-xs dark:bg-gray-700">Tab</kbd> Navigate between
+              interface elements
+            </li>
+            <li>
+              <kbd class="rounded bg-gray-200 px-2 py-1 text-xs dark:bg-gray-700">
+                Ctrl/⌘ + Home/End
+              </kbd> Jump to first/last result
+            </li>
           </ul>
         </div>
       </details>

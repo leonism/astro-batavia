@@ -1,15 +1,15 @@
-import { getCollection } from "astro:content";
-import type { APIRoute } from "astro";
+import { getCollection } from 'astro:content';
+import type { APIRoute } from 'astro';
 
 export async function getSearchSuggestions(
   query: string,
-  lang: string = "en",
-  limit: number = 5
+  lang: string = 'en',
+  limit: number = 5,
 ): Promise<string[]> {
   try {
     if (query.length < 2) return [];
 
-    const allPosts = await getCollection("blog", ({ id, data }) => {
+    const allPosts = await getCollection('blog', ({ id, data }) => {
       return id.startsWith(`${lang}/`) && !data.draft;
     });
 
@@ -32,35 +32,32 @@ export async function getSearchSuggestions(
 
     return Array.from(suggestions).slice(0, limit);
   } catch (error) {
-    console.error("Get search suggestions error:", error);
+    console.error('Get search suggestions error:', error);
     return [];
   }
 }
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
-  const query = url.searchParams.get("q") || "";
-  const lang = url.searchParams.get("lang") || "en";
-  const limit = parseInt(url.searchParams.get("limit") || "5");
+  const query = url.searchParams.get('q') || '';
+  const lang = url.searchParams.get('lang') || 'en';
+  const limit = parseInt(url.searchParams.get('limit') || '5');
 
   try {
     const suggestions = await getSearchSuggestions(query, lang, limit);
     return new Response(JSON.stringify(suggestions), {
       status: 200,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   } catch (error) {
-    console.error("API error:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to get search suggestions" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    console.error('API error:', error);
+    return new Response(JSON.stringify({ error: 'Failed to get search suggestions' }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 };

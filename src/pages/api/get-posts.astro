@@ -1,12 +1,13 @@
 ---
-import BlogCard from '@/components/blog/BlogCard.astro';
 import { BlogService } from '@/services/BlogService';
 import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 import type { LanguageKey } from '@/i18n/types';
+import { getPostUrl } from '@/i18n/utils';
+import { getExcerpt } from '@/utils/content-helpers';
 
 const url = Astro.url;
 const page = parseInt(url.searchParams.get('page') || '1', 10);
-const queryLang = (url.searchParams.get('lang') || 'en') as string;
+const queryLang = url.searchParams.get('lang') || 'en';
 const lang = (['en', 'es', 'ja'].includes(queryLang) ? queryLang : 'en') as LanguageKey;
 const tag = url.searchParams.get('tag');
 
@@ -20,15 +21,23 @@ if (tag) {
 const postsPerPage = PAGINATION_POSTS_PER_PAGE;
 const startIndex = (page - 1) * postsPerPage;
 const postsToDisplay = sortedPosts.slice(startIndex, startIndex + postsPerPage);
----
 
-{
-  postsToDisplay.map((post) => (
-    <div class="post-item animate-fade-in">
-      <BlogCard
-        post={post}
-        lang={lang}
-      />
-    </div>
-  ))
-}
+const postsData = postsToDisplay.map((post) => ({
+  id: post.id,
+  slug: post.slug,
+  title: post.data.title,
+  author: post.data.author,
+  pubDate: post.data.pubDate,
+  description: post.data.description,
+  heroImage: post.data.heroImage,
+  heroImageAlt: post.data.heroImageAlt,
+  tags: post.data.tags,
+  readingTime: post.data.readingTime,
+  url: getPostUrl(post.slug, lang),
+  excerpt: getExcerpt(post.body, post.data.description, 150),
+}));
+
+return new Response(JSON.stringify(postsData), {
+  headers: { 'Content-Type': 'application/json' },
+});
+---

@@ -18,7 +18,7 @@ export function useTranslations(lang: keyof typeof ui) {
       return ui[DEFAULT_LOCALE][key] || key;
     }
     return ui[lang][key] || ui[DEFAULT_LOCALE][key] || key;
-  }
+  };
 }
 
 export function getLocalizedPath(path: string, lang: string) {

@@ -11,7 +11,15 @@ const gzip = promisify(zlib.gzip);
 const brotliCompress = promisify(zlib.brotliCompress);
 
 const SUPPORTED_EXTENSIONS = new Set([
-  '.html', '.css', '.js', '.json', '.xml', '.svg', '.txt', '.wasm', '.webmanifest'
+  '.html',
+  '.css',
+  '.js',
+  '.json',
+  '.xml',
+  '.svg',
+  '.txt',
+  '.wasm',
+  '.webmanifest',
 ]);
 
 const DEFAULT_DIST_DIR = 'dist';
@@ -31,7 +39,7 @@ async function compressData(data: Buffer) {
 
 // Finds all files matching the supported extensions using glob
 async function getCompressibleFiles(dir: string) {
-  const extensions = Array.from(SUPPORTED_EXTENSIONS).map(ext => ext.substring(1));
+  const extensions = Array.from(SUPPORTED_EXTENSIONS).map((ext) => ext.substring(1));
   const pattern = `**/*.{${extensions.join(',')}}`;
   // Use glob for faster file discovery
   return glob(pattern, { cwd: dir, absolute: true, nodir: true });
@@ -87,14 +95,15 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
         }
 
         compressedVariants += 2;
-
       } catch (err: unknown) {
         console.error(`❌ Failed to compress: ${filePath}`, err);
         allErrors.push({ filePath, error: err instanceof Error ? err.message : String(err) });
       } finally {
         filesProcessed++;
         const progress = ((filesProcessed / files.length) * 100).toFixed(0);
-        process.stdout.write(`[${'#'.repeat(Math.floor(parseInt(progress) / 5)).padEnd(20, ' ')}] ${progress}% (${filesProcessed}/${files.length})\r`);
+        process.stdout.write(
+          `[${'#'.repeat(Math.floor(parseInt(progress) / 5)).padEnd(20, ' ')}] ${progress}% (${filesProcessed}/${files.length})\r`,
+        );
       }
     }
   };
@@ -116,7 +125,7 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
 
   if (allErrors.length > 0) {
     console.log('\n🚨 Error Details:');
-    allErrors.forEach(e => {
+    allErrors.forEach((e) => {
       console.log(`  - File: ${e.filePath}\n    Error: ${e.error}`);
     });
   }
@@ -134,7 +143,7 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
 
 if (import.meta.url.startsWith('file://') && process.argv[1] === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
-  const targetDir = args.find(arg => !arg.startsWith('--')) || DEFAULT_DIST_DIR;
+  const targetDir = args.find((arg) => !arg.startsWith('--')) || DEFAULT_DIST_DIR;
   const verbose = args.includes('--verbose');
   runCompressionEngine(targetDir, { verbose }).catch((err) => {
     console.error('An unhandled error occurred in the compression engine:', err);

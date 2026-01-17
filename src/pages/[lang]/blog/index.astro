@@ -60,7 +60,8 @@ const pageProps = {
       : lang === 'ja'
         ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
         : 'Explore our collection of articles covering web development, technology trends, and insights.'}
-  lang={lang}>
+  lang={lang}
+>
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-12 text-center">
@@ -137,13 +138,11 @@ const pageProps = {
       postsToDisplay.length > 0 ? (
         <div
           id="posts-container"
-          class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+        >
           {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
-            <div class="post-item animate-fade-in">
-              <BlogCard
-                post={post}
-                lang={lang}
-              />
+            <div class="post-item animate-fade-in" data-slug={post.slug}>
+              <BlogCard post={post} lang={lang} />
             </div>
           ))}
         </div>
@@ -153,7 +152,8 @@ const pageProps = {
             class="mx-auto mb-4 h-16 w-16 text-gray-400"
             fill="none"
             stroke="currentColor"
-            viewBox="0 0 24 24">
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -189,17 +189,14 @@ const pageProps = {
             id="load-more"
             class="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-6 py-3 text-base font-medium text-white transition-all duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             data-total-pages={totalPages}
-            data-lang={lang}>
+            data-lang={lang}
+          >
             {lang === 'es'
               ? 'Cargar Más Artículos'
               : lang === 'ja'
                 ? 'もっと記事を読む'
                 : 'Load More Articles'}
-            <svg
-              class="ml-2 h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
+            <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -214,7 +211,31 @@ const pageProps = {
   </div>
 </Layout>
 
-<script
-  src="/src/services/BlogIndexClient.ts"
-  type="module">
+<script>
+  import { initializeBlogIndex } from '../../../services/BlogIndexClient';
+
+  function setupLoadMore() {
+    const button = document.getElementById('load-more');
+    if (!button) return;
+
+    const totalPagesValue = button.getAttribute('data-total-pages') || '1';
+    const langValue = button.getAttribute('data-lang') || 'en';
+
+    const totalPages = parseInt(totalPagesValue, 10);
+    const lang = langValue;
+
+    initializeBlogIndex(totalPages, lang);
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    setupLoadMore();
+  });
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setupLoadMore();
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      setupLoadMore();
+    });
+  }
 </script>

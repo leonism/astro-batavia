@@ -1,47 +1,51 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { getLocalizedPath } from "@/i18n/utils";
-import { SITE_TITLE, LOCALES } from "@/consts";
+import Layout from '@/layouts/Layout.astro';
+import { getLocalizedPath } from '@/i18n/utils';
+import { SITE_TITLE, LOCALES } from '@/consts';
 const lang = LOCALES.ja;
 ---
 
 <Layout
   title="利用規約"
   description={`${SITE_TITLE}のコンテンツとサービスを利用するためのルールとガイドラインを理解するために、利用規約をお読みください。`}
-  lang={lang}>
+  lang={lang}
+>
   <!-- TODO: Translate content to Japanese -->
   <!-- Hero Section -->
   <section
-    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    class="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+  >
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h1
-          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+        <h1 class="mb-6 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
           利用規約
         </h1>
-        <p
-          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-          当社のサービスをご利用になる前に、これらの規約をよくお読みください。{SITE_TITLE}にアクセスすることにより、これらの規約に拘束されることに同意するものとします。
+        <p class="mx-auto max-w-3xl text-xl leading-relaxed text-slate-600 dark:text-slate-300">
+          当社のサービスをご利用になる前に、これらの規約をよくお読みください。{
+            SITE_TITLE
+          }にアクセスすることにより、これらの規約に拘束されることに同意するものとします。
         </p>
-        <p class="text-sm text-slate-500 dark:text-slate-500 mt-4">
-          最終更新日：2024年1月
-        </p>
+        <p class="mt-4 text-sm text-slate-500 dark:text-slate-500">最終更新日：2024年1月</p>
       </div>
     </div>
   </section>
 
   <!-- Terms Content -->
-  <section class="py-16 bg-white dark:bg-slate-900">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="prose prose-lg dark:prose-invert max-w-none">
+  <section class="bg-white py-16 dark:bg-slate-900">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-lg max-w-none dark:prose-invert">
         <h2>規約の受諾</h2>
         <p>
-          {SITE_TITLE}（「当社」）にアクセスし、利用することにより、お客様はこの契約の条項に同意し、拘束されることに同意するものとします。上記に従うことに同意しない場合は、このサービスを使用しないでください。
+          {
+            SITE_TITLE
+          }（「当社」）にアクセスし、利用することにより、お客様はこの契約の条項に同意し、拘束されることに同意するものとします。上記に従うことに同意しない場合は、このサービスを使用しないでください。
         </p>
 
         <h2>サービスの説明</h2>
         <p>
-          {SITE_TITLE}は、ソフトウェア開発、人工知能、新興技術に関連するテクノロジーに焦点を当てたコンテンツ、記事、チュートリアル、リソースを提供します。当社のサービスには以下が含まれます。
+          {
+            SITE_TITLE
+          }は、ソフトウェア開発、人工知能、新興技術に関連するテクノロジーに焦点を当てたコンテンツ、記事、チュートリアル、リソースを提供します。当社のサービスには以下が含まれます。
         </p>
         <ul>
           <li>ブログ記事と技術コンテンツ</li>
@@ -84,7 +88,9 @@ const lang = LOCALES.ja;
 
         <h3>当社のコンテンツ</h3>
         <p>
-          記事、グラフィック、ロゴ、ソフトウェアを含む{SITE_TITLE}のすべてのコンテンツは、著作権およびその他の知的財産法によって保護されています。お客様は以下を行うことができます。
+          記事、グラフィック、ロゴ、ソフトウェアを含む{
+            SITE_TITLE
+          }のすべてのコンテンツは、著作権およびその他の知的財産法によって保護されています。お客様は以下を行うことができます。
         </p>
         <ul>
           <li>個人的および教育目的で当社のコンテンツを読み、共有する</li>
@@ -112,7 +118,9 @@ const lang = LOCALES.ja;
 
         <h2>責任の制限</h2>
         <p>
-          法律で許容される最大限の範囲で、{SITE_TITLE}は、お客様のサービスの使用から生じる間接的、偶発的、特別、または結果的な損害について責任を負いません。これには以下が含まれますが、これに限定されません。
+          法律で許容される最大限の範囲で、{
+            SITE_TITLE
+          }は、お客様のサービスの使用から生じる間接的、偶発的、特別、または結果的な損害について責任を負いません。これには以下が含まれますが、これに限定されません。
         </p>
         <ul>
           <li>利益または収益の損失</li>
@@ -158,9 +166,7 @@ const lang = LOCALES.ja;
         </p>
 
         <h2>連絡先情報</h2>
-        <p>
-          これらの利用規約についてご質問がある場合は、以下までお問い合わせください。
-        </p>
+        <p>これらの利用規約についてご質問がある場合は、以下までお問い合わせください。</p>
         <ul>
           <li><strong>メール:</strong> legal@AstroBatavia.com</li>
           <li>
@@ -168,7 +174,7 @@ const lang = LOCALES.ja;
           </li>
           <li>
             <strong>お問い合わせフォーム:</strong>
-            <a href={getLocalizedPath("/contact", "ja")}>お問い合わせページ</a>
+            <a href={getLocalizedPath('/contact', 'ja')}>お問い合わせページ</a>
           </li>
         </ul>
 
@@ -176,7 +182,9 @@ const lang = LOCALES.ja;
 
         <h3>ニュースレターの購読</h3>
         <p>
-          ニュースレターを購読することにより、お客様はテクノロジーのトレンドと{SITE_TITLE}のコンテンツに関する定期的な更新を受け取ることに同意するものとします。各メールに記載されているリンクを使用して、いつでも購読を解除できます。
+          ニュースレターを購読することにより、お客様はテクノロジーのトレンドと{
+            SITE_TITLE
+          }のコンテンツに関する定期的な更新を受け取ることに同意するものとします。各メールに記載されているリンクを使用して、いつでも購読を解除できます。
         </p>
 
         <h3>ゲストコンテンツの提出</h3>
@@ -190,29 +198,27 @@ const lang = LOCALES.ja;
         </ul>
 
         <div
-          class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-6 my-8">
-          <h3
-            class="text-lg font-semibold text-amber-900 dark:text-amber-100 mb-3">
+          class="my-8 rounded-xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-800 dark:bg-amber-900/20"
+        >
+          <h3 class="mb-3 text-lg font-semibold text-amber-900 dark:text-amber-100">
             重要なお知らせ
           </h3>
-          <p class="text-amber-800 dark:text-amber-200 mb-4">
+          <p class="mb-4 text-amber-800 dark:text-amber-200">
             これらの規約は法的に拘束力のある契約です。当社のサービスをご利用になる前に、よくお読みになり、ご質問がある場合はお問い合わせください。
           </p>
           <a
-            href={getLocalizedPath("/contact", "ja")}
-            class="inline-flex items-center px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors">
+            href={getLocalizedPath('/contact', 'ja')}
+            class="inline-flex items-center rounded-lg bg-amber-600 px-4 py-2 font-medium text-white transition-colors hover:bg-amber-700"
+          >
             法務チームに連絡する
-            <svg
-              class="ml-2 w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
+            <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
-              ></path>
+              >
+              </path>
             </svg>
           </a>
         </div>
@@ -223,19 +229,19 @@ const lang = LOCALES.ja;
 
 <style>
   .prose h2 {
-    @apply text-2xl font-bold text-slate-900 dark:text-white mt-12 mb-6 first:mt-0;
+    @apply mb-6 mt-12 text-2xl font-bold text-slate-900 first:mt-0 dark:text-white;
   }
 
   .prose h3 {
-    @apply text-xl font-semibold text-slate-800 dark:text-slate-200 mt-8 mb-4;
+    @apply mb-4 mt-8 text-xl font-semibold text-slate-800 dark:text-slate-200;
   }
 
   .prose p {
-    @apply text-slate-600 dark:text-slate-300 leading-relaxed mb-4;
+    @apply mb-4 leading-relaxed text-slate-600 dark:text-slate-300;
   }
 
   .prose ul {
-    @apply space-y-2 mb-6;
+    @apply mb-6 space-y-2;
   }
 
   .prose li {
@@ -243,6 +249,6 @@ const lang = LOCALES.ja;
   }
 
   .prose a {
-    @apply text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors;
+    @apply text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
   }
 </style>

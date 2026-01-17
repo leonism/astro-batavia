@@ -18,7 +18,8 @@ const latestPosts = await BlogService.getLatestPosts('en', 3);
 <Layout
   title={`${SITE_TITLE} - Modern Multi-Language Blog`}
   description={t('meta.description') as string}
-  lang={lang as string}>
+  lang={lang as string}
+>
   <HeroSection />
   <FeaturesSection />
   <FeaturedStoriesSection latestPosts={latestPosts} />

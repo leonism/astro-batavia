@@ -1,4 +1,4 @@
-import type { ui, languages } from "./ui";
+import type { ui, languages } from './ui';
 
 export type LanguageKey = keyof typeof languages;
-export type TranslationKey = keyof typeof ui["en"];
+export type TranslationKey = keyof (typeof ui)['en'];
