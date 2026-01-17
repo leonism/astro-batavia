@@ -2,10 +2,12 @@
 import BlogCard from '@/components/blog/BlogCard.astro';
 import { BlogService } from '@/services/BlogService';
 import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
+import type { LanguageKey } from '@/i18n/types';
 
 const url = Astro.url;
 const page = parseInt(url.searchParams.get('page') || '1', 10);
-const lang = url.searchParams.get('lang') || 'en';
+const queryLang = (url.searchParams.get('lang') || 'en') as string;
+const lang = (['en', 'es', 'ja'].includes(queryLang) ? queryLang : 'en') as LanguageKey;
 const tag = url.searchParams.get('tag');
 
 let sortedPosts;
@@ -20,8 +22,13 @@ const startIndex = (page - 1) * postsPerPage;
 const postsToDisplay = sortedPosts.slice(startIndex, startIndex + postsPerPage);
 ---
 
-{postsToDisplay.map((post) => (
-  <div class="post-item animate-fade-in">
-    <BlogCard post={post} lang={lang} />
-  </div>
-))}
+{
+  postsToDisplay.map((post) => (
+    <div class="post-item animate-fade-in">
+      <BlogCard
+        post={post}
+        lang={lang}
+      />
+    </div>
+  ))
+}
