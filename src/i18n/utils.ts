@@ -65,19 +65,7 @@ export function getLanguageFromPath(path: string): string {
   return DEFAULT_LOCALE;
 }
 
-export function formatDate(date: Date, lang: string = DEFAULT_LOCALE): string {
-  const locales = {
-    en: 'en-US',
-    es: 'es-ES',
-    ja: 'ja-JP',
-  };
-
-  return new Intl.DateTimeFormat(locales[lang as keyof typeof locales] || locales.en, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date);
-}
+export { formatDate } from '@/utils/date-formatters';
 
 export function getAvailableLanguages() {
   return Object.keys(ui);

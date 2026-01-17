@@ -1,6 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatDate, useTranslations, getPostUrl, getLocalizedPath, slugifyTag } from "@/i18n/utils";
+import { useTranslations, getPostUrl, getLocalizedPath, slugifyTag } from "@/i18n/utils";
+import { formatDate } from "@/utils/date-formatters";
+import { getExcerpt } from "@/utils/content-helpers";
 import type { LanguageKey } from "@/i18n/types";
 import Picture from "@/components/ui/Picture.astro";
 
@@ -15,13 +17,7 @@ const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
 const t = useTranslations(lang);
 const postUrl = getPostUrl(post.slug, lang);
 
-// Logic separated from view
-const getExcerpt = (body: string, description?: string) => {
-  if (!showExcerpt) return "";
-  return description || body.slice(0, isFeatured ? 300 : 150) + "...";
-};
-
-const excerpt = getExcerpt(post.body, post.data.description);
+const excerpt = showExcerpt ? getExcerpt(post.body, post.data.description, isFeatured ? 300 : 150) : "";
 
 // CSS Classes extraction
 const classes = {
