@@ -10,7 +10,7 @@ import BlogPostTags from '@/components/blog/BlogPostTags.astro';
 import BlogPostHero from '@/components/blog/BlogPostHero.astro';
 import { SITE_TITLE, SITE_URL, SOCIAL_LINKS } from '@/consts';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
-import { getSortedPostsByLang, getPostNavigation, getRelatedPosts } from '@/features/blog/blogData';
+import { BlogService } from '@/services/BlogService';
 
 type BlogFrontmatter = CollectionEntry<'blog'>['data'];
 
@@ -45,9 +45,9 @@ const {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const allLangPosts = await getSortedPostsByLang(lang);
-const { previousPostData, nextPostData } = getPostNavigation(allLangPosts, slug, lang);
-const relatedPosts = getRelatedPosts(allLangPosts, slug, tags);
+const allLangPosts = await BlogService.getPostsByLang(lang);
+const { previousPostData, nextPostData } = BlogService.getPostNavigation(allLangPosts, slug, lang);
+const relatedPosts = BlogService.getRelatedPosts(allLangPosts, slug, tags);
 ---
 
 <Layout

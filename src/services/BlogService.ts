@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { getPostUrl } from '@/i18n/utils';
+import { getPostUrl, slugifyTag } from '@/i18n/utils';
+import { LOCALES } from '@/consts';
 
 export type BlogPost = CollectionEntry<'blog'>;
 
@@ -39,7 +40,10 @@ export class BlogService {
    */
   static async getPostsByTag(lang: string, tag: string): Promise<BlogPost[]> {
     const posts = await this.getPostsByLang(lang);
-    return posts.filter((post) => post.data.tags?.includes(tag));
+    return posts.filter((post) => {
+      if (!post.data.tags) return false;
+      return post.data.tags.some(t => slugifyTag(t) === tag);
+    });
   }
 
   /**
@@ -105,6 +109,34 @@ export class BlogService {
       });
     });
 
+    return paths;
+  }
+
+  /**
+   * Generates static paths for all tags.
+   * Useful for [lang]/blog/tags/[tag].astro getStaticPaths.
+   */
+  static async getStaticTagPaths() {
+    const languages = Object.keys(LOCALES);
+    const paths = [];
+
+    for (const lang of languages) {
+      const tags = await this.getUniqueTags(lang);
+      
+      // Use a Set to ensure unique slugs per language
+      const uniqueSlugs = new Set();
+
+      for (const tag of tags) {
+        const slug = slugifyTag(tag);
+        if (slug && !uniqueSlugs.has(slug)) {
+          uniqueSlugs.add(slug);
+          paths.push({
+            params: { lang, tag: slug },
+            props: { tag }
+          });
+        }
+      }
+    }
     return paths;
   }
 }
