@@ -1,7 +1,7 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { getLocalizedPath } from "@/i18n/utils";
-import { SITE_TITLE, LOCALES } from "@/consts";
+import Layout from '@/layouts/Layout.astro';
+import { getLocalizedPath } from '@/i18n/utils';
+import { SITE_TITLE, LOCALES } from '@/consts';
 
 const lang = LOCALES.ja;
 // Remove unused translation initialization since it's not being used in this file
@@ -10,35 +10,34 @@ const lang = LOCALES.ja;
 <Layout
   title="プライバシーポリシー"
   description={`${SITE_TITLE}が個人情報をどのように収集、使用、保護するかを学びましょう。お客様のプライバシーとデータセキュリティへのコミットメント。`}
-  lang={lang}>
+  lang={lang}
+>
   <!-- TODO: Translate content to Japanese -->
   <!-- Hero Section -->
   <section
-    class="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    class="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+  >
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h1
-          class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+        <h1 class="mb-6 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
           プライバシー<span
-            class="text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text"
-            >ポリシー</span
+            class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
           >
+            ポリシー
+          </span>
         </h1>
-        <p
-          class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+        <p class="mx-auto max-w-3xl text-xl leading-relaxed text-slate-600 dark:text-slate-300">
           お客様のプライバシーは当社にとって重要です。このポリシーは、当社が個人情報をどのように収集、使用、保護するかを説明します。
         </p>
-        <p class="text-sm text-slate-500 dark:text-slate-500 mt-4">
-          最終更新日：2024年1月
-        </p>
+        <p class="mt-4 text-sm text-slate-500 dark:text-slate-500">最終更新日：2024年1月</p>
       </div>
     </div>
   </section>
 
   <!-- Privacy Policy Content -->
-  <section class="py-16 bg-white dark:bg-slate-900">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="prose prose-lg dark:prose-invert max-w-none">
+  <section class="bg-white py-16 dark:bg-slate-900">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-lg max-w-none dark:prose-invert">
         <h2>収集する情報</h2>
 
         <h3>お客様が提供する情報</h3>
@@ -194,7 +193,7 @@ const lang = LOCALES.ja;
           </li>
           <li>
             <strong>お問い合わせフォーム:</strong>
-            <a href={getLocalizedPath("/contact", "ja")}>お問い合わせページ</a>
+            <a href={getLocalizedPath('/contact', 'ja')}>お問い合わせページ</a>
           </li>
         </ul>
 
@@ -216,29 +215,27 @@ const lang = LOCALES.ja;
         </p>
 
         <div
-          class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 my-8">
-          <h3
-            class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+          class="my-8 rounded-xl border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20"
+        >
+          <h3 class="mb-3 text-lg font-semibold text-blue-900 dark:text-blue-100">
             プライバシーに関する質問はありますか？
           </h3>
-          <p class="text-blue-800 dark:text-blue-200 mb-4">
+          <p class="mb-4 text-blue-800 dark:text-blue-200">
             当社は、透明性を確保し、お客様のプライバシーを保護することに尽力しています。お客様のデータの取り扱いについてご質問やご不明な点がございましたら、お気軽にお問い合わせください。
           </p>
           <a
-            href={getLocalizedPath("/contact", "ja")}
-            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+            href={getLocalizedPath('/contact', 'ja')}
+            class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+          >
             プライバシーチームに連絡する
-            <svg
-              class="ml-2 w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
+            <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
-              ></path>
+              >
+              </path>
             </svg>
           </a>
         </div>
@@ -249,19 +246,19 @@ const lang = LOCALES.ja;
 
 <style>
   .prose h2 {
-    @apply text-2xl font-bold text-slate-900 dark:text-white mt-12 mb-6 first:mt-0;
+    @apply mb-6 mt-12 text-2xl font-bold text-slate-900 first:mt-0 dark:text-white;
   }
 
   .prose h3 {
-    @apply text-xl font-semibold text-slate-800 dark:text-slate-200 mt-8 mb-4;
+    @apply mb-4 mt-8 text-xl font-semibold text-slate-800 dark:text-slate-200;
   }
 
   .prose p {
-    @apply text-slate-600 dark:text-slate-300 leading-relaxed mb-4;
+    @apply mb-4 leading-relaxed text-slate-600 dark:text-slate-300;
   }
 
   .prose ul {
-    @apply space-y-2 mb-6;
+    @apply mb-6 space-y-2;
   }
 
   .prose li {
@@ -269,6 +266,6 @@ const lang = LOCALES.ja;
   }
 
   .prose a {
-    @apply text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors;
+    @apply text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
   }
 </style>

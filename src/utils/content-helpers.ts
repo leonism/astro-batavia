@@ -7,5 +7,5 @@
  */
 export function getExcerpt(body: string, description?: string, limit: number = 150): string {
   if (description) return description;
-  return body.slice(0, limit) + (body.length > limit ? "..." : "");
+  return body.slice(0, limit) + (body.length > limit ? '...' : '');
 }

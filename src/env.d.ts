@@ -18,5 +18,5 @@ declare module '*.astro' {
 }
 
 declare module '@/services/BlogIndexClient' {
-	export function initializeBlogIndex(totalPages: number, lang: string): void;
+  export function initializeBlogIndex(totalPages: number, lang: string): void;
 }

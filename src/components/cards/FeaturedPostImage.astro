@@ -1,5 +1,5 @@
 ---
-import Picture from "@/components/ui/Picture.astro";
+import Picture from '@/components/ui/Picture.astro';
 
 interface Props {
   heroImage?: string;
@@ -10,12 +10,12 @@ const { heroImage, index } = Astro.props;
 ---
 
 <Picture
-  src={heroImage || "/images/placeholder-hero.svg"}
+  src={heroImage || '/images/placeholder-hero.svg'}
   alt=""
   width={800}
   height={600}
   class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-  loading={index > 1 ? "lazy" : "eager"}
+  loading={index > 1 ? 'lazy' : 'eager'}
   decoding="async"
   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
 />

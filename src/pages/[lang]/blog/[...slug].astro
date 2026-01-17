@@ -1,4 +1,3 @@
-export const prerender = true;
 ---
 import { type CollectionEntry } from 'astro:content';
 import BlogPost from '@/layouts/BlogPost.astro';
@@ -6,7 +5,7 @@ import { isValidLanguage } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
 
 export async function getStaticPaths() {
-	return await BlogService.getStaticPaths();
+  return await BlogService.getStaticPaths();
 }
 
 type Props = CollectionEntry<'blog'>;

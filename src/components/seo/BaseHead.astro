@@ -64,8 +64,20 @@ const {
 } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
-const canonicalURL = canonical || getCanonicalURL(Astro.url.pathname, siteUrl);
-const resolvedImage = getOpenGraphImage(image, siteUrl);
+
+let canonicalURL = canonical || Astro.url.href;
+let resolvedImage = image || new URL('/og-default.png', siteUrl).href;
+
+try {
+  canonicalURL = canonical || getCanonicalURL(Astro.url.pathname, siteUrl);
+  resolvedImage = getOpenGraphImage(image, siteUrl);
+} catch (error) {
+  console.error('Error resolving SEO metadata', {
+    error,
+    pathname: Astro.url.pathname,
+    siteUrl,
+  });
+}
 ---
 
 <meta charset="UTF-8" />

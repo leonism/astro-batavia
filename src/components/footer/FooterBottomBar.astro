@@ -1,7 +1,7 @@
 ---
 import { useTranslations } from '@/i18n/utils';
 import type { LanguageKey } from '@/i18n/types';
-import { SITE_TITLE } from '@/consts';
+import { SITE_TITLE, SITE_UTILS } from '@/consts';
 
 interface Props {
   lang: LanguageKey;
@@ -18,8 +18,45 @@ const t = useTranslations(lang);
       <div class="flex items-center gap-3">
         <p class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-left">
           &copy; {currentYear}
-          {SITE_TITLE}. {t('footer.rights_reserved') || 'All Rights Reserved.'}
+          {SITE_TITLE}. {t('footer.rights_reserved')}
         </p>
+        <a
+          href={SITE_UTILS.sitemap}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition-colors hover:bg-gray-200 hover:text-primary-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-primary-400"
+          aria-label="Sitemap">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle
+              cx="12"
+              cy="5"
+              r="3">
+            </circle>
+            <path d="M12 8v4"></path>
+            <path d="M12 12h8"></path>
+            <path d="M12 12H4"></path>
+            <path d="M20 12v4"></path>
+            <path d="M4 12v4"></path>
+            <circle
+              cx="20"
+              cy="19"
+              r="3">
+            </circle>
+            <circle
+              cx="4"
+              cy="19"
+              r="3">
+            </circle>
+          </svg>
+        </a>
       </div>
     </div>
 

@@ -15,14 +15,21 @@ export const LOCALES = {
 
 export type LocaleKey = keyof typeof LOCALES;
 
-// Social & Author Defaults
+// Author Defaults
 export const SITE_AUTHOR = {
   name: `${SITE_TITLE} Team`,
-  image: '/images/default-author.jpg', // Local fallback
+  image: '/images/og-default.png', // Local fallback
   url: `${SITE_URL}/about`,
   email: `${SITE_EMAIL}`,
 };
 
+// Site Utilities
+export const SITE_UTILS = {
+  rss: `${SITE_URL}/rss.xml`,
+  sitemap: `${SITE_URL}/sitemap-index.xml`,
+};
+
+// Social Links
 export const SOCIAL_LINKS = {
   github: 'https://www.github.com/leonism/astro-batavia',
   X: 'https://www.x.com/AstroBatavia',
@@ -32,8 +39,6 @@ export const SOCIAL_LINKS = {
   tiktok: 'https://www.tiktok.com/@AstroBatavia',
   telegram: 'https://t.me/AstroBatavia',
   facebook: 'https://www.facebook.com/AstroBatavia',
-  rss: '${SITE_URL}/rss.xml',
-  sitemap: '${SITE_URL}/sitemap-0.xml',
 };
 
 // System Logic

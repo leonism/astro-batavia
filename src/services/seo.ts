@@ -15,7 +15,5 @@ export function getCanonicalURL(pathname: string, siteUrl: string): string {
  * @returns The resolved absolute image URL.
  */
 export function getOpenGraphImage(image: string | undefined, siteUrl: string): string {
-  return image
-    ? new URL(image, siteUrl).href
-    : new URL('/og-default.png', siteUrl).href;
+  return image ? new URL(image, siteUrl).href : new URL('/og-default.png', siteUrl).href;
 }
