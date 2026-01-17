@@ -32,6 +32,8 @@ export const SOCIAL_LINKS = {
   tiktok: 'https://www.tiktok.com/@AstroBatavia',
   telegram: 'https://t.me/AstroBatavia',
   facebook: 'https://www.facebook.com/AstroBatavia',
+  rss: '${SITE_URL}/rss.xml',
+  sitemap: '${SITE_URL}/sitemap-0.xml',
 };
 
 // System Logic
