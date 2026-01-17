@@ -1,43 +1,12 @@
 export const prerender = true;
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 import BlogPost from '@/layouts/BlogPost.astro';
 import { isValidLanguage } from '@/i18n/utils';
-
-interface PathParams {
-  lang: string;
-  slug: string;
-}
-
-interface StaticPath {
-  params: PathParams;
-  props: CollectionEntry<'blog'>;
-}
+import { BlogService } from '@/services/BlogService';
 
 export async function getStaticPaths() {
-	const allPosts = await getCollection('blog', ({ data }: { id: string, data: any }) => !data.draft);
-
-	const paths: StaticPath[] = [];
-
-	// Generate paths for all languages
-	allPosts.forEach((post: CollectionEntry<'blog'>) => {
-    const parts = post.id.split('/');
-    const lang = parts[0];
-    const slugPart = parts[1] === 'blog' ? parts.slice(2).join('/') : parts.slice(1).join('/');
-
-    // Remove the file extension (.mdx or .md) from the slug part
-    const finalSlug = slugPart.replace(/\.(mdx?)$/, '');
-
-    paths.push({
-      params: {
-        lang: lang,
-        slug: finalSlug // Use the carefully constructed slug
-      },
-      props: post,
-    });
-  });
-
-  return paths;
+	return await BlogService.getStaticPaths();
 }
 
 type Props = CollectionEntry<'blog'>;

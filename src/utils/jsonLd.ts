@@ -1,4 +1,3 @@
-
 // src/utils/jsonLd.ts
 
 interface Schema {
