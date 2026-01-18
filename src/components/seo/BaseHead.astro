@@ -1,7 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import SEO from './SEO.astro';
-import Schema from './Schema.astro';
+import SEO from '@/components/seo/SEO.astro';
+import Schema from '@/components/seo/Schema.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import { GoogleTagmanager } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from '@/consts';
@@ -81,9 +81,18 @@ try {
 ---
 
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="generator" content={Astro.generator} />
-<link rel="sitemap" href="/sitemap-0.xml" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+<meta
+  name="generator"
+  content={Astro.generator}
+/>
+<link
+  rel="sitemap"
+  href="/sitemap-0.xml"
+/>
 <GoogleTagmanager id={GTM_ID} />
 
 <SEO
@@ -125,8 +134,15 @@ try {
   creator={creator}
 />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+/>
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+/>
 <link
   href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
   rel="stylesheet"

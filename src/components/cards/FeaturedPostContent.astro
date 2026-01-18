@@ -1,9 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import FeaturedPostMeta from './FeaturedPostMeta.astro';
-import FeaturedPostTitle from './FeaturedPostTitle.astro';
-import FeaturedPostDescription from './FeaturedPostDescription.astro';
-import FeaturedPostTags from './FeaturedPostTags.astro';
+import FeaturedPostMeta from '@/components/cards/FeaturedPostMeta.astro';
+import FeaturedPostTitle from '@/components/cards/FeaturedPostTitle.astro';
+import FeaturedPostDescription from '@/components/cards/FeaturedPostDescription.astro';
+import FeaturedPostTags from '@/components/cards/FeaturedPostTags.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;

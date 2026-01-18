@@ -2,11 +2,11 @@
 import { getLangFromUrl } from '@/i18n/utils';
 import type { LanguageKey } from '@/i18n/types';
 
-import NavigationHeaderLogo from './NavigationHeaderLogo.astro';
-import NavigationHeaderNavLinks from './NavigationHeaderNavLinks.astro';
-import NavigationHeaderUtilities from './NavigationHeaderUtilities.astro';
-import NavigationMobileMenu from './NavigationMobileMenu.astro';
-import NavigationSearchToggle from './NavigationSearchToggle.astro';
+import NavigationHeaderLogo from '@/components/navigation/NavigationHeaderLogo.astro';
+import NavigationHeaderNavLinks from '@/components/navigation/NavigationHeaderNavLinks.astro';
+import NavigationHeaderUtilities from '@/components/navigation/NavigationHeaderUtilities.astro';
+import NavigationMobileMenu from '@/components/navigation/NavigationMobileMenu.astro';
+import NavigationSearchToggle from '@/components/navigation/NavigationSearchToggle.astro';
 
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const currentPath = Astro.url.pathname;
