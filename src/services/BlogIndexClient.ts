@@ -6,6 +6,7 @@ interface LoadMoreContext {
   totalPages: number;
   lang: string;
   loadedSlugs: Set<string>;
+  tag?: string | null;
 }
 
 export function initializeBlogIndex(totalPages: number, lang: string) {
@@ -39,6 +40,7 @@ export function initializeBlogIndex(totalPages: number, lang: string) {
   console.log('[BlogIndex] Initial loaded slugs:', loadedSlugs.size);
 
   const ui = new BlogIndexUI(container, button);
+  const tag = button.getAttribute('data-tag');
 
   const context: LoadMoreContext = {
     ui,
@@ -46,21 +48,30 @@ export function initializeBlogIndex(totalPages: number, lang: string) {
     totalPages,
     lang,
     loadedSlugs,
+    tag,
   };
 
   attachLoadMore(context);
 }
 
-function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs }: LoadMoreContext) {
+function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs, tag }: LoadMoreContext) {
   let currentPage = 1;
 
   button.addEventListener('click', async () => {
+    if (currentPage >= totalPages) {
+      ui.hideButton();
+      return;
+    }
+
     console.log('[BlogIndex] Load More clicked. Current page:', currentPage);
     ui.setButtonLoading();
 
     try {
       const nextPage = currentPage + 1;
-      const url = `/api/get-posts?page=${nextPage}&lang=${lang}`;
+      let url = `/api/get-posts?page=${nextPage}&lang=${lang}`;
+      if (tag) {
+        url += `&tag=${encodeURIComponent(tag)}`;
+      }
       console.log('[BlogIndex] Fetching:', url);
       
       const response = await fetch(url);
