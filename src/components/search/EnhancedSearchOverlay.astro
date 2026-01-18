@@ -1,10 +1,10 @@
 ---
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import SearchOverlayInput from './SearchOverlayInput.astro';
-import SearchOverlaySuggestions from './SearchOverlaySuggestions.astro';
-import SearchOverlayResults from './SearchOverlayResults.astro';
-import SearchOverlayNoResults from './SearchOverlayNoResults.astro';
-import SearchOverlayFooter from './SearchOverlayFooter.astro';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import SearchOverlayInput from '@/components/search/SearchOverlayInput.astro';
+import SearchOverlaySuggestions from '@/components/search/SearchOverlaySuggestions.astro';
+import SearchOverlayResults from '@/components/search/SearchOverlayResults.astro';
+import SearchOverlayNoResults from '@/components/search/SearchOverlayNoResults.astro';
+import SearchOverlayFooter from '@/components/search/SearchOverlayFooter.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -45,7 +45,7 @@ const t = useTranslations(lang);
 </section>
 
 <script>
-  import { EnhancedSearchUI } from '../../features/search/EnhancedSearchUI';
+  import { EnhancedSearchUI } from '@/features/search/EnhancedSearchUI';
   new EnhancedSearchUI();
 </script>
 
