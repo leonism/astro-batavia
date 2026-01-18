@@ -25,6 +25,9 @@ export class BlogIndexUI {
 
   public setButtonLoading(): void {
     this.button.disabled = true;
+    this.button.setAttribute('aria-busy', 'true');
+    this.button.setAttribute('aria-disabled', 'true');
+    this.container.setAttribute('aria-busy', 'true');
     this.button.innerHTML = `
 			<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
 				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -37,6 +40,9 @@ export class BlogIndexUI {
   public resetButton(): void {
     if (this.button.style.display === 'none') return;
     this.button.disabled = false;
+    this.button.removeAttribute('aria-busy');
+    this.button.removeAttribute('aria-disabled');
+    this.container.removeAttribute('aria-busy');
     this.button.innerHTML = this.originalButtonText;
   }
 
@@ -45,7 +51,21 @@ export class BlogIndexUI {
   }
 
   public showErrorMessage(message: string): void {
-    alert(message);
+    const existingError = this.button.parentNode?.querySelector('.load-more-error');
+    if (existingError) {
+      existingError.remove();
+    }
+
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'load-more-error text-red-500 text-center mt-2 text-sm';
+    errorDiv.role = 'alert';
+    errorDiv.textContent = message;
+    
+    this.button.parentNode?.insertBefore(errorDiv, this.button.nextSibling);
+    
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
   }
 
   public appendPosts(posts: BlogPost[], lang: string): void {
@@ -62,6 +82,11 @@ export class BlogIndexUI {
       post.classList.add('animate-fade-in');
       this.container.appendChild(post);
     });
+
+    if (newPosts.length > 0) {
+      const firstNewPost = newPosts[0];
+      firstNewPost.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+    }
   }
 
   private slugifyTag(tag: string): string {
