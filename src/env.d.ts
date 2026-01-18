@@ -20,3 +20,8 @@ declare module '*.astro' {
 declare module '@/services/BlogIndexClient' {
   export function initializeBlogIndex(totalPages: number, lang: string): void;
 }
+
+declare module '@/services/SEO' {
+  export function getCanonicalURL(pathname: string, siteUrl: string): string;
+  export function getOpenGraphImage(image: string | undefined, siteUrl: string): string;
+}
