@@ -9,12 +9,18 @@ interface LoadMoreContext {
 }
 
 export function initializeBlogIndex(totalPages: number, lang: string) {
+  console.log('[BlogIndex] Initializing with:', { totalPages, lang });
+  
   const button = document.getElementById('load-more') as HTMLButtonElement | null;
   const container = document.getElementById('posts-container') as HTMLElement | null;
 
-  if (!button || !container) return;
+  if (!button || !container) {
+    console.warn('[BlogIndex] Missing elements:', { button: !!button, container: !!container });
+    return;
+  }
 
   if (button.dataset.loadMoreInitialized === 'true') {
+    console.log('[BlogIndex] Already initialized');
     return;
   }
 
@@ -29,6 +35,8 @@ export function initializeBlogIndex(totalPages: number, lang: string) {
       loadedSlugs.add(slug);
     }
   });
+  
+  console.log('[BlogIndex] Initial loaded slugs:', loadedSlugs.size);
 
   const ui = new BlogIndexUI(container, button);
 
@@ -47,11 +55,15 @@ function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs }: LoadMoreC
   let currentPage = 1;
 
   button.addEventListener('click', async () => {
+    console.log('[BlogIndex] Load More clicked. Current page:', currentPage);
     ui.setButtonLoading();
 
     try {
       const nextPage = currentPage + 1;
-      const response = await fetch(`/api/get-posts?page=${nextPage}&lang=${lang}`);
+      const url = `/api/get-posts?page=${nextPage}&lang=${lang}`;
+      console.log('[BlogIndex] Fetching:', url);
+      
+      const response = await fetch(url);
 
       if (!response.ok) {
         console.error('Error fetching posts for pagination', {
@@ -60,32 +72,40 @@ function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs }: LoadMoreC
           page: nextPage,
           lang,
         });
-        throw new Error('Failed to fetch posts');
+        throw new Error(`Failed to fetch posts: ${response.status}`);
       }
 
       const posts = await response.json();
+      console.log(`[BlogIndex] Fetched ${posts.length} posts`);
+      
       const uniquePosts = Array.isArray(posts)
         ? posts.filter((post: BlogPost) => {
             if (!post || !post.slug) return true;
             if (loadedSlugs.has(post.slug)) {
+              console.log('[BlogIndex] Skipping duplicate slug:', post.slug);
               return false;
             }
             loadedSlugs.add(post.slug);
             return true;
           })
         : [];
+      
+      console.log(`[BlogIndex] Unique new posts to append: ${uniquePosts.length}`);
 
       if (!uniquePosts.length) {
+        console.log('[BlogIndex] No unique posts. Hiding button.');
         ui.hideButton();
-        currentPage = nextPage;
+        currentPage = nextPage; // Still increment to avoid infinite loop of trying same page
         return;
       }
 
       ui.appendPosts(uniquePosts, lang);
 
       currentPage = nextPage;
+      console.log('[BlogIndex] New current page:', currentPage);
 
       if (currentPage >= totalPages) {
+        console.log('[BlogIndex] Reached total pages. Hiding button.');
         ui.hideButton();
       }
     } catch (error) {
@@ -97,6 +117,8 @@ function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs }: LoadMoreC
       });
       ui.showErrorMessage('Failed to load more articles. Please try again.');
     } finally {
+      // Only reset if we didn't hide it (i.e., not finished)
+      // Actually ui.resetButton just resets state/text, if hidden it stays hidden via style
       ui.resetButton();
     }
   });

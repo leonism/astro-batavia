@@ -35,6 +35,7 @@ export class BlogIndexUI {
   }
 
   public resetButton(): void {
+    if (this.button.style.display === 'none') return;
     this.button.disabled = false;
     this.button.innerHTML = this.originalButtonText;
   }
