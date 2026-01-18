@@ -4,14 +4,14 @@ import {
   generateArticleSchema,
   generateBreadcrumbSchema,
   generateWebsiteSchema,
-} from '../../utils/jsonLd';
+} from '@/utils/jsonLd';
 
-import BasicMetaTags from './BasicMetaTags.astro';
-import OpenGraphMetaTags from './OpenGraphMetaTags.astro';
-import TwitterMetaTags from './TwitterMetaTags.astro';
-import HreflangTags from './HreflangTags.astro';
-import FaviconLinks from './FaviconLinks.astro';
-import OtherMetaTags from './OtherMetaTags.astro';
+import BasicMetaTags from '@/components/seo/BasicMetaTags.astro';
+import OpenGraphMetaTags from '@/components/seo/OpenGraphMetaTags.astro';
+import TwitterMetaTags from '@/components/seo/TwitterMetaTags.astro';
+import HreflangTags from '@/components/seo/HreflangTags.astro';
+import FaviconLinks from '@/components/seo/FaviconLinks.astro';
+import OtherMetaTags from '@/components/seo/OtherMetaTags.astro';
 
 export interface Props {
   title: string;
