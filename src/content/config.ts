@@ -1,6 +1,6 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'zod';
-import { SITE_AUTHOR, SITE_URL } from '../consts';
+import { SITE_AUTHOR, SITE_URL } from '@/consts';
 
 const blog = defineCollection({
   type: 'content',

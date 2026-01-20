@@ -43,11 +43,14 @@ const resourceLinks: Link[] = [
 <footer
   class="border-t border-gray-200 bg-gray-50 transition-colors duration-300 dark:border-gray-700 dark:bg-slate-900/80"
   role="contentinfo"
-  aria-labelledby="footer-heading"
->
-  <h2 id="footer-heading" class="sr-only">Footer</h2>
+  aria-labelledby="footer-heading">
+  <h2
+    id="footer-heading"
+    class="sr-only">
+    Footer
+  </h2>
   <div class="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 justify-around md:grid-cols-5">
+    <div class="semi-bold grid grid-cols-1 justify-around md:grid-cols-5">
       <FooterBrand lang={lang} />
       <FooterLinks
         title="Navigation"
@@ -61,8 +64,16 @@ const resourceLinks: Link[] = [
         lang={lang}
         aria-label="External resources"
       />
-      <FooterLinks title="Legal" links={legalLinks} lang={lang} aria-label="Legal information" />
+      <FooterLinks
+        title="Legal"
+        links={legalLinks}
+        lang={lang}
+        aria-label="Legal information"
+      />
     </div>
-    <FooterBottomBar lang={lang} currentYear={currentYear} />
+    <FooterBottomBar
+      lang={lang}
+      currentYear={currentYear}
+    />
   </div>
 </footer>
