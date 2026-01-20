@@ -114,17 +114,28 @@ export class BlogService {
     const paths: Array<{ params: { lang: string; slug: string }; props: BlogPost }> = [];
 
     allPosts.forEach((post) => {
+      // Extract language from the file ID (folder structure)
       const parts = post.id.split('/');
       const lang = parts[0];
-      const slugPart = parts[1] === 'blog' ? parts.slice(2).join('/') : parts.slice(1).join('/');
 
-      // Remove the file extension (.mdx or .md) from the slug part
-      const finalSlug = slugPart.replace(/\.(mdx?)$/, '');
+      // Use post.slug as the source of truth for the URL slug
+      let finalSlug = post.slug;
+
+      // Strip the language prefix if present (e.g. "en/my-post" -> "my-post")
+      if (finalSlug.startsWith(`${lang}/`)) {
+        finalSlug = finalSlug.slice(lang.length + 1);
+      }
+
+      // Strip the "blog/" prefix if present (e.g. "blog/my-post" -> "my-post")
+      // This handles cases where the slug in frontmatter includes "blog/"
+      if (finalSlug.startsWith('blog/')) {
+        finalSlug = finalSlug.slice(5);
+      }
 
       paths.push({
         params: {
           lang: lang,
-          slug: finalSlug, // Use the carefully constructed slug
+          slug: finalSlug,
         },
         props: post,
       });
