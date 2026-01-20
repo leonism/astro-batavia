@@ -33,6 +33,13 @@ export interface Props {
   creditText?: string;
   copyrightNotice?: string;
   creator?: string;
+  canonical?: string;
+  organization?: {
+    name: string;
+    url: string;
+    logo: string;
+    sameAs?: string[];
+  };
 }
 
 const {
@@ -53,10 +60,12 @@ const {
   creditText,
   copyrightNotice,
   creator,
+  canonical,
+  organization,
 } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
-const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
 const imageUrl = image ? new URL(image, siteUrl).href : new URL('/favicon-32x32.png', siteUrl).href;
 
 let imageDimensions = null;
@@ -114,15 +123,26 @@ if (type === 'article' || type === 'blog') {
       name: author,
       ...(authorUrl && { url: authorUrl }),
     },
-    publisher: {
-      '@type': 'Organization',
-      name: SITE_TITLE,
-      url: siteUrl,
-      logo: {
-        '@type': 'ImageObject',
-        url: new URL('/favicon.svg', siteUrl).href,
-      },
-    },
+    publisher: organization
+      ? {
+          '@type': 'Organization',
+          name: organization.name,
+          url: organization.url,
+          logo: {
+            '@type': 'ImageObject',
+            url: organization.logo,
+          },
+          ...(organization.sameAs && { sameAs: organization.sameAs }),
+        }
+      : {
+          '@type': 'Organization',
+          name: SITE_TITLE,
+          url: siteUrl,
+          logo: {
+            '@type': 'ImageObject',
+            url: new URL('/favicon.svg', siteUrl).href,
+          },
+        },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': canonicalUrl,
@@ -197,4 +217,7 @@ const schema = {
 };
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+/>
