@@ -1,5 +1,4 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import HeroSection from '@/components/sections/HeroSection.astro';
 import FeaturesSection from '@/components/sections/FeaturesSection.astro';
@@ -7,6 +6,7 @@ import FeaturedStoriesSection from '@/components/sections/FeaturedStoriesSection
 import NewsletterSection from '@/components/sections/NewsletterSection.astro';
 import { useTranslations, isValidLanguage } from '@/i18n/utils';
 import { SITE_TITLE } from '@/consts';
+import { BlogService } from '@/services/BlogService';
 
 export async function getStaticPaths() {
   return [{ params: { lang: 'es' } }, { params: { lang: 'ja' } }];
@@ -21,17 +21,8 @@ if (!lang || !isValidLanguage(lang)) {
 
 const t = useTranslations(lang);
 
-// Get latest blog posts for this language
-const allPosts = await getCollection('blog', (post: CollectionEntry<'blog'>) => {
-  return post.id.startsWith(`${lang}/`) && !post.data.draft;
-});
-
-// Sort posts by publication date (newest first)
-const sortedPosts = allPosts.sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
-    b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-const latestPosts = sortedPosts.slice(0, 3);
+// Get latest blog posts for this language using BlogService
+const latestPosts = await BlogService.getLatestPosts(lang, 3);
 ---
 
 <Layout

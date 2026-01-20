@@ -45,8 +45,8 @@ const {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const allLangPosts = await BlogService.getPostsByLang(lang);
-const { previousPostData, nextPostData } = BlogService.getPostNavigation(allLangPosts, slug, lang);
+const allLangPosts = await BlogService.getPostsByLocale(lang);
+const { previousPost, nextPost } = BlogService.getPostNavigation(allLangPosts, slug);
 const relatedPosts = BlogService.getRelatedPosts(allLangPosts, slug, tags);
 ---
 
@@ -153,8 +153,8 @@ const relatedPosts = BlogService.getRelatedPosts(allLangPosts, slug, tags);
       />
 
       <BlogNextPrevNavigation
-        {previousPostData}
-        {nextPostData}
+        previousPostData={previousPost}
+        nextPostData={nextPost}
         {lang}
       />
 
