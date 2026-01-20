@@ -15,14 +15,18 @@ interface Props {
 const { title, links, lang } = Astro.props;
 ---
 
-<div class="my-0" role="navigation" aria-labelledby={`${title.toLowerCase()}-links`}>
+<div
+  class="my-0"
+  role="navigation"
+  aria-labelledby={`${title.toLowerCase()}-links`}>
   <h3
     id={`${title.toLowerCase()}-links`}
-    class="mb-4 mt-7 text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100"
-  >
+    class="bold mb-4 mt-7 text-sm uppercase tracking-wider text-gray-900 dark:text-gray-100">
     {title}
   </h3>
-  <ul class="space-y-2" role="list">
+  <ul
+    class="space-y-2"
+    role="list">
     {
       links.map((link) => (
         <li>
@@ -31,8 +35,7 @@ const { title, links, lang } = Astro.props;
             target={link.isExternal ? '_blank' : undefined}
             rel={link.isExternal ? 'noopener noreferrer' : undefined}
             aria-label={link.isExternal ? `${link.text} (opens in a new tab)` : undefined}
-            class="text-gray-600 transition-colors duration-200 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
-          >
+            class="text-gray-600 transition-colors duration-200 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">
             {link.text}
           </a>
         </li>

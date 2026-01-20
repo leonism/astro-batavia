@@ -11,7 +11,7 @@ interface LoadMoreContext {
 
 export function initializeBlogIndex(totalPages: number, lang: string) {
   console.log('[BlogIndex] Initializing with:', { totalPages, lang });
-  
+
   const button = document.getElementById('load-more') as HTMLButtonElement | null;
   const container = document.getElementById('posts-container') as HTMLElement | null;
 
@@ -36,7 +36,7 @@ export function initializeBlogIndex(totalPages: number, lang: string) {
       loadedSlugs.add(slug);
     }
   });
-  
+
   console.log('[BlogIndex] Initial loaded slugs:', loadedSlugs.size);
 
   const ui = new BlogIndexUI(container, button);
@@ -68,12 +68,14 @@ function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs, tag }: Load
 
     try {
       const nextPage = currentPage + 1;
-      let url = `/api/get-posts?page=${nextPage}&lang=${lang}`;
+      let url;
       if (tag) {
-        url += `&tag=${encodeURIComponent(tag)}`;
+        url = `/api/posts/${lang}/tag/${encodeURIComponent(tag)}/${nextPage}.json`;
+      } else {
+        url = `/api/posts/${lang}/${nextPage}.json`;
       }
       console.log('[BlogIndex] Fetching:', url);
-      
+
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -88,7 +90,7 @@ function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs, tag }: Load
 
       const posts = await response.json();
       console.log(`[BlogIndex] Fetched ${posts.length} posts`);
-      
+
       const uniquePosts = Array.isArray(posts)
         ? posts.filter((post: BlogPost) => {
             if (!post || !post.slug) return true;
@@ -100,7 +102,7 @@ function attachLoadMore({ ui, button, totalPages, lang, loadedSlugs, tag }: Load
             return true;
           })
         : [];
-      
+
       console.log(`[BlogIndex] Unique new posts to append: ${uniquePosts.length}`);
 
       if (!uniquePosts.length) {
