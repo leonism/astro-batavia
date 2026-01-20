@@ -4,7 +4,7 @@ import SEO from '@/components/seo/SEO.astro';
 import Schema from '@/components/seo/Schema.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import { GoogleTagmanager } from '@digi4care/astro-google-tagmanager';
-import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from '@/consts';
+import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SITE_AUTHOR } from '@/consts';
 import { getCanonicalURL, getOpenGraphImage } from '@/services/SEOService';
 
 interface Props {
@@ -66,7 +66,8 @@ const {
 const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
 
 let canonicalURL = canonical || Astro.url.href;
-let resolvedImage = image || new URL('/og-default.png', siteUrl).href;
+// Use SITE_AUTHOR.image as the default fallback for OG image
+let resolvedImage = image || new URL(SITE_AUTHOR.image, siteUrl).href;
 
 try {
   canonicalURL = canonical || getCanonicalURL(Astro.url.pathname, siteUrl);
@@ -99,32 +100,30 @@ try {
   title={title}
   description={description}
   image={resolvedImage}
-  canonical={canonicalURL}
   type={type}
+  canonical={canonicalURL}
   lang={lang}
-  publishedTime={publishedTime || (articleDate ? new Date(articleDate).toISOString() : undefined)}
-  modifiedTime={modifiedTime}
   author={author}
   authorUrl={authorUrl}
   tags={tags}
-  readingTime={readingTime?.toString()}
+  publishedTime={publishedTime || (articleDate ? new Date(articleDate).toISOString() : undefined)}
+  modifiedTime={modifiedTime}
+  readingTime={readingTime ? String(readingTime) : undefined}
   wordCount={wordCount}
   excerpt={excerpt}
-  breadcrumbs={breadcrumbs}
-  organization={organization}
 />
 
 <Schema
   title={title}
   description={description}
-  date={articleDate}
   image={resolvedImage}
   imageAlt={imageAlt}
-  type={type}
+  date={articleDate}
   author={author}
   authorUrl={authorUrl}
-  modifiedTime={modifiedTime}
+  canonical={canonicalURL}
   breadcrumbs={breadcrumbs}
+  organization={organization}
   faqs={faqs}
   review={review}
   license={license}
@@ -132,20 +131,6 @@ try {
   creditText={creditText}
   copyrightNotice={copyrightNotice}
   creator={creator}
-/>
-
-<link
-  rel="preconnect"
-  href="https://fonts.googleapis.com"
-/>
-<link
-  rel="preconnect"
-  href="https://fonts.gstatic.com"
-  crossorigin
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-  rel="stylesheet"
 />
 
 <ThemeInitializer />
