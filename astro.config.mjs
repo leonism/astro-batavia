@@ -87,6 +87,9 @@ export default defineConfig({
     },
     remarkPlugins: [remarkReadingTime],
   },
+  image: {
+    domains: ['images.pexels.com'],
+  },
   vite: {
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],

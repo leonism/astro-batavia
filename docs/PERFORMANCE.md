@@ -32,3 +32,36 @@ The Enhanced Search Overlay has been optimized to reduce the initial bundle size
 ### Implementation Details
 - The search overlay component uses `import()` syntax to dynamically load the `EnhancedSearchUI` class.
 - A loading state is managed to prevent multiple concurrent initialization requests.
+
+## Image Optimization
+
+The image rendering implementation has been migrated to Astro's native `<Image />` component (powered by `astro:assets`) to provide automatic optimization, responsive sizing, and modern format support.
+
+### Features
+- **Remote Image Optimization**: Configured to optimize images from allowed domains (e.g., Pexels) using Astro's image service (Sharp).
+- **Responsive Images**: Automatically generates `srcset` with multiple widths (640px, 768px, 1024px, 1280px, 1600px) to serve the most appropriate size for the user's device.
+- **Format Conversion**: Automatically converts images to modern formats (WebP/AVIF) where supported.
+- **CLS Prevention**: Enforces explicit `width` and `height` or uses `inferSize` for remote images to prevent Cumulative Layout Shift.
+- **Legacy Support**: Maintains fallback support for legacy public folder images, ensuring no regression for existing assets.
+- **Quality Control**: Sets a default quality of 75% to balance visual fidelity and file size.
+
+### Usage
+The `Picture` component now acts as a wrapper around `astro:assets`'s `<Image />`:
+
+```astro
+<Picture
+  src={post.data.heroImage} // Remote URL or imported image
+  alt={post.data.title}
+  width={800}
+  height={600}
+  class="object-cover"
+/>
+```
+
+### Configuration
+Allowed remote domains are configured in `astro.config.mjs`:
+```javascript
+image: {
+  domains: ['images.pexels.com'],
+},
+```

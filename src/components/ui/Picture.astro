@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 export interface Props {
-  src: string;
+  src: string | ImageMetadata;
   alt: string;
   width?: number;
   height?: number;
@@ -19,34 +22,43 @@ const {
   loading = 'lazy',
   decoding = 'async',
   sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  ...rest
 } = Astro.props;
 
-// Check if the image is external (starts with http/https)
-const isExternalImage = src.startsWith('http');
-
-// Only generate different formats for local images
-const getImageUrl = (originalSrc: string, format: string) => {
-  if (isExternalImage) return null;
-  const ext = originalSrc.split('.').pop();
-  return originalSrc.replace(`.${ext}`, `.${format}`);
-};
-
-const avifSrc = getImageUrl(src, 'avif');
-const webpSrc = getImageUrl(src, 'webp');
+const isRemote = typeof src === 'string' && (src.startsWith('http') || src.startsWith('//'));
+const isLocalImport = typeof src === 'object';
 ---
 
-<picture>
-  {avifSrc && <source srcset={avifSrc} type="image/avif" sizes={sizes} />}
-  {webpSrc && <source srcset={webpSrc} type="image/webp" sizes={sizes} />}
-  <img
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    class={className}
-    loading={loading}
-    decoding={decoding}
-    role="img"
-    aria-label={alt}
-  />
-</picture>
+{
+  (isRemote || isLocalImport) ? (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      class={className}
+      loading={loading}
+      decoding={decoding}
+      inferSize={isRemote && !width && !height}
+      widths={[640, 768, 1024, 1280, 1600]}
+      sizes={sizes}
+      quality={75}
+      {...rest}
+    />
+  ) : (
+    <picture>
+      <source srcset={(src as string).replace(/\.[^/.]+$/, '.avif')} type="image/avif" sizes={sizes} />
+      <source srcset={(src as string).replace(/\.[^/.]+$/, '.webp')} type="image/webp" sizes={sizes} />
+      <img
+        src={src as string}
+        alt={alt}
+        width={width}
+        height={height}
+        class={className}
+        loading={loading}
+        decoding={decoding}
+        {...rest}
+      />
+    </picture>
+  )
+}

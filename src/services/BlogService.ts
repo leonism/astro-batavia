@@ -72,9 +72,21 @@ export class BlogService {
 
     return {
       previousPostData: prev
-        ? { url: getPostUrl(prev.slug, lang), title: prev.data.title }
+        ? {
+            url: getPostUrl(prev.slug, lang),
+            title: prev.data.title,
+            heroImage: prev.data.heroImage,
+            heroImageAlt: prev.data.heroImageAlt,
+          }
         : undefined,
-      nextPostData: next ? { url: getPostUrl(next.slug, lang), title: next.data.title } : undefined,
+      nextPostData: next
+        ? {
+            url: getPostUrl(next.slug, lang),
+            title: next.data.title,
+            heroImage: next.data.heroImage,
+            heroImageAlt: next.data.heroImageAlt,
+          }
+        : undefined,
     };
   }
 
