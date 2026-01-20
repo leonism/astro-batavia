@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
-import sentry from '@sentry/astro';
-import spotlightjs from '@spotlightjs/astro';
+// import sentry from '@sentry/astro';
+// import spotlightjs from '@spotlightjs/astro';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
@@ -65,10 +65,10 @@ export default defineConfig({
       entryLimit: 10000,
     }),
     sitemapStyler(),
-    sentry({
-      telemetry: false,
-    }),
-    spotlightjs(),
+    // sentry({
+    //   telemetry: false,
+    // }),
+    // spotlightjs(),
     htmlMinifier({
       removeComments: true,
     }),
@@ -86,9 +86,6 @@ export default defineConfig({
       wrap: true,
     },
     remarkPlugins: [remarkReadingTime],
-  },
-  image: {
-    domains: ['images.pexels.com'],
   },
   vite: {
     optimizeDeps: {
