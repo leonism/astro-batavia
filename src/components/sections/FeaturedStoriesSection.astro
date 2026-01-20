@@ -1,5 +1,5 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 import FeaturedPostCard from '@/components/cards/FeaturedPostCard.astro';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
 
@@ -10,20 +10,6 @@ interface Props {
 const { latestPosts } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-// Try to get authors collection, fallback to empty array if it doesn't exist
-let allAuthors: any[] = [];
-try {
-  allAuthors = await getCollection('authors');
-} catch (error) {
-  // Authors collection doesn't exist, use empty array
-  console.warn('Authors collection not found, using fallback author data');
-}
-
-// Function to find author details by slug
-const getAuthorDetails = (authorSlug: string) => {
-  return allAuthors.find((author: any) => author.slug === authorSlug);
-};
 ---
 
 <section

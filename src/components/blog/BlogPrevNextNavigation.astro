@@ -1,10 +1,11 @@
 ---
-import { useTranslations } from '@/i18n/utils';
+import { useTranslations, getPostUrl } from '@/i18n/utils';
 import type { LanguageKey } from '@/i18n/types';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  previousPostData?: { url: string; title: string; heroImage?: string; heroImageAlt?: string };
-  nextPostData?: { url: string; title: string; heroImage?: string; heroImageAlt?: string };
+  previousPostData?: CollectionEntry<'blog'> | null;
+  nextPostData?: CollectionEntry<'blog'> | null;
   lang: LanguageKey;
 }
 
@@ -21,13 +22,13 @@ const t = useTranslations(lang);
         class={`grid gap-6 ${previousPostData && nextPostData ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
         {previousPostData && (
           <a
-            href={previousPostData.url}
-            title={`${t('blog.previousArticle')}: ${previousPostData.title}`}
+            href={getPostUrl(previousPostData.slug, lang)}
+            title={`${t('blog.previousArticle')}: ${previousPostData.data.title}`}
             class="group flex flex-row items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600">
-            {previousPostData.heroImage && (
+            {previousPostData.data.heroImage && (
               <img
-                src={previousPostData.heroImage}
-                alt={previousPostData.heroImageAlt || ''}
+                src={previousPostData.data.heroImage}
+                alt={previousPostData.data.heroImageAlt || ''}
                 class="h-20 w-20 flex-shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
               />
             )}
@@ -50,7 +51,7 @@ const t = useTranslations(lang);
                 </span>
               </div>
               <h3 class="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-400">
-                {previousPostData.title}
+                {previousPostData.data.title}
               </h3>
             </div>
           </a>
@@ -58,8 +59,8 @@ const t = useTranslations(lang);
 
         {nextPostData && (
           <a
-            href={nextPostData.url}
-            title={`${t('blog.nextArticle')}: ${nextPostData.title}`}
+            href={getPostUrl(nextPostData.slug, lang)}
+            title={`${t('blog.nextArticle')}: ${nextPostData.data.title}`}
             class="group flex flex-row items-center justify-end gap-4 rounded-lg border border-gray-200 bg-white p-4 text-right transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600">
             <div class="flex flex-col items-end">
               <div class="mb-2 flex items-center text-sm text-gray-500 dark:text-gray-400 md:flex-row-reverse">
@@ -80,13 +81,13 @@ const t = useTranslations(lang);
                 </span>
               </div>
               <h3 class="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-400">
-                {nextPostData.title}
+                {nextPostData.data.title}
               </h3>
             </div>
-            {nextPostData.heroImage && (
+            {nextPostData.data.heroImage && (
               <img
-                src={nextPostData.heroImage}
-                alt={nextPostData.heroImageAlt || ''}
+                src={nextPostData.data.heroImage}
+                alt={nextPostData.data.heroImageAlt || ''}
                 class="h-20 w-20 flex-shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
               />
             )}

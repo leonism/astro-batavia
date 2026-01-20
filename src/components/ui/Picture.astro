@@ -27,28 +27,39 @@ const {
 
 const isRemote = typeof src === 'string' && (src.startsWith('http') || src.startsWith('//'));
 const isLocalImport = typeof src === 'object';
+
+const imageProps: any = {
+  src,
+  alt,
+  class: className,
+  loading,
+  decoding,
+  widths: [640, 768, 1024, 1280, 1600],
+  sizes,
+  quality: 75,
+  ...rest,
+};
+
+if (width) imageProps.width = width;
+if (height) imageProps.height = height;
+if (isRemote && !width && !height) imageProps.inferSize = true;
 ---
 
 {
-  (isRemote || isLocalImport) ? (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      class={className}
-      loading={loading}
-      decoding={decoding}
-      inferSize={isRemote && !width && !height}
-      widths={[640, 768, 1024, 1280, 1600]}
-      sizes={sizes}
-      quality={75}
-      {...rest}
-    />
+  isRemote || isLocalImport ? (
+    <Image {...imageProps} />
   ) : (
     <picture>
-      <source srcset={(src as string).replace(/\.[^/.]+$/, '.avif')} type="image/avif" sizes={sizes} />
-      <source srcset={(src as string).replace(/\.[^/.]+$/, '.webp')} type="image/webp" sizes={sizes} />
+      <source
+        srcset={(src as string).replace(/\.[^/.]+$/, '.avif')}
+        type="image/avif"
+        sizes={sizes}
+      />
+      <source
+        srcset={(src as string).replace(/\.[^/.]+$/, '.webp')}
+        type="image/webp"
+        sizes={sizes}
+      />
       <img
         src={src as string}
         alt={alt}
