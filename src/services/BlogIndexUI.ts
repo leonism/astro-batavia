@@ -30,7 +30,7 @@ export class BlogIndexUI {
       this.button.style.pointerEvents = 'none';
       this.button.setAttribute('aria-disabled', 'true');
     }
-
+    
     this.button.setAttribute('aria-busy', 'true');
     this.container.setAttribute('aria-busy', 'true');
     this.button.innerHTML = `
@@ -44,7 +44,7 @@ export class BlogIndexUI {
 
   public resetButton(): void {
     if (this.button.style.display === 'none') return;
-
+    
     if (this.button instanceof HTMLButtonElement) {
       this.button.disabled = false;
     } else {

@@ -28,6 +28,7 @@ const t = useTranslations(lang);
             {previousPostData.data.heroImage && (
               <img
                 src={previousPostData.data.heroImage}
+                loading="lazy"
                 alt={previousPostData.data.heroImageAlt || ''}
                 class="h-20 w-20 flex-shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
               />
@@ -87,6 +88,7 @@ const t = useTranslations(lang);
             {nextPostData.data.heroImage && (
               <img
                 src={nextPostData.data.heroImage}
+                loading="lazy"
                 alt={nextPostData.data.heroImageAlt || ''}
                 class="h-20 w-20 flex-shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
               />

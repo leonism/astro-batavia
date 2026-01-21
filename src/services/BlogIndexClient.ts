@@ -63,6 +63,52 @@ export function initializeBlogIndex() {
         
         // Update URL
         window.history.pushState(null, '', nextUrl);
+        
+        // Update Page Content (Title and Meta Tags)
+        document.title = doc.title;
+        
+        // Update Canonical
+        const newCanonical = doc.querySelector('link[rel="canonical"]');
+        const oldCanonical = document.querySelector('link[rel="canonical"]');
+        if (newCanonical && oldCanonical) {
+          oldCanonical.setAttribute('href', newCanonical.getAttribute('href') || '');
+        }
+
+        // Update Prev/Next
+        ['prev', 'next'].forEach(rel => {
+          const newLink = doc.querySelector(`link[rel="${rel}"]`);
+          const oldLink = document.querySelector(`link[rel="${rel}"]`);
+          if (newLink) {
+            if (oldLink) {
+              oldLink.setAttribute('href', newLink.getAttribute('href') || '');
+            } else {
+              document.head.appendChild(newLink.cloneNode(true));
+            }
+          } else if (oldLink) {
+            oldLink.remove();
+          }
+        });
+
+        // Update Description
+        const newDesc = doc.querySelector('meta[name="description"]');
+        const oldDesc = document.querySelector('meta[name="description"]');
+        if (newDesc && oldDesc) {
+          oldDesc.setAttribute('content', newDesc.getAttribute('content') || '');
+        }
+
+        // Update OG URL and Title
+        const newOgUrl = doc.querySelector('meta[property="og:url"]');
+        const oldOgUrl = document.querySelector('meta[property="og:url"]');
+        if (newOgUrl && oldOgUrl) {
+          oldOgUrl.setAttribute('content', newOgUrl.getAttribute('content') || '');
+        }
+        
+        const newOgTitle = doc.querySelector('meta[property="og:title"]');
+        const oldOgTitle = document.querySelector('meta[property="og:title"]');
+        if (newOgTitle && oldOgTitle) {
+          oldOgTitle.setAttribute('content', newOgTitle.getAttribute('content') || '');
+        }
+
       } else {
         // No unique posts found? maybe end of list
         ui.hideButton();

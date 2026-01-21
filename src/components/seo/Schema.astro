@@ -10,10 +10,16 @@ export interface Props {
   date?: string | Date;
   image?: string;
   imageAlt?: string;
-  type?: 'website' | 'article' | 'blog';
+  type?: 'website' | 'article' | 'blog' | 'collection';
   author?: string;
   authorUrl?: string;
   modifiedTime?: string | Date;
+  collectionPosts?: Array<{
+    title: string;
+    url: string;
+    description?: string;
+    date?: string | Date;
+  }>;
   breadcrumbs?: { name: string; url: string }[];
   faqs?: { question: string; answer: string }[];
   review?: {
@@ -52,6 +58,7 @@ const {
   author = SITE_AUTHOR.name,
   authorUrl,
   modifiedTime,
+  collectionPosts,
   breadcrumbs,
   faqs,
   review,
@@ -147,6 +154,27 @@ if (type === 'article' || type === 'blog') {
       '@type': 'WebPage',
       '@id': canonicalUrl,
     },
+  });
+} else if (type === 'collection') {
+  graph.push({
+    '@type': 'CollectionPage',
+    '@id': canonicalUrl,
+    url: canonicalUrl,
+    name: title,
+    description: description,
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': siteUrl,
+      name: SITE_TITLE,
+      url: siteUrl,
+    },
+    hasPart: collectionPosts?.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: post.url.startsWith('http') ? post.url : new URL(post.url, siteUrl).href,
+      description: post.description,
+      datePublished: post.date ? new Date(post.date).toISOString() : undefined,
+    })),
   });
 } else {
   graph.push({
