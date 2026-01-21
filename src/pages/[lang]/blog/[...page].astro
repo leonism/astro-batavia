@@ -1,16 +1,18 @@
 ---
 import { type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
+import BlogPost from '@/layouts/BlogPost.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
 import { useTranslations, isValidLanguage } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
 import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
-import type { GetStaticPaths } from 'astro';
+import type { GetStaticPaths, MarkdownHeading, Page } from 'astro';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const languages = ['en', 'es', 'ja'];
   const allPaths = [];
 
+  // 1. Pagination Paths
   for (const lang of languages) {
     const posts = await BlogService.getPostsByLang(lang);
     const paths = paginate(posts, {
@@ -20,10 +22,31 @@ export const getStaticPaths = (async ({ paginate }) => {
     allPaths.push(...paths);
   }
 
+  // 2. Individual Post Paths
+  const allPosts = await BlogService.getAllPosts();
+  const postPaths = allPosts.map((post) => {
+    const [lang, ...slugParts] = post.slug.split('/');
+    // Remove 'blog' from the slug parts if it exists to get the page param
+    // post.slug is like 'en/blog/my-post' -> slugParts = ['blog', 'my-post'] -> page = 'my-post'
+    const page = slugParts[0] === 'blog' ? slugParts.slice(1).join('/') : slugParts.join('/');
+
+    return {
+      params: { lang, page },
+      props: { post },
+    };
+  });
+
+  allPaths.push(...postPaths);
+
   return allPaths;
 }) satisfies GetStaticPaths;
 
-const { page } = Astro.props;
+type Props = {
+  post?: CollectionEntry<'blog'>;
+  page?: Page<CollectionEntry<'blog'>>;
+};
+
+const { post, page } = Astro.props as Props;
 const { lang } = Astro.params;
 
 // Validate language
@@ -31,156 +54,124 @@ if (!lang || !isValidLanguage(lang)) {
   return Astro.redirect('/404');
 }
 
+// Prepare data for rendering
+let Content: any;
+let headings: MarkdownHeading[] = [];
+let readingTime;
+
+if (post) {
+  const rendered = await post.render();
+  Content = rendered.Content;
+  headings = rendered.headings;
+  readingTime = rendered.remarkPluginFrontmatter?.readingTime;
+}
+
 const t = useTranslations(lang);
 const allTags = await BlogService.getUniqueTags(lang);
 
 // Determine if we are on the first page
-const isFirstPage = page.currentPage === 1;
+const isFirstPage = page?.currentPage === 1;
+const pagePosts = page?.data || [];
 ---
 
-<Layout
-  title={`${t('nav.blog')} ${!isFirstPage ? `| Page ${page.currentPage}` : ''}`}
-  description={lang === 'es'
-    ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
-    : lang === 'ja'
-      ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-      : 'Explore our collection of articles covering web development, technology trends, and insights.'}
-  lang={lang}
->
-  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="mb-12 text-center">
-      <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 sm:text-5xl">
-        {t('nav.blog')}
-      </h1>
-      <p class="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">
-        {
-          lang === 'es'
-            ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
-            : lang === 'ja'
-              ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-              : 'Explore our collection of articles covering web development, technology trends, and insights.'
-        }
-      </p>
-    </div>
-
-    <!-- Stats (Only show on first page to reduce noise on subsequent pages, or keep it?) 
-         The original index.astro showed it. I'll keep it for all pages for consistency, 
-         but technically stats are for "all posts", not just this page's posts. 
-         The original calculated `posts.length` (all posts) for the count.
-         Here `page.total` gives total posts.
-    -->
-    <div class="mb-12 flex flex-wrap justify-center gap-6">
-      <div class="text-center">
-        <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
-          {page.total}
-        </div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">
-          {
-            lang === 'es'
-              ? page.total === 1
-                ? 'Artículo'
-                : 'Artículos'
+{
+  post ? (
+    <BlogPost
+      {...post.data}
+      slug={post.slug}
+      headings={headings}
+      readingTime={readingTime}>
+      {Content && <Content />}
+    </BlogPost>
+  ) : (
+    <Layout
+      title={`${t('nav.blog')} ${page && !isFirstPage ? `| Page ${page.currentPage}` : ''}`}
+      description={
+        lang === 'es'
+          ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
+          : lang === 'ja'
+            ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+            : 'Explore our collection of articles covering web development, technology trends, and insights.'
+      }
+      lang={lang}>
+      <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div class="mb-12 text-center">
+          <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 sm:text-5xl">
+            {t('nav.blog')}
+          </h1>
+          <p class="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">
+            {lang === 'es'
+              ? 'Últimas noticias, tutoriales y actualizaciones de nuestro equipo'
               : lang === 'ja'
-                ? '記事'
-                : page.total === 1
-                  ? 'Article'
-                  : 'Articles'
-          }
-        </div>
-      </div>
-      <div class="text-center">
-        <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
-          {allTags.length}
-        </div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">
-          {
-            lang === 'es'
-              ? allTags.length === 1
-                ? 'Tema'
-                : 'Temas'
-              : lang === 'ja'
-                ? 'トピック'
-                : allTags.length === 1
-                  ? 'Topic'
-                  : 'Topics'
-          }
-        </div>
-      </div>
-    </div>
-
-    <!-- Posts Grid -->
-    {
-      page.data.length > 0 ? (
-        <div
-          id="posts-container"
-          class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {page.data.map((post: CollectionEntry<'blog'>) => (
-            <div class="post-item animate-fade-in" data-slug={post.slug}>
-              <BlogCard post={post} lang={lang} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div class="py-12 text-center">
-          <svg
-            class="mx-auto mb-4 h-16 w-16 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-          <h3 class="mb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
-            {t('blog.no-posts')}
-          </h3>
-          <p class="text-gray-500 dark:text-gray-400">
-             {lang === 'es'
-                ? '¡Vuelve pronto para nuevo contenido!'
-                : lang === 'ja'
-                  ? '新しいコンテンツをお楽しみに！'
-                  : 'Check back soon for new content!'}
+                ? 'チームからの最新ニュース、チュートリアル、アップデート'
+                : 'Latest news, tutorials, and updates from our team'}
           </p>
         </div>
-      )
-    }
 
-    <!-- Load More Button (Progressive Enhancement) -->
-    {
-      page.url.next && (
-        <div class="text-center">
-          <a
-            href={page.url.next}
-            id="load-more"
-            class="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-6 py-3 text-base font-medium text-white transition-all duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            data-next-url={page.url.next}
-            data-lang={lang}
-          >
-            {lang === 'es'
-              ? 'Cargar Más Artículos'
-              : lang === 'ja'
-                ? 'もっと記事を読む'
-                : 'Load More Articles'}
-            <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
+        {/* Featured Post - Only on first page */}
+        {isFirstPage && pagePosts.length > 0 && (
+          <div class="mb-16">
+            {
+              <BlogCard
+                post={pagePosts[0]}
+                isFeatured={true}
+                lang={lang}
               />
-            </svg>
-          </a>
+            }
+          </div>
+        )}
+
+        {/* Blog Grid */}
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {pagePosts.slice(isFirstPage ? 1 : 0).map((post) => (
+            <BlogCard
+              post={post}
+              lang={lang}
+            />
+          ))}
         </div>
-      )
-    }
-  </div>
-</Layout>
+
+        {/* Pagination */}
+        {page && page.lastPage > 1 && (
+          <div class="mt-12 flex justify-center">
+            <nav
+              class="flex items-center gap-2"
+              aria-label="Pagination">
+              {page.url.prev ? (
+                <a
+                  href={page.url.prev}
+                  class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+                  ← {t('blog.previousArticle')}
+                </a>
+              ) : (
+                <span class="cursor-not-allowed rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-400 dark:border-gray-700 dark:text-gray-500">
+                  ← {t('blog.previousArticle')}
+                </span>
+              )}
+
+              <span class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
+                Page {page.currentPage} of {page.lastPage}
+              </span>
+
+              {page.url.next ? (
+                <a
+                  href={page.url.next}
+                  class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+                  {t('blog.nextArticle')} →
+                </a>
+              ) : (
+                <span class="cursor-not-allowed rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-400 dark:border-gray-700 dark:text-gray-500">
+                  {t('blog.nextArticle')} →
+                </span>
+              )}
+            </nav>
+          </div>
+        )}
+      </div>
+    </Layout>
+  )
+}
 
 <script>
   import { initializeBlogIndex } from '@/services/BlogIndexClient';
@@ -196,7 +187,7 @@ const isFirstPage = page.currentPage === 1;
 
   // Handle Astro view transitions and initial load
   document.addEventListener('astro:page-load', setupLoadMore);
-  
+
   // Fallback for non-view-transition initial loads
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     setupLoadMore();

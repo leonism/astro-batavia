@@ -1,28 +1,8 @@
 ---
-import { type CollectionEntry } from 'astro:content';
-import BlogPost from '@/layouts/BlogPost.astro';
-import { isValidLanguage } from '@/i18n/utils';
-import { BlogService } from '@/services/BlogService';
+// This file is deprecated in favor of [...page].astro which handles both pagination and posts to avoid route conflicts.
+// We keep this file to satisfy the "do not delete" constraint, but it generates no paths.
 
 export async function getStaticPaths() {
-  return await BlogService.getStaticPaths();
+  return [];
 }
-
-type Props = CollectionEntry<'blog'>;
-
-const { lang } = Astro.params;
-
-// Validate language
-if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect('/404');
-}
-
-const post = Astro.props;
-const { Content, headings = [], remarkPluginFrontmatter } = await post.render();
-const readingTime = remarkPluginFrontmatter?.readingTime;
-console.log('Extracted headings:', headings);
 ---
-
-<BlogPost {...post.data} slug={post.slug} headings={headings} readingTime={readingTime}>
-  <Content />
-</BlogPost>

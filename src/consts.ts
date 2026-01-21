@@ -42,5 +42,5 @@ export const SOCIAL_LINKS = {
 };
 
 // System Logic
-export const PAGINATION_POSTS_PER_PAGE = 6;
+export const PAGINATION_POSTS_PER_PAGE = 7;
 export const SEARCH_MAX_SUGGESTIONS = 6;
