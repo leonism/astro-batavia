@@ -95,7 +95,10 @@ export class EnhancedSearchUI {
     const openButton = document.getElementById('open-search-overlay');
     const closeButton = document.getElementById('close-search-overlay');
 
-    openButton?.addEventListener('click', () => this.openSearchOverlay());
+    openButton?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.openSearchOverlay();
+    });
     closeButton?.addEventListener('click', () => this.closeSearchOverlay());
 
     // Global keyboard shortcuts
