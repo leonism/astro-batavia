@@ -15,14 +15,14 @@ export async function getStaticPaths() {
     // Generate a path for each page
     // Start from page 2 because page 1 is rendered by the Astro component
     // But LoadMore might request page 1 if logic is weird? No, usually next page.
-    // However, for completeness and testing, we can generate all. 
+    // However, for completeness and testing, we can generate all.
     // The Client requests `nextPage`.
     for (let i = 1; i <= totalPages; i++) {
       paths.push({
         params: { lang, page: i.toString() },
-        props: { 
-            posts: posts.slice((i - 1) * PAGINATION_POSTS_PER_PAGE, i * PAGINATION_POSTS_PER_PAGE),
-            lang 
+        props: {
+          posts: posts.slice((i - 1) * PAGINATION_POSTS_PER_PAGE, i * PAGINATION_POSTS_PER_PAGE),
+          lang,
         },
       });
     }
@@ -31,9 +31,9 @@ export async function getStaticPaths() {
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { posts, lang } = props;
-  
-  const postsData = posts.map((post) => ({
+  const { posts, lang } = props as { posts: any[]; lang: string };
+
+  const postsData = posts.map((post: any) => ({
     id: post.id,
     slug: post.slug,
     title: post.data.title,

@@ -10,31 +10,31 @@ export async function getStaticPaths() {
 
   for (const lang of languages) {
     const tags = await BlogService.getUniqueTags(lang);
-    
+
     for (const tag of tags) {
-        const tagSlug = slugifyTag(tag);
-        if (!tagSlug) continue;
+      const tagSlug = slugifyTag(tag);
+      if (!tagSlug) continue;
 
-        const posts = await BlogService.getPostsByTag(lang, tagSlug);
-        const totalPages = Math.ceil(posts.length / PAGINATION_POSTS_PER_PAGE);
+      const posts = await BlogService.getPostsByTag(lang, tagSlug);
+      const totalPages = Math.ceil(posts.length / PAGINATION_POSTS_PER_PAGE);
 
-        for (let i = 1; i <= totalPages; i++) {
-            paths.push({
-                params: { lang, tag: tagSlug, page: i.toString() },
-                props: { 
-                    posts: posts.slice((i - 1) * PAGINATION_POSTS_PER_PAGE, i * PAGINATION_POSTS_PER_PAGE),
-                    lang 
-                },
-            });
-        }
+      for (let i = 1; i <= totalPages; i++) {
+        paths.push({
+          params: { lang, tag: tagSlug, page: i.toString() },
+          props: {
+            posts: posts.slice((i - 1) * PAGINATION_POSTS_PER_PAGE, i * PAGINATION_POSTS_PER_PAGE),
+            lang,
+          },
+        });
+      }
     }
   }
   return paths;
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { posts, lang } = props;
-  
+  const { posts, lang } = props as { posts: any[]; lang: string };
+
   const postsData = posts.map((post) => ({
     id: post.id,
     slug: post.slug,
