@@ -11,9 +11,22 @@ export interface Props {
   lang: LanguageKey;
   showExcerpt?: boolean;
   isFeatured?: boolean;
+  /**
+   * Controls the image loading strategy.
+   * 'eager': Load immediately (use for above-the-fold content).
+   * 'lazy': Load when near viewport (use for below-the-fold content).
+   * Defaults to 'eager' if isFeatured is true, otherwise 'lazy'.
+   */
+  loading?: 'eager' | 'lazy';
 }
 
-const { post, lang, showExcerpt = true, isFeatured = false } = Astro.props;
+const {
+  post,
+  lang,
+  showExcerpt = true,
+  isFeatured = false,
+  loading = isFeatured ? 'eager' : 'lazy',
+} = Astro.props;
 const t = useTranslations(lang);
 const postUrl = getPostUrl(post.slug, lang);
 
@@ -49,11 +62,16 @@ const classes = {
 };
 ---
 
-<article class={classes.article} aria-labelledby={`blog-post-title-${post.id}`}>
+<article
+  class={classes.article}
+  aria-labelledby={`blog-post-title-${post.id}`}>
   {
     post.data.heroImage && (
       <div class={classes.imageContainer}>
-        <a href={postUrl} tabindex="-1" aria-hidden="true">
+        <a
+          href={postUrl}
+          tabindex="-1"
+          aria-hidden="true">
           <Picture
             src={post.data.heroImage}
             alt={post.data.heroImageAlt || post.data.title}
@@ -74,13 +92,11 @@ const classes = {
         <div
           class={`mb-3 flex flex-wrap gap-2 ${isFeatured ? 'md:mb-4' : ''}`}
           role="group"
-          aria-label="Post tags"
-        >
+          aria-label="Post tags">
           {post.data.tags.slice(0, 3).map((tag: string) => (
             <a
               href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
-              class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800"
-            >
+              class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800">
               #{tag}
             </a>
           ))}
@@ -93,7 +109,9 @@ const classes = {
       )
     }
 
-    <h2 class={classes.title} id={`blog-post-title-${post.id}`}>
+    <h2
+      class={classes.title}
+      id={`blog-post-title-${post.id}`}>
       <a href={postUrl}>
         {post.data.title}
       </a>
@@ -110,33 +128,31 @@ const classes = {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              >
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
               </path>
             </svg>
             <span>{post.data.author}</span>
           </div>
 
-          <time datetime={post.data.pubDate.toISOString()} class="flex items-center">
+          <time
+            datetime={post.data.pubDate.toISOString()}
+            class="flex items-center">
             <svg
               class="mr-1 h-4 w-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              >
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
               </path>
             </svg>
             {formatDate(post.data.pubDate, lang)}
@@ -151,8 +167,7 @@ const classes = {
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
+                aria-hidden="true">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -170,17 +185,19 @@ const classes = {
         <a
           href={postUrl}
           class="group inline-flex items-center justify-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-primary-700 hover:shadow-lg dark:bg-primary-500 dark:hover:bg-primary-600"
-          aria-label={`${t('blog.readMoreAbout')} ${post.data.title}`}
-        >
+          aria-label={`${t('blog.readMoreAbout')} ${post.data.title}`}>
           {t('blog.readMore')}
           <svg
             class="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+            aria-hidden="true">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7">
             </path>
           </svg>
         </a>
