@@ -14,19 +14,24 @@ export interface BlogPost {
 
 export class BlogIndexUI {
   private container: HTMLElement;
-  private button: HTMLButtonElement;
+  private button: HTMLElement;
   private originalButtonText: string = '';
 
-  constructor(container: HTMLElement, button: HTMLButtonElement) {
+  constructor(container: HTMLElement, button: HTMLElement) {
     this.container = container;
     this.button = button;
     this.originalButtonText = button.innerHTML;
   }
 
   public setButtonLoading(): void {
-    this.button.disabled = true;
+    if (this.button instanceof HTMLButtonElement) {
+      this.button.disabled = true;
+    } else {
+      this.button.style.pointerEvents = 'none';
+      this.button.setAttribute('aria-disabled', 'true');
+    }
+
     this.button.setAttribute('aria-busy', 'true');
-    this.button.setAttribute('aria-disabled', 'true');
     this.container.setAttribute('aria-busy', 'true');
     this.button.innerHTML = `
 			<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
@@ -39,9 +44,15 @@ export class BlogIndexUI {
 
   public resetButton(): void {
     if (this.button.style.display === 'none') return;
-    this.button.disabled = false;
+
+    if (this.button instanceof HTMLButtonElement) {
+      this.button.disabled = false;
+    } else {
+      this.button.style.pointerEvents = 'auto';
+      this.button.removeAttribute('aria-disabled');
+    }
+
     this.button.removeAttribute('aria-busy');
-    this.button.removeAttribute('aria-disabled');
     this.container.removeAttribute('aria-busy');
     this.button.innerHTML = this.originalButtonText;
   }
@@ -60,11 +71,11 @@ export class BlogIndexUI {
     errorDiv.className = 'load-more-error text-red-500 text-center mt-2 text-sm';
     errorDiv.role = 'alert';
     errorDiv.textContent = message;
-    
+
     this.button.parentNode?.insertBefore(errorDiv, this.button.nextSibling);
-    
+
     setTimeout(() => {
-        errorDiv.remove();
+      errorDiv.remove();
     }, 5000);
   }
 
@@ -78,13 +89,17 @@ export class BlogIndexUI {
     tempDiv.innerHTML = newPostsHtml;
 
     const newPosts = Array.from(tempDiv.children) as HTMLElement[];
-    newPosts.forEach((post) => {
+    this.appendPostElements(newPosts);
+  }
+
+  public appendPostElements(elements: Element[]): void {
+    elements.forEach((post) => {
       post.classList.add('animate-fade-in');
       this.container.appendChild(post);
     });
 
-    if (newPosts.length > 0) {
-      const firstNewPost = newPosts[0];
+    if (elements.length > 0) {
+      const firstNewPost = elements[0] as HTMLElement;
       firstNewPost.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }
   }
@@ -105,32 +120,38 @@ export class BlogIndexUI {
 
   private createPostCardHtml(post: BlogPost, lang: string): string {
     const readMoreText = lang === 'es' ? 'Leer Más' : lang === 'ja' ? '続きを読む' : 'Read More';
-    
+
     const postUrl = post.url || `/${lang}/blog/${post.slug.split('/').pop()}`;
-    
-    const readMoreAboutLabel = lang === 'es' 
-      ? `Leer más sobre ${post.title}` 
-      : lang === 'ja' 
-        ? `${post.title} について続きを読む` 
-        : `Read more about ${post.title}`;
+
+    const readMoreAboutLabel =
+      lang === 'es'
+        ? `Leer más sobre ${post.title}`
+        : lang === 'ja'
+          ? `${post.title} について続きを読む`
+          : `Read more about ${post.title}`;
 
     let tagsHtml = '';
     if (post.tags && post.tags.length > 0) {
-      const tagItems = post.tags.slice(0, 3).map(tag => {
-        const tagUrl = lang === 'en' 
-          ? `/blog/tags/${this.slugifyTag(tag)}` 
-          : `/${lang}/blog/tags/${this.slugifyTag(tag)}`;
-          
-        return `
+      const tagItems = post.tags
+        .slice(0, 3)
+        .map((tag) => {
+          const tagUrl =
+            lang === 'en'
+              ? `/blog/tags/${this.slugifyTag(tag)}`
+              : `/${lang}/blog/tags/${this.slugifyTag(tag)}`;
+
+          return `
           <a href="${tagUrl}" class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800">
             #${tag}
           </a>
         `;
-      }).join('');
+        })
+        .join('');
 
-      const moreTags = post.tags.length > 3 
-        ? `<span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">+${post.tags.length - 3}</span>`
-        : '';
+      const moreTags =
+        post.tags.length > 3
+          ? `<span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">+${post.tags.length - 3}</span>`
+          : '';
 
       tagsHtml = `
         <div class="mb-3 flex flex-wrap gap-2" role="group" aria-label="Post tags">
@@ -140,10 +161,10 @@ export class BlogIndexUI {
       `;
     }
 
-    const formattedDate = new Date(post.pubDate).toLocaleDateString(lang, { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    const formattedDate = new Date(post.pubDate).toLocaleDateString(lang, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
 
     return `
@@ -162,13 +183,13 @@ export class BlogIndexUI {
         }
         <div class="p-6 flex-1 flex flex-col">
           ${tagsHtml}
-          
+
           <h2 class="font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200 line-clamp-2 text-xl" id="blog-post-title-${post.id}">
             <a href="${postUrl}">${post.title}</a>
           </h2>
-          
+
           ${post.excerpt ? `<p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 text-sm line-clamp-3">${post.excerpt}</p>` : ''}
-          
+
           <div class="mt-auto pt-4">
             <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
               <div class="flex items-center space-x-3">
