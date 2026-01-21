@@ -5,15 +5,25 @@ import BlogCard from '@/components/blog/BlogCard.astro';
 import { useTranslations, isValidLanguage } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
 import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
+import type { GetStaticPaths } from 'astro';
 
-export async function getStaticPaths() {
+export const getStaticPaths = (async ({ paginate }) => {
   const languages = ['en', 'es', 'ja'];
+  const allPaths = [];
 
-  return languages.map((lang) => ({
-    params: { lang },
-  }));
-}
+  for (const lang of languages) {
+    const posts = await BlogService.getPostsByLang(lang);
+    const paths = paginate(posts, {
+      params: { lang },
+      pageSize: PAGINATION_POSTS_PER_PAGE,
+    });
+    allPaths.push(...paths);
+  }
 
+  return allPaths;
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
 const { lang } = Astro.params;
 
 // Validate language
@@ -22,94 +32,60 @@ if (!lang || !isValidLanguage(lang)) {
 }
 
 const t = useTranslations(lang);
-
-// Get filtered and sorted blog posts for this language
-const currentTag = Astro.url.searchParams.get('tag');
-let posts: CollectionEntry<'blog'>[];
-
-if (currentTag) {
-  posts = await BlogService.getPostsByTag(lang, currentTag);
-} else {
-  posts = await BlogService.getPostsByLang(lang);
-}
-
-// Get unique tags
 const allTags = await BlogService.getUniqueTags(lang);
 
-const postsPerPage = PAGINATION_POSTS_PER_PAGE;
-const totalPages = Math.ceil(posts.length / postsPerPage);
-const postsToDisplay = posts.slice(0, postsPerPage);
-const pageProps = {
-  postsPerPage,
-  totalPages,
-  lang,
-};
+// Determine if we are on the first page
+const isFirstPage = page.currentPage === 1;
 ---
 
 <Layout
-  {...pageProps}
-  title={`${t('nav.blog')}${currentTag ? ` | #${currentTag}` : ''}`}
-  description={currentTag
-    ? lang === 'es'
-      ? `Explora artículos sobre ${currentTag} en nuestro blog de tecnología y desarrollo web.`
-      : lang === 'ja'
-        ? `${currentTag}に関する技術とウェブ開発のブログ記事をご覧ください。`
-        : `Explore articles about ${currentTag} on our technology and web development blog.`
-    : lang === 'es'
-      ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
-      : lang === 'ja'
-        ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-        : 'Explore our collection of articles covering web development, technology trends, and insights.'}
+  title={`${t('nav.blog')} ${!isFirstPage ? `| Page ${page.currentPage}` : ''}`}
+  description={lang === 'es'
+    ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
+    : lang === 'ja'
+      ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+      : 'Explore our collection of articles covering web development, technology trends, and insights.'}
   lang={lang}
 >
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-12 text-center">
       <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 sm:text-5xl">
-        {currentTag ? `#${currentTag}` : t('nav.blog')}
+        {t('nav.blog')}
       </h1>
       <p class="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">
         {
-          currentTag
-            ? lang === 'es'
-              ? `Artículos etiquetados con #${currentTag}`
-              : lang === 'ja'
-                ? `#${currentTag} のタグが付いた記事`
-                : `Articles tagged with #${currentTag}`
-            : lang === 'es'
-              ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
-              : lang === 'ja'
-                ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-                : 'Explore our collection of articles covering web development, technology trends, and insights.'
+          lang === 'es'
+            ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
+            : lang === 'ja'
+              ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+              : 'Explore our collection of articles covering web development, technology trends, and insights.'
         }
       </p>
     </div>
 
-    <!-- Stats -->
+    <!-- Stats (Only show on first page to reduce noise on subsequent pages, or keep it?) 
+         The original index.astro showed it. I'll keep it for all pages for consistency, 
+         but technically stats are for "all posts", not just this page's posts. 
+         The original calculated `posts.length` (all posts) for the count.
+         Here `page.total` gives total posts.
+    -->
     <div class="mb-12 flex flex-wrap justify-center gap-6">
       <div class="text-center">
         <div class="text-3xl font-bold text-primary-600 dark:text-primary-400">
-          {posts.length}
+          {page.total}
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
           {
             lang === 'es'
-              ? posts.length === 1
+              ? page.total === 1
                 ? 'Artículo'
                 : 'Artículos'
               : lang === 'ja'
                 ? '記事'
-                : posts.length === 1
+                : page.total === 1
                   ? 'Article'
                   : 'Articles'
-          }
-          {
-            currentTag &&
-              (lang === 'es'
-                ? ` con #${currentTag}`
-                : lang === 'ja'
-                  ? ` (#${currentTag})`
-                  : ` with #${currentTag}`)
           }
         </div>
       </div>
@@ -135,12 +111,12 @@ const pageProps = {
 
     <!-- Posts Grid -->
     {
-      postsToDisplay.length > 0 ? (
+      page.data.length > 0 ? (
         <div
           id="posts-container"
           class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
         >
-          {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
+          {page.data.map((post: CollectionEntry<'blog'>) => (
             <div class="post-item animate-fade-in" data-slug={post.slug}>
               <BlogCard post={post} lang={lang} />
             </div>
@@ -162,16 +138,10 @@ const pageProps = {
             />
           </svg>
           <h3 class="mb-2 text-lg font-medium text-gray-900 dark:text-gray-100">
-            {currentTag ? t('blog.noPostsForTag').replace('{tag}', currentTag) : t('blog.no-posts')}
+            {t('blog.no-posts')}
           </h3>
           <p class="text-gray-500 dark:text-gray-400">
-            {currentTag
-              ? lang === 'es'
-                ? `Intenta con otra etiqueta o revisa todos los artículos.`
-                : lang === 'ja'
-                  ? `別のタグを試すか、すべての記事を確認してください。`
-                  : `Try a different tag or check all articles.`
-              : lang === 'es'
+             {lang === 'es'
                 ? '¡Vuelve pronto para nuevo contenido!'
                 : lang === 'ja'
                   ? '新しいコンテンツをお楽しみに！'
@@ -181,16 +151,16 @@ const pageProps = {
       )
     }
 
-    <!-- Load More Button -->
+    <!-- Load More Button (Progressive Enhancement) -->
     {
-      totalPages > 1 && (
+      page.url.next && (
         <div class="text-center">
-          <button
+          <a
+            href={page.url.next}
             id="load-more"
             class="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-6 py-3 text-base font-medium text-white transition-all duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            data-total-pages={totalPages}
+            data-next-url={page.url.next}
             data-lang={lang}
-            data-tag={currentTag}
           >
             {lang === 'es'
               ? 'Cargar Más Artículos'
@@ -205,7 +175,7 @@ const pageProps = {
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-          </button>
+          </a>
         </div>
       )
     }
@@ -216,27 +186,21 @@ const pageProps = {
   import { initializeBlogIndex } from '@/services/BlogIndexClient';
 
   function setupLoadMore() {
+    // Only initialize if the button exists and hasn't been initialized
     const button = document.getElementById('load-more');
-    if (!button) return;
+    if (!button || button.dataset.loadMoreInitialized === 'true') return;
 
-    const totalPagesValue = button.getAttribute('data-total-pages') || '1';
-    const langValue = button.getAttribute('data-lang') || 'en';
-
-    const totalPages = parseInt(totalPagesValue, 10);
-    const lang = langValue;
-
-    initializeBlogIndex(totalPages, lang);
+    // Initialize our client-side logic
+    initializeBlogIndex();
   }
 
-  document.addEventListener('astro:page-load', () => {
-    setupLoadMore();
-  });
-
+  // Handle Astro view transitions and initial load
+  document.addEventListener('astro:page-load', setupLoadMore);
+  
+  // Fallback for non-view-transition initial loads
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     setupLoadMore();
   } else {
-    document.addEventListener('DOMContentLoaded', () => {
-      setupLoadMore();
-    });
+    document.addEventListener('DOMContentLoaded', setupLoadMore);
   }
 </script>
