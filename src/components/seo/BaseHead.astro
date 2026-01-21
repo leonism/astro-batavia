@@ -12,7 +12,7 @@ interface Props {
   description?: string;
   image?: string;
   articleDate?: string | Date;
-  type?: 'website' | 'article';
+  type?: 'website' | 'article' | 'blog' | 'profile' | 'collection';
   lang?: string;
   author?: string;
   authorUrl?: string;
@@ -33,6 +33,8 @@ interface Props {
   creditText?: string;
   copyrightNotice?: string;
   creator?: string;
+  prev?: string;
+  next?: string;
 }
 
 const {

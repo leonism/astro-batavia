@@ -10,6 +10,8 @@ interface Props {
   finalExcerpt?: string;
   noindex: boolean;
   canonicalUrl: string;
+  prev?: string;
+  next?: string;
 }
 
 const {
@@ -23,6 +25,8 @@ const {
   finalExcerpt,
   noindex,
   canonicalUrl,
+  prev,
+  next,
 } = Astro.props;
 ---
 
@@ -36,3 +40,5 @@ const {
 {finalExcerpt && finalExcerpt !== description && <meta name="excerpt" content={finalExcerpt} />}
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <link rel="canonical" href={canonicalUrl} />
+{prev && <link rel="prev" href={prev} />}
+{next && <link rel="next" href={next} />}
