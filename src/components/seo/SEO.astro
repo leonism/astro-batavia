@@ -20,7 +20,7 @@ export interface Props {
   noindex?: boolean;
   canonical?: string;
   lang?: string;
-  type?: 'website' | 'article' | 'blog' | 'profile';
+  type?: 'website' | 'article' | 'blog' | 'profile' | 'collection';
   publishedTime?: string;
   modifiedTime?: string;
   author?: string;
@@ -44,6 +44,8 @@ export interface Props {
     duration?: string;
     description?: string;
   };
+  prev?: string;
+  next?: string;
 }
 
 const {
@@ -67,6 +69,8 @@ const {
   breadcrumbs = [],
   organization,
   video,
+  prev,
+  next,
 } = Astro.props;
 
 const siteTitle = SITE_TITLE;
@@ -140,7 +144,10 @@ const alternateUrls = getAlternateUrls();
 ---
 
 <!-- JSON-LD Structured Data -->
-<script type="application/ld+json" set:text={jsonLdData} />
+<script
+  type="application/ld+json"
+  set:text={jsonLdData}
+/>
 
 <BasicMetaTags
   fullTitle={fullTitle}
@@ -153,10 +160,12 @@ const alternateUrls = getAlternateUrls();
   finalExcerpt={finalExcerpt}
   noindex={noindex}
   canonicalUrl={canonicalUrl}
+  prev={prev}
+  next={next}
 />
 
 <OpenGraphMetaTags
-  type={type}
+  type={type === 'collection' ? 'website' : type}
   fullTitle={fullTitle}
   description={description}
   imageUrl={imageUrl}
@@ -187,5 +196,8 @@ const alternateUrls = getAlternateUrls();
   siteTitle={siteTitle}
 />
 
-<HreflangTags alternateUrls={alternateUrls} hreflangMap={hreflangMap} />
+<HreflangTags
+  alternateUrls={alternateUrls}
+  hreflangMap={hreflangMap}
+/>
 <FaviconLinks />
