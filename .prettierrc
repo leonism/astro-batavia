@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/prettierrc",
   "semi": true,
   "singleQuote": true,
   "tabWidth": 2,
@@ -9,7 +10,57 @@
   "arrowParens": "always",
   "htmlWhitespaceSensitivity": "ignore",
   "endOfLine": "lf",
-  "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"]
+
+  // Formatting rules
+  "bracketSameLine": false,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": false,
+  "proseWrap": "preserve",
+
+  // Overrides for specific file types
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro"
+      }
+    },
+    {
+      "files": ["*.json", "*.jsonc", "*.json5"],
+      "options": {
+        "trailingComma": "none",
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "*.mdx",
+      "options": {
+        "proseWrap": "always"
+      }
+    },
+    {
+      "files": ["*.yaml", "*.yml"],
+      "options": {
+        "singleQuote": false,
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "package.json",
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false,
+        "printWidth": 80
+      }
+    }
+  ],
+
+  // Plugin configurations
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
+
+  // Tailwind CSS plugin configuration (optional)
+  "tailwindConfig": "./tailwind.config.js",
+
+  // Editor integration hints
+  "editorconfig": true
 }
-
-

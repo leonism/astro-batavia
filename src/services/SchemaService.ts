@@ -55,7 +55,7 @@ export interface SchemaProps {
 export class SchemaService {
   /**
    * Generates the complete Schema.org graph for a page.
-   * 
+   *
    * @param {SchemaProps} props - The properties for the schema.
    * @param {string} siteUrl - The base URL of the site.
    * @returns {Record<string, any>} The complete schema object with @context and @graph.
@@ -70,7 +70,7 @@ export class SchemaService {
 
   /**
    * Builds the graph array for the schema.
-   * 
+   *
    * @param {SchemaProps} props - The properties for the schema.
    * @param {string} siteUrl - The base URL of the site.
    * @returns {Record<string, any>[]} The array of schema objects.
@@ -102,16 +102,19 @@ export class SchemaService {
     // Ensure siteUrl doesn't have a trailing slash for consistency in URL construction
     const baseUrl = siteUrl.replace(/\/$/, '');
     const canonicalUrl = canonical || baseUrl;
-    const imageUrl = image ? new URL(image, baseUrl).href : new URL('/favicon-32x32.png', baseUrl).href;
+    const imageUrl = image
+      ? new URL(image, baseUrl).href
+      : new URL('/favicon-32x32.png', baseUrl).href;
 
     const graph: Record<string, any>[] = [];
 
-    const imageSchema = SchemaService.buildImageObject(
-      imageUrl,
-      imageAlt || title,
-      image,
-      { license, acquireLicensePage, creditText, copyrightNotice, creator }
-    );
+    const imageSchema = SchemaService.buildImageObject(imageUrl, imageAlt || title, image, {
+      license,
+      acquireLicensePage,
+      creditText,
+      copyrightNotice,
+      creator,
+    });
 
     if (type === 'article' || type === 'blog') {
       graph.push({
@@ -261,7 +264,7 @@ export class SchemaService {
       creditText?: string;
       copyrightNotice?: string;
       creator?: string;
-    }
+    },
   ): Record<string, any> {
     const imageSchema: Record<string, any> = {
       '@type': 'ImageObject',

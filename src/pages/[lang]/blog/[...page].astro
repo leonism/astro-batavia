@@ -76,11 +76,7 @@ const pagePosts = page?.data || [];
 
 {
   post ? (
-    <BlogPost
-      {...post.data}
-      slug={post.slug}
-      headings={headings}
-      readingTime={readingTime}>
+    <BlogPost {...post.data} slug={post.slug} headings={headings} readingTime={readingTime}>
       {Content && <Content />}
     </BlogPost>
   ) : (
@@ -93,7 +89,8 @@ const pagePosts = page?.data || [];
             ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
             : 'Explore our collection of articles covering web development, technology trends, and insights.'
       }
-      lang={lang}>
+      lang={lang}
+    >
       <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div class="mb-12 text-center">
@@ -111,15 +108,7 @@ const pagePosts = page?.data || [];
 
         {/* Featured Post - Only on first page */}
         {isFirstPage && pagePosts.length > 0 && (
-          <div class="mb-16">
-            {
-              <BlogCard
-                post={pagePosts[0]}
-                isFeatured={true}
-                lang={lang}
-              />
-            }
-          </div>
+          <div class="mb-16">{<BlogCard post={pagePosts[0]} isFeatured={true} lang={lang} />}</div>
         )}
 
         {/* Blog Grid */}
@@ -131,24 +120,19 @@ const pagePosts = page?.data || [];
             preventing "unoptimized loading attribute" warnings and layout shifts.
           */}
           {pagePosts.slice(isFirstPage ? 1 : 0).map((post, index) => (
-            <BlogCard
-              post={post}
-              lang={lang}
-              loading={index < 3 ? 'eager' : 'lazy'}
-            />
+            <BlogCard post={post} lang={lang} loading={index < 3 ? 'eager' : 'lazy'} />
           ))}
         </div>
 
         {/* Pagination */}
         {page && page.lastPage > 1 && (
           <div class="mt-12 flex justify-center">
-            <nav
-              class="flex items-center gap-2"
-              aria-label="Pagination">
+            <nav class="flex items-center gap-2" aria-label="Pagination">
               {page.url.prev ? (
                 <a
                   href={page.url.prev}
-                  class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+                  class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+                >
                   ← {t('blog.previousArticle')}
                 </a>
               ) : (
@@ -164,7 +148,8 @@ const pagePosts = page?.data || [];
               {page.url.next ? (
                 <a
                   href={page.url.next}
-                  class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+                  class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+                >
                   {t('blog.nextArticle')} →
                 </a>
               ) : (

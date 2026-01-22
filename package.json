@@ -11,6 +11,7 @@
     "compress": "tsx scripts/compress.ts",
     "preview": "astro preview",
     "lint": "eslint .",
+    "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "keywords": [],
