@@ -65,8 +65,6 @@ export function getLanguageFromPath(path: string): string {
   return DEFAULT_LOCALE;
 }
 
-export { formatDate } from '@/utils/date-formatters';
-
 export function getAvailableLanguages() {
   return Object.keys(ui);
 }

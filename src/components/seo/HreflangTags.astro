@@ -1,15 +1,7 @@
 ---
 interface Props {
-  alternateUrls: {
-    en: string;
-    es: string;
-    ja: string;
-  };
-  hreflangMap: {
-    en: string;
-    es: string;
-    ja: string;
-  };
+  alternateUrls: Record<string, string>;
+  hreflangMap: Record<string, string>;
 }
 
 const { alternateUrls, hreflangMap } = Astro.props;
@@ -17,7 +9,7 @@ const { alternateUrls, hreflangMap } = Astro.props;
 
 {
   Object.entries(alternateUrls).map(([langCode, url]) => (
-    <link rel="alternate" hreflang={hreflangMap[langCode as keyof typeof hreflangMap]} href={url} />
+    <link rel="alternate" hreflang={hreflangMap[langCode] || langCode} href={url} />
   ))
 }
-<link rel="alternate" hreflang="x-default" href={alternateUrls.en} />
+{alternateUrls.en && <link rel="alternate" hreflang="x-default" href={alternateUrls.en} />}

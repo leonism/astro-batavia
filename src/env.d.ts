@@ -17,11 +17,3 @@ declare module '*.astro' {
   export default Component;
 }
 
-declare module '@/services/BlogIndexClient' {
-  export function initializeBlogIndex(): void;
-}
-
-declare module '@/services/SEOService' {
-  export function getCanonicalURL(pathname: string, siteUrl: string): string;
-  export function getOpenGraphImage(image: string | undefined, siteUrl: string): string;
-}
