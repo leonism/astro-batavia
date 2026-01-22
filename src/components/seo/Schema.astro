@@ -8,7 +8,4 @@ const siteUrl = (Astro.site ? Astro.site.href : SITE_URL).replace(/\/$/, '');
 const schema = SchemaService.generateSchema(Astro.props, siteUrl);
 ---
 
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify(schema)}
-/>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

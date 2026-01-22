@@ -2,17 +2,19 @@
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
 
-  [![Astro](https://img.shields.io/badge/Astro-5.16.6-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-  [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
+[![Astro](https://img.shields.io/badge/Astro-5.16.6-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
   <!-- Additional new badges below -->
-  [![Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare_Pages-F38020?style=flat&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
-  [![Vercel](https://img.shields.io/badge/Preview-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://vercel.com/)
-  [![Netlify Status](https://api.netlify.com/api/v1/badges/7e052926-bd01-4269-be91-b2a98ccdce35/deploy-status)](https://app.netlify.com/projects/astro-batavia/deploys)
-  [![Multilingual](https://img.shields.io/badge/Multilingual-Yes-0A7E07?style=flat)](#)
-  [![Dark Mode](https://img.shields.io/badge/Dark_Mode-Enabled-000000?style=flat)](#)
+
+[![Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare_Pages-F38020?style=flat&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+[![Vercel](https://img.shields.io/badge/Preview-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://vercel.com/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7e052926-bd01-4269-be91-b2a98ccdce35/deploy-status)](https://app.netlify.com/projects/astro-batavia/deploys)
+[![Multilingual](https://img.shields.io/badge/Multilingual-Yes-0A7E07?style=flat)](#)
+[![Dark Mode](https://img.shields.io/badge/Dark_Mode-Enabled-000000?style=flat)](#)
+
 </div>
 
 ## 📋 Table of Contents
@@ -36,18 +38,21 @@
 ## ✨ Features
 
 ### 🌍 **Multilingual Support**
+
 - **3 Languages**: English, Spanish, and Japanese
 - **Smart Routing**: Language-prefixed URLs with fallback handling
 - **Localized Content**: Date formatting, UI translations, and content management
 - **SEO Optimized**: Language-specific meta tags and hreflang attributes
 
 ### 📱 **Modern Design**
+
 - **Responsive Layout**: Mobile-first design with Tailwind CSS
 - **Dark Mode**: System preference detection with manual toggle
 - **Performance**: Static site generation with optimized assets
 - **Accessibility**: WCAG compliant with semantic HTML
 
 ### 📝 **Content Management**
+
 - **Decap CMS**: Git-based headless CMS for easy content editing
 - **MDX Support**: Rich markdown with React components
 - **Reading Time**: Automatic calculation for better UX
@@ -55,44 +60,51 @@
 - **Draft Support**: Preview unpublished content
 
 ### 🔍 **SEO & Analytics**
+
 - **Advanced SEO**: Open Graph, Twitter Cards, JSON-LD structured data
 - **Sitemap**: Automatic generation with i18n support
 - **Analytics Ready**: Sentry integration for error tracking
 - **Performance**: Lighthouse-optimized with compression
 
 ### 🎯 **Developer Experience**
+
 - **TypeScript**: Full type safety across the codebase
 - **Component Architecture**: Modular and reusable components
 - **Hot Reload**: Fast development with Astro's dev server
 - **Advanced Build Optimization**:
-    - **Enterprise-Grade HTML Minification**: Custom integration with `html-minifier-terser` using multi-core processing.
-    - **Asset Compression**: Automatic Gzip and Brotli compression for production builds.
-    - **Granular Control**: Configurable build tools for fine-tuning optimization settings.
-    - **Detailed Build Reports**: Comprehensive reports on file sizes and compression savings.
+  - **Enterprise-Grade HTML Minification**: Custom integration with `html-minifier-terser` using multi-core processing.
+  - **Asset Compression**: Automatic Gzip and Brotli compression for production builds.
+  - **Granular Control**: Configurable build tools for fine-tuning optimization settings.
+  - **Detailed Build Reports**: Comprehensive reports on file sizes and compression savings.
 
 ## 🛠️ Tech Stack
 
 ### **Core Framework**
+
 - **[Astro 5.16.6](https://astro.build)** - Static site generator with islands architecture
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript development
 - **[MDX 4.3.0](https://mdxjs.com/)** - Markdown with JSX components
 
 ### **Styling & UI**
+
 - **[Tailwind CSS 3.4.17](https://tailwindcss.com)** - Utility-first CSS framework
 - **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)** - Beautiful typographic defaults
 - **Custom Design System** - Consistent color palette and spacing
 
 ### **Content & CMS**
+
 - **[Decap CMS](https://decapcms.org/)** - Git-based content management
 - **[Zod](https://zod.dev/)** - Schema validation for content types
 - **Reading Time Calculation** - Automatic reading time estimation
 
 ### **SEO & Analytics**
+
 - **[@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)** - Automatic sitemap generation
 - **[Sentry](https://sentry.io/)** - Error tracking and performance monitoring
 - **[Spotlight.js](https://spotlightjs.com/)** - Development debugging tools
 
 ### **Build & Optimization**
+
 - **Vite** - Fast build tool and dev server
 - **HTML, CSS, & JS Minification** - Automatic minification for optimized delivery
 - **Image Optimization** - Automatic image compression and format conversion
@@ -112,6 +124,7 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 ```
 
 ### **Key Architectural Decisions**
+
 - **Islands Architecture**: Minimal JavaScript with selective hydration
 - **Content Collections**: Type-safe content management with Zod validation
 - **Internationalization**: Route-based language switching with shared components
@@ -128,12 +141,14 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/leonism/astro-batavia.git
    cd astro-batavia
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -147,12 +162,15 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 ### Development
 
 1. **Start the development server**
+
    ```bash
    npm run dev
    ```
+
    The site will be available at `http://localhost:5000`
 
 2. **Available Scripts**
+
    ```bash
    npm run dev          # Start development server
    npm run build        # Build for production with compression
@@ -169,11 +187,13 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 Astro Batavia supports three languages out of the box with a flexible i18n system:
 
 ### **Supported Languages**
+
 - 🇺🇸 **English** (`en`) - Default language
 - 🇪🇸 **Spanish** (`es`)
 - 🇯🇵 **Japanese** (`ja`)
 
 ### **URL Structure**
+
 ```
 /                    → Redirects to /en/
 /en/                 → English homepage
@@ -186,17 +206,19 @@ Astro Batavia supports three languages out of the box with a flexible i18n syste
 ### **Adding a New Language**
 
 1. **Update language configuration**
+
    ```typescript
    // src/i18n/ui.ts
    export const languages = {
      en: 'English',
      es: 'Español',
      ja: '日本語',
-     fr: 'Français' // Add new language
+     fr: 'Français', // Add new language
    };
    ```
 
 2. **Add translations**
+
    ```typescript
    // src/i18n/ui.ts
    export const ui = {
@@ -205,7 +227,7 @@ Astro Batavia supports three languages out of the box with a flexible i18n syste
        'nav.home': 'Accueil',
        'nav.blog': 'Blog',
        // ... add all required translations
-     }
+     },
    } as const;
    ```
 
@@ -250,24 +272,24 @@ Each blog post includes comprehensive metadata:
 
 ```yaml
 ---
-title: "Your Post Title"
-slug: "your-post-slug"
-language: "en"
-categories: ["Technology", "Web Development"]
-description: "Post description for SEO"
-keywords: ["astro", "blog", "seo"]
+title: 'Your Post Title'
+slug: 'your-post-slug'
+language: 'en'
+categories: ['Technology', 'Web Development']
+description: 'Post description for SEO'
+keywords: ['astro', 'blog', 'seo']
 author:
-  name: "Author Name"
-  url: "https://author-website.com"
-  image: "/images/author.jpg"
+  name: 'Author Name'
+  url: 'https://author-website.com'
+  image: '/images/author.jpg'
 publishDate: 2024-01-15
 editDate: 2024-01-16
-heroImage: "/images/hero.jpg"
-tags: ["astro", "tutorial"]
+heroImage: '/images/hero.jpg'
+tags: ['astro', 'tutorial']
 draft: false
-commentStatus: "open"
-robots: "index, follow"
-canonical: "https://yourdomain.com/en/blog/your-post-slug"
+commentStatus: 'open'
+robots: 'index, follow'
+canonical: 'https://yourdomain.com/en/blog/your-post-slug'
 ---
 ```
 
@@ -340,6 +362,7 @@ dist/
 ### **Deployment Options**
 
 #### **Netlify**
+
 ```toml
 # netlify.toml
 [build]
@@ -353,6 +376,7 @@ dist/
 ```
 
 #### **Vercel**
+
 ```json
 {
   "buildCommand": "npm run build",
@@ -362,6 +386,7 @@ dist/
 ```
 
 #### **GitHub Pages**
+
 ```yaml
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
@@ -369,7 +394,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ['main']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -383,7 +408,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
@@ -442,8 +467,8 @@ SENTRY_DSN=your_sentry_dsn
 ```javascript
 // astro.config.mjs
 export default defineConfig({
-  site: "https://yourdomain.com", // Update with your domain
-  output: "static",
+  site: 'https://yourdomain.com', // Update with your domain
+  output: 'static',
   // ... other configuration
 });
 ```
@@ -542,12 +567,14 @@ We welcome contributions to Astro Batavia! Here's how you can help:
 ### **Getting Started**
 
 1. **Fork the repository**
+
    ```bash
    git clone https://github.com/leonism/astro-batavia.git
    cd astro-batavia
    ```
 
 2. **Create a feature branch**
+
    ```bash
    git checkout -b feature/amazing-feature
    ```
@@ -558,12 +585,14 @@ We welcome contributions to Astro Batavia! Here's how you can help:
    - Update documentation
 
 4. **Test your changes**
+
    ```bash
    npm run dev
    npm run build
    ```
 
 5. **Commit and push**
+
    ```bash
    git commit -m "Add amazing feature"
    git push origin feature/amazing-feature
@@ -574,6 +603,7 @@ We welcome contributions to Astro Batavia! Here's how you can help:
 ### **Contribution Guidelines**
 
 #### **Code Style**
+
 - Use TypeScript for type safety
 - Follow existing naming conventions
 - Use Tailwind CSS for styling
@@ -581,20 +611,25 @@ We welcome contributions to Astro Batavia! Here's how you can help:
 - Write descriptive commit messages
 
 #### **Adding New Features**
+
 - **Components**: Place in appropriate `src/components/` subdirectory
 - **Pages**: Follow the existing language structure
 - **Translations**: Add to all supported languages in `src/i18n/ui.ts`
 - **Content**: Use the established frontmatter schema
 
 #### **Bug Reports**
+
 When reporting bugs, please include:
+
 - Steps to reproduce
 - Expected vs actual behavior
 - Browser and OS information
 - Screenshots if applicable
 
 #### **Feature Requests**
+
 For new features, please:
+
 - Check existing issues first
 - Provide detailed use cases
 - Consider backward compatibility
@@ -603,11 +638,13 @@ For new features, please:
 ### **Development Workflow**
 
 1. **Local Development**
+
    ```bash
    npm run dev          # Start dev server
    ```
 
 2. **Code Quality**
+
    ```bash
    npm run build        # Test production build
    ```
@@ -633,10 +670,12 @@ The ISC license is a permissive free software license that allows you to:
 ✅ **Sell** copies of the software
 
 **Requirements:**
+
 - Include the original copyright notice
 - Include the license text
 
 **Limitations:**
+
 - No warranty provided
 - No liability assumed
 

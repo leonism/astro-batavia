@@ -142,8 +142,5 @@ const alternateUrls = SEOService.getAlternateUrls(Astro.url.pathname, siteUrl);
   siteTitle={siteTitle}
 />
 
-<HreflangTags
-  alternateUrls={alternateUrls}
-  hreflangMap={hreflangMap}
-/>
+<HreflangTags alternateUrls={alternateUrls} hreflangMap={hreflangMap} />
 <FaviconLinks />
