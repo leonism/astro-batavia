@@ -1,24 +1,48 @@
 import { EnhancedSearchClient } from './EnhancedSearchClient';
 import { SORT_OPTIONS, DEFAULT_SORT, DOM_IDS, SEARCH_CONFIG } from './searchConstants';
 
+/**
+ * Interface representing the state of active search filters.
+ */
 interface FilterState {
+  /** Array of selected tags for filtering. */
   tags: string[];
+  /** Selected language code for filtering (optional). */
   lang?: string;
 }
 
+/**
+ * Interface representing the state of search results sorting.
+ */
 interface SortState {
+  /** The field to sort by (e.g., 'date', 'relevance'). */
   sortBy: string;
+  /** The sort order ('asc' or 'desc'). */
   sortOrder: string;
 }
 
+/**
+ * Controller for the Search Page.
+ * Manages the initialization, event handling, and state coordination between the UI and the search client.
+ */
 export class SearchPageController {
+  /** The client for interacting with the enhanced search engine. */
   private client: EnhancedSearchClient;
+  /** Current state of active filters. */
   private currentFilters: FilterState;
+  /** Current sorting configuration. */
   private currentSort: SortState;
+  /** Reference to the sort selection dropdown element. */
   private sortSelect: HTMLSelectElement | null;
+  /** Reference to the language selection dropdown element. */
   private langSelect: HTMLSelectElement | null;
+  /** Collection of tag filter buttons. */
   private tagButtons: NodeListOf<HTMLButtonElement>;
 
+  /**
+   * Creates an instance of SearchPageController.
+   * Initializes the search client, default state, and DOM element references.
+   */
   constructor() {
     this.client = new EnhancedSearchClient(SEARCH_CONFIG);
     this.currentFilters = { tags: [] };
@@ -30,6 +54,12 @@ export class SearchPageController {
     this.tagButtons = document.querySelectorAll(DOM_IDS.tagFilter);
   }
 
+  /**
+   * Initializes the search page controller.
+   * Sets up the client, sort options, event listeners, and handles the initial URL state.
+   *
+   * @returns {Promise<void>} A promise that resolves when initialization is complete.
+   */
   public async init(): Promise<void> {
     console.log('Enhanced search page controller initializing...');
 
@@ -51,6 +81,12 @@ export class SearchPageController {
     }
   }
 
+  /**
+   * Initializes the search client by fetching and indexing documents.
+   *
+   * @private
+   * @returns {Promise<void>} A promise that resolves when the client is initialized.
+   */
   private async initializeClient(): Promise<void> {
     console.log('Fetching search index...');
     const response = await fetch('/api/search-index');
@@ -65,6 +101,12 @@ export class SearchPageController {
     await this.client.initialize(documents);
   }
 
+  /**
+   * Populates the sort selection dropdown with available options.
+   * Sets the initial value based on the current sort state.
+   *
+   * @private
+   */
   private setupSortOptions(): void {
     if (!this.sortSelect) return;
 
@@ -77,6 +119,12 @@ export class SearchPageController {
     this.sortSelect.value = `${this.currentSort.sortBy}-${this.currentSort.sortOrder}`;
   }
 
+  /**
+   * Sets up event listeners for UI interactions.
+   * Handles tag clicks, language changes, sort changes, and window unload events.
+   *
+   * @private
+   */
   private setupEventListeners(): void {
     // Tag Filters
     this.tagButtons.forEach((button) => {
@@ -113,6 +161,13 @@ export class SearchPageController {
     });
   }
 
+  /**
+   * Handles the initial state of the page based on URL parameters.
+   * Sets initial filters and performs a search if a query is present.
+   *
+   * @private
+   * @returns {Promise<void>} A promise that resolves when the initial state is handled.
+   */
   private async handleInitialState(): Promise<void> {
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get('q');
@@ -134,6 +189,13 @@ export class SearchPageController {
     }
   }
 
+  /**
+   * Handles click events on tag filter buttons.
+   * Updates the UI and triggers a search update.
+   *
+   * @private
+   * @param {HTMLButtonElement} clickedButton - The button that was clicked.
+   */
   private handleTagClick(clickedButton: HTMLButtonElement): void {
     // Update UI
     this.tagButtons.forEach((btn) => btn.classList.remove('active'));
@@ -147,6 +209,12 @@ export class SearchPageController {
     this.handleSearchUpdate();
   }
 
+  /**
+   * Updates the UI to reflect the active tag filter.
+   *
+   * @private
+   * @param {string} activeTag - The tag that is currently active.
+   */
   private updateTagUI(activeTag: string): void {
     const targetButton = document.querySelector(`${DOM_IDS.tagFilter}[data-tag="${activeTag}"]`);
     if (targetButton) {
@@ -155,6 +223,13 @@ export class SearchPageController {
     }
   }
 
+  /**
+   * Orchestrates a search update based on current inputs and filters.
+   * Retrieves the query and language, then executes the search.
+   *
+   * @private
+   * @returns {Promise<void>} A promise that resolves when the search update is complete.
+   */
   private async handleSearchUpdate(): Promise<void> {
     const searchInput = document.getElementById(SEARCH_CONFIG.searchInputId) as HTMLInputElement;
     const query = searchInput ? searchInput.value : '';
@@ -167,6 +242,15 @@ export class SearchPageController {
     }
   }
 
+  /**
+   * Executes a search with the provided query and current configuration.
+   * Displays the results via the client.
+   *
+   * @private
+   * @param {string} query - The search query string.
+   * @param {string} [lang] - The language code to filter by (optional).
+   * @returns {Promise<void>} A promise that resolves when the search is performed and results are displayed.
+   */
   private async performSearch(query: string, lang?: string): Promise<void> {
     const searchOptions = {
       ...this.currentFilters,
@@ -178,6 +262,13 @@ export class SearchPageController {
     this.client.displayResults(results);
   }
 
+  /**
+   * Handles errors during initialization or search operations.
+   * Logs the error and displays a user-friendly message in the UI.
+   *
+   * @private
+   * @param {unknown} error - The error that occurred.
+   */
   private handleError(error: unknown): void {
     console.error('Failed to initialize search:', error);
     const statusElement = document.getElementById(SEARCH_CONFIG.statusElementId);

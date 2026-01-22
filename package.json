@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "dev": "astro dev",
     "build": "astro build && tsx scripts/compress.ts",
     "build:only": "astro build",
@@ -53,6 +53,7 @@
     "imagemin-pngquant": "^10.0.0",
     "imagemin-svgo": "^11.0.1",
     "imagemin-webp": "^8.0.0",
+    "jsdom": "^27.4.0",
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
@@ -60,6 +61,7 @@
     "rollup-plugin-gzip": "^4.1.1",
     "terser": "^5.43.1",
     "tsx": "^4.21.0",
-    "vite-plugin-imagemin": "^0.6.1"
+    "vite-plugin-imagemin": "^0.6.1",
+    "vitest": "^4.0.17"
   }
 }

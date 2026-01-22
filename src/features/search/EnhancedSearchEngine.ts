@@ -1,73 +1,143 @@
 /**
- * Enhanced Search Engine for Astro Batavia
- * Features: Semantic search, instant results, accessibility, debouncing, caching
+ * Enhanced Search Engine for Astro Batavia.
+ * Features: Semantic search, instant results, accessibility, debouncing, caching.
  */
 
+/**
+ * Interface representing a document that can be indexed and searched.
+ */
 export interface SearchableDocument {
+  /** Unique identifier for the document. */
   id: string;
+  /** Title of the document. */
   title: string;
+  /** Description or summary of the document. */
   description: string;
+  /** Full content of the document (optional). */
   content?: string;
+  /** Array of tags associated with the document. */
   tags: string[];
+  /** URL to the document. */
   url: string;
+  /** Publication date of the document. */
   pubDate: Date | string | number;
+  /** Author of the document (optional). */
   author?: string;
+  /** Category of the document (optional). */
   category?: string;
+  /** Language code of the document. */
   lang: string;
+  /** URL slug of the document. */
   slug: string;
+  /** Estimated reading time in minutes (optional). */
   readingTime?: number;
+  /** URL to the hero image (optional). */
   heroImage?: string;
 }
 
+/**
+ * Interface representing a search result with relevance scores and highlights.
+ * Extends SearchableDocument.
+ */
 export interface SearchResult extends SearchableDocument {
+  /** Overall relevance score for the search query. */
   relevanceScore: number;
+  /** List of fields that matched the search query. */
   matchedFields: string[];
+  /** Title with search terms highlighted (optional). */
   highlightedTitle?: string;
+  /** Description with search terms highlighted (optional). */
   highlightedDescription?: string;
+  /** Content with search terms highlighted (optional). */
   highlightedContent?: string;
+  /** Excerpt with search terms highlighted (optional). */
   highlightedExcerpt?: string;
+  /** Generated excerpt relevant to the search query (optional). */
   excerpt?: string;
+  /** Score based on semantic relevance (optional). */
   semanticScore?: number;
+  /** Score based on contextual relevance (optional). */
   contextualRelevance?: number;
 }
 
+/**
+ * Interface for filtering search results.
+ */
 export interface SearchFilters {
+  /** Filter by tags. */
   tags?: string[];
+  /** Filter by publication date (start). */
   dateFrom?: Date;
+  /** Filter by publication date (end). */
   dateTo?: Date;
+  /** Filter by author. */
   author?: string;
+  /** Filter by category. */
   category?: string;
+  /** Filter by language. */
   lang?: string;
+  /** Sort criteria. */
   sortBy?: 'relevance' | 'date' | 'title' | 'semantic' | 'hybrid';
+  /** Sort order. */
   sortOrder?: 'asc' | 'desc';
 }
 
+/**
+ * Interface for configuring search options.
+ */
 export interface SearchOptions {
+  /** Threshold for fuzzy matching (0.0 to 1.0). */
   fuzzyThreshold?: number;
+  /** Maximum number of results to return. */
   maxResults?: number;
+  /** Whether to enable term highlighting. */
   enableHighlighting?: boolean;
+  /** Whether to enable search suggestions. */
   enableSuggestions?: boolean;
+  /** Minimum query length to trigger search. */
   minQueryLength?: number;
+  /** Boost factor for semantic matches. */
   semanticBoost?: number;
+  /** Boost factor for contextual matches. */
   contextualBoost?: number;
+  /** Whether to enable typo tolerance. */
   typoTolerance?: boolean;
+  /** Whether to enable phrase matching. */
   phraseMatching?: boolean;
 }
 
+/**
+ * Interface representing a search suggestion.
+ */
 export interface SearchSuggestion {
+  /** The suggested text. */
   text: string;
+  /** The type of suggestion. */
   type: 'query' | 'tag' | 'title' | 'semantic' | 'completion';
+  /** The relevance score of the suggestion. */
   score: number;
+  /** Description of the suggestion (optional). */
   description?: string;
+  /** Category of the suggestion (optional). */
   category?: string;
 }
 
+/**
+ * Interface representing a semantic cluster of related terms.
+ */
 interface SemanticCluster {
+  /** List of related terms in the cluster. */
   terms: string[];
+  /** Weight of the cluster for relevance calculation. */
   weight: number;
+  /** Category name of the cluster. */
   category: string;
 }
 
+/**
+ * Enhanced Search Engine class providing advanced search capabilities.
+ * Includes semantic search, caching, and performance optimization.
+ */
 class EnhancedSearchEngine {
   private documents: SearchableDocument[] = [];
   private searchIndex: Map<string, Set<number>> = new Map();
@@ -255,6 +325,10 @@ class EnhancedSearchEngine {
   // Search cache separate from main cache
   private searchCache: Map<string, SearchResult[]> = new Map();
 
+  /**
+   * Creates an instance of EnhancedSearchEngine.
+   * Initializes synonyms and sets up keyboard shortcuts if in a browser environment.
+   */
   constructor() {
     this.initializeSynonyms();
     if (typeof window !== 'undefined') {
@@ -263,7 +337,11 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Index documents with enhanced semantic analysis
+   * Index documents with enhanced semantic analysis.
+   * Builds multiple indexes in parallel for optimized search performance.
+   *
+   * @param {SearchableDocument[]} documents - The list of documents to index.
+   * @returns {Promise<void>} A promise that resolves when indexing is complete.
    */
   async indexDocuments(documents: SearchableDocument[]): Promise<void> {
     const startTime = performance.now();
@@ -290,7 +368,12 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Enhanced search with semantic understanding and typo tolerance
+   * Enhanced search with semantic understanding and typo tolerance.
+   *
+   * @param {string} query - The search query.
+   * @param {SearchFilters} filters - Optional filters to apply.
+   * @param {SearchOptions} options - Optional search configuration.
+   * @returns {SearchResult[]} An array of search results sorted by relevance.
    */
   search(query: string, filters: SearchFilters = {}, options: SearchOptions = {}): SearchResult[] {
     const startTime = performance.now();
@@ -338,7 +421,11 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Get intelligent search suggestions with context awareness
+   * Get intelligent search suggestions with context awareness.
+   *
+   * @param {string} partialQuery - The partial search query.
+   * @param {number} limit - The maximum number of suggestions to return (default: 8).
+   * @returns {SearchSuggestion[]} An array of search suggestions.
    */
   getSuggestions(partialQuery: string, limit: number = 8): SearchSuggestion[] {
     if (partialQuery.length < 2) return [];
@@ -424,7 +511,10 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Get popular search terms
+   * Get popular search terms.
+   *
+   * @param {number} limit - The maximum number of popular terms to return (default: 10).
+   * @returns {{ query: string; count: number }[]} An array of popular search terms and their counts.
    */
   getPopularSearches(limit: number = 10): { query: string; count: number }[] {
     return Array.from(this.performanceMetrics.popularQueries.entries())
@@ -434,7 +524,9 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Get search insights and analytics
+   * Get search insights and analytics.
+   *
+   * @returns {object} An object containing search metrics and analytics.
    */
   getSearchInsights() {
     return {
@@ -451,6 +543,14 @@ class EnhancedSearchEngine {
 
   // Private methods
 
+  /**
+   * Performs the core search logic using various matching strategies.
+   *
+   * @param {string} query - The search query.
+   * @param {SearchFilters} filters - Filters to apply.
+   * @param {object} options - Search options.
+   * @returns {SearchResult[]} The list of matching results.
+   */
   private performEnhancedSearch(
     query: string,
     filters: SearchFilters,
@@ -535,6 +635,13 @@ class EnhancedSearchEngine {
     );
   }
 
+  /**
+   * Adds fuzzy matches to candidate scores.
+   *
+   * @param {string[]} queryWords - The words in the query.
+   * @param {Map<number, number>} candidateScores - The map of candidate scores to update.
+   * @param {number} threshold - The fuzzy matching threshold.
+   */
   private addFuzzyMatches(
     queryWords: string[],
     candidateScores: Map<number, number>,
@@ -552,6 +659,12 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Adds phrase matches to candidate scores.
+   *
+   * @param {string} query - The full search query.
+   * @param {Map<number, number>} candidateScores - The map of candidate scores to update.
+   */
   private addPhraseMatches(query: string, candidateScores: Map<number, number>): void {
     if (this.phraseIndex.has(query)) {
       this.phraseIndex.get(query)!.forEach((index) => {
@@ -560,6 +673,13 @@ class EnhancedSearchEngine {
     }
   }
 
+  /**
+   * Adds semantic matches to candidate scores based on clusters.
+   *
+   * @param {string} query - The search query.
+   * @param {Map<number, number>} candidateScores - The map of candidate scores to update.
+   * @param {number} boost - The boost factor for semantic matches.
+   */
   private addSemanticMatches(
     query: string,
     candidateScores: Map<number, number>,
@@ -581,6 +701,12 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Adds n-gram matches to candidate scores.
+   *
+   * @param {string} query - The search query.
+   * @param {Map<number, number>} candidateScores - The map of candidate scores to update.
+   */
   private addNgramMatches(query: string, candidateScores: Map<number, number>): void {
     const ngrams = this.generateNgrams(query, 3);
     ngrams.forEach((ngram) => {
@@ -592,6 +718,15 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Calculates the enhanced relevance score for a document.
+   *
+   * @param {SearchableDocument} doc - The document to score.
+   * @param {string} query - The search query.
+   * @param {number} baseScore - The base match score.
+   * @param {any} options - Search options.
+   * @returns {number} The calculated relevance score.
+   */
   private calculateEnhancedRelevance(
     doc: SearchableDocument,
     query: string,
@@ -642,6 +777,13 @@ class EnhancedSearchEngine {
     return score;
   }
 
+  /**
+   * Calculates semantic relevance score between query and text.
+   *
+   * @param {string} query - The search query.
+   * @param {string} text - The text to compare against.
+   * @returns {number} The semantic relevance score.
+   */
   private calculateSemanticRelevance(query: string, text: string): number {
     let score = 0;
     const queryLower = query.toLowerCase();
@@ -663,6 +805,13 @@ class EnhancedSearchEngine {
     return score;
   }
 
+  /**
+   * Calculates contextual relevance based on related words.
+   *
+   * @param {SearchableDocument} doc - The document to check.
+   * @param {string} query - The search query.
+   * @returns {number} The contextual relevance score.
+   */
   private calculateContextualRelevance(doc: SearchableDocument, query: string): number {
     let score = 0;
     const queryWords = this.extractWords(query);
@@ -679,6 +828,13 @@ class EnhancedSearchEngine {
     return score;
   }
 
+  /**
+   * Checks if two words are related using a predefined list.
+   *
+   * @param {string} word1 - The first word.
+   * @param {string} word2 - The second word.
+   * @returns {boolean} True if the words are related, false otherwise.
+   */
   private areWordsRelated(word1: string, word2: string): boolean {
     // Simple related word detection - can be enhanced with NLP libraries
     const relatedPairs = [
@@ -695,6 +851,14 @@ class EnhancedSearchEngine {
     );
   }
 
+  /**
+   * Sorts search results based on specified criteria.
+   *
+   * @param {SearchResult[]} results - The results to sort.
+   * @param {string} sortBy - The sort criteria.
+   * @param {string} sortOrder - The sort order ('asc' or 'desc').
+   * @returns {SearchResult[]} The sorted results.
+   */
   private sortResultsIntelligently(
     results: SearchResult[],
     sortBy: string,
@@ -726,6 +890,11 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Builds the main search index.
+   *
+   * @returns {Promise<void>} A promise that resolves when the index is built.
+   */
   private buildSearchIndex(): Promise<void> {
     return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
@@ -744,6 +913,11 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Builds the semantic index based on clusters.
+   *
+   * @returns {Promise<void>} A promise that resolves when the index is built.
+   */
   private buildSemanticIndex(): Promise<void> {
     return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
@@ -764,6 +938,11 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Builds the n-gram index for partial matching.
+   *
+   * @returns {Promise<void>} A promise that resolves when the index is built.
+   */
   private buildNgramIndex(): Promise<void> {
     return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
@@ -781,6 +960,11 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Builds the phrase index for phrase matching.
+   *
+   * @returns {Promise<void>} A promise that resolves when the index is built.
+   */
   private buildPhraseIndex(): Promise<void> {
     return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
@@ -800,6 +984,11 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Builds the tag index for tag-based filtering.
+   *
+   * @returns {Promise<void>} A promise that resolves when the index is built.
+   */
   private buildTagIndex(): Promise<void> {
     return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
@@ -815,6 +1004,11 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Builds the title index for title matching.
+   *
+   * @returns {Promise<void>} A promise that resolves when the index is built.
+   */
   private buildTitleIndex(): Promise<void> {
     return new Promise((resolve) => {
       this.documents.forEach((doc, index) => {
@@ -830,6 +1024,13 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Generates n-grams from text.
+   *
+   * @param {string} text - The input text.
+   * @param {number} n - The size of n-grams.
+   * @returns {string[]} An array of n-grams.
+   */
   private generateNgrams(text: string, n: number): string[] {
     const ngrams: string[] = [];
     for (let i = 0; i <= text.length - n; i++) {
@@ -838,6 +1039,13 @@ class EnhancedSearchEngine {
     return ngrams;
   }
 
+  /**
+   * Extracts phrases of a specific length from text.
+   *
+   * @param {string} text - The input text.
+   * @param {number} length - The number of words in the phrase.
+   * @returns {string[]} An array of phrases.
+   */
   private extractPhrases(text: string, length: number): string[] {
     const words = text.split(/\s+/);
     const phrases: string[] = [];
@@ -852,6 +1060,13 @@ class EnhancedSearchEngine {
     return phrases;
   }
 
+  /**
+   * Generates a smart excerpt containing the query terms.
+   *
+   * @param {SearchableDocument} doc - The document.
+   * @param {string} query - The search query.
+   * @returns {string} The generated excerpt.
+   */
   private generateSmartExcerpt(doc: SearchableDocument, query: string): string {
     const queryWords = this.extractWords(query);
     const content = this.stripMarkdown(doc.content || doc.description);
@@ -879,6 +1094,9 @@ class EnhancedSearchEngine {
     return doc.description.substring(0, 150) + (doc.description.length > 150 ? '...' : '');
   }
 
+  /**
+   * Sets up keyboard shortcuts for search.
+   */
   private setupKeyboardShortcuts(): void {
     document.addEventListener('keydown', (e) => {
       // Ctrl/Cmd + K to focus search
@@ -902,6 +1120,9 @@ class EnhancedSearchEngine {
     });
   }
 
+  /**
+   * Initializes default synonyms.
+   */
   private initializeSynonyms(): void {
     // Basic synonym mapping - can be expanded
     this.synonymIndex.set('javascript', ['js', 'ecmascript']);
@@ -910,6 +1131,13 @@ class EnhancedSearchEngine {
     this.synonymIndex.set('application programming interface', ['api', 'rest api']);
   }
 
+  /**
+   * Updates performance metrics after a search.
+   *
+   * @param {string} query - The search query.
+   * @param {number} searchTime - The time taken for the search.
+   * @param {boolean} cacheHit - Whether the result was from cache.
+   */
   private updatePerformanceMetrics(query: string, searchTime: number, cacheHit: boolean): void {
     this.performanceMetrics.searchCount++;
     this.performanceMetrics.avgSearchTime =
@@ -927,6 +1155,9 @@ class EnhancedSearchEngine {
     this.performanceMetrics.popularQueries.set(query, queryCount + 1);
   }
 
+  /**
+   * Clears all indexes and caches.
+   */
   private clearIndexes(): void {
     this.searchIndex.clear();
     this.tagIndex.clear();
@@ -938,6 +1169,9 @@ class EnhancedSearchEngine {
     this.suggestionCache.clear();
   }
 
+  /**
+   * Cleans up indexes by removing references to invalid documents.
+   */
   private cleanupIndexes(): void {
     // Remove entries that point to non-existent documents
     const validIndices = new Set(Array.from({ length: this.documents.length }, (_, i) => i));
@@ -962,6 +1196,13 @@ class EnhancedSearchEngine {
   }
 
   // Utility methods from base class with enhancements
+
+  /**
+   * Extracts words from text, removing stop words and short words.
+   *
+   * @param {string} text - The input text.
+   * @returns {string[]} An array of extracted words.
+   */
   private extractWords(text: string): string[] {
     return text
       .toLowerCase()
@@ -971,20 +1212,47 @@ class EnhancedSearchEngine {
       .filter((word) => word.length >= 2 && !this.stopWords.has(word));
   }
 
+  /**
+   * Normalizes a search query.
+   *
+   * @param {string} query - The search query.
+   * @returns {string} The normalized query.
+   */
   private normalizeQuery(query: string): string {
     return query.trim().toLowerCase().replace(/\s+/g, ' ');
   }
 
+  /**
+   * Normalizes a publication date.
+   *
+   * @param {Date | string | number} pubDate - The publication date.
+   * @returns {Date} The normalized date object.
+   */
   private normalizePubDate(pubDate: Date | string | number): Date {
     if (pubDate instanceof Date) return pubDate;
     const date = new Date(pubDate);
     return isNaN(date.getTime()) ? new Date(0) : date;
   }
 
+  /**
+   * Generates a unique cache key for search parameters.
+   *
+   * @param {string} query - The search query.
+   * @param {SearchFilters} filters - The search filters.
+   * @param {SearchOptions} options - The search options.
+   * @returns {string} The cache key.
+   */
   private getCacheKey(query: string, filters: SearchFilters, options: SearchOptions): string {
     return `${query}:${JSON.stringify(filters)}:${JSON.stringify(options)}`;
   }
 
+  /**
+   * Returns documents filtered only by basic filters (no text search).
+   *
+   * @param {SearchFilters} filters - The filters to apply.
+   * @param {number} maxResults - The maximum number of results.
+   * @returns {SearchResult[]} The filtered results.
+   */
   private getFilteredDocuments(filters: SearchFilters, maxResults: number): SearchResult[] {
     return this.documents
       .filter((doc) => this.matchesFilters(doc, filters))
@@ -998,6 +1266,13 @@ class EnhancedSearchEngine {
       .slice(0, maxResults);
   }
 
+  /**
+   * Checks if a document matches the specified filters.
+   *
+   * @param {SearchableDocument} doc - The document to check.
+   * @param {SearchFilters} filters - The filters to apply.
+   * @returns {boolean} True if the document matches the filters, false otherwise.
+   */
   private matchesFilters(doc: SearchableDocument, filters: SearchFilters): boolean {
     if (filters.tags?.length && !filters.tags.some((tag) => doc.tags.includes(tag))) return false;
     if (filters.dateFrom && new Date(doc.pubDate) < filters.dateFrom) return false;
@@ -1013,6 +1288,13 @@ class EnhancedSearchEngine {
     return true;
   }
 
+  /**
+   * Identifies which fields matched the query.
+   *
+   * @param {SearchableDocument} doc - The document.
+   * @param {string} query - The search query.
+   * @returns {string[]} An array of matched field names.
+   */
   private getMatchedFields(doc: SearchableDocument, query: string): string[] {
     const fields: string[] = [];
     const queryLower = query.toLowerCase();
@@ -1025,6 +1307,13 @@ class EnhancedSearchEngine {
     return fields;
   }
 
+  /**
+   * Highlights occurrences of query terms in text.
+   *
+   * @param {string} text - The input text.
+   * @param {string} query - The search query.
+   * @returns {string} The text with highlights applied.
+   */
   private highlightText(text: string, query: string): string {
     const queryWords = this.extractWords(query);
     let highlightedText = text;
@@ -1040,6 +1329,13 @@ class EnhancedSearchEngine {
     return highlightedText;
   }
 
+  /**
+   * Calculates similarity between two strings (0.0 to 1.0).
+   *
+   * @param {string} str1 - The first string.
+   * @param {string} str2 - The second string.
+   * @returns {number} The similarity score.
+   */
   private calculateSimilarity(str1: string, str2: string): number {
     if (str1 === str2) return 1.0;
 
@@ -1051,6 +1347,13 @@ class EnhancedSearchEngine {
     return (longer.length - this.levenshteinDistance(longer, shorter)) / longer.length;
   }
 
+  /**
+   * Calculates Levenshtein distance between two strings.
+   *
+   * @param {string} str1 - The first string.
+   * @param {string} str2 - The second string.
+   * @returns {number} The Levenshtein distance.
+   */
   private levenshteinDistance(str1: string, str2: string): number {
     const matrix = Array(str2.length + 1)
       .fill(null)
@@ -1073,6 +1376,13 @@ class EnhancedSearchEngine {
     return matrix[str2.length][str1.length];
   }
 
+  /**
+   * Calculates a score for a suggestion based on the query.
+   *
+   * @param {string} suggestion - The suggestion text.
+   * @param {string} query - The search query.
+   * @returns {number} The calculated score.
+   */
   private calculateSuggestionScore(suggestion: string, query: string): number {
     const similarity = this.calculateSimilarity(suggestion.toLowerCase(), query);
     const startsWithBonus = suggestion.toLowerCase().startsWith(query) ? 0.5 : 0;
@@ -1080,10 +1390,22 @@ class EnhancedSearchEngine {
     return similarity + startsWithBonus - lengthPenalty;
   }
 
+  /**
+   * Escapes special characters for use in a regular expression.
+   *
+   * @param {string} string - The input string.
+   * @returns {string} The escaped string.
+   */
   private escapeRegex(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
+  /**
+   * Strips Markdown formatting from text.
+   *
+   * @param {string} text - The Markdown text.
+   * @returns {string} The plain text.
+   */
   private stripMarkdown(text: string): string {
     if (!text) return '';
     return text
@@ -1100,7 +1422,10 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Track result click for analytics
+   * Track result click for analytics.
+   *
+   * @param {string} query - The search query.
+   * @param {string} resultId - The ID of the clicked result.
    */
   trackResultClick(query: string, resultId: string): void {
     if (!this.analytics.clickTracking) {
@@ -1116,7 +1441,8 @@ class EnhancedSearchEngine {
   }
 
   /**
-   * Optimize performance by clearing old cache entries
+   * Optimize performance by clearing old cache entries.
+   * Checks both search cache and analytics data.
    */
   optimizePerformance(): void {
     // Clear old cache entries if cache is too large

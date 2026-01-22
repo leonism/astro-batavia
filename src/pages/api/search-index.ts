@@ -2,10 +2,20 @@ import type { APIRoute } from 'astro';
 import { getPostUrl } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
 
+/**
+ * API route for generating the search index.
+ * Returns a JSON array of all blog posts with their metadata and content.
+ */
 export const GET: APIRoute = async () => {
   try {
+    /**
+     * Fetch all blog posts from the service layer.
+     */
     const allBlogPosts = await BlogService.getAllPosts();
 
+    /**
+     * Transform blog posts into search documents.
+     */
     const documents = allBlogPosts.map((post) => {
       const lang = post.slug.split('/')[0];
       return {
