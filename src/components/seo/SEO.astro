@@ -1,10 +1,5 @@
 ---
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SOCIAL_LINKS } from '@/consts';
-import {
-  generateArticleSchema,
-  generateBreadcrumbSchema,
-  generateWebsiteSchema,
-} from '@/utils/jsonLd';
 
 import BasicMetaTags from '@/components/seo/BasicMetaTags.astro';
 import OpenGraphMetaTags from '@/components/seo/OpenGraphMetaTags.astro';
@@ -89,39 +84,6 @@ const defaultOrganization = {
 };
 const orgData = organization || defaultOrganization;
 
-// Generate JSON-LD structured data
-const generateJsonLd = () => {
-  const schemas = [];
-
-  if (type === 'website') {
-    schemas.push(generateWebsiteSchema({ siteTitle, siteUrl }));
-  }
-
-  if (type === 'article' || type === 'blog') {
-    schemas.push(
-      generateArticleSchema({
-        title,
-        description,
-        image: imageUrl,
-        publishedTime,
-        modifiedTime,
-        author,
-        authorUrl,
-        organization: orgData,
-        canonical: canonicalUrl,
-      }),
-    );
-  }
-
-  if (breadcrumbs.length > 0) {
-    schemas.push(generateBreadcrumbSchema(breadcrumbs));
-  }
-
-  return JSON.stringify(schemas);
-};
-
-const jsonLdData = generateJsonLd();
-
 // Language mappings
 const hreflangMap = {
   en: 'en-US',
@@ -142,12 +104,6 @@ const getAlternateUrls = () => {
 
 const alternateUrls = getAlternateUrls();
 ---
-
-<!-- JSON-LD Structured Data -->
-<script
-  type="application/ld+json"
-  set:text={jsonLdData}
-/>
 
 <BasicMetaTags
   fullTitle={fullTitle}
