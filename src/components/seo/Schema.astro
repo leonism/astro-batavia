@@ -33,6 +33,7 @@ export interface Props {
     bestRating?: number;
     worstRating?: number;
     reviewBody?: string;
+    datePublished?: string | Date;
   };
   license?: string;
   acquireLicensePage?: string;
@@ -71,7 +72,7 @@ const {
   organization,
 } = Astro.props;
 
-const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
+const siteUrl = (Astro.site ? Astro.site.href : SITE_URL).replace(/\/$/, '');
 const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
 const imageUrl = image ? new URL(image, siteUrl).href : new URL('/favicon-32x32.png', siteUrl).href;
 
@@ -92,8 +93,9 @@ const graph: Record<string, any>[] = [];
 let imageSchema: Record<string, any> = {
   '@type': 'ImageObject',
   url: imageUrl,
+  contentUrl: imageUrl,
   caption: imageAlt || title,
-  representativeOfPage: 'true',
+  representativeOfPage: true,
 };
 
 if (imageDimensions) {
@@ -184,7 +186,7 @@ if (type === 'article' || type === 'blog') {
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${siteUrl}?q={search_term_string}`,
+      target: `${siteUrl}/search?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   });
@@ -223,7 +225,9 @@ if (review) {
       '@type': 'Thing',
       name: review.itemReviewed?.name || title,
       description: review.itemReviewed?.description,
-      image: review.itemReviewed?.image,
+      image: review.itemReviewed?.image
+        ? new URL(review.itemReviewed.image, siteUrl).href
+        : undefined,
     },
     author: {
       '@type': 'Person',
@@ -235,6 +239,9 @@ if (review) {
       bestRating: review.bestRating || 5,
       worstRating: review.worstRating || 1,
     },
+    datePublished: review.datePublished
+      ? new Date(review.datePublished).toISOString()
+      : new Date().toISOString(),
     reviewBody: review.reviewBody,
   });
 }
