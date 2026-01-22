@@ -17,7 +17,8 @@ const t = useTranslations(lang);
 <Layout
   title={`${SITE_TITLE} - Modern Multi-Language Blog`}
   description={t('meta.description') as string}
-  lang={lang}>
+  lang={lang}
+>
   <HeroSection />
   <FeaturesSection />
   <FeaturedStoriesSection latestPosts={latestPosts} />

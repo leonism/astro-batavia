@@ -4,51 +4,51 @@ backend:
 
 local_backend: true
 
-media_folder: "public/images"
-public_folder: "/images"
+media_folder: 'public/images'
+public_folder: '/images'
 
 collections:
-  - name: "blog-en"
-    label: "Blog Posts (English)"
-    folder: "src/content/blog/en"
+  - name: 'blog-en'
+    label: 'Blog Posts (English)'
+    folder: 'src/content/blog/en'
     create: true
-    slug: "{{slug}}"
+    slug: '{{slug}}'
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Author", name: "author", widget: "string", default: "Admin" }
-      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
-      - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
-      - { label: "Draft", name: "draft", widget: "boolean", default: false }
-      - { label: "Tags", name: "tags", widget: "list", default: ["general"] }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Description', name: 'description', widget: 'text' }
+      - { label: 'Author', name: 'author', widget: 'string', default: 'Admin' }
+      - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
+      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - { label: 'Draft', name: 'draft', widget: 'boolean', default: false }
+      - { label: 'Tags', name: 'tags', widget: 'list', default: ['general'] }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
 
-  - name: "blog-es"
-    label: "Blog Posts (Spanish)"
-    folder: "src/content/blog/es"
+  - name: 'blog-es'
+    label: 'Blog Posts (Spanish)'
+    folder: 'src/content/blog/es'
     create: true
-    slug: "{{slug}}"
+    slug: '{{slug}}'
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Author", name: "author", widget: "string", default: "Admin" }
-      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
-      - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
-      - { label: "Draft", name: "draft", widget: "boolean", default: false }
-      - { label: "Tags", name: "tags", widget: "list", default: ["general"] }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Description', name: 'description', widget: 'text' }
+      - { label: 'Author', name: 'author', widget: 'string', default: 'Admin' }
+      - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
+      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - { label: 'Draft', name: 'draft', widget: 'boolean', default: false }
+      - { label: 'Tags', name: 'tags', widget: 'list', default: ['general'] }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
 
-  - name: "blog-ja"
-    label: "Blog Posts (Japanese)"
-    folder: "src/content/blog/ja"
+  - name: 'blog-ja'
+    label: 'Blog Posts (Japanese)'
+    folder: 'src/content/blog/ja'
     create: true
-    slug: "{{slug}}"
+    slug: '{{slug}}'
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Author", name: "author", widget: "string", default: "Admin" }
-      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
-      - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
-      - { label: "Draft", name: "draft", widget: "boolean", default: false }
-      - { label: "Tags", name: "tags", widget: "list", default: ["general"] }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Description', name: 'description', widget: 'text' }
+      - { label: 'Author', name: 'author', widget: 'string', default: 'Admin' }
+      - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
+      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - { label: 'Draft', name: 'draft', widget: 'boolean', default: false }
+      - { label: 'Tags', name: 'tags', widget: 'list', default: ['general'] }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
