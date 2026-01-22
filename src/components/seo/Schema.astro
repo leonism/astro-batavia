@@ -6,6 +6,22 @@ export type Props = SchemaProps;
 
 const siteUrl = (Astro.site ? Astro.site.href : SITE_URL).replace(/\/$/, '');
 const schema = SchemaService.generateSchema(Astro.props, siteUrl);
+
+/**
+ * Safely serialize JSON for embedding in HTML <script> tags.
+ * Prevents XSS and parsing errors by escaping HTML characters.
+ */
+const serializeSchema = (data: Record<string, any>) => {
+  const json = JSON.stringify(data);
+  if (!json) return '{}';
+  
+  return json
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+};
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script type="application/ld+json" set:html={serializeSchema(schema)} />
