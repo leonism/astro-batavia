@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 import { BlogService } from '@/services/BlogService';
+import { ContentService } from '@/services/ContentService';
 import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 import { getPostUrl, slugifyTag } from '@/i18n/utils';
-import { getExcerpt } from '@/utils/content-helpers';
 
 export async function getStaticPaths() {
   const languages = ['en', 'es', 'ja'];
@@ -47,7 +47,7 @@ export const GET: APIRoute = async ({ props }) => {
     tags: post.data.tags,
     readingTime: post.data.readingTime,
     url: getPostUrl(post.slug, lang),
-    excerpt: getExcerpt(post.body, post.data.description, 150),
+    excerpt: ContentService.getExcerpt(post.body, post.data.description, 150),
   }));
 
   return new Response(JSON.stringify(postsData), {

@@ -1,5 +1,6 @@
 ---
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SOCIAL_LINKS } from '@/consts';
+import { SEOService } from '@/services/SEOService';
 
 import BasicMetaTags from '@/components/seo/BasicMetaTags.astro';
 import OpenGraphMetaTags from '@/components/seo/OpenGraphMetaTags.astro';
@@ -91,18 +92,7 @@ const hreflangMap = {
   ja: 'ja-JP',
 };
 
-// Get alternate language URLs
-const getAlternateUrls = () => {
-  const currentPath = Astro.url.pathname;
-  const pathWithoutLang = currentPath.replace(/^\/(en|es|ja)/, '') || '/';
-  return {
-    en: pathWithoutLang === '/' ? siteUrl : `${siteUrl}${pathWithoutLang}`,
-    es: `${siteUrl}/es${pathWithoutLang}`,
-    ja: `${siteUrl}/ja${pathWithoutLang}`,
-  };
-};
-
-const alternateUrls = getAlternateUrls();
+const alternateUrls = SEOService.getAlternateUrls(Astro.url.pathname, siteUrl);
 ---
 
 <BasicMetaTags

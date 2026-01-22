@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Picture from '@/components/ui/Picture.astro';
-import { formatDate } from '@/i18n/utils';
+import { DateService } from '@/services/DateService';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -51,6 +51,6 @@ const { post, lang } = Astro.props;
       >
       </path>
     </svg>
-    {formatDate(post.data.pubDate, lang)}
+    {DateService.format(post.data.pubDate, lang)}
   </time>
 </div>

@@ -1,8 +1,8 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { useTranslations, getPostUrl, getLocalizedPath, slugifyTag } from '@/i18n/utils';
-import { formatDate } from '@/utils/date-formatters';
-import { getExcerpt } from '@/utils/content-helpers';
+import { DateService } from '@/services/DateService';
+import { ContentService } from '@/services/ContentService';
 import type { LanguageKey } from '@/i18n/types';
 import Picture from '@/components/ui/Picture.astro';
 
@@ -31,7 +31,7 @@ const t = useTranslations(lang);
 const postUrl = getPostUrl(post.slug, lang);
 
 const excerpt = showExcerpt
-  ? getExcerpt(post.body, post.data.description, isFeatured ? 300 : 150)
+  ? ContentService.getExcerpt(post.body, post.data.description, isFeatured ? 300 : 150)
   : '';
 
 // CSS Classes extraction
@@ -155,7 +155,7 @@ const classes = {
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
               </path>
             </svg>
-            {formatDate(post.data.pubDate, lang)}
+            {DateService.format(post.data.pubDate, lang)}
           </time>
         </div>
 

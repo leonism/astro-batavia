@@ -181,7 +181,7 @@ const pagePosts = page?.data || [];
 }
 
 <script>
-  import { initializeBlogIndex } from '@/services/BlogIndexClient';
+  import { BlogIndexClient } from '@/services/BlogIndexClient';
 
   function setupLoadMore() {
     // Only initialize if the button exists and hasn't been initialized
@@ -189,7 +189,7 @@ const pagePosts = page?.data || [];
     if (!button || button.dataset.loadMoreInitialized === 'true') return;
 
     // Initialize our client-side logic
-    initializeBlogIndex();
+    BlogIndexClient.init();
   }
 
   // Handle Astro view transitions and initial load
