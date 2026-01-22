@@ -5,7 +5,7 @@ import Schema from '@/components/seo/Schema.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import { GoogleTagmanager } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SITE_AUTHOR } from '@/consts';
-import { getCanonicalURL, getOpenGraphImage } from '@/services/SEOService';
+import { SEOService } from '@/services/SEOService';
 
 interface Props {
   title: string;
@@ -72,8 +72,8 @@ let canonicalURL = canonical || Astro.url.href;
 let resolvedImage = image || new URL(SITE_AUTHOR.image, siteUrl).href;
 
 try {
-  canonicalURL = canonical || getCanonicalURL(Astro.url.pathname, siteUrl);
-  resolvedImage = getOpenGraphImage(image, siteUrl);
+  canonicalURL = canonical || SEOService.getCanonicalURL(Astro.url.pathname, siteUrl);
+  resolvedImage = SEOService.getOpenGraphImage(image, siteUrl);
 } catch (error) {
   console.error('Error resolving SEO metadata', {
     error,

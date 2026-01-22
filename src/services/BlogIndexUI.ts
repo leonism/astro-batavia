@@ -1,3 +1,6 @@
+import { slugifyTag } from '@/i18n/utils';
+import { DateService } from '@/services/DateService';
+
 export interface BlogPost {
   id: string;
   slug: string;
@@ -12,17 +15,31 @@ export interface BlogPost {
   url?: string;
 }
 
+/**
+ * UI Controller for the Blog Index page.
+ * Handles client-side interactions such as pagination (load more),
+ * loading states, and dynamic content rendering.
+ */
 export class BlogIndexUI {
   private container: HTMLElement;
   private button: HTMLElement;
   private originalButtonText: string = '';
 
+  /**
+   * Creates an instance of BlogIndexUI.
+   * @param {HTMLElement} container - The container element where blog posts will be appended.
+   * @param {HTMLElement} button - The 'Load More' button element.
+   */
   constructor(container: HTMLElement, button: HTMLElement) {
     this.container = container;
     this.button = button;
     this.originalButtonText = button.innerHTML;
   }
 
+  /**
+   * Sets the 'Load More' button to a loading state.
+   * Disables interactions and shows a spinner.
+   */
   public setButtonLoading(): void {
     if (this.button instanceof HTMLButtonElement) {
       this.button.disabled = true;
@@ -30,7 +47,7 @@ export class BlogIndexUI {
       this.button.style.pointerEvents = 'none';
       this.button.setAttribute('aria-disabled', 'true');
     }
-    
+
     this.button.setAttribute('aria-busy', 'true');
     this.container.setAttribute('aria-busy', 'true');
     this.button.innerHTML = `
@@ -42,9 +59,13 @@ export class BlogIndexUI {
 		`;
   }
 
+  /**
+   * Resets the 'Load More' button to its original state.
+   * Re-enables interactions and restores original text.
+   */
   public resetButton(): void {
     if (this.button.style.display === 'none') return;
-    
+
     if (this.button instanceof HTMLButtonElement) {
       this.button.disabled = false;
     } else {
@@ -57,10 +78,17 @@ export class BlogIndexUI {
     this.button.innerHTML = this.originalButtonText;
   }
 
+  /**
+   * Hides the 'Load More' button completely (e.g., when no more posts).
+   */
   public hideButton(): void {
     this.button.style.display = 'none';
   }
 
+  /**
+   * Displays an error message near the button.
+   * @param {string} message - The error message to display.
+   */
   public showErrorMessage(message: string): void {
     const existingError = this.button.parentNode?.querySelector('.load-more-error');
     if (existingError) {
@@ -79,6 +107,11 @@ export class BlogIndexUI {
     }, 5000);
   }
 
+  /**
+   * Appends new blog posts to the container.
+   * @param {BlogPost[]} posts - The array of blog posts to append.
+   * @param {string} lang - The current language code.
+   */
   public appendPosts(posts: BlogPost[], lang: string): void {
     let newPostsHtml = '';
     for (const post of posts) {
@@ -92,6 +125,10 @@ export class BlogIndexUI {
     this.appendPostElements(newPosts);
   }
 
+  /**
+   * Appends post elements to the container and triggers animations.
+   * @param {Element[]} elements - The HTML elements to append.
+   */
   public appendPostElements(elements: Element[]): void {
     elements.forEach((post) => {
       post.classList.add('animate-fade-in');
@@ -104,25 +141,15 @@ export class BlogIndexUI {
     }
   }
 
-  private slugifyTag(tag: string): string {
-    return tag
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/\//g, '-')
-      .replace(/[!"#$%&'()*+,.:;<=>?@\[\\\\]^`{|}~]/g, '')
-      .replace(/--+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
-  }
-
+  /**
+   * Generates the HTML string for a single blog post card.
+   * @param {BlogPost} post - The blog post data.
+   * @param {string} lang - The current language code.
+   * @returns {string} The HTML string.
+   */
   private createPostCardHtml(post: BlogPost, lang: string): string {
     const readMoreText = lang === 'es' ? 'Leer Más' : lang === 'ja' ? '続きを読む' : 'Read More';
-
     const postUrl = post.url || `/${lang}/blog/${post.slug.split('/').pop()}`;
-
     const readMoreAboutLabel =
       lang === 'es'
         ? `Leer más sobre ${post.title}`
@@ -130,42 +157,8 @@ export class BlogIndexUI {
           ? `${post.title} について続きを読む`
           : `Read more about ${post.title}`;
 
-    let tagsHtml = '';
-    if (post.tags && post.tags.length > 0) {
-      const tagItems = post.tags
-        .slice(0, 3)
-        .map((tag) => {
-          const tagUrl =
-            lang === 'en'
-              ? `/blog/tags/${this.slugifyTag(tag)}`
-              : `/${lang}/blog/tags/${this.slugifyTag(tag)}`;
-
-          return `
-          <a href="${tagUrl}" class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800">
-            #${tag}
-          </a>
-        `;
-        })
-        .join('');
-
-      const moreTags =
-        post.tags.length > 3
-          ? `<span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">+${post.tags.length - 3}</span>`
-          : '';
-
-      tagsHtml = `
-        <div class="mb-3 flex flex-wrap gap-2" role="group" aria-label="Post tags">
-          ${tagItems}
-          ${moreTags}
-        </div>
-      `;
-    }
-
-    const formattedDate = new Date(post.pubDate).toLocaleDateString(lang, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    const tagsHtml = this.createTagsHtml(post.tags, lang);
+    const formattedDate = DateService.format(new Date(post.pubDate), lang);
 
     return `
     <div class="post-item animate-fade-in" data-slug="${post.slug}">
@@ -224,5 +217,38 @@ export class BlogIndexUI {
       </article>
     </div>
   `;
+  }
+
+  /**
+   * Helper to generate HTML for tags.
+   */
+  private createTagsHtml(tags: string[] | undefined, lang: string): string {
+    if (!tags || tags.length === 0) return '';
+
+    const tagItems = tags
+      .slice(0, 3)
+      .map((tag) => {
+        const tagUrl =
+          lang === 'en' ? `/blog/tags/${slugifyTag(tag)}` : `/${lang}/blog/tags/${slugifyTag(tag)}`;
+
+        return `
+        <a href="${tagUrl}" class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800">
+          #${tag}
+        </a>
+      `;
+      })
+      .join('');
+
+    const moreTags =
+      tags.length > 3
+        ? `<span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">+${tags.length - 3}</span>`
+        : '';
+
+    return `
+      <div class="mb-3 flex flex-wrap gap-2" role="group" aria-label="Post tags">
+        ${tagItems}
+        ${moreTags}
+      </div>
+    `;
   }
 }
