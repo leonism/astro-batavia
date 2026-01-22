@@ -2,9 +2,17 @@ import { defineCollection } from 'astro:content';
 import { z } from 'zod';
 import { SITE_AUTHOR, SITE_URL } from '@/consts';
 
+/**
+ * Content Collection Configuration.
+ * Defines the schemas for blog posts and authors using Zod.
+ */
+
 const blog = defineCollection({
   type: 'content',
-  // Type-check frontmatter using a schema
+  /**
+   * Type-check frontmatter using a schema.
+   * Defines validation rules for blog post metadata.
+   */
   schema: z
     .object({
       title: z.string().trim(),
@@ -79,4 +87,7 @@ const authors = defineCollection({
   }),
 });
 
+/**
+ * Export registered collections.
+ */
 export const collections = { blog, authors };

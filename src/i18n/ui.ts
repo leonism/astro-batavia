@@ -1,13 +1,30 @@
+/**
+ * UI Translations.
+ * Defines the translation strings for the user interface across supported languages.
+ */
+
 import { SITE_TITLE, DEFAULT_LOCALE } from '../consts';
 
+/**
+ * Supported Languages.
+ * Maps language codes to their display names.
+ */
 export const languages = {
   en: 'English',
   es: 'Español',
   ja: '日本語',
 };
 
+/**
+ * Default Language.
+ * The fallback language code used when no other language is specified.
+ */
 export const defaultLang = DEFAULT_LOCALE;
 
+/**
+ * UI Translation Strings.
+ * Key-value pairs for all UI text elements, organized by language.
+ */
 export const ui = {
   en: {
     'nav.home': 'Home',

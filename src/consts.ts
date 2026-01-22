@@ -1,3 +1,8 @@
+/**
+ * Application Constants.
+ * Defines global configuration values, site metadata, and defaults.
+ */
+
 // Core Site Data
 export const SITE_TITLE = 'Astro Batavia';
 export const SITE_DESCRIPTION = 'A modern multi-language blog built with Astro.js';
@@ -5,6 +10,9 @@ export const SITE_URL = 'https://astro-batavia.pages.dev'; // Production URL
 export const SITE_EMAIL = 'contact@astrobatavia.com';
 export const GTM_ID = 'GTM-5BH6SQST';
 
+/**
+ * Internationalization Configuration.
+ */
 // Internationalization
 export const DEFAULT_LOCALE = 'en';
 export const LOCALES = {
@@ -15,6 +23,9 @@ export const LOCALES = {
 
 export type LocaleKey = keyof typeof LOCALES;
 
+/**
+ * Default Author Information.
+ */
 // Author Defaults
 export const SITE_AUTHOR = {
   name: `${SITE_TITLE} Team`,
@@ -23,12 +34,18 @@ export const SITE_AUTHOR = {
   email: `${SITE_EMAIL}`,
 };
 
+/**
+ * Site Utility Links.
+ */
 // Site Utilities
 export const SITE_UTILS = {
   rss: `${SITE_URL}/rss.xml`,
   sitemap: `${SITE_URL}/sitemap-index.xml`,
 };
 
+/**
+ * Social Media Links.
+ */
 // Social Links
 export const SOCIAL_LINKS = {
   github: 'https://www.github.com/leonism/astro-batavia',
@@ -41,6 +58,9 @@ export const SOCIAL_LINKS = {
   facebook: 'https://www.facebook.com/AstroBatavia',
 };
 
+/**
+ * System Configuration Logic.
+ */
 // System Logic
 export const PAGINATION_POSTS_PER_PAGE = 7;
 export const SEARCH_MAX_SUGGESTIONS = 6;

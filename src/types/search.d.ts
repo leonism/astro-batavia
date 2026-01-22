@@ -1,5 +1,6 @@
 /**
  * Enhanced Search Type Declarations for Astro Batavia
+ * Defines interfaces for search documents, results, filters, and configuration.
  */
 
 declare global {
@@ -9,32 +10,62 @@ declare global {
   }
 }
 
+/**
+ * Represents a document in the search index.
+ */
 export interface SearchableDocument {
+  /** Unique identifier for the document */
   id: string;
+  /** Title of the document */
   title: string;
+  /** Short description or excerpt */
   description: string;
+  /** Full content of the document (optional) */
   content?: string;
+  /** List of associated tags */
   tags: string[];
+  /** URL path to the document */
   url: string;
+  /** Publication date */
   pubDate: Date | string | number;
+  /** Author name */
   author?: string;
+  /** Category name */
   category?: string;
+  /** Language code */
   lang: string;
+  /** URL slug */
   slug: string;
+  /** Estimated reading time in minutes */
   readingTime?: number;
 }
 
+/**
+ * Represents a search result with relevance metadata.
+ * Extends SearchableDocument with scoring and highlighting details.
+ */
 export interface SearchResult extends SearchableDocument {
+  /** Overall relevance score */
   relevanceScore: number;
+  /** List of fields that matched the query */
   matchedFields: string[];
+  /** Title with search terms highlighted (HTML) */
   highlightedTitle?: string;
+  /** Description with search terms highlighted (HTML) */
   highlightedDescription?: string;
+  /** Content snippet with search terms highlighted (HTML) */
   highlightedContent?: string;
+  /** Generated excerpt for display */
   excerpt?: string;
+  /** Score based on semantic similarity */
   semanticScore?: number;
+  /** Score based on contextual relevance */
   contextualRelevance?: number;
 }
 
+/**
+ * Filters that can be applied to search queries.
+ */
 export interface SearchFilters {
   tags?: string[];
   dateFrom?: Date;
@@ -46,6 +77,9 @@ export interface SearchFilters {
   sortOrder?: 'asc' | 'desc';
 }
 
+/**
+ * Configuration options for the search engine.
+ */
 export interface SearchOptions {
   fuzzyThreshold?: number;
   maxResults?: number;
@@ -58,6 +92,9 @@ export interface SearchOptions {
   phraseMatching?: boolean;
 }
 
+/**
+ * Represents a search suggestion or autocomplete item.
+ */
 export interface SearchSuggestion {
   text: string;
   type: 'query' | 'tag' | 'title' | 'semantic' | 'completion';
@@ -66,6 +103,9 @@ export interface SearchSuggestion {
   category?: string;
 }
 
+/**
+ * Configuration for the search client UI.
+ */
 export interface SearchClientConfig {
   searchInputId: string;
   resultsContainerId: string;
@@ -80,6 +120,9 @@ export interface SearchClientConfig {
   enableAnalytics?: boolean;
 }
 
+/**
+ * Represents the current state of the search interface.
+ */
 export interface SearchState {
   isSearching: boolean;
   currentQuery: string;
@@ -90,6 +133,9 @@ export interface SearchState {
   currentLang: string;
 }
 
+/**
+ * Analytics data for search performance and usage.
+ */
 export interface SearchInsights {
   searchCount: number;
   avgSearchTime: number;

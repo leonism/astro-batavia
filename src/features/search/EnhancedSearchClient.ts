@@ -8,6 +8,9 @@ import { SEARCH_MAX_SUGGESTIONS } from '../../consts';
 
 declare const gtag: (...args: any[]) => void;
 
+/**
+ * Configuration options for the search client.
+ */
 interface SearchClientConfig {
   searchInputId: string;
   resultsContainerId: string;
@@ -22,6 +25,9 @@ interface SearchClientConfig {
   enableAnalytics?: boolean;
 }
 
+/**
+ * Internal state of the search client.
+ */
 interface SearchState {
   isSearching: boolean;
   currentQuery: string;
@@ -32,6 +38,10 @@ interface SearchState {
   currentLang: string;
 }
 
+/**
+ * Client-side controller for the enhanced search functionality.
+ * Manages UI interactions, search state, and coordinates with the search engine.
+ */
 export class EnhancedSearchClient {
   private searchEngine: EnhancedSearchEngine;
   private config: SearchClientConfig;
@@ -54,6 +64,11 @@ export class EnhancedSearchClient {
   // Performance monitoring
   private performanceObserver?: PerformanceObserver;
 
+  /**
+   * Creates an instance of EnhancedSearchClient.
+   *
+   * @param {SearchClientConfig} config - The configuration for the search client.
+   */
   constructor(config: SearchClientConfig) {
     this.config = {
       debounceMs: 150,
@@ -83,7 +98,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Initialize the search system with documents
+   * Initialize the search system with documents.
+   *
+   * @param {any[]} documents - The list of documents to index.
+   * @returns {Promise<void>} A promise that resolves when initialization is complete.
    */
   async initialize(documents: any[]): Promise<void> {
     try {
@@ -98,7 +116,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Perform search with enhanced features
+   * Perform search with enhanced features.
+   *
+   * @param {string} query - The search query string.
+   * @param {any} options - Optional search parameters.
+   * @returns {Promise<SearchResult[]>} A promise that resolves to an array of search results.
    */
   async search(query: string, options: any = {}): Promise<SearchResult[]> {
     // Cancel any ongoing search
@@ -155,7 +177,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Get intelligent search suggestions
+   * Get intelligent search suggestions.
+   *
+   * @param {string} query - The current query string.
+   * @returns {Promise<SearchSuggestion[]>} A promise that resolves to an array of suggestions.
    */
   async getSuggestions(query: string): Promise<SearchSuggestion[]> {
     if (query.length < 2) return [];
@@ -171,7 +196,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Display search results with accessibility
+   * Display search results with accessibility.
+   *
+   * @param {SearchResult[]} results - The array of search results to display.
+   * @returns {void}
    */
   displayResults(results: SearchResult[]): void {
     if (!this.elements.resultsContainer) return;
@@ -199,7 +227,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Display search suggestions with keyboard navigation
+   * Display search suggestions with keyboard navigation.
+   *
+   * @param {SearchSuggestion[]} suggestions - The array of suggestions to display.
+   * @returns {void}
    */
   private displaySuggestions(suggestions: SearchSuggestion[]): void {
     if (!this.elements.suggestionsContainer) return;
@@ -224,7 +255,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Handle keyboard navigation
+   * Handle keyboard navigation.
+   *
+   * @param {KeyboardEvent} event - The keyboard event.
+   * @returns {void}
    */
   private handleKeyboardNavigation(event: KeyboardEvent): void {
     if (!this.config.enableKeyboardNavigation) return;
@@ -286,7 +320,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Navigate down through suggestions and results
+   * Navigate down through suggestions and results.
+   *
+   * @param {HTMLCollection | undefined} suggestions - The suggestions collection.
+   * @param {NodeListOf<Element> | undefined} results - The results list.
+   * @returns {void}
    */
   private navigateDown(
     suggestions: HTMLCollection | undefined,
@@ -313,7 +351,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Navigate up through suggestions and results
+   * Navigate up through suggestions and results.
+   *
+   * @param {HTMLCollection | undefined} suggestions - The suggestions collection.
+   * @param {NodeListOf<Element> | undefined} results - The results list.
+   * @returns {void}
    */
   private navigateUp(
     suggestions: HTMLCollection | undefined,
@@ -334,7 +376,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Handle Enter key for suggestions and results
+   * Handle Enter key for suggestions and results.
+   *
+   * @param {HTMLCollection | undefined} suggestions - The suggestions collection.
+   * @param {NodeListOf<Element> | undefined} results - The results list.
+   * @returns {void}
    */
   private handleEnterKey(
     suggestions: HTMLCollection | undefined,
@@ -363,7 +409,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Handle Escape key
+   * Handle Escape key.
+   *
+   * @returns {void}
    */
   private handleEscapeKey(): void {
     if (
@@ -381,7 +429,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Navigate to first item
+   * Navigate to first item.
+   *
+   * @param {HTMLCollection | undefined} suggestions - The suggestions collection.
+   * @param {NodeListOf<Element> | undefined} results - The results list.
+   * @returns {void}
    */
   private navigateToFirst(
     suggestions: HTMLCollection | undefined,
@@ -402,7 +454,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Navigate to last item
+   * Navigate to last item.
+   *
+   * @param {HTMLCollection | undefined} suggestions - The suggestions collection.
+   * @param {NodeListOf<Element> | undefined} results - The results list.
+   * @returns {void}
    */
   private navigateToLast(
     suggestions: HTMLCollection | undefined,
@@ -423,7 +479,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Update result selection styling and accessibility
+   * Update result selection styling and accessibility.
+   *
+   * @param {NodeListOf<Element> | Element[]} results - The list of result elements.
+   * @returns {void}
    */
   private updateResultSelection(results: NodeListOf<Element> | Element[]): void {
     const resultsArray = Array.from(results);
@@ -471,7 +530,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Create accessible result element
+   * Create accessible result element.
+   *
+   * @param {SearchResult} result - The search result object.
+   * @param {number} index - The index of the result.
+   * @returns {HTMLElement} The created DOM element for the result.
    */
   private createResultElement(result: SearchResult, index: number): HTMLElement {
     const article = document.createElement('article');
@@ -570,7 +633,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Create accessible suggestion element
+   * Create accessible suggestion element.
+   *
+   * @param {SearchSuggestion} suggestion - The suggestion object.
+   * @param {number} index - The index of the suggestion.
+   * @returns {HTMLElement} The created DOM element for the suggestion.
    */
   private createSuggestionElement(suggestion: SearchSuggestion, index: number): HTMLElement {
     const li = document.createElement('li');
@@ -619,7 +686,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Setup event listeners with proper debouncing
+   * Setup event listeners with proper debouncing.
+   *
+   * @returns {void}
    */
   private setupEventListeners(): void {
     if (!this.elements.searchInput) return;
@@ -677,7 +746,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Debounced search function
+   * Debounced search function.
+   *
+   * @param {string} query - The search query.
+   * @returns {void}
    */
   private debouncedSearch = (query: string): void => {
     if (this.debounceTimer) {
@@ -695,7 +767,10 @@ export class EnhancedSearchClient {
   };
 
   /**
-   * Debounced suggestions function
+   * Debounced suggestions function.
+   *
+   * @param {string} query - The search query.
+   * @returns {void}
    */
   private debouncedSuggestions = (query: string): void => {
     if (this.suggestionDebounceTimer) {
@@ -712,7 +787,9 @@ export class EnhancedSearchClient {
   };
 
   /**
-   * Setup voice search functionality
+   * Setup voice search functionality.
+   *
+   * @returns {void}
    */
   private setupVoiceSearch(): void {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -753,7 +830,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Setup accessibility features
+   * Setup accessibility features.
+   *
+   * @returns {void}
    */
   private setupAccessibility(): void {
     // Create screen reader announcer
@@ -765,7 +844,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Announce message to screen readers
+   * Announce message to screen readers.
+   *
+   * @param {string} message - The message to announce.
+   * @returns {void}
    */
   private announceToScreenReader(message: string): void {
     this.announcer.textContent = message;
@@ -776,7 +858,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Initialize DOM elements
+   * Initialize DOM elements.
+   *
+   * @returns {void}
    */
   private initializeElements(): void {
     this.elements.searchInput = document.getElementById(
@@ -809,7 +893,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Create suggestions container
+   * Create suggestions container.
+   *
+   * @returns {void}
    */
   private createSuggestionsContainer(): void {
     if (!this.elements.searchInput) return;
@@ -831,7 +917,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Update suggestion selection
+   * Update suggestion selection.
+   *
+   * @returns {void}
    */
   private updateSuggestionSelection(): void {
     if (!this.elements.suggestionsContainer) return;
@@ -856,7 +944,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Select a suggestion
+   * Select a suggestion.
+   *
+   * @param {string} text - The selected suggestion text.
+   * @returns {void}
    */
   private selectSuggestion(text: string): void {
     if (!this.elements.searchInput) return;
@@ -868,7 +959,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Clear suggestions
+   * Clear suggestions.
+   *
+   * @returns {void}
    */
   private clearSuggestions(): void {
     if (this.elements.suggestionsContainer) {
@@ -884,7 +977,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Clear search results
+   * Clear search results.
+   *
+   * @returns {void}
    */
   private clearResults(): void {
     if (this.elements.resultsContainer) {
@@ -895,7 +990,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Clear entire search
+   * Clear entire search.
+   *
+   * @returns {void}
    */
   private clearSearch(): void {
     if (this.elements.searchInput) {
@@ -909,7 +1006,10 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Update clear button visibility
+   * Update clear button visibility.
+   *
+   * @param {string} query - The current search query.
+   * @returns {void}
    */
   private updateClearButtonVisibility(query: string): void {
     const clearButton = document.getElementById('search-clear-button');
@@ -923,7 +1023,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Show no results state
+   * Show no results state.
+   *
+   * @returns {void}
    */
   private showNoResults(): void {
     if (this.elements.noResultsElement) {
@@ -932,7 +1034,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Hide no results state
+   * Hide no results state.
+   *
+   * @returns {void}
    */
   private hideNoResults(): void {
     if (this.elements.noResultsElement) {
@@ -941,7 +1045,13 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Update search status
+   * Update search status.
+   *
+   * @param {string} query - The search query.
+   * @param {number} count - The number of results found.
+   * @param {number} time - The time taken for the search.
+   * @param {string} [error] - Optional error message.
+   * @returns {void}
    */
   private updateSearchStatus(query: string, count: number, time: number, error?: string): void {
     if (!this.elements.statusElement) return;
@@ -964,7 +1074,11 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Set loading state
+   * Set loading state.
+   *
+   * @param {boolean} loading - Whether the search is loading.
+   * @param {string} [message] - Optional status message.
+   * @returns {void}
    */
   private setLoadingState(loading: boolean, message: string = ''): void {
     this.state.isSearching = loading;
@@ -987,7 +1101,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Setup performance monitoring
+   * Setup performance monitoring.
+   *
+   * @returns {void}
    */
   private setupPerformanceMonitoring(): void {
     if ('PerformanceObserver' in window) {
@@ -1005,7 +1121,12 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Track search event for analytics
+   * Track search event for analytics.
+   *
+   * @param {string} query - The search query.
+   * @param {number} resultCount - The number of results found.
+   * @param {number} searchTime - The time taken for the search.
+   * @returns {void}
    */
   private trackSearchEvent(query: string, resultCount: number, searchTime: number): void {
     // Custom analytics event
@@ -1023,7 +1144,12 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Track click event for analytics
+   * Track click event for analytics.
+   *
+   * @param {string} resultId - The ID of the clicked result.
+   * @param {string} query - The search query.
+   * @param {number} position - The position of the result.
+   * @returns {void}
    */
   private trackClickEvent(resultId: string, query: string, position: number): void {
     this.searchEngine.trackResultClick(query, resultId);
@@ -1039,7 +1165,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Get search insights
+   * Get search insights.
+   *
+   * @returns {object} Object containing search insights and client state.
    */
   getInsights() {
     return {
@@ -1049,7 +1177,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Optimize performance
+   * Optimize performance.
+   *
+   * @returns {void}
    */
   optimizePerformance(): void {
     this.searchEngine.optimizePerformance();
@@ -1067,7 +1197,9 @@ export class EnhancedSearchClient {
   }
 
   /**
-   * Cleanup resources
+   * Cleanup resources.
+   *
+   * @returns {void}
    */
   destroy(): void {
     this.optimizePerformance();
