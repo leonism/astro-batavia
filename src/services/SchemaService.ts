@@ -1,4 +1,4 @@
-import { SITE_TITLE, SITE_URL, SITE_AUTHOR } from '@/consts';
+import { SITE_TITLE, SITE_URL, SITE_AUTHOR, SOCIAL_LINKS } from '@/consts';
 import path from 'path';
 import fs from 'fs';
 import { imageSize } from 'image-size';
@@ -9,7 +9,7 @@ export interface SchemaProps {
   date?: string | Date;
   image?: string;
   imageAlt?: string;
-  type?: 'website' | 'article' | 'blog' | 'collection';
+  type?: 'website' | 'article' | 'blog' | 'collection' | 'profile';
   author?: string;
   authorUrl?: string;
   modifiedTime?: string | Date;
@@ -53,6 +53,17 @@ export interface SchemaProps {
  * Encapsulates logic for creating Schema.org graphs for various page types.
  */
 export class SchemaService {
+  /**
+   * Helper to sanitize strings for JSON-LD.
+   * Removes control characters and ensures valid encoding.
+   */
+  private static sanitize(str: string): string {
+    if (!str) return '';
+    return str
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
+      .trim();
+  }
+
   /**
    * Generates the complete Schema.org graph for a page.
    *
@@ -99,6 +110,12 @@ export class SchemaService {
       organization,
     } = props;
 
+    // Sanitize basic string inputs
+    const safeTitle = SchemaService.sanitize(title);
+    const safeDescription = SchemaService.sanitize(description);
+    const safeAuthor = SchemaService.sanitize(author);
+    const safeImageAlt = SchemaService.sanitize(imageAlt || safeTitle);
+
     // Ensure siteUrl doesn't have a trailing slash for consistency in URL construction
     const baseUrl = siteUrl.replace(/\/$/, '');
     const canonicalUrl = canonical || baseUrl;
@@ -106,134 +123,225 @@ export class SchemaService {
       ? new URL(image, baseUrl).href
       : new URL('/favicon-32x32.png', baseUrl).href;
 
+    // Entity IDs
+    const ids = {
+      website: `${baseUrl}/#website`,
+      organization: `${baseUrl}/#organization`,
+      webpage: `${canonicalUrl}#webpage`,
+      primaryImage: `${canonicalUrl}#primaryimage`,
+      author: `${canonicalUrl}#author`,
+      breadcrumb: `${canonicalUrl}#breadcrumb`,
+    };
+
     const graph: Record<string, any>[] = [];
 
-    const imageSchema = SchemaService.buildImageObject(imageUrl, imageAlt || title, image, {
-      license,
-      acquireLicensePage,
-      creditText,
-      copyrightNotice,
-      creator,
-    });
+    // 1. Organization (Publisher)
+    const orgSchema = {
+      '@type': 'Organization',
+      '@id': ids.organization,
+      name: organization?.name ? SchemaService.sanitize(organization.name) : SITE_TITLE,
+      url: organization?.url || baseUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: organization?.logo || new URL('/favicon.svg', baseUrl).href,
+      },
+      sameAs: organization?.sameAs || Object.values(SOCIAL_LINKS),
+    };
+    graph.push(orgSchema);
 
-    if (type === 'article' || type === 'blog') {
-      graph.push({
-        '@type': 'BlogPosting',
-        headline: title,
-        description: description,
-        url: canonicalUrl,
-        image: imageSchema,
-        datePublished: date ? new Date(date).toISOString() : new Date().toISOString(),
-        dateModified: modifiedTime
-          ? new Date(modifiedTime).toISOString()
-          : date
-            ? new Date(date).toISOString()
-            : new Date().toISOString(),
-        author: {
-          '@type': 'Person',
-          name: author,
-          ...(authorUrl && { url: authorUrl }),
+    // 2. WebSite
+    const websiteSchema = {
+      '@type': 'WebSite',
+      '@id': ids.website,
+      url: baseUrl,
+      name: SITE_TITLE,
+      description: SITE_AUTHOR.name, // Or a global description
+      publisher: {
+        '@id': ids.organization,
+      },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${baseUrl}/search?q={search_term_string}`,
         },
-        publisher: organization
-          ? {
-              '@type': 'Organization',
-              name: organization.name,
-              url: organization.url,
-              logo: {
-                '@type': 'ImageObject',
-                url: organization.logo,
-              },
-              ...(organization.sameAs && { sameAs: organization.sameAs }),
-            }
-          : {
-              '@type': 'Organization',
-              name: SITE_TITLE,
-              url: baseUrl,
-              logo: {
-                '@type': 'ImageObject',
-                url: new URL('/favicon.svg', baseUrl).href,
-              },
-            },
-        mainEntityOfPage: {
-          '@type': 'WebPage',
-          '@id': canonicalUrl,
-        },
-      });
-    } else if (type === 'collection') {
-      graph.push({
-        '@type': 'CollectionPage',
-        '@id': canonicalUrl,
-        url: canonicalUrl,
-        name: title,
-        description: description,
-        isPartOf: {
-          '@type': 'WebSite',
-          '@id': baseUrl,
-          name: SITE_TITLE,
-          url: baseUrl,
-        },
-        hasPart: collectionPosts?.map((post) => ({
-          '@type': 'BlogPosting',
-          headline: post.title,
-          url: post.url.startsWith('http') ? post.url : new URL(post.url, baseUrl).href,
-          description: post.description,
-          datePublished: post.date ? new Date(post.date).toISOString() : undefined,
-        })),
-      });
-    } else {
-      graph.push({
-        '@type': 'WebSite',
-        name: title,
-        description: description,
-        url: baseUrl,
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: `${baseUrl}/search?q={search_term_string}`,
-          'query-input': 'required name=search_term_string',
-        },
-      });
+        'query-input': 'required name=search_term_string',
+      },
+    };
+    graph.push(websiteSchema);
+
+    // 3. ImageObject (Primary Image)
+    // We always create an ImageObject for the primary image if it exists
+    const imageObject = SchemaService.buildImageObject(
+      imageUrl,
+      safeImageAlt,
+      image,
+      ids.primaryImage,
+      {
+        license,
+        acquireLicensePage,
+        creditText: creditText ? SchemaService.sanitize(creditText) : undefined,
+        copyrightNotice: copyrightNotice ? SchemaService.sanitize(copyrightNotice) : undefined,
+        creator: creator ? SchemaService.sanitize(creator) : undefined,
+      },
+    );
+    graph.push(imageObject);
+
+    // 4. WebPage (Base for everything)
+    const webpageSchema: Record<string, any> = {
+      '@type': type === 'profile' ? 'ProfilePage' : 'WebPage',
+      '@id': ids.webpage,
+      url: canonicalUrl,
+      name: safeTitle,
+      headline: safeTitle,
+      description: safeDescription,
+      isPartOf: {
+        '@id': ids.website,
+      },
+      primaryImageOfPage: {
+        '@id': ids.primaryImage,
+      },
+      image: {
+        '@id': ids.primaryImage,
+      },
+      publisher: {
+        '@id': ids.organization,
+      },
+    };
+
+    if (breadcrumbs && breadcrumbs.length > 0) {
+      webpageSchema.breadcrumb = {
+        '@id': ids.breadcrumb,
+      };
     }
 
+    if (date) {
+      webpageSchema.datePublished = new Date(date).toISOString();
+    }
+    if (modifiedTime) {
+      webpageSchema.dateModified = new Date(modifiedTime).toISOString();
+    } else if (date) {
+      webpageSchema.dateModified = new Date(date).toISOString();
+    }
+
+    // 5. BreadcrumbList
     if (breadcrumbs && breadcrumbs.length > 0) {
       graph.push({
         '@type': 'BreadcrumbList',
+        '@id': ids.breadcrumb,
         itemListElement: breadcrumbs.map((crumb, index) => ({
           '@type': 'ListItem',
           position: index + 1,
-          name: crumb.name,
+          name: SchemaService.sanitize(crumb.name),
           item: crumb.url,
         })),
       });
     }
 
+    // 6. Person (Author) - Optional but good for Article/Profile
+    if (author) {
+      const personSchema: Record<string, any> = {
+        '@type': 'Person',
+        '@id': ids.author,
+        name: safeAuthor,
+      };
+      if (authorUrl) {
+        personSchema.url = authorUrl;
+      }
+      // If it's a ProfilePage, the main entity is this Person
+      if (type === 'profile') {
+        webpageSchema.mainEntity = {
+          '@id': ids.author,
+        };
+      }
+      graph.push(personSchema);
+    }
+
+    // 7. Special Types Logic (Article, BlogPosting, Collection)
+    if (type === 'article' || type === 'blog') {
+      const articleSchema = {
+        '@type': 'BlogPosting',
+        '@id': `${canonicalUrl}#article`,
+        isPartOf: {
+          '@id': ids.webpage,
+        },
+        headline: safeTitle,
+        description: safeDescription,
+        image: {
+          '@id': ids.primaryImage,
+        },
+        datePublished: webpageSchema.datePublished,
+        dateModified: webpageSchema.dateModified,
+        author: {
+          '@id': ids.author, // Link to the Person entity
+        },
+        publisher: {
+          '@id': ids.organization,
+        },
+        mainEntityOfPage: {
+          '@id': ids.webpage,
+        },
+      };
+      graph.push(articleSchema);
+    } else if (type === 'collection') {
+      // For collections, the WebPage itself is a CollectionPage
+      webpageSchema['@type'] = 'CollectionPage';
+      if (collectionPosts) {
+        webpageSchema.hasPart = collectionPosts.map((post) => ({
+          '@type': 'BlogPosting',
+          headline: SchemaService.sanitize(post.title),
+          url: post.url.startsWith('http') ? post.url : new URL(post.url, baseUrl).href,
+          description: post.description ? SchemaService.sanitize(post.description) : undefined,
+          datePublished: post.date ? new Date(post.date).toISOString() : undefined,
+        }));
+      }
+    }
+
+    // Add WebPage to graph
+    graph.push(webpageSchema);
+
+    // 8. FAQPage
     if (faqs && faqs.length > 0) {
       graph.push({
         '@type': 'FAQPage',
+        '@id': `${canonicalUrl}#faq`,
+        isPartOf: {
+          '@id': ids.webpage,
+        },
         mainEntity: faqs.map((faq) => ({
           '@type': 'Question',
-          name: faq.question,
+          name: SchemaService.sanitize(faq.question),
           acceptedAnswer: {
             '@type': 'Answer',
-            text: faq.answer,
+            text: SchemaService.sanitize(faq.answer),
           },
         })),
       });
     }
 
+    // 9. Review
     if (review) {
       graph.push({
         '@type': 'Review',
+        '@id': `${canonicalUrl}#review`,
+        isPartOf: {
+          '@id': ids.webpage,
+        },
         itemReviewed: {
           '@type': 'Thing',
-          name: review.itemReviewed?.name || title,
-          description: review.itemReviewed?.description,
+          name: review.itemReviewed?.name
+            ? SchemaService.sanitize(review.itemReviewed.name)
+            : safeTitle,
+          description: review.itemReviewed?.description
+            ? SchemaService.sanitize(review.itemReviewed.description)
+            : undefined,
           image: review.itemReviewed?.image
             ? new URL(review.itemReviewed.image, baseUrl).href
             : undefined,
         },
         author: {
           '@type': 'Person',
-          name: review.author || author,
+          name: review.author ? SchemaService.sanitize(review.author) : safeAuthor,
         },
         reviewRating: {
           '@type': 'Rating',
@@ -244,7 +352,7 @@ export class SchemaService {
         datePublished: review.datePublished
           ? new Date(review.datePublished).toISOString()
           : new Date().toISOString(),
-        reviewBody: review.reviewBody,
+        reviewBody: review.reviewBody ? SchemaService.sanitize(review.reviewBody) : undefined,
       });
     }
 
@@ -258,6 +366,7 @@ export class SchemaService {
     imageUrl: string,
     caption: string,
     localImagePath?: string,
+    id?: string,
     metadata?: {
       license?: string;
       acquireLicensePage?: string;
@@ -271,8 +380,11 @@ export class SchemaService {
       url: imageUrl,
       contentUrl: imageUrl,
       caption: caption,
-      representativeOfPage: true,
     };
+
+    if (id) {
+      imageSchema['@id'] = id;
+    }
 
     if (localImagePath) {
       try {
