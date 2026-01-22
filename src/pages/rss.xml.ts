@@ -4,6 +4,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getPostUrl } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
 
+/**
+ * RSS Feed Generator.
+ * Generates an RSS 2.0 feed for all blog posts across all languages.
+ *
+ * @param {APIContext} context - The Astro API context.
+ * @returns {Promise<Response>} The RSS feed response.
+ */
 export async function GET(context: APIContext) {
   const posts = await BlogService.getAllPosts();
 

@@ -3,30 +3,58 @@ import EnhancedSearchEngine, {
   type SearchFilters,
 } from './EnhancedSearchEngine';
 
+/**
+ * Interface representing category information for search suggestions.
+ */
 interface CategoryInfo {
+  /** The name of the category. */
   name: string;
+  /** The number of documents in this category. */
   count: number;
+  /** The CSS class for the category's color styling. */
   color: string;
 }
 
+/**
+ * Interface representing tag information for search suggestions.
+ */
 interface TagInfo {
+  /** The name of the tag. */
   name: string;
+  /** The number of documents associated with this tag. */
   count: number;
+  /** The CSS class for the tag's color styling. */
   color: string;
 }
 
+/**
+ * Interface representing author information for search suggestions.
+ */
 interface AuthorInfo {
+  /** The name of the author. */
   name: string;
+  /** The number of documents written by this author. */
   count: number;
 }
 
+/**
+ * User Interface controller for the Enhanced Search feature.
+ * Manages the search overlay, input handling, results display, and keyboard navigation.
+ */
 export class EnhancedSearchUI {
+  /** The underlying search engine instance. */
   private searchEngine: EnhancedSearchEngine;
+  /** Cache of all searchable documents. */
   private allDocuments: any[] = [];
+  /** The current search query string. */
   private currentQuery: string = '';
+  /** Active search filters. */
   private currentFilters: SearchFilters = {};
+  /** Index of the currently focused result for keyboard navigation. */
   private keyboardFocusIndex: number = -1;
+  /** Array of current search results. */
   private searchResults: SearchResult[] = [];
+  /** Timer ID for search input debouncing. */
   private debounceTimer: number | null = null;
 
   // DOM Elements
@@ -42,6 +70,10 @@ export class EnhancedSearchUI {
   private searchPerformance!: HTMLElement;
   private searchTime!: HTMLElement;
 
+  /**
+   * Creates an instance of EnhancedSearchUI.
+   * Initializes the search engine, UI elements, event listeners, and loads the search index.
+   */
   constructor() {
     this.searchEngine = new EnhancedSearchEngine();
     this.initializeElements();
@@ -49,6 +81,12 @@ export class EnhancedSearchUI {
     this.loadSearchIndex();
   }
 
+  /**
+   * Initializes references to DOM elements used by the search UI.
+   * Logs an error if essential elements are missing.
+   *
+   * @private
+   */
   private initializeElements(): void {
     this.searchOverlay = document.getElementById('search-overlay')!;
     this.searchInput = document.getElementById('search-input') as HTMLInputElement;
@@ -68,6 +106,12 @@ export class EnhancedSearchUI {
     }
   }
 
+  /**
+   * Loads the search index from the API and initializes the search engine.
+   *
+   * @private
+   * @returns {Promise<void>} A promise that resolves when the index is loaded and initialized.
+   */
   private async loadSearchIndex(): Promise<void> {
     try {
       const response = await fetch('/api/search-index');
@@ -85,6 +129,11 @@ export class EnhancedSearchUI {
     }
   }
 
+  /**
+   * Sets up event listeners for the search input, overlay controls, and keyboard shortcuts.
+   *
+   * @private
+   */
   private setupEventListeners(): void {
     // Search input
     this.searchInput.addEventListener('input', () => this.handleSearchInput());
@@ -108,6 +157,12 @@ export class EnhancedSearchUI {
     this.searchOverlay.addEventListener('click', (e) => this.handleOverlayClick(e));
   }
 
+  /**
+   * Handles input events on the search field.
+   * Debounces the search execution to improve performance.
+   *
+   * @private
+   */
   private handleSearchInput(): void {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
@@ -120,6 +175,12 @@ export class EnhancedSearchUI {
     }, 150); // 150ms debounce
   }
 
+  /**
+   * Executes a search query and updates the UI with the results.
+   *
+   * @private
+   * @param {string} query - The search query string.
+   */
   private performSearch(query: string): void {
     const startTime = performance.now();
 
@@ -148,6 +209,14 @@ export class EnhancedSearchUI {
     this.keyboardFocusIndex = -1; // Reset keyboard focus
   }
 
+  /**
+   * Renders the search results in the UI.
+   *
+   * @private
+   * @param {SearchResult[]} results - The list of search results to display.
+   * @param {string} query - The search query string.
+   * @param {number} searchTime - The time taken to execute the search in milliseconds.
+   */
   private displayResults(results: SearchResult[], query: string, searchTime: number): void {
     // Update performance indicator
     this.searchTime.textContent = `${searchTime}ms`;
@@ -178,6 +247,14 @@ export class EnhancedSearchUI {
     this.addResultClickHandlers();
   }
 
+  /**
+   * Generates the HTML string for a single result card.
+   *
+   * @private
+   * @param {SearchResult} result - The search result object.
+   * @param {number} index - The index of the result in the results list.
+   * @returns {string} The HTML string representing the result card.
+   */
   private createResultCard(result: SearchResult, index: number): string {
     const tags = result.tags
       .slice(0, 3)
@@ -228,6 +305,12 @@ export class EnhancedSearchUI {
     `;
   }
 
+  /**
+   * Updates the category filters based on the current search results.
+   *
+   * @private
+   * @param {SearchResult[]} results - The list of search results.
+   */
   private updateFilters(results: SearchResult[]): void {
     const categories = new Map<string, number>();
 
@@ -254,6 +337,13 @@ export class EnhancedSearchUI {
     });
   }
 
+  /**
+   * Handles click events on filter buttons.
+   * Toggles the selected filter and re-executes the search.
+   *
+   * @private
+   * @param {Event} e - The click event.
+   */
   private handleFilterClick(e: Event): void {
     const button = e.target as HTMLButtonElement;
     const filterType = button.dataset.filter;
@@ -266,6 +356,11 @@ export class EnhancedSearchUI {
     }
   }
 
+  /**
+   * Adds click event listeners to search result items for analytics and navigation.
+   *
+   * @private
+   */
   private addResultClickHandlers(): void {
     this.searchResultsContainer.querySelectorAll('.search-result-item').forEach((item, index) => {
       item.addEventListener('click', () => {
@@ -279,6 +374,12 @@ export class EnhancedSearchUI {
     });
   }
 
+  /**
+   * Displays the no results view and shows fallback suggestions.
+   *
+   * @private
+   * @param {string} query - The search query that yielded no results.
+   */
   private showNoResults(query: string): void {
     this.searchSuggestions.classList.add('hidden');
     this.searchResultsSection.classList.add('hidden');
@@ -298,6 +399,12 @@ export class EnhancedSearchUI {
       .join('');
   }
 
+  /**
+   * Displays the default search suggestions view.
+   * Hides the results and no results sections.
+   *
+   * @private
+   */
   private showSuggestions(): void {
     this.searchResultsSection.classList.add('hidden');
     this.noResultsSection.classList.add('hidden');
@@ -305,6 +412,11 @@ export class EnhancedSearchUI {
     this.searchPerformance.classList.add('hidden');
   }
 
+  /**
+   * Initializes and renders the various suggestion lists (categories, tags, authors, popular searches).
+   *
+   * @private
+   */
   private initializeSuggestions(): void {
     const categories = this.extractCategories();
     const tags = this.extractTags();
@@ -361,6 +473,12 @@ export class EnhancedSearchUI {
       .join('');
   }
 
+  /**
+   * Extracts category information from the indexed documents.
+   *
+   * @private
+   * @returns {CategoryInfo[]} An array of category information objects.
+   */
   private extractCategories(): CategoryInfo[] {
     const categoryMap = new Map<string, number>();
     this.allDocuments.forEach((doc) => {
@@ -384,6 +502,12 @@ export class EnhancedSearchUI {
     }));
   }
 
+  /**
+   * Extracts tag information from the indexed documents.
+   *
+   * @private
+   * @returns {TagInfo[]} An array of tag information objects, sorted by count.
+   */
   private extractTags(): TagInfo[] {
     const tagMap = new Map<string, number>();
     this.allDocuments.forEach((doc) => {
@@ -410,6 +534,12 @@ export class EnhancedSearchUI {
       }));
   }
 
+  /**
+   * Extracts author information from the indexed documents.
+   *
+   * @private
+   * @returns {AuthorInfo[]} An array of author information objects.
+   */
   private extractAuthors(): AuthorInfo[] {
     const authorMap = new Map<string, number>();
     this.allDocuments.forEach((doc) => {
@@ -424,6 +554,13 @@ export class EnhancedSearchUI {
     }));
   }
 
+  /**
+   * Handles keyboard navigation events within the search results.
+   * Supports ArrowDown, ArrowUp, Enter, and Escape keys.
+   *
+   * @private
+   * @param {KeyboardEvent} e - The keyboard event.
+   */
   private handleKeyboardNavigation(e: KeyboardEvent): void {
     const visibleResults = this.searchResultsContainer.querySelectorAll('.search-result-item');
 
@@ -450,6 +587,12 @@ export class EnhancedSearchUI {
     }
   }
 
+  /**
+   * Updates the visual focus state of result items during keyboard navigation.
+   *
+   * @private
+   * @param {NodeListOf<Element>} results - The list of result elements.
+   */
   private updateKeyboardFocus(results: NodeListOf<Element>): void {
     results.forEach((result, index) => {
       if (index === this.keyboardFocusIndex) {
@@ -461,6 +604,12 @@ export class EnhancedSearchUI {
     });
   }
 
+  /**
+   * Handles global keyboard shortcuts (e.g., Ctrl+K to open search).
+   *
+   * @private
+   * @param {KeyboardEvent} e - The keyboard event.
+   */
   private handleGlobalKeyboard(e: KeyboardEvent): void {
     // Ctrl+K or Cmd+K to open search
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -469,12 +618,25 @@ export class EnhancedSearchUI {
     }
   }
 
+  /**
+   * Handles focus events on the search input.
+   * Shows suggestions if the query is empty.
+   *
+   * @private
+   */
   private handleSearchFocus(): void {
     if (this.currentQuery.length === 0) {
       this.showSuggestions();
     }
   }
 
+  /**
+   * Handles click events on the search overlay.
+   * Closes the overlay if the click is outside the content area.
+   *
+   * @private
+   * @param {Event} e - The click event.
+   */
   private handleOverlayClick(e: Event): void {
     const contentArea = this.searchOverlay.querySelector('.max-w-4xl');
     if (contentArea && !contentArea.contains(e.target as Node)) {
@@ -482,6 +644,10 @@ export class EnhancedSearchUI {
     }
   }
 
+  /**
+   * Opens the search overlay and focuses the search input.
+   * Disables body scrolling.
+   */
   public openSearchOverlay(): void {
     this.searchOverlay.classList.remove('hidden');
     this.searchOverlay.setAttribute('aria-hidden', 'false');
@@ -493,6 +659,10 @@ export class EnhancedSearchUI {
     }
   }
 
+  /**
+   * Closes the search overlay and resets the search state.
+   * Restores body scrolling.
+   */
   public closeSearchOverlay(): void {
     this.searchOverlay.classList.add('hidden');
     this.searchOverlay.setAttribute('aria-hidden', 'true');
