@@ -5,21 +5,19 @@ import FeaturesSection from '@/components/sections/FeaturesSection.astro';
 import FeaturedStoriesSection from '@/components/sections/FeaturedStoriesSection.astro';
 import NewsletterSection from '@/components/sections/NewsletterSection.astro';
 import { useTranslations } from '@/i18n/utils';
-import { BlogService } from '@/services/BlogService';
+import { getLocalizedPath } from '@/i18n/utils';
 import { SITE_TITLE, LOCALES } from '@/consts';
+import { BlogService } from '@/services/BlogService';
 
 const lang = LOCALES.en;
+const latestPosts = await BlogService.getLatestPosts(lang, 3);
 const t = useTranslations(lang);
-
-// Get latest blog posts in English using BlogService
-const latestPosts = await BlogService.getLatestPosts('en', 3);
 ---
 
 <Layout
   title={`${SITE_TITLE} - Modern Multi-Language Blog`}
   description={t('meta.description') as string}
-  lang={lang as string}
->
+  lang={lang}>
   <HeroSection />
   <FeaturesSection />
   <FeaturedStoriesSection latestPosts={latestPosts} />
