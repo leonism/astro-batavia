@@ -14,7 +14,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 
   // 1. Pagination Paths
   for (const lang of languages) {
-    const posts = await BlogService.getPostsByLang(lang);
+    const posts = await BlogService.getPostsByLocale(lang);
     const paths = paginate(posts, {
       params: { lang },
       pageSize: PAGINATION_POSTS_PER_PAGE,
@@ -179,26 +179,3 @@ const pagePosts = page?.data || [];
     </Layout>
   )
 }
-
-<script>
-  import { BlogIndexClient } from '@/services/BlogIndexClient';
-
-  function setupLoadMore() {
-    // Only initialize if the button exists and hasn't been initialized
-    const button = document.getElementById('load-more');
-    if (!button || button.dataset.loadMoreInitialized === 'true') return;
-
-    // Initialize our client-side logic
-    BlogIndexClient.init();
-  }
-
-  // Handle Astro view transitions and initial load
-  document.addEventListener('astro:page-load', setupLoadMore);
-
-  // Fallback for non-view-transition initial loads
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setupLoadMore();
-  } else {
-    document.addEventListener('DOMContentLoaded', setupLoadMore);
-  }
-</script>
