@@ -9,7 +9,7 @@ export async function getStaticPaths() {
   const paths = [];
 
   for (const lang of languages) {
-    const posts = await BlogService.getPostsByLang(lang);
+    const posts = await BlogService.getPostsByLocale(lang);
     const totalPages = Math.ceil(posts.length / PAGINATION_POSTS_PER_PAGE);
 
     // Generate a path for each page

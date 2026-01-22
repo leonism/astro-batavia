@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { slugifyTag } from '@/i18n/utils';
 
 /**
  * Service for handling blog post logic and data fetching.
@@ -36,14 +37,6 @@ export class BlogService {
       (post) => post.id.startsWith(`${lang}/`) && !post.data.draft,
     );
     return allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-  }
-
-  /**
-   * Alias for getPostsByLocale to maintain backward compatibility.
-   * @deprecated Use getPostsByLocale instead.
-   */
-  static async getPostsByLang(lang: string): Promise<CollectionEntry<'blog'>[]> {
-    return BlogService.getPostsByLocale(lang);
   }
 
   /**
