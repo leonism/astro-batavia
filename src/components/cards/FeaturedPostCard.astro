@@ -30,6 +30,7 @@ const postUrl = getPostUrl(post.slug, lang);
     href={postUrl}
     class="absolute inset-0 z-20"
     aria-labelledby={`featured-post-title-${post.slug}`}
+    data-astro-prefetch
   >
   </a>
 </article>

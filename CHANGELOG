@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.25] - 2026-01-29
+
+### Changed
+
+- **style(ui):** Refactored global color tokens in `global.css`, migrating from HSL to Hex/RGB values for improved compatibility and consistency.
+- **style(ui):** Refined dark mode contrast in `Layout.astro` and standardized specific gray/slate usages in `Footer` and `NavigationMobileMenu`.
+- **docs:** Updated `README.md` to reflect the latest project dependencies (Astro v5.17.0, Tailwind CSS v4.1, Node.js v24+).
+
 ## [1.0.24] - 2026-01-15
 
 ### Changed

@@ -25,3 +25,7 @@ declare module '*.astro' {
   const Component: any;
   export default Component;
 }
+
+interface Window {
+  dataLayer: any[];
+}
