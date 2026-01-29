@@ -1,4 +1,5 @@
 /* Enhanced Search Styles for Astro Batavia */
+@reference "./global.css";
 
 /* Search highlighting */
 .search-highlight {

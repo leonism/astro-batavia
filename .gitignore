@@ -52,11 +52,6 @@ bun.lockb
 *.sublime-workspace
 GEMINI.md
 
-#python
-python/
-generate_redirects.py
-analyze_404.py
-
 # System
 Thumbs.db
 

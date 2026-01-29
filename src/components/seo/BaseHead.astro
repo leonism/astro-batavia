@@ -3,7 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import SEO from '@/components/seo/SEO.astro';
 import Schema from '@/components/seo/Schema.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
-import { GoogleTagmanager } from '@digi4care/astro-google-tagmanager';
+import { GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SITE_AUTHOR } from '@/consts';
 import { SEOService } from '@/services/SEOService';
 
@@ -92,7 +92,12 @@ try {
 />
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href="/sitemap-0.xml" />
-<GoogleTagmanager id={GTM_ID} />
+<script type="text/partytown" src={`https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`}
+></script>
+<script type="text/partytown">
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+</script>
 
 <SEO
   title={title}

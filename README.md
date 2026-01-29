@@ -2,9 +2,9 @@
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
 
-[![Astro](https://img.shields.io/badge/Astro-5.16.6-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
+[![Astro](https://img.shields.io/badge/Astro-5.17.0-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
   <!-- Additional new badges below -->
@@ -81,13 +81,13 @@
 
 ### **Core Framework**
 
-- **[Astro 5.16.6](https://astro.build)** - Static site generator with islands architecture
+- **[Astro 5.17.0](https://astro.build)** - Static site generator with islands architecture
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript development
 - **[MDX 4.3.0](https://mdxjs.com/)** - Markdown with JSX components
 
 ### **Styling & UI**
 
-- **[Tailwind CSS 3.4.17](https://tailwindcss.com)** - Utility-first CSS framework
+- **[Tailwind CSS 4.1.18](https://tailwindcss.com)** - Utility-first CSS framework
 - **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)** - Beautiful typographic defaults
 - **Custom Design System** - Consistent color palette and spacing
 
@@ -134,7 +134,7 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 
 ### Prerequisites
 
-- **Node.js** 18.0.0 or higher
+- **Node.js** 24.0.0 or higher
 - **npm** 8.0.0 or higher (or **yarn** 1.22.0+)
 - **Git** for version control
 

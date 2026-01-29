@@ -1,20 +1,24 @@
 import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
-// import sentry from '@sentry/astro';
-// import spotlightjs from '@spotlightjs/astro';
 import mdx from '@astrojs/mdx';
-import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 import { SITE_URL } from './src/consts.ts';
+import partytown from '@astrojs/partytown';
+// import sentry from '@sentry/astro';
+// import spotlightjs from '@spotlightjs/astro';
 
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
   site: SITE_URL,
   trailingSlash: 'ignore',
+  prefetch: {
+    defaultStrategy: 'viewport',
+  },
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
@@ -22,9 +26,6 @@ export default defineConfig({
         theme: 'github-dark',
       },
       remarkPlugins: [remarkReadingTime],
-    }),
-    tailwind({
-      applyBaseStyles: false,
     }),
     sitemap({
       i18n: {
@@ -64,13 +65,17 @@ export default defineConfig({
       },
       entryLimit: 10000,
     }),
-    sitemapStyler(),
-    // sentry({
+    sitemapStyler(), // sentry({
     //   telemetry: false,
     // }),
     // spotlightjs(),
     htmlMinifier({
       removeComments: true,
+    }),
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
     }),
   ],
   i18n: {
@@ -88,6 +93,7 @@ export default defineConfig({
     remarkPlugins: [remarkReadingTime],
   },
   vite: {
+    plugins: [tailwindcss()],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
     },
@@ -98,6 +104,7 @@ export default defineConfig({
     },
     build: {
       minify: true,
+      cssCodeSplit: false,
       rollupOptions: {
         onwarn(warning, warn) {
           if (
@@ -111,7 +118,10 @@ export default defineConfig({
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
-          assetFileNames: 'assets/[name].[hash].[ext]',
+          assetFileNames: (assetInfo) => {
+            if (assetInfo.name === 'style.css') return 'style.min.css';
+            return 'assets/[name].[hash][extname]';
+          },
         },
       },
     },
