@@ -98,6 +98,7 @@ export default defineConfig({
     },
     build: {
       minify: true,
+      cssCodeSplit: false,
       rollupOptions: {
         onwarn(warning, warn) {
           if (
@@ -111,7 +112,10 @@ export default defineConfig({
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
-          assetFileNames: 'assets/[name].[hash].[ext]',
+          assetFileNames: (assetInfo) => {
+            if (assetInfo.name === 'style.css') return 'style.min.css';
+            return 'assets/[name].[hash][extname]';
+          },
         },
       },
     },
