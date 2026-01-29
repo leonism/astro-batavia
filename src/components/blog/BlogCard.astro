@@ -25,7 +25,7 @@ const vm = BlogCardService.getViewModel(Astro.props);
   {
     vm.heroImage && (
       <div class={vm.cssClasses.imageContainer}>
-        <a href={vm.postUrl} tabindex="-1" aria-hidden="true">
+        <a href={vm.postUrl} tabindex="-1" aria-hidden="true" data-astro-prefetch>
           <Picture
             src={vm.heroImage.src}
             alt={vm.heroImage.alt}
@@ -52,6 +52,7 @@ const vm = BlogCardService.getViewModel(Astro.props);
             <a
               href={tag.url}
               class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 transition-colors duration-200 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800"
+              data-astro-prefetch
             >
               #{tag.name}
             </a>
@@ -66,7 +67,7 @@ const vm = BlogCardService.getViewModel(Astro.props);
     }
 
     <h2 class={vm.cssClasses.title} id={`blog-post-title-${vm.id}`}>
-      <a href={vm.postUrl}>
+      <a href={vm.postUrl} data-astro-prefetch>
         {vm.title}
       </a>
     </h2>
@@ -143,6 +144,7 @@ const vm = BlogCardService.getViewModel(Astro.props);
           href={vm.postUrl}
           class="group inline-flex items-center justify-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-primary-700 hover:shadow-lg dark:bg-primary-500 dark:hover:bg-primary-600"
           aria-label={vm.translations.readMoreAbout}
+          data-astro-prefetch
         >
           {vm.translations.readMore}
           <svg
