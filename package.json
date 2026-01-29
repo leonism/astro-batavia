@@ -23,6 +23,7 @@
   "description": "",
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
+    "@astrojs/partytown": "^2.1.4",
     "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
     "@astrojs/tailwind": "^6.0.2",
