@@ -1,7 +1,5 @@
 import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
-// import sentry from '@sentry/astro';
-// import spotlightjs from '@spotlightjs/astro';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
@@ -9,6 +7,8 @@ import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 import { SITE_URL } from './src/consts.ts';
+// import sentry from '@sentry/astro';
+// import spotlightjs from '@spotlightjs/astro';
 
 // https://astro.build/config
 export default defineConfig({
