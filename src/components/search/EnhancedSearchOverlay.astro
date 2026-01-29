@@ -50,6 +50,8 @@ const t = useTranslations(lang);
 </script>
 
 <style>
+  @reference "../../styles/global.css";
+
   #search-overlay {
     animation: fadeIn 0.3s ease-out forwards;
   }
@@ -98,10 +100,10 @@ const t = useTranslations(lang);
 
   /* Keyboard navigation styles */
   .search-result-item.keyboard-focused {
-    @apply ring-2 ring-primary-500 ring-opacity-50;
+    @apply ring-2 ring-primary-500/50;
   }
 
   .suggestion-item.keyboard-focused {
-    @apply ring-2 ring-primary-500 ring-opacity-50;
+    @apply ring-2 ring-primary-500/50;
   }
 </style>

@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'node:url';
 import mdx from '@astrojs/mdx';
-import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 import sitemapStyler from './src/integrations/sitemap-styler.mjs';
@@ -26,9 +26,6 @@ export default defineConfig({
         theme: 'github-dark',
       },
       remarkPlugins: [remarkReadingTime],
-    }),
-    tailwind({
-      applyBaseStyles: false,
     }),
     sitemap({
       i18n: {
@@ -96,6 +93,7 @@ export default defineConfig({
     remarkPlugins: [remarkReadingTime],
   },
   vite: {
+    plugins: [tailwindcss()],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
     },
