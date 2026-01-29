@@ -10,7 +10,7 @@ const t = useTranslations(lang);
 
 <div
   id="mobile-nav-overlay"
-  class="mobile-nav-overlay pointer-events-none fixed inset-0 z-40 bg-slate-900/40 opacity-0 backdrop-blur-sm transition-opacity duration-300 md:hidden"
+  class="mobile-nav-overlay pointer-events-none fixed inset-0 z-40 bg-gray-900/40 opacity-0 backdrop-blur-sm transition-opacity duration-300 md:hidden"
   aria-hidden="true"
   role="presentation"
 >
@@ -30,16 +30,16 @@ const t = useTranslations(lang);
   </div>
 
   <header
-    class="flex items-center justify-between border-b border-slate-100 p-6 dark:border-slate-800"
+    class="flex items-center justify-between border-b border-gray-100 p-6 dark:border-slate-800"
   >
     <div
-      class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500"
+      class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500"
     >
       Navigation
     </div>
     <button
       id="close-mobile-menu"
-      class="group rounded-full bg-slate-100 p-2 text-slate-500 transition-all duration-300 hover:bg-red-50 hover:text-red-500 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-red-900/20"
+      class="group rounded-full bg-gray-100 p-2 text-gray-500 transition-all duration-300 hover:bg-red-50 hover:text-red-500 dark:bg-slate-800 dark:text-gray-400 dark:hover:bg-red-900/20"
       aria-label="Close mobile menu"
     >
       <svg
@@ -65,7 +65,7 @@ const t = useTranslations(lang);
   </nav>
 
   <footer
-    class="border-t border-slate-100 bg-slate-50/50 p-6 dark:border-slate-800 dark:bg-slate-900/50"
+    class="border-t border-gray-100 bg-gray-50/50 p-6 dark:border-slate-800 dark:bg-slate-900/50"
   >
     <a
       href={getLocalizedPath('/blog', lang)}

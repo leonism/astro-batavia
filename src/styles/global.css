@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+@variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+}
+
 @theme {
   --color-primary-50: hsl(210 100% 98%);
   --color-primary-100: hsl(210 100% 95%);
@@ -13,16 +19,16 @@
   --color-primary-800: hsl(210 100% 30%);
   --color-primary-900: hsl(210 100% 20%);
 
-  --color-gray-50: hsl(210 20% 98%);
-  --color-gray-100: hsl(210 20% 95%);
-  --color-gray-200: hsl(210 16% 93%);
-  --color-gray-300: hsl(210 14% 89%);
-  --color-gray-400: hsl(210 14% 83%);
-  --color-gray-500: hsl(210 11% 71%);
-  --color-gray-600: hsl(210 7% 56%);
-  --color-gray-700: hsl(210 9% 31%);
-  --color-gray-800: hsl(210 10% 23%);
-  --color-gray-900: hsl(210 11% 15%);
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
 
   --font-family-sans: Inter, ui-sans-serif, system-ui, sans-serif;
   --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -32,19 +38,19 @@
 :root {
   /* Light theme colors */
   --background: 0 0% 100%; /* #FFFFFF */
-  --foreground: 210 11% 15%; /* #222831 */
-  --muted: 210 20% 98%; /* #F8FAFC */
-  --muted-foreground: 210 11% 71%; /* #64748B */
-  --popover: 0 0% 100%; /* #FFFFFF */
-  --popover-foreground: 210 11% 15%; /* #222831 */
-  --card: 0 0% 100%; /* #FFFFFF */
-  --card-foreground: 210 11% 15%; /* #222831 */
-  --border: 210 16% 93%; /* #E2E8F0 */
-  --input: 210 16% 93%; /* #E2E8F0 */
-  --primary: 210 100% 50%; /* #0EA5E9 */
-  --primary-foreground: 0 0% 100%; /* #FFFFFF */
-  --secondary: 210 20% 95%; /* #F1F5F9 */
-  --secondary-foreground: 210 11% 15%; /* #222831 */
+  --foreground: 34 40 49; /* #222831 */
+  --muted: 248 250 252; /* #F8FAFC */
+  --muted-foreground: 100 116 139; /* #64748B */
+  --popover: 255 255 255; /* #FFFFFF */
+  --popover-foreground: 34 40 49; /* #222831 */
+  --card: 255 255 255; /* #FFFFFF */
+  --card-foreground: 34 40 49; /* #222831 */
+  --border: 226 232 240; /* #E2E8F0 */
+  --input: 226 232 240; /* #E2E8F0 */
+  --primary: 14 165 233; /* #0EA5E9 */
+  --primary-foreground: 255 255 255; /* #FFFFFF */
+  --secondary: 241 245 249; /* #F1F5F9 */
+  --secondary-foreground: 34 40 49; /* #222831 */
   --accent: 210 20% 95%; /* #F1F5F9 */
   --accent-foreground: 210 11% 15%; /* #222831 */
   --destructive: 0 84% 60%; /* #EF4444 */
@@ -55,16 +61,16 @@
 
 .dark {
   /* Dark theme colors */
-  --background: 210 11% 15%; /* #1E293B */
-  --foreground: 210 20% 95%; /* #F8FAFC */
-  --muted: 210 10% 23%; /* #334155 */
-  --muted-foreground: 210 7% 56%; /* #64748B */
-  --popover: 210 11% 15%; /* #1E293B */
-  --popover-foreground: 210 20% 95%; /* #F8FAFC */
-  --card: 210 11% 15%; /* #1E293B */
-  --card-foreground: 210 20% 95%; /* #F8FAFC */
-  --border: 210 9% 31%; /* #475569 */
-  --input: 210 9% 31%; /* #475569 */
+  --background: 15 23 42; /* #0f172a */
+  --foreground: 241 245 249; /* #f1f5f9 */
+  --muted: 30 41 59; /* #1e293b */
+  --muted-foreground: 148 163 184; /* #94a3b8 */
+  --popover: 15 23 42; /* #0f172a */
+  --popover-foreground: 241 245 249; /* #f1f5f9 */
+  --card: 15 23 42; /* #0f172a */
+  --card-foreground: 241 245 249; /* #f1f5f9 */
+  --border: 51 65 85; /* #334155 */
+  --input: 51 65 85; /* #334155 */
   --primary: 210 100% 60%; /* #3B82F6 */
   --primary-foreground: 0 0% 100%; /* #FFFFFF */
   --secondary: 210 10% 23%; /* #334155 */
@@ -78,7 +84,7 @@
 
 /* Base styles */
 body {
-  @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100;
   font-feature-settings:
     'rlig' 1,
     'calt' 1;
