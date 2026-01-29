@@ -32,6 +32,7 @@ const { title, links, lang } = Astro.props;
             rel={link.isExternal ? 'noopener noreferrer' : undefined}
             aria-label={link.isExternal ? `${link.text} (opens in a new tab)` : undefined}
             class="text-gray-600 transition-colors duration-200 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
+            data-astro-prefetch={!link.isExternal ? 'true' : undefined}
           >
             {link.text}
           </a>

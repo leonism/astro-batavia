@@ -15,6 +15,9 @@ export default defineConfig({
   output: 'static',
   site: SITE_URL,
   trailingSlash: 'ignore',
+  prefetch: {
+    defaultStrategy: 'viewport',
+  },
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
