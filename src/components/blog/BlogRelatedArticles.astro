@@ -21,7 +21,7 @@ const t = useTranslations(lang);
       </h2>
       <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {relatedPosts.map((post) => (
-          <a href={getPostUrl(post.slug, lang)} class="group block">
+          <a href={getPostUrl(post.slug, lang)} class="group block" data-astro-prefetch>
             <div class="flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg dark:bg-gray-800">
               {post.data.heroImage && (
                 <Picture
