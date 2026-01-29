@@ -7,6 +7,7 @@ import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 import { SITE_URL } from './src/consts.ts';
+import partytown from '@astrojs/partytown';
 // import sentry from '@sentry/astro';
 // import spotlightjs from '@spotlightjs/astro';
 
@@ -67,13 +68,17 @@ export default defineConfig({
       },
       entryLimit: 10000,
     }),
-    sitemapStyler(),
-    // sentry({
+    sitemapStyler(), // sentry({
     //   telemetry: false,
     // }),
     // spotlightjs(),
     htmlMinifier({
       removeComments: true,
+    }),
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
     }),
   ],
   i18n: {
