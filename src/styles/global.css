@@ -1,8 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
-:root {
+@theme {
   --color-primary-50: hsl(210 100% 98%);
   --color-primary-100: hsl(210 100% 95%);
   --color-primary-200: hsl(210 100% 90%);
