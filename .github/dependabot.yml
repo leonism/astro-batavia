@@ -16,10 +16,21 @@ updates:
     labels:
       - 'npm'
       - 'dependencies'
+    # Group updates to reduce noise
+    groups:
+      dependencies:
+        patterns:
+          - '*'
+        exclude-patterns:
+          - 'astro' # Keep astro separate for stability
+      devDependencies:
+        dependency-type: 'development'
+        patterns:
+          - '*'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
     labels:
       - 'github-actions'
       - 'dependencies'
