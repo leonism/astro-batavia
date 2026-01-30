@@ -1,317 +1,126 @@
-# Enterprise Search System
+# Enhanced Search System
 
-A powerful, enterprise-grade search engine built for Astro Batavia with advanced features including instant search, fuzzy matching, intelligent filtering, and comprehensive analytics.
+The Astro Batavia Enhanced Search System is a high-performance, accessible, and semantically-aware search engine built specifically for modern multilingual blog platforms. It provides a seamless keyboard-driven experience without sacrificing accessibility.
 
-## Features
+## Key Features
 
-### 🚀 Core Search Capabilities
+### 🚀 Performance & Intelligence
 
-- **Instant Search**: Sub-100ms search results with optimized indexing
-- **Fuzzy Matching**: Find results even with typos using advanced similarity algorithms
-- **Multi-field Search**: Search across titles, descriptions, content, tags, and authors
-- **Relevance Scoring**: Intelligent ranking based on multiple factors
-- **Real-time Suggestions**: Dynamic search suggestions as you type
+- **Instant Results**: Sub-100ms response times for all queries.
+- **Semantic Clustering**: Understands relationships between terms (e.g., "Web" and "Internet").
+- **Fuzzy Matching**: Intelligent typo tolerance and partial match support.
+- **Zero Initial Load**: The search engine and UI are lazy-loaded only when requested (via `⌘K` or click), avoiding unnecessary impact on the initial page load.
 
-### 🎯 Advanced Filtering
+### 🍱 User Experience
 
-- **Tag-based Filtering**: Filter by multiple tags simultaneously
-- **Date Range Filtering**: Search within specific time periods
-- **Author Filtering**: Find content by specific authors
-- **Category Filtering**: Browse by content categories
-- **Quick Filters**: Popular and recent content shortcuts
+- **Premium UI**: Modern glassmorphism design with smooth animations.
+- **Keyboard First**: Full `⌘K`/`Ctrl+K` support with intuitive arrow-key navigation.
+- **Multi-language**: Seamless searching across English, Spanish, and Japanese content.
+- **Voice Search**: Native speech-to-text integration for hands-free searching.
 
-### 🎨 User Experience
+### ♿ Accessibility
 
-- **Voice Search**: Hands-free search using speech recognition
-- **Keyboard Shortcuts**: ⌘K (Mac) / Ctrl+K (Windows) to focus search
-- **Search History**: Track and revisit previous searches
-- **Popular Searches**: Discover trending search terms
-- **Responsive Design**: Optimized for all device sizes
-
-### 📊 Analytics & Performance
-
-- **Search Analytics**: Track search patterns and user behavior
-- **Performance Monitoring**: Real-time search performance metrics
-- **Caching System**: Intelligent caching for faster repeat searches
-- **Click Tracking**: Monitor which results users find most relevant
+- **WCAG 2.1 Compliant**: Full ARIA support for screen readers.
+- **Reduced Motion**: Respects system preferences for animations using `prefers-reduced-motion`.
+- **Focus Management**: Robust handling of focus traps, returns, and high-contrast indicators.
 
 ## Architecture
 
-### Components Overview
+The search functionality follows a clean modular design, separated between logic and presentation:
 
-```
-src/features/search/
-├── EnterpriseSearchEngine.ts     # Core search engine with indexing and algorithms
-├── searchIntegration.ts          # Integration layer and unified API
-├── EnterpriseSearchClient.ts     # Client-side UI and interaction handling
-├── EnterpriseSearchBox.astro     # Search input component with suggestions
-├── EnterpriseSearchResults.astro # Results display with filtering and sorting
-└── README.md                     # This documentation
-```
+### Logic Layers (`src/features/search/`)
 
-### Data Flow
+- **`EnhancedSearchEngine.ts`**: The core logic handling heavy-duty document indexing, semantic clustering, and fuzzy matching algorithms.
+- **`EnhancedSearchClient.ts`**: The main browser-side controller managing event listeners, state orchestration, and performance monitoring.
+- **`EnhancedSearchUI.ts`**: Orchestrates high-frequency DOM updates, result rendering, and UI transitions.
+- **`SearchPageController.ts`**: Orchestrates the search experience on the dedicated standalone `/search` page.
 
-1. **Indexing**: Documents are processed and indexed by `EnterpriseSearchEngine`
-2. **Search Request**: User input triggers search through `searchIntegration`
-3. **Processing**: Query is normalized, cached results checked, search performed
-4. **Results**: Ranked results returned with highlighting and suggestions
-5. **Analytics**: Search patterns and clicks tracked for optimization
+### Presentation Layers (`src/components/search/`)
 
-## Usage
+- **`EnhancedSearchOverlay.astro`**: Main entry point and modal container for the instant search feature.
+- **`SearchInputForm.astro`**: Main search input with integrated accessibility announcements.
+- **`SearchResults.astro`**: Dedicated results display used in the full-page search.
+- **`SearchFilters.astro`**: Logic for sorting and category filtering.
+- **`SearchOverlayInput.astro`**, **`SearchOverlayResults.astro`**, etc.: Specialized sub-components for the modal overlay.
 
-### Basic Implementation
+## Implementation Details
+
+### Initialization Flow
+
+1.  **Trigger**: User clicks a search button or presses `⌘K`.
+2.  **Lazy Load**: The search component dynamically imports the search feature module.
+3.  **Indexing**: Post data is indexed in the browser's background for rapid retrieval.
+4.  **UI Mount**: The search modal appears, ready for user input.
+
+### Example: Programmatic Search
 
 ```typescript
-import { searchIntegration } from '@/features/search/searchIntegration';
+import { EnhancedSearchEngine } from '@/features/search/EnhancedSearchEngine';
 
-// Initialize with your documents
-const documents = [
+const engine = new EnhancedSearchEngine();
+
+// Indexing documents
+await engine.initialize([
   {
     id: 'post-1',
-    title: 'Getting Started with TypeScript',
-    description: 'Learn the basics of TypeScript development',
-    content: 'TypeScript is a typed superset of JavaScript...',
-    tags: ['typescript', 'javascript', 'programming'],
-    url: '/blog/typescript-basics',
-    pubDate: new Date('2024-01-15'),
-    author: 'John Doe',
-    category: 'Tutorial',
+    title: 'Astro Batavia Guide',
+    content: 'Learn how to build multilingual blogs...',
+    tags: ['astro', 'i18n'],
+    url: '/en/blog/guide',
     lang: 'en',
-    slug: 'typescript-basics',
   },
-  // ... more documents
-];
+]);
 
-// Initialize the search engine
-await searchIntegration.initialize(documents);
-
-// Perform a search
-const results = await searchIntegration.search('typescript', {
-  tags: ['programming'],
-  sortBy: 'relevance',
-});
-
-console.log(`Found ${results.totalCount} results in ${results.searchTime}ms`);
-```
-
-### Astro Component Usage
-
-```astro
----
-// pages/search.astro
-import EnterpriseSearchBox from '@/components/search/EnterpriseSearchBox.astro';
-import EnterpriseSearchResults from '@/components/search/EnterpriseSearchResults.astro';
-import { getAllPosts } from '@/utils/search-server';
-
-const posts = await getAllPosts('en');
----
-
-<Layout title="Search">
-  <main>
-    <EnterpriseSearchBox
-      placeholder="Search articles, tags, authors..."
-      enableVoiceSearch={true}
-      showKeyboardShortcut={true}
-      popularSearches={['JavaScript', 'React', 'TypeScript']}
-    />
-
-    <EnterpriseSearchResults posts={posts} lang="en" enableInfiniteScroll={true} />
-  </main>
-</Layout>
-
-<script>
-  import { EnterpriseSearchClient } from '@/features/search/EnterpriseSearchClient';
-
-  document.addEventListener('DOMContentLoaded', async () => {
-    const searchClient = new EnterpriseSearchClient();
-    await searchClient.indexPosts(window.__SEARCH_DATA__ || []);
-  });
-</script>
+// Performing a semantic search
+const results = await engine.search('building blogs');
+console.log(results);
 ```
 
 ## Configuration
 
-### Search Integration Config
+Constants are centralized in `src/features/search/searchConstants.ts`:
 
-```typescript
-import { SearchIntegration } from '@/features/search/searchIntegration';
+- `DEBOUNCE_MS`: Prevents excessive processing during typing (default 150ms).
+- `MIN_QUERY_LENGTH`: Minimum characters before searching starts.
+- `MAX_RESULTS`: Cap on displayed results for performance.
 
-const searchIntegration = new SearchIntegration({
-  enableAnalytics: true, // Track search analytics
-  enableCache: true, // Cache search results
-  enableVoiceSearch: true, // Enable voice search
-  maxResults: 50, // Maximum results per search
-  debounceMs: 300, // Debounce delay for search input
-  fuzzyThreshold: 0.6, // Fuzzy matching sensitivity (0-1)
-});
-```
+## Keyboard Interaction Model
 
-### Search Options
+### Universal Shortcuts
 
-```typescript
-const results = await searchIntegration.search('query', filters, {
-  limit: 20, // Number of results to return
-  offset: 0, // Pagination offset
-});
-```
+| Key                  | Action                             |
+| :------------------- | :--------------------------------- |
+| `⌘ + K` / `Ctrl + K` | Focus or Toggle Search Overlay     |
+| `Esc`                | Close search / Clear current input |
 
-### Search Filters
+### Navigation Controls
 
-```typescript
-const filters = {
-  tags: ['javascript', 'react'], // Filter by tags
-  dateFrom: new Date('2024-01-01'), // Start date
-  dateTo: new Date('2024-12-31'), // End date
-  author: 'John Doe', // Filter by author
-  category: 'Tutorial', // Filter by category
-  sortBy: 'relevance', // Sort method
-  sortOrder: 'desc', // Sort direction
-};
-```
+| Key           | Action                                                    |
+| :------------ | :-------------------------------------------------------- |
+| `↑` / `↓`     | Navigate through suggestions or results                   |
+| `Enter`       | Activate/Open selected item                               |
+| `Ctrl + Home` | Jump to the first search result                           |
+| `Ctrl + End`  | Jump to the last search result                            |
+| `Tab`         | Iterate through interactive UI elements (Filters, Inputs) |
 
-## API Reference
+## Accessibility Implementation
 
-### SearchIntegration
+1.  **Semantic Roles**: Uses `combobox` for the input and `listbox` for results to satisfy ARIA patterns.
+2.  **Live Announcements**: `aria-live="polite"` handles real-time updates for result counts and loading states.
+3.  **Visual Indicators**: High-contrast focus rings and selection backgrounds ensure clarity across all display modes.
+4.  **Motion**: All transitions are automatically disabled if the user has requested reduced motion.
 
-#### Methods
+## Analytics & Insights
 
-- `initialize(documents: SearchableDocument[]): Promise<void>`
-  - Index documents for searching
+The system tracks search performance and user intent (locally by default):
 
-- `search(query: string, filters?: SearchFilters, options?: SearchOptions): Promise<SearchResults>`
-  - Perform a search with optional filtering
+- **Search Timing**: Time taken to index and retrieve results.
+- **Query History**: Recent searches for user convenience.
+- **Cache Hit Rate**: Efficiency of the internal result cache.
 
-- `getSuggestions(partialQuery: string, limit?: number): Promise<string[]>`
-  - Get search suggestions based on partial input
+## Troubleshooting & Debugging
 
-- `trackResultClick(query: string, resultId: string): void`
-  - Track when a user clicks on a search result
-
-- `getAnalytics(): SearchAnalytics[]`
-  - Retrieve search analytics data
-
-- `clearCache(): void`
-  - Clear the search result cache
-
-### SearchUtils
-
-#### Utility Functions
-
-- `highlightText(text: string, query: string): string`
-  - Highlight search terms in text
-
-- `truncateText(text: string, maxLength: number): string`
-  - Truncate text with ellipsis
-
-- `formatSearchTime(timeMs: number): string`
-  - Format search time for display
-
-- `formatResultCount(count: number): string`
-  - Format result count for display
-
-- `debounce(func: Function, wait: number): Function`
-  - Debounce function for search input
-
-- `supportsVoiceSearch(): boolean`
-  - Check if browser supports voice search
-
-## Performance Optimization
-
-### Indexing Strategy
-
-1. **Multi-level Indexing**: Separate indexes for search terms, tags, and titles
-2. **Stop Word Filtering**: Common words are excluded from indexing
-3. **Text Normalization**: Consistent text processing for better matching
-4. **Incremental Updates**: Efficient re-indexing for content changes
-
-### Search Optimization
-
-1. **Result Caching**: Frequently searched queries are cached
-2. **Fuzzy Matching**: Configurable similarity thresholds
-3. **Early Termination**: Stop processing when enough results are found
-4. **Relevance Scoring**: Multi-factor scoring for result ranking
-
-### UI Performance
-
-1. **Debounced Input**: Prevents excessive search requests
-2. **Virtual Scrolling**: Efficient rendering of large result sets
-3. **Lazy Loading**: Load additional results on demand
-4. **Progressive Enhancement**: Works without JavaScript
-
-## Analytics
-
-### Tracked Metrics
-
-- **Search Queries**: What users are searching for
-- **Result Counts**: How many results each query returns
-- **Click-through Rates**: Which results users find most relevant
-- **Search Patterns**: Popular search terms and trends
-- **Performance Metrics**: Search response times
-
-### Data Storage
-
-Analytics data is stored locally using `localStorage` and includes:
-
-```typescript
-interface SearchAnalytics {
-  query: string; // The search query
-  timestamp: Date; // When the search was performed
-  resultsCount: number; // Number of results returned
-  clickedResult?: string; // ID of clicked result (if any)
-  filters?: SearchFilters; // Applied filters
-}
-```
-
-## Browser Support
-
-- **Modern Browsers**: Chrome 80+, Firefox 75+, Safari 13+, Edge 80+
-- **Voice Search**: Requires Web Speech API support
-- **Local Storage**: Required for analytics and search history
-- **ES2020**: Modern JavaScript features used throughout
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Search Not Working**
-   - Ensure documents are properly indexed
-   - Check browser console for errors
-   - Verify search integration is initialized
-
-2. **Slow Search Performance**
-   - Reduce fuzzy matching threshold
-   - Enable result caching
-   - Limit maximum results
-
-3. **Voice Search Not Available**
-   - Check browser support for Web Speech API
-   - Ensure HTTPS connection (required for voice)
-   - Verify microphone permissions
-
-4. **Analytics Not Tracking**
-   - Ensure analytics are enabled in config
-   - Check localStorage availability
-   - Verify proper result click tracking
-
-### Debug Mode
-
-Enable debug logging:
-
-```typescript
-// In browser console
-window.searchClient?.getConfig();
-window.searchClient?.getSearchAnalytics();
-```
-
-## Contributing
-
-When contributing to the search system:
-
-1. **Performance**: Always consider search performance impact
-2. **Accessibility**: Ensure keyboard navigation and screen reader support
-3. **Testing**: Test with various query types and edge cases
-4. **Documentation**: Update this README for any API changes
-
-## License
-
-This enterprise search system is part of the Astro Batavia project and follows the same licensing terms.
+- **No results?**: Ensure the `lang` parameter matches the indexed documents.
+- **Slow navigation?**: Profile the `EnhancedSearchClient` event listeners.
+- **Overlay won't open?**: Check for dynamic import failures in the browser console.
+- **Debug Mode**: Run `localStorage.setItem('search-debug', 'true')` in the console for detailed background logging.
