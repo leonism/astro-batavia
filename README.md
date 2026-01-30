@@ -467,7 +467,7 @@ SENTRY_DSN=your_sentry_dsn
 ```javascript
 // astro.config.mjs
 export default defineConfig({
-  site: 'https://yourdomain.com', // Update with your domain
+  site: 'https://www.yourdomain.com', // Update with your domain
   output: 'static',
   // ... other configuration
 });
