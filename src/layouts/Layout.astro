@@ -3,6 +3,7 @@ import BaseHead from '@/components/seo/BaseHead.astro';
 import NavigationHeader from '@/components/navigation/NavigationHeader.astro';
 import Footer from '@/components/footer/Footer.astro';
 import GlobalWidgets from '@/components/ui/GlobalWidgets.astro';
+import BreadCrumb from '@/components/ui/BreadCrumb.astro';
 import { GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID } from '@/consts';
 import '@/styles/global.css';
@@ -66,6 +67,7 @@ const { lang = 'en' } = Astro.props;
     <div id="app" class="flex min-h-screen flex-col">
       <NavigationHeader />
       <main role="main" id="main-content" class="flex-1 pt-16">
+        <BreadCrumb />
         <slot />
       </main>
       <Footer />
