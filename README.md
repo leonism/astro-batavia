@@ -59,7 +59,14 @@
 - **Tag System**: Categorization and filtering capabilities
 - **Draft Support**: Preview unpublished content
 
-### 🔍 **SEO & Analytics**
+### 🔍 **Advanced Search**
+
+- **Realtime Search**: Search results appear as you type keywords
+- **Search Overlay UI**: Search UI under an overlay UI composition
+- **Under 100 millisecond**: Fast, blazingly fast results experience
+- **Accesibility**: Navigate search results using key strokes on desktop
+
+### 📊 **SEO & Analytics**
 
 - **Advanced SEO**: Open Graph, Twitter Cards, JSON-LD structured data
 - **Sitemap**: Automatic generation with i18n support
