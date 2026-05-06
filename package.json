@@ -65,6 +65,7 @@
     "terser": "^5.43.1",
     "tsx": "^4.21.0",
     "vite-plugin-imagemin": "^0.6.1",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.17",
+    "zstd-napi": "^0.0.12"
   }
 }
