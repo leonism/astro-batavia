@@ -6,6 +6,7 @@ import { performance } from 'perf_hooks';
 import os from 'os';
 import { glob } from 'glob';
 import { fileURLToPath } from 'url';
+import { compress as zstdCompress } from 'zstd-napi';
 
 const gzip = promisify(zlib.gzip);
 const brotliCompress = promisify(zlib.brotliCompress);
@@ -24,17 +25,34 @@ const SUPPORTED_EXTENSIONS = new Set([
 
 const DEFAULT_DIST_DIR = 'dist';
 
-// Runs gzip and brotli in parallel for a single file's data
-async function compressData(data: Buffer) {
+// Runs gzip, brotli and zstd in parallel for a single file's data
+async function compressData(data: Buffer, extension: string) {
   const gzipPromise = gzip(data, { level: zlib.constants.Z_BEST_COMPRESSION });
+  
+  const brotliMode = extension === '.wasm' 
+    ? zlib.constants.BROTLI_MODE_GENERIC 
+    : zlib.constants.BROTLI_MODE_TEXT;
+
   const brotliPromise = brotliCompress(data, {
     params: {
       [zlib.constants.BROTLI_PARAM_QUALITY]: 11, // Max quality
       [zlib.constants.BROTLI_PARAM_SIZE_HINT]: data.length,
+      [zlib.constants.BROTLI_PARAM_LGWIN]: 24, // Max window size for better compression on large files
+      [zlib.constants.BROTLI_PARAM_MODE]: brotliMode,
     },
   });
-  // Await both promises to run them in parallel
-  return Promise.all([gzipPromise, brotliPromise]);
+
+  // zstdCompress from zstd-napi is synchronous but very fast at lower levels.
+  // At level 22 it is slow, so we wrap it to keep the async flow.
+  const zstdPromise = Promise.resolve().then(() => 
+    zstdCompress(data, { 
+      compressionLevel: 22,
+      enableLongDistanceMatching: true // Helps with larger files
+    })
+  );
+
+  // Await all promises to run them in parallel
+  return Promise.all([gzipPromise, brotliPromise, zstdPromise]);
 }
 
 // Finds all files matching the supported extensions using glob
@@ -47,7 +65,7 @@ async function getCompressibleFiles(dir: string) {
 
 async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verbose: false }) {
   const startTime = performance.now();
-  console.log('🚀 Starting high-performance compression...');
+  console.log('🚀 Starting ultra-high-performance compression...');
   console.log(`🔍 Finding compressible files in: ${distDir}`);
 
   try {
@@ -82,19 +100,44 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
 
       try {
         const data = await fs.readFile(filePath);
-        const [gzipData, brotliData] = await compressData(data);
+        const ext = path.extname(filePath);
+        const [gzipData, brotliData, zstdData] = await compressData(data, ext);
 
-        const writeGzipPromise = fs.writeFile(`${filePath}.gz`, gzipData);
-        const writeBrotliPromise = fs.writeFile(`${filePath}.br`, brotliData);
+        const writePromises: Promise<void>[] = [];
+        let savedVariantsForFile = 0;
 
-        await Promise.all([writeGzipPromise, writeBrotliPromise]);
+        if (gzipData.length < data.length) {
+          writePromises.push(fs.writeFile(`${filePath}.gz`, gzipData));
+          savedVariantsForFile++;
+        }
+
+        if (brotliData.length < data.length) {
+          writePromises.push(fs.writeFile(`${filePath}.br`, brotliData));
+          savedVariantsForFile++;
+        }
+
+        if (zstdData.length < data.length) {
+          writePromises.push(fs.writeFile(`${filePath}.zst`, zstdData));
+          savedVariantsForFile++;
+        }
+
+        await Promise.all(writePromises);
 
         if (options.verbose) {
           const relativePath = path.relative(process.cwd(), filePath);
-          console.log(`✅ Compressed: ${relativePath} (.gz, .br)`);
+          const savedExts = [];
+          if (gzipData.length < data.length) savedExts.push('.gz');
+          if (brotliData.length < data.length) savedExts.push('.br');
+          if (zstdData.length < data.length) savedExts.push('.zst');
+          
+          if (savedVariantsForFile > 0) {
+            console.log(`✅ Compressed: ${relativePath} (${savedExts.join(', ')})`);
+          } else {
+            console.log(`⏭️  Skipped: ${relativePath} (no reduction)`);
+          }
         }
 
-        compressedVariants += 2;
+        compressedVariants += savedVariantsForFile;
       } catch (err: unknown) {
         console.error(`❌ Failed to compress: ${filePath}`, err);
         allErrors.push({ filePath, error: err instanceof Error ? err.message : String(err) });
