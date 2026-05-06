@@ -17,7 +17,9 @@ if (pageTitle && breadcrumbs.length > 0) {
   // Only replace if it's the actual content page (not a category/index page that has a translated name)
   // For now, let's just always use it for the last item if it's not the home page
   if (breadcrumbs.length > 1) {
-    lastItem.name = pageTitle;
+    // Clean up the page title for the breadcrumb (e.g., remove " | Blog")
+    const cleanTitle = pageTitle.split(' | ')[0].trim();
+    lastItem.name = cleanTitle;
   }
 }
 
