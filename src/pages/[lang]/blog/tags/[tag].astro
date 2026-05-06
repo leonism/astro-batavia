@@ -8,7 +8,8 @@ import { BlogService } from '@/services/BlogService';
 import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
 export async function getStaticPaths() {
-  return await BlogService.getStaticTagPaths();
+  const allPaths = await BlogService.getStaticTagPaths();
+  return allPaths.filter(path => path.params.lang !== 'en');
 }
 
 const { tag } = Astro.props;
@@ -17,7 +18,6 @@ const t = useTranslations(lang as keyof typeof ui);
 
 // Get blog posts for this language and tag
 const posts = await BlogService.getPostsByTag(lang as string, Astro.params.tag as string);
-
 const postsPerPage = PAGINATION_POSTS_PER_PAGE;
 const totalPages = Math.ceil(posts.length / postsPerPage);
 const postsToDisplay = posts.slice(0, postsPerPage);

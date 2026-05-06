@@ -4,9 +4,14 @@ import SearchInputForm from '@/components/search/SearchInputForm.astro';
 import SearchFilters from '@/components/search/SearchFilters.astro';
 import SearchResults from '@/components/search/SearchResults.astro';
 import { getCollection } from 'astro:content';
-import { useTranslations, defaultLang } from '@/i18n/utils';
+import { useTranslations } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
 
-const lang = defaultLang;
+export async function getStaticPaths() {
+  return ['en', 'es', 'ja'].map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as LanguageKey;
 const t = useTranslations(lang);
 
 // Fetch all posts to get unique tags for filtering

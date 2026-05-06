@@ -26,12 +26,22 @@ export class BreadCrumbService {
 
     const items: BreadCrumbItem[] = [];
 
-    // Always add Home as the first item
+    // 1. Always add Home as the first item - points to the absolute root /
     items.push({
       name: t('nav.home'),
-      url: getLocalizedPath('/', lang),
-      isLast: segments.length === 0,
+      url: '/',
+      isLast: false,
     });
+    
+    // 2. Add Language segment (e.g., "En", "Es", "Ja") only if we're not on the root
+    if (pathname !== '/' && pathname !== '') {
+      const langDisplay = lang.charAt(0).toUpperCase() + lang.slice(1);
+      items.push({
+        name: langDisplay,
+        url: getLocalizedPath('/', lang),
+        isLast: false,
+      });
+    }
 
     let currentPath = '';
     segments.forEach((segment, index) => {

@@ -1,8 +1,13 @@
 ---
 import FeaturedCard from '@/components/cards/FeaturedCard.astro';
-import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { useTranslations } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
 
-const lang = getLangFromUrl(Astro.url);
+interface Props {
+  lang: LanguageKey;
+}
+
+const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 

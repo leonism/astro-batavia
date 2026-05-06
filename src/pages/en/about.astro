@@ -14,13 +14,13 @@ const lang = LOCALES.en;
 >
   <!-- Hero Section -->
   <section
-    class="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+    class="relative bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
   >
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="text-center">
         <h1 class="mb-6 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
           About <span
-            class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+            class="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
           >
             {SITE_TITLE}
           </span>
@@ -130,11 +130,11 @@ const lang = LOCALES.en;
           </div>
           <!-- Decorative elements -->
           <div
-            class="absolute -right-4 -top-4 h-24 w-24 rotate-12 transform rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 opacity-20"
+            class="absolute -right-4 -top-4 h-24 w-24 rotate-12 transform rounded-2xl bg-linear-to-br from-blue-400 to-indigo-600 opacity-20"
           >
           </div>
           <div
-            class="absolute -bottom-4 -left-4 h-32 w-32 rounded-full bg-gradient-to-tr from-purple-400 to-pink-600 opacity-20"
+            class="absolute -bottom-4 -left-4 h-32 w-32 rounded-full bg-linear-to-tr from-purple-400 to-pink-600 opacity-20"
           >
           </div>
         </div>
@@ -148,7 +148,7 @@ const lang = LOCALES.en;
       <div class="mb-16 text-center">
         <h2 class="mb-6 text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">
           Meet Our <span
-            class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+            class="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
           >
             Expert Team
           </span>
@@ -166,7 +166,7 @@ const lang = LOCALES.en;
         >
           <div class="text-center">
             <div
-              class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600"
+              class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600"
             >
               <span class="text-2xl font-bold text-white">SC</span>
             </div>
@@ -185,7 +185,7 @@ const lang = LOCALES.en;
         >
           <div class="text-center">
             <div
-              class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600"
+              class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-linear-to-br from-purple-500 to-pink-600"
             >
               <span class="text-2xl font-bold text-white">MR</span>
             </div>
@@ -206,7 +206,7 @@ const lang = LOCALES.en;
         >
           <div class="text-center">
             <div
-              class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600"
+              class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-2xl bg-linear-to-br from-green-500 to-emerald-600"
             >
               <span class="text-2xl font-bold text-white">EJ</span>
             </div>
@@ -342,7 +342,7 @@ const lang = LOCALES.en;
   </section>
 
   <!-- CTA Section -->
-  <section class="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 py-24">
+  <section class="bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700 py-24">
     <div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
       <h2 class="mb-6 text-3xl font-bold text-white sm:text-4xl">Join Our Technology Community</h2>
       <p class="mx-auto mb-8 max-w-2xl text-xl text-blue-100">
@@ -351,7 +351,7 @@ const lang = LOCALES.en;
       </p>
       <div class="flex flex-col justify-center gap-4 sm:flex-row">
         <a
-          href="/blog"
+          href={getLocalizedPath('/blog', lang)}
           class="inline-flex items-center rounded-2xl bg-white px-8 py-4 font-semibold text-blue-600 transition-all duration-300 hover:scale-105 hover:bg-blue-50 hover:shadow-2xl"
         >
           Explore Articles

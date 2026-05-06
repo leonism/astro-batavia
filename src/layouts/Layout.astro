@@ -67,7 +67,7 @@ const { lang = 'en' } = Astro.props;
     <div id="app" class="flex min-h-screen flex-col">
       <NavigationHeader />
       <main role="main" id="main-content" class="flex-1 pt-16">
-        <BreadCrumb />
+        <BreadCrumb title={Astro.props.title} />
         <slot />
       </main>
       <Footer />
