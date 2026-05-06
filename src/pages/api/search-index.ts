@@ -17,18 +17,18 @@ export const GET: APIRoute = async () => {
      * Transform blog posts into search documents.
      */
     const documents = allBlogPosts.map((post) => {
-      const lang = post.slug.split('/')[0];
+      const lang = post.id.split('/')[0];
       return {
         id: post.id,
         title: post.data.title,
         description: post.data.description,
         content: post.body,
         tags: post.data.tags || [],
-        url: getPostUrl(post.slug, lang),
+        url: getPostUrl(post.id, lang),
         pubDate: post.data.pubDate,
         author: post.data.author,
         lang: lang,
-        slug: post.slug.split('/').slice(1).join('/'),
+        slug: post.id.split('/').slice(1).join('/'),
         heroImage: post.data.heroImage,
       };
     });

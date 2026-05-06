@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry } from 'astro:content';
+import { type CollectionEntry, render } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import BlogPost from '@/layouts/BlogPost.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
@@ -9,7 +9,7 @@ import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 import type { GetStaticPaths, MarkdownHeading, Page } from 'astro';
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const languages = ['en', 'es', 'ja'];
+  const languages = ['es', 'ja'];
   const allPaths = [];
 
   // 1. Pagination Paths
@@ -24,10 +24,9 @@ export const getStaticPaths = (async ({ paginate }) => {
 
   // 2. Individual Post Paths
   const allPosts = await BlogService.getAllPosts();
-  const postPaths = allPosts.map((post) => {
-    const [lang, ...slugParts] = post.slug.split('/');
-    // Remove 'blog' from the slug parts if it exists to get the page param
-    // post.slug is like 'en/blog/my-post' -> slugParts = ['blog', 'my-post'] -> page = 'my-post'
+  const nonEnglishPosts = allPosts.filter((post) => !post.id.startsWith('en/'));
+  const postPaths = nonEnglishPosts.map((post) => {
+    const [lang, ...slugParts] = post.id.replace(/\.mdx?$/, '').split('/');
     const page = slugParts[0] === 'blog' ? slugParts.slice(1).join('/') : slugParts.join('/');
 
     return {
@@ -60,7 +59,7 @@ let headings: MarkdownHeading[] = [];
 let readingTime;
 
 if (post) {
-  const rendered = await post.render();
+  const rendered = await render(post);
   Content = rendered.Content;
   headings = rendered.headings;
   readingTime = rendered.remarkPluginFrontmatter?.readingTime;
@@ -76,7 +75,7 @@ const pagePosts = page?.data || [];
 
 {
   post ? (
-    <BlogPost {...post.data} slug={post.slug} headings={headings} readingTime={readingTime}>
+    <BlogPost {...post.data} slug={post.id} headings={headings} readingTime={readingTime}>
       {Content && <Content />}
     </BlogPost>
   ) : (
