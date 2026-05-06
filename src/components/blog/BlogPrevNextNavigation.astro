@@ -24,7 +24,7 @@ const t = useTranslations(lang);
       >
         {previousPostData && (
           <a
-            href={getPostUrl(previousPostData.slug, lang)}
+            href={getPostUrl(previousPostData.id, lang)}
             title={`${t('blog.previousArticle')}: ${previousPostData.data.title}`}
             class="group flex flex-row items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
             data-astro-prefetch
@@ -34,7 +34,7 @@ const t = useTranslations(lang);
                 src={previousPostData.data.heroImage}
                 loading="lazy"
                 alt={previousPostData.data.heroImageAlt || ''}
-                class="h-20 w-20 flex-shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
+                class="h-20 w-20 shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
               />
             )}
             <div class="flex flex-col">
@@ -65,7 +65,7 @@ const t = useTranslations(lang);
 
         {nextPostData && (
           <a
-            href={getPostUrl(nextPostData.slug, lang)}
+            href={getPostUrl(nextPostData.id, lang)}
             title={`${t('blog.nextArticle')}: ${nextPostData.data.title}`}
             class="group flex flex-row items-center justify-end gap-4 rounded-lg border border-gray-200 bg-white p-4 text-right transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
             data-astro-prefetch
@@ -98,7 +98,7 @@ const t = useTranslations(lang);
                 src={nextPostData.data.heroImage}
                 loading="lazy"
                 alt={nextPostData.data.heroImageAlt || ''}
-                class="h-20 w-20 flex-shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
+                class="h-20 w-20 shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
               />
             )}
           </a>
