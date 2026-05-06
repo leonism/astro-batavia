@@ -47,7 +47,7 @@ export class BlogService {
    * @returns {{ previousPost: CollectionEntry<'blog'> | null, nextPost: CollectionEntry<'blog'> | null }} The previous and next posts.
    */
   static getPostNavigation(allPosts: CollectionEntry<'blog'>[], currentSlug: string) {
-    const currentIndex = allPosts.findIndex((post) => post.slug === currentSlug);
+    const currentIndex = allPosts.findIndex((post) => post.id === currentSlug);
     const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
     const previousPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
     return { previousPost, nextPost };
@@ -71,7 +71,7 @@ export class BlogService {
     if (!tags || tags.length === 0) return [];
     const relatedPosts = allPosts.filter(
       (post) =>
-        post.slug !== currentSlug && tags.some((tag) => (post.data.tags || []).includes(tag)),
+        post.id !== currentSlug && tags.some((tag) => (post.data.tags || []).includes(tag)),
     );
     relatedPosts.sort((a, b) => {
       const aCommonTags = (a.data.tags || []).filter((tag) => tags.includes(tag)).length;
@@ -181,7 +181,7 @@ export class BlogService {
   > {
     const posts = await BlogService.getAllPosts();
     return posts.map((post) => {
-      const [lang, ...slugParts] = post.slug.split('/');
+      const [lang, ...slugParts] = post.id.replace(/\.mdx?$/, '').split('/');
       const slug = slugParts.join('/');
       return { params: { lang, slug }, props: post };
     });
