@@ -9,28 +9,26 @@ import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 import type { GetStaticPaths, MarkdownHeading, Page } from 'astro';
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const languages = ['es', 'ja'];
+  const lang = 'en';
   const allPaths = [];
 
   // 1. Pagination Paths
-  for (const lang of languages) {
-    const posts = await BlogService.getPostsByLocale(lang);
-    const paths = paginate(posts, {
-      params: { lang },
-      pageSize: PAGINATION_POSTS_PER_PAGE,
-    });
-    allPaths.push(...paths);
-  }
+  const posts = await BlogService.getPostsByLocale(lang);
+  const paths = paginate(posts, {
+    pageSize: PAGINATION_POSTS_PER_PAGE,
+  });
+  allPaths.push(...paths);
 
   // 2. Individual Post Paths
-  const allPosts = await BlogService.getAllPosts();
-  const nonEnglishPosts = allPosts.filter((post) => !post.id.startsWith('en/'));
-  const postPaths = nonEnglishPosts.map((post) => {
-    const [lang, ...slugParts] = post.id.replace(/\.mdx?$/, '').split('/');
-    const page = slugParts[0] === 'blog' ? slugParts.slice(1).join('/') : slugParts.join('/');
+  const allPosts = await BlogService.getPostsByLocale(lang);
+  const postPaths = allPosts.map((post) => {
+    const slugParts = post.id.replace(/\.mdx?$/, '').split('/');
+    // slugParts is [lang, 'blog', 'slug'] or [lang, 'slug']
+    // We want the part after 'blog' or after 'lang'
+    const page = slugParts[slugParts.length - 1];
 
     return {
-      params: { lang, page },
+      params: { page },
       props: { post },
     };
   });
@@ -46,12 +44,8 @@ type Props = {
 };
 
 const { post, page } = Astro.props as Props;
-const { lang } = Astro.params;
-
-// Validate language
-if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect('/404');
-}
+// Use hardcoded lang = 'en'
+const lang = 'en';
 
 // Prepare data for rendering
 let Content: any;
@@ -81,13 +75,7 @@ const pagePosts = page?.data || [];
   ) : (
     <Layout
       title={`${t('nav.blog')} ${page && !isFirstPage ? `| Page ${page.currentPage}` : ''}`}
-      description={
-        lang === 'es'
-          ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
-          : lang === 'ja'
-            ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
-            : 'Explore our collection of articles covering web development, technology trends, and insights.'
-      }
+      description="Explore our collection of articles covering web development, technology trends, and insights."
       lang={lang}
     >
       <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -97,11 +85,7 @@ const pagePosts = page?.data || [];
             {t('nav.blog')}
           </h1>
           <p class="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">
-            {lang === 'es'
-              ? 'Últimas noticias, tutoriales y actualizaciones de nuestro equipo'
-              : lang === 'ja'
-                ? 'チームからの最新ニュース、チュートリアル、アップデート'
-                : 'Latest news, tutorials, and updates from our team'}
+            Latest news, tutorials, and updates from our team
           </p>
         </div>
 

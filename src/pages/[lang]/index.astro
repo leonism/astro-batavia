@@ -30,8 +30,8 @@ const latestPosts = await BlogService.getLatestPosts(lang, 3);
   description={t('meta.description')}
   lang={lang}
 >
-  <HeroSection />
-  <FeaturesSection />
-  <FeaturedStoriesSection latestPosts={latestPosts} />
-  <NewsletterSection />
+  <HeroSection lang={lang} />
+  <FeaturesSection lang={lang} />
+  <FeaturedStoriesSection latestPosts={latestPosts} lang={lang} />
+  <NewsletterSection lang={lang} />
 </Layout>

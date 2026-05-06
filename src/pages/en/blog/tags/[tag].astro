@@ -9,11 +9,16 @@ import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
 export async function getStaticPaths() {
   const allPaths = await BlogService.getStaticTagPaths();
-  return allPaths.filter(path => path.params.lang !== 'en');
+  return allPaths
+    .filter(path => path.params.lang === 'en')
+    .map(path => ({
+      params: { tag: path.params.tag },
+      props: { tag: path.props.tag }
+    }));
 }
 
+const lang = 'en';
 const { tag } = Astro.props;
-const { lang } = Astro.params;
 const t = useTranslations(lang as keyof typeof ui);
 
 // Get blog posts for this language and tag

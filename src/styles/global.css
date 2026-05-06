@@ -240,7 +240,7 @@ html {
 .prose h4,
 .prose h5,
 .prose h6 {
-  @apply scroll-mt-20;
+  @apply scroll-mt-32;
 }
 
 .prose h1 {

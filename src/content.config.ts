@@ -1,6 +1,7 @@
-import { defineCollection } from 'astro:content';
-import { z } from 'zod';
-import { SITE_AUTHOR, SITE_URL } from '@/consts';
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+import { SITE_AUTHOR } from '@/consts';
 
 /**
  * Content Collection Configuration.
@@ -8,7 +9,7 @@ import { SITE_AUTHOR, SITE_URL } from '@/consts';
  */
 
 const blog = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
   /**
    * Type-check frontmatter using a schema.
    * Defines validation rules for blog post metadata.
@@ -70,7 +71,7 @@ const blog = defineCollection({
 });
 
 const authors = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/authors' }),
   schema: z.object({
     name: z.string(),
     bio: z.string(),
@@ -78,10 +79,10 @@ const authors = defineCollection({
     role: z.string().optional(),
     social: z
       .object({
-        twitter: z.string().url().optional(),
-        github: z.string().url().optional(),
-        linkedin: z.string().url().optional(),
-        website: z.string().url().optional(),
+        twitter: z.string().optional(),
+        github: z.string().optional(),
+        linkedin: z.string().optional(),
+        website: z.string().optional(),
       })
       .optional(),
   }),
@@ -91,3 +92,4 @@ const authors = defineCollection({
  * Export registered collections.
  */
 export const collections = { blog, authors };
+
