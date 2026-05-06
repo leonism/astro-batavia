@@ -1,8 +1,13 @@
 ---
 import NewsletterForm from '@/components/ui/NewsletterForm.astro';
-import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { useTranslations } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
 
-const lang = getLangFromUrl(Astro.url);
+interface Props {
+  lang: LanguageKey;
+}
+
+const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const title = t('home.newsletter.title');
@@ -19,7 +24,7 @@ const privacyNoteText = t('home.newsletter.privacyNote');
   buttonText={buttonText}
   showPrivacyNote={true}
   privacyNoteText={privacyNoteText}
-  sectionClass="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700"
+  sectionClass="py-24 bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700"
   containerClass="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
   titleClass="text-4xl sm:text-5xl font-bold text-white mb-6"
   subtitleClass="text-xl text-blue-100 max-w-2xl mx-auto mb-8"

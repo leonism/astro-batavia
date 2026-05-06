@@ -12,8 +12,10 @@ export { ui };
  * @returns {keyof typeof ui} The language code found in the URL, or the default locale if not found.
  */
 export function getLangFromUrl(url: URL) {
-  const [, lang] = url.pathname.split('/');
-  if (lang in ui) return lang as keyof typeof ui;
+  if (!url || !url.pathname) return DEFAULT_LOCALE;
+  const segments = url.pathname.split('/').filter(Boolean);
+  const lang = segments[0];
+  if (lang && lang in ui) return lang as keyof typeof ui;
   return DEFAULT_LOCALE;
 }
 
@@ -44,15 +46,18 @@ export function useTranslations(lang: keyof typeof ui) {
 export function getLocalizedPath(path: string, lang: string) {
   const cleanPath = path.startsWith('/') ? path : '/' + path;
 
-  // Special case: Search page is unified and language-agnostic in the URL
-  if (cleanPath === '/search') {
-    return '/search';
+
+  // Handle English (default locale)
+  if (lang === DEFAULT_LOCALE) {
+    // English homepage is at the root (/)
+    if (cleanPath === '/') {
+      return '/';
+    }
+    // All other English pages are prefixed with /en/
+    return `/en${cleanPath}`;
   }
 
-  // Special case: English home page stays at root
-  if (lang === DEFAULT_LOCALE && (path === '/' || path === '')) {
-    return '/';
-  }
+  // Always include the language prefix for other languages (es, ja)
   return `/${lang}${cleanPath}`;
 }
 
@@ -63,9 +68,10 @@ export function getLocalizedPath(path: string, lang: string) {
  * @param {string} lang - The target language.
  * @returns {string} The localized URL for the blog post.
  */
-export function getPostUrl(slug: string, lang: string) {
-  // slug usually is "lang/slug-content" or "lang/blog/slug-content"
-  const parts = slug.split('/');
+export function getPostUrl(id: string, lang: string) {
+  // id usually is "lang/slug-content.mdx"
+  const cleanId = id.replace(/\.mdx?$/, '');
+  const parts = cleanId.split('/');
   const slugWithoutLang = parts.slice(1).join('/');
 
   // Check if the slug already includes the 'blog' segment to avoid double /blog/blog/
@@ -83,6 +89,7 @@ export function getPostUrl(slug: string, lang: string) {
  * @returns {string} The path without the locale segment.
  */
 export function removeLocaleFromPath(path: string) {
+  if (!path) return '/';
   const segments = path.split('/');
   if (segments[1] && segments[1] in ui) {
     segments.splice(1, 1);
@@ -97,6 +104,7 @@ export function removeLocaleFromPath(path: string) {
  * @returns {string} The language code found in the path, or the default locale.
  */
 export function getLanguageFromPath(path: string): string {
+  if (!path) return DEFAULT_LOCALE;
   const segments = path.split('/');
   if (segments[1] && segments[1] in ui) {
     return segments[1];

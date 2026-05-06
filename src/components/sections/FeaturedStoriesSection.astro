@@ -1,14 +1,15 @@
 ---
 import { type CollectionEntry } from 'astro:content';
 import FeaturedPostCard from '@/components/cards/FeaturedPostCard.astro';
-import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
+import { useTranslations, getLocalizedPath } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
 
 interface Props {
   latestPosts: CollectionEntry<'blog'>[];
+  lang: LanguageKey;
 }
 
-const { latestPosts } = Astro.props;
-const lang = getLangFromUrl(Astro.url);
+const { latestPosts, lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
@@ -43,7 +44,7 @@ const t = useTranslations(lang);
     <div class="text-center">
       <a
         href={getLocalizedPath('/blog', lang)}
-        class="inline-flex items-center rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-base font-semibold text-white/90 transition-all duration-300 hover:scale-[1.02] hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:bg-slate-800 dark:text-slate-300 dark:ring-offset-slate-900 dark:hover:bg-slate-700 sm:px-8 sm:py-4 sm:text-lg"
+        class="inline-flex items-center rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 px-6 py-3 text-base font-semibold text-white/90 transition-all duration-300 hover:scale-[1.02] hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:bg-slate-800 dark:text-slate-300 dark:ring-offset-slate-900 dark:hover:bg-slate-700 sm:px-8 sm:py-4 sm:text-lg"
       >
         {t('home.featuredStories.viewAll')}
         <svg

@@ -79,7 +79,7 @@ export class BlogCardService {
     } = props;
 
     const t = useTranslations(lang);
-    const postUrl = getPostUrl(post.slug, lang);
+    const postUrl = getPostUrl(post.id, lang);
 
     // Generate excerpt
     const excerpt = showExcerpt

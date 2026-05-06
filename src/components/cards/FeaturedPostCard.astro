@@ -14,14 +14,14 @@ const { post, index } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 
 // Fix double /blog/ issue - use helper
-const postUrl = getPostUrl(post.slug, lang);
+const postUrl = getPostUrl(post.id, lang);
 ---
 
 <article
-  id={`featured-post-${post.slug}`}
+  id={`featured-post-${post.id}`}
   class="group relative h-64 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 sm:h-80 md:h-[400px] lg:h-[600px]"
   class:list={[index === 0 && 'lg:col-span-2 lg:row-span-2']}
-  aria-labelledby={`featured-post-title-${post.slug}`}
+  aria-labelledby={`featured-post-title-${post.id}`}
 >
   <FeaturedPostImage heroImage={post.data.heroImage} index={index} />
   <FeaturedPostOverlay />
@@ -29,8 +29,9 @@ const postUrl = getPostUrl(post.slug, lang);
   <a
     href={postUrl}
     class="absolute inset-0 z-20"
-    aria-labelledby={`featured-post-title-${post.slug}`}
+    aria-labelledby={`featured-post-title-${post.id}`}
     data-astro-prefetch
   >
   </a>
 </article>
+

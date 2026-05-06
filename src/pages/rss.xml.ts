@@ -34,7 +34,7 @@ export async function GET(context: APIContext) {
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     `.trim(),
     items: posts.map((post) => {
-      const lang = post.slug.split('/')[0];
+      const lang = post.id.split('/')[0];
       const heroImage = post.data.heroImage;
       let mediaContent = '';
 
@@ -47,7 +47,7 @@ export async function GET(context: APIContext) {
         title: post.data.title,
         pubDate: post.data.pubDate,
         description: post.data.description,
-        link: getPostUrl(post.slug, lang),
+        link: getPostUrl(post.id, lang),
         customData: mediaContent,
       };
     }),
