@@ -21,13 +21,15 @@ if (pageTitle && breadcrumbs.length > 0) {
   }
 }
 
-// Only show breadcrumbs if there are more than 1 item (Home + something else)
-const shouldShow = breadcrumbs.length > 1;
+// Don't show breadcrumbs on language roots (/es/, /ja/, etc.)
+const isLanguageRoot = lang !== 'en' && (Astro.url.pathname === `/${lang}/` || Astro.url.pathname === `/${lang}`);
+// Only show breadcrumbs if there are more than 1 item (Home + something else) and not on a language root
+const shouldShow = breadcrumbs.length > 1 && !isLanguageRoot;
 ---
 
 {
   shouldShow && (
-    <div class="sticky top-16 z-40 w-full border-b border-slate-200/40 bg-white/70 shadow-sm backdrop-blur-md transition-all duration-500 animate-in fade-in slide-in-from-top-1 dark:border-slate-800/40 dark:bg-slate-900/80 dark:shadow-none">
+    <div class="sticky top-16 z-40 w-full border-b border-slate-200/40 bg-white/70 shadow-xs backdrop-blur-md transition-all duration-500 animate-in fade-in slide-in-from-top-1 dark:border-slate-800/40 dark:bg-slate-900/80 dark:shadow-none">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="relative">
           <nav
@@ -62,7 +64,7 @@ const shouldShow = breadcrumbs.length > 1;
                       >
                         {index === 0 && (
                           <svg
-                            class="mr-1.5 h-4 w-4 text-primary-500/80 dark:text-primary-400/80 sm:h-4.5 sm:w-4.5"
+                            class="h-[1em] w-[1em] text-primary-500/80 dark:text-primary-400/80"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -73,7 +75,7 @@ const shouldShow = breadcrumbs.length > 1;
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                           </svg>
                         )}
-                        {item.name}
+                        {index === 0 ? <span class="sr-only">{item.name}</span> : item.name}
                       </span>
                     ) : (
                       <a
@@ -82,7 +84,7 @@ const shouldShow = breadcrumbs.length > 1;
                       >
                         {index === 0 && (
                           <svg
-                            class="mr-1.5 h-4 w-4 text-slate-400/80 transition-colors group-hover:text-primary-500/80 sm:h-4.5 sm:w-4.5"
+                            class="h-[1em] w-[1em] text-slate-400/80 transition-colors group-hover:text-primary-500/80"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -94,7 +96,7 @@ const shouldShow = breadcrumbs.length > 1;
                           </svg>
                         )}
                         <span class="relative">
-                          {item.name}
+                          {index === 0 ? <span class="sr-only">{item.name}</span> : item.name}
                           <span class="absolute -bottom-0.5 left-0 h-px w-0 bg-primary-500/40 transition-all duration-300 group-hover:w-full"></span>
                         </span>
                       </a>
