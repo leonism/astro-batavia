@@ -9,8 +9,17 @@ import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 import { SITE_URL } from './src/consts.ts';
 import partytown from '@astrojs/partytown';
 import seoGraph from '@jdevalk/astro-seo-graph/integration';
-// import sentry from '@sentry/astro';
-// import spotlightjs from '@spotlightjs/astro';
+import { createLogger } from 'vite';
+
+// Custom logger to silence persistent sourcemap warnings from third-party libraries
+const customLogger = createLogger();
+const originalWarn = customLogger.warn;
+
+/** @type {import('vite').Logger['warn']} */
+customLogger.warn = (msg, options) => {
+  if (msg.includes('points to missing source files') && msg.includes('@jdevalk/astro-seo-graph')) return;
+  originalWarn(msg, options);
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,6 +28,10 @@ export default defineConfig({
   trailingSlash: 'ignore',
   prefetch: {
     defaultStrategy: 'viewport',
+  },
+  redirects: {
+    '/sitemap.xml': '/sitemap-index.xml',
+    '/sitemap-index.xml': '/sitemap-0.xml',
   },
   integrations: [
     mdx({
@@ -113,14 +126,16 @@ export default defineConfig({
     remarkPlugins: [remarkReadingTime],
   },
   vite: {
+    customLogger,
     plugins: [
       tailwindcss(),
       {
         name: 'silence-sourcemaps',
+        enforce: 'pre',
         transform(code, id) {
           if (id.includes('@jdevalk/astro-seo-graph')) {
             return {
-              code: code.replace(/\/\/# sourceMappingURL=.*/g, ''),
+              code: code.replace(/\/\/[#@] sourceMappingURL=.*/g, '').replace(/\/\*# sourceMappingURL=.*?\*\//g, ''),
               map: null,
             };
           }
@@ -129,6 +144,16 @@ export default defineConfig({
     ],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
+      exclude: ['@jdevalk/astro-seo-graph'],
+    },
+    server: {
+      proxy: {
+        '/apple-touch-icon.png': {
+          target: 'http://localhost:5000/favicon.svg',
+          changeOrigin: true,
+          rewrite: () => '/favicon.svg',
+        },
+      },
     },
     resolve: {
       alias: {
