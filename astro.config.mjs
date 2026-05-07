@@ -149,9 +149,15 @@ export default defineConfig({
     server: {
       proxy: {
         '/apple-touch-icon.png': {
-          target: 'http://localhost:5000/favicon.svg',
+          target: SITE_URL + '/favicon.svg',
           changeOrigin: true,
-          rewrite: () => '/favicon.svg',
+          ignorePath: true,
+        },
+        // Handle sitemap variations in dev to prevent dynamic route fallthrough
+        '^/sitemap.*\\.xml$': {
+          target: SITE_URL + '/favicon.svg', // Redirecting to any existing asset quiets the router
+          changeOrigin: true,
+          ignorePath: true,
         },
       },
     },
