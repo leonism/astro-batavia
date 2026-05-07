@@ -284,33 +284,26 @@ if (license || acquireLicensePage) {
   description={description}
   canonical={canonicalUrl}
   siteName={SITE_TITLE}
-  twitter={{
-    card: 'summary_large_image',
-    site: SOCIAL_LINKS.X.split('/').pop(),
-    creator: author,
+  ogType={(type === 'blog' || type === 'article') ? 'article' : (type === 'profile' ? 'profile' : 'website')}
+  ogImage={imageUrl}
+  ogImageAlt={title}
+  locale={hreflangMap[lang as keyof typeof hreflangMap]}
+  twitterCard="summary_large_image"
+  twitterSite={SOCIAL_LINKS.X.split('/').pop()}
+  twitterCreator={author}
+  twitterImage={imageUrl}
+  articlePublishedTime={publishedTime}
+  articleModifiedTime={modifiedTime}
+  articleAuthor={author ? [author] : undefined}
+  noindex={noindex}
+  graph={{ "@context": "https://schema.org", "@graph": graph }}
+  alternates={{
+    defaultLocale: 'en',
+    entries: Object.entries(alternateUrls).map(([hreflang, href]) => ({ hreflang, href }))
   }}
-  openGraph={{
-    basic: {
-      title: fullTitle,
-      type: type === 'collection' ? 'website' : type,
-      image: imageUrl,
-      url: canonicalUrl,
-    },
-    optional: {
-      description: description,
-      siteName: SITE_TITLE,
-      locale: hreflangMap[lang as keyof typeof hreflangMap],
-    },
-    article: (type === 'article' || type === 'blog') ? {
-      publishedTime,
-      modifiedTime,
-      authors: author ? [author] : undefined,
-      tags,
-      section: category,
-    } : undefined,
-  }}
-  robots={noindex ? { index: false, follow: false } : undefined}
-  graph={graph}
+  extraMeta={[
+    { property: 'og:logo', content: orgData.logo }
+  ]}
 />
 
 <FaviconLinks />
