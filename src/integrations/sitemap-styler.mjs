@@ -36,6 +36,32 @@ export default function sitemapStyler() {
             console.error(`❌ Error styling sitemap ${file}:`, error);
           }
         }
+
+        // 3. Rename sitemap-index.xml or sitemap-0.xml to sitemap.xml
+        try {
+          const indexPath = dir.pathname + 'sitemap-index.xml';
+          const sitemap0Path = dir.pathname + 'sitemap-0.xml';
+          const targetPath = dir.pathname + 'sitemap.xml';
+
+          const indexExists = await fs
+            .access(indexPath)
+            .then(() => true)
+            .catch(() => false);
+          const sitemap0Exists = await fs
+            .access(sitemap0Path)
+            .then(() => true)
+            .catch(() => false);
+
+          if (indexExists) {
+            await fs.rename(indexPath, targetPath);
+            console.log('📦 Renamed sitemap-index.xml to sitemap.xml');
+          } else if (sitemap0Exists) {
+            await fs.rename(sitemap0Path, targetPath);
+            console.log('📦 Renamed sitemap-0.xml to sitemap.xml');
+          }
+        } catch (renameError) {
+          console.error('❌ Error renaming sitemap files:', renameError);
+        }
       },
     },
   };
