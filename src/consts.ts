@@ -40,7 +40,7 @@ export const SITE_AUTHOR = {
 // Site Utilities
 export const SITE_UTILS = {
   rss: `${SITE_URL}/rss.xml`,
-  sitemap: `${SITE_URL}/sitemap-index.xml`,
+  sitemap: `${SITE_URL}/sitemap.xml`,
 };
 
 /**
