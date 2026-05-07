@@ -1,8 +1,6 @@
 ---
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SOCIAL_LINKS } from '@/consts';
 import { SEOService } from '@/services/SEOService';
-import Seo from '@jdevalk/astro-seo-graph/Seo.astro';
-
 import FaviconLinks from '@/components/seo/FaviconLinks.astro';
 
 export interface Props {
@@ -87,8 +85,8 @@ const siteUrl = (Astro.site?.href || SITE_URL).replace(/\/$/, '');
 const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.png`;
 const canonicalUrl = canonical || Astro.url.href;
 
-// Enhanced meta data
 const finalExcerpt = excerpt || description || SITE_DESCRIPTION;
+
 const defaultOrganization = {
   name: SITE_TITLE,
   url: siteUrl,
@@ -98,18 +96,28 @@ const defaultOrganization = {
 const orgData = organization || defaultOrganization;
 
 // Language mappings
-const hreflangMap = {
+const hreflangMap: Record<string, string> = {
   en: 'en-US',
   es: 'es-ES',
   ja: 'ja-JP',
 };
+const ogLocale = hreflangMap[lang] ?? lang;
 
 const alternateUrls = SEOService.getAlternateUrls(Astro.url.pathname, siteUrl);
+
+// OG type mapping
+const ogType = (type === 'blog' || type === 'article') ? 'article' : (type === 'profile' ? 'profile' : 'website');
 
 // WebPage subtype mapping
 const webPageType = type === 'collection' ? 'CollectionPage' : (type === 'profile' ? 'ProfilePage' : 'WebPage');
 
-// Construct the Graph
+// Twitter handle (strip URL to @handle)
+const twitterHandle = SOCIAL_LINKS.X ? `@${SOCIAL_LINKS.X.split('/').pop()}` : undefined;
+
+// Robots directive
+const robotsContent = noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+
+// ── JSON-LD Graph ──────────────────────────────────────────────────────────────
 const graph: any[] = [
   {
     '@type': 'Organization',
@@ -128,16 +136,16 @@ const graph: any[] = [
       SOCIAL_LINKS.instagram,
       SOCIAL_LINKS.tiktok,
       SOCIAL_LINKS.telegram,
-      SOCIAL_LINKS.facebook
+      SOCIAL_LINKS.facebook,
     ],
     publishingPrinciples: SEOService.getLocalizedLegalLinks(lang, siteUrl),
     contactPoint: [
       {
         '@type': 'ContactPoint',
-        'email': 'contact@astrobatavia.com',
-        'contactType': 'customer support'
-      }
-    ]
+        email: 'contact@astrobatavia.com',
+        contactType: 'customer support',
+      },
+    ],
   },
   {
     '@type': 'WebSite',
@@ -163,7 +171,7 @@ const graph: any[] = [
     url: `${siteUrl}/blog/`,
     publisher: { '@id': `${siteUrl}/#organization` },
     isPartOf: { '@id': `${siteUrl}/#website` },
-    inLanguage: hreflangMap[lang as keyof typeof hreflangMap] || lang,
+    inLanguage: ogLocale,
   },
   {
     '@type': webPageType,
@@ -199,28 +207,36 @@ if (type === 'article' || type === 'blog') {
           name: author,
           url: authorUrl,
           sameAs: authorSameAs,
-          image: authorImage ? {
-            '@type': 'ImageObject',
-            url: authorImage,
-          } : undefined,
+          image: authorImage
+            ? {
+                '@type': 'ImageObject',
+                url: authorImage,
+              }
+            : undefined,
         }
       : { '@id': `${siteUrl}/#organization` },
     headline: title,
     datePublished: publishedTime,
     dateModified: modifiedTime || publishedTime,
     mainEntityOfPage: { '@id': `${canonicalUrl}/#webpage` },
-    isPartOf: type === 'blog' ? [{ '@id': `${canonicalUrl}/#webpage` }, { '@id': `${siteUrl}/blog/#blog` }] : { '@id': `${canonicalUrl}/#webpage` },
-    image: (license || acquireLicensePage) ? { '@id': `${imageUrl}/#primaryimage` } : {
-      '@type': 'ImageObject',
-      url: imageUrl,
-    },
+    isPartOf:
+      type === 'blog'
+        ? [{ '@id': `${canonicalUrl}/#webpage` }, { '@id': `${siteUrl}/blog/#blog` }]
+        : { '@id': `${canonicalUrl}/#webpage` },
+    image:
+      license || acquireLicensePage
+        ? { '@id': `${imageUrl}/#primaryimage` }
+        : {
+            '@type': 'ImageObject',
+            url: imageUrl,
+          },
     publisher: { '@id': `${siteUrl}/#organization` },
     keywords: tags.join(', '),
     articleSection: category,
+    wordCount: wordCount,
   });
 }
 
-// 8. FAQPage
 if (faqs && faqs.length > 0) {
   graph.push({
     '@type': 'FAQPage',
@@ -237,7 +253,6 @@ if (faqs && faqs.length > 0) {
   });
 }
 
-// 9. Review
 if (review) {
   graph.push({
     '@type': 'Review',
@@ -264,7 +279,6 @@ if (review) {
   });
 }
 
-// 10. License metadata (ImageObject enrichment)
 if (license || acquireLicensePage) {
   graph.push({
     '@type': 'ImageObject',
@@ -277,34 +291,67 @@ if (license || acquireLicensePage) {
     creator: creator ? { '@type': 'Person', name: creator } : undefined,
   });
 }
+
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 ---
 
-<Seo
-  title={fullTitle}
-  description={description}
-  canonical={canonicalUrl}
-  siteName={SITE_TITLE}
-  ogType={(type === 'blog' || type === 'article') ? 'article' : (type === 'profile' ? 'profile' : 'website')}
-  ogImage={imageUrl}
-  ogImageAlt={title}
-  locale={hreflangMap[lang as keyof typeof hreflangMap]}
-  twitterCard="summary_large_image"
-  twitterSite={SOCIAL_LINKS.X.split('/').pop()}
-  twitterCreator={author}
-  twitterImage={imageUrl}
-  articlePublishedTime={publishedTime}
-  articleModifiedTime={modifiedTime}
-  articleAuthor={author ? [author] : undefined}
-  noindex={noindex}
-  graph={{ "@context": "https://schema.org", "@graph": graph }}
-  alternates={{
-    defaultLocale: 'en',
-    entries: Object.entries(alternateUrls).map(([hreflang, href]) => ({ hreflang, href }))
-  }}
-  extraMeta={[
-    { property: 'og:logo', content: orgData.logo },
-    { property: 'og:image', content: imageUrl }
-  ]}
-/>
+<!-- ── Primary Meta ──────────────────────────────────────────── -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robotsContent} />
+<link rel="canonical" href={canonicalUrl} />
 
+<!-- ── Open Graph (Facebook, WhatsApp, LinkedIn, Slack, etc.) ── -->
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={finalExcerpt} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:type" content={ogType} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+{orgData.logo && <meta property="og:logo" content={orgData.logo} />}
+
+<!-- Article-specific OG -->
+{(type === 'article' || type === 'blog') && publishedTime && (
+  <meta property="article:published_time" content={publishedTime} />
+)}
+{(type === 'article' || type === 'blog') && modifiedTime && (
+  <meta property="article:modified_time" content={modifiedTime} />
+)}
+{(type === 'article' || type === 'blog') && author && (
+  <meta property="article:author" content={author} />
+)}
+{(type === 'article' || type === 'blog') && category && (
+  <meta property="article:section" content={category} />
+)}
+{(type === 'article' || type === 'blog') && tags.map((tag) => (
+  <meta property="article:tag" content={tag} />
+))}
+
+<!-- ── Twitter / X Card ─────────────────────────────────────── -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={finalExcerpt} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={title} />
+{twitterHandle && <meta name="twitter:site" content={twitterHandle} />}
+{author && <meta name="twitter:creator" content={author} />}
+
+<!-- ── Hreflang Alternates ──────────────────────────────────── -->
+{Object.entries(alternateUrls).map(([hreflang, href]) => (
+  <link rel="alternate" hreflang={hreflang} href={href} />
+))}
+<link rel="alternate" hreflang="x-default" href={alternateUrls['en'] ?? canonicalUrl} />
+
+<!-- ── Pagination ───────────────────────────────────────────── -->
+{prev && <link rel="prev" href={prev} />}
+{next && <link rel="next" href={next} />}
+
+<!-- ── JSON-LD Structured Data ──────────────────────────────── -->
+<script type="application/ld+json" set:html={jsonLd} />
+
+<!-- ── Favicon ──────────────────────────────────────────────── -->
 <FaviconLinks />
