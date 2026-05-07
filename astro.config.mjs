@@ -73,6 +73,10 @@ export default defineConfig({
     // spotlightjs(),
     htmlMinifier({
       removeComments: true,
+      removeAttributeQuotes: true,
+      collapseWhitespace: true,
+      minifyJS: true,
+      minifyCSS: true,
     }),
     partytown({
       config: {
@@ -109,7 +113,20 @@ export default defineConfig({
     remarkPlugins: [remarkReadingTime],
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      {
+        name: 'silence-sourcemaps',
+        transform(code, id) {
+          if (id.includes('@jdevalk/astro-seo-graph')) {
+            return {
+              code: code.replace(/\/\/# sourceMappingURL=.*/g, ''),
+              map: null,
+            };
+          }
+        },
+      },
+    ],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
     },
@@ -123,6 +140,7 @@ export default defineConfig({
       cssCodeSplit: false,
       rollupOptions: {
         onwarn(warning, warn) {
+          if (warning.code === 'SOURCEMAP_ERROR') return;
           if (
             warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
             warning.message.includes('@astrojs/internal-helpers/remote')
