@@ -15,135 +15,191 @@ interface Props {
 
 const { headings, lang } = Astro.props;
 const t = useTranslations(lang);
+
+// Only include h2 and h3 in the TOC
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<div
-  class="toc-container mb-5 rounded-2xl bg-white/90 m-10 p-10 backdrop-blur-md dark:bg-gray-900/70 dark:ring-gray-700"
->
-  <div class="group flex cursor-pointer items-center justify-between" id="toc-toggle-wrapper">
-    <div class="flex items-center gap-3">
-      <h2 class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-        {t('blog.tableOfContents')}
-      </h2>
-    </div>
-    <button
-      type="button"
-      aria-label="Toggle Table of Contents"
-      class="dark:group-hover:bg-primary-950 flex h-9 w-9 items-center justify-center rounded-full border border-primary-600 transition-colors duration-300 group-hover:bg-primary-50 dark:border-primary-400"
-    >
-      <svg
-        id="toc-arrow-icon"
-        class="h-5 w-5 rotate-0 transform text-primary-600 transition-transform duration-300 dark:text-primary-400"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
+{
+  tocHeadings.length > 0 && (
+    <>
+      {/* ── Desktop: sticky left sidebar (rendered inside the 2-col grid in BlogPost.astro) ── */}
+      <aside
+        id="toc-sidebar"
+        class="toc-sidebar hidden lg:block"
+        aria-label={t('blog.tableOfContents')}
       >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-      </svg>
-    </button>
-  </div>
+        <div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2 [scrollbar-width:thin]">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            {t('blog.tableOfContents')}
+          </p>
+          <nav>
+            <ul class="space-y-0.5 border-l border-slate-200 dark:border-slate-700/60">
+              {tocHeadings.map((heading) => (
+                <li>
+                  <a
+                    href={`#${heading.slug}`}
+                    data-toc-link
+                    class={`toc-link block py-1 text-xs leading-5 text-slate-500 transition-colors duration-150 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 ${
+                      heading.depth === 2
+                        ? 'pl-3 font-medium'
+                        : 'pl-6 font-normal text-slate-400 dark:text-slate-500'
+                    }`}
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </aside>
 
-  <nav aria-label={t('blog.tableOfContents')} class="mt-6">
-    <ul id="toc-list" class="hidden space-y-3">
-      {
-        headings.map((heading) => (
-          <li>
-            <a
-              href={`#${heading.slug}`}
-              class={`block text-gray-700 transition-all duration-200 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 depth-${heading.depth}`}
-              style={{ paddingLeft: `${(heading.depth - 2) * 1.25}rem` }}
-            >
-              {heading.text}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
-</div>
+      {/* ── Mobile: collapsible accordion above the content ── */}
+      <div class="toc-mobile mb-6 rounded-xl border border-slate-200 bg-white/90 backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/70 lg:hidden">
+        <button
+          type="button"
+          id="toc-mobile-toggle"
+          aria-expanded="false"
+          aria-controls="toc-mobile-list"
+          class="flex w-full items-center justify-between px-4 py-3 text-left"
+        >
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            {t('blog.tableOfContents')}
+          </span>
+          <svg
+            id="toc-mobile-arrow"
+            class="h-4 w-4 shrink-0 rotate-0 text-slate-400 transition-transform duration-200 dark:text-slate-500"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <nav id="toc-mobile-list" class="hidden border-t border-slate-100 px-4 pb-3 pt-2 dark:border-slate-700/60">
+          <ul class="space-y-0.5 border-l border-slate-200 dark:border-slate-700/60">
+            {tocHeadings.map((heading) => (
+              <li>
+                <a
+                  href={`#${heading.slug}`}
+                  class={`toc-mobile-link block py-1 text-xs leading-5 text-slate-500 transition-colors duration-150 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 ${
+                    heading.depth === 2
+                      ? 'pl-3 font-medium'
+                      : 'pl-6 font-normal text-slate-400 dark:text-slate-500'
+                  }`}
+                >
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </>
+  )
+}
 
 <style is:global>
-  .toc-container ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  .toc-container li {
-    margin-bottom: 0.25rem;
-  }
-
-  .toc-container a {
-    display: block;
-    padding: 0.25rem 0;
-    border-left: 2px solid transparent;
-  }
-
-  .toc-container a:hover {
-    border-left-color: currentColor;
-  }
-
-  .toc-container a.depth-2 {
+  /* Active link highlight */
+  .toc-link.is-active {
+    color: var(--color-primary-600, #2563eb);
+    border-left: 2px solid var(--color-primary-500, #3b82f6);
+    padding-left: calc(0.75rem - 2px); /* compensate for the border */
     font-weight: 600;
-    font-size: 1rem;
   }
 
-  .toc-container a.depth-3 {
-    font-weight: 500;
-    font-size: 0.95rem;
+  .dark .toc-link.is-active {
+    color: var(--color-primary-400, #60a5fa);
+    border-left-color: var(--color-primary-400, #60a5fa);
   }
 
-  .toc-container a.depth-4 {
-    font-weight: 400;
-    font-size: 0.9rem;
+  /* Depth-3 active stays indented */
+  .toc-link.is-active[class*="pl-6"] {
+    padding-left: calc(1.5rem - 2px);
   }
 
-  .rotate-180 {
-    transform: rotate(180deg);
+  /* Thin scrollbar for sidebar */
+  .toc-sidebar [scrollbar-width~='thin'] {
+    scrollbar-width: thin;
+    scrollbar-color: #e2e8f0 transparent;
   }
 
-  @media (max-width: 768px) {
-    .toc-container {
-      margin-left: 0;
-      margin-right: 0;
-      border-radius: 0;
-      box-shadow: none;
-    }
+  .dark .toc-sidebar [scrollbar-width~='thin'] {
+    scrollbar-color: #334155 transparent;
   }
 </style>
 
 <script>
-  const initTocToggle = () => {
-    const toggleWrapper = document.getElementById('toc-toggle-wrapper');
-    const tocList = document.getElementById('toc-list');
-    const arrowIcon = document.getElementById('toc-arrow-icon');
+  const initToc = () => {
+    // ── Mobile toggle ──
+    const mobileToggle = document.getElementById('toc-mobile-toggle');
+    const mobileList   = document.getElementById('toc-mobile-list');
+    const mobileArrow  = document.getElementById('toc-mobile-arrow');
 
-    if (!toggleWrapper || !tocList || !arrowIcon) {
-      return;
+    if (mobileToggle && mobileList && mobileArrow) {
+      // Avoid re-init on SPA navigation
+      if (!mobileToggle.dataset.tocInit) {
+        mobileToggle.dataset.tocInit = 'true';
+        mobileToggle.addEventListener('click', () => {
+          const isOpen = mobileToggle.getAttribute('aria-expanded') === 'true';
+          mobileToggle.setAttribute('aria-expanded', String(!isOpen));
+          mobileList.classList.toggle('hidden', isOpen);
+          mobileArrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+
+        // Close accordion when a link is tapped on mobile
+        mobileList.querySelectorAll('a').forEach((link) => {
+          link.addEventListener('click', () => {
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            mobileList.classList.add('hidden');
+            mobileArrow.style.transform = 'rotate(0deg)';
+          });
+        });
+      }
     }
 
-    // Prevent re-initializing the script on the same element
-    if (toggleWrapper.dataset.tocInitialized) {
-      return;
-    }
-    toggleWrapper.dataset.tocInitialized = 'true';
+    // ── Active-link tracking via IntersectionObserver ──
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+    if (!tocLinks.length) return;
 
-    // Set initial ARIA state based on the visibility of the content
-    const isInitiallyExpanded = !tocList.classList.contains('hidden');
-    toggleWrapper.setAttribute('aria-expanded', isInitiallyExpanded.toString());
-    arrowIcon.classList.toggle('rotate-180', isInitiallyExpanded);
-
-    toggleWrapper.addEventListener('click', () => {
-      const isExpanded = toggleWrapper.getAttribute('aria-expanded') === 'true';
-      const newIsExpanded = !isExpanded;
-
-      toggleWrapper.setAttribute('aria-expanded', newIsExpanded.toString());
-      tocList.classList.toggle('hidden', !newIsExpanded);
-      arrowIcon.classList.toggle('rotate-180', newIsExpanded);
+    const headingEls: Element[] = [];
+    tocLinks.forEach((link) => {
+      const id = link.getAttribute('href')?.replace('#', '');
+      if (id) {
+        const el = document.getElementById(id);
+        if (el) headingEls.push(el);
+      }
     });
+
+    let activeId = '';
+
+    const setActive = (id: string) => {
+      if (id === activeId) return;
+      activeId = id;
+      tocLinks.forEach((link) => {
+        const isActive = link.getAttribute('href') === `#${id}`;
+        link.classList.toggle('is-active', isActive);
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      {
+        rootMargin: '-20% 0% -70% 0%',
+        threshold: 0,
+      },
+    );
+
+    headingEls.forEach((el) => observer.observe(el));
   };
 
-  // Run the script on initial page load and after Astro's client-side navigation
-  document.addEventListener('astro:page-load', initTocToggle);
+  document.addEventListener('astro:page-load', initToc);
 </script>
