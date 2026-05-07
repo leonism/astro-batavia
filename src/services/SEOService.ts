@@ -50,4 +50,15 @@ export class SEOService {
       ja: `${siteUrl}/ja${pathWithoutLang}`,
     };
   }
+
+  /**
+   * Generates localized legal links for the Knowledge Graph.
+   * @param {string} lang - The current language.
+   * @param {string} siteUrl - The base site URL.
+   * @returns {string[]} An array of absolute legal URLs.
+   */
+  static getLocalizedLegalLinks(lang: string, siteUrl: string): string[] {
+    const paths = ['/privacy/', '/terms/', '/cookies/'];
+    return paths.map((path) => `${siteUrl}/${lang}${path}`);
+  }
 }

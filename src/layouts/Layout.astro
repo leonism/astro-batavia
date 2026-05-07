@@ -6,6 +6,7 @@ import GlobalWidgets from '@/components/ui/GlobalWidgets.astro';
 import BreadCrumb from '@/components/ui/BreadCrumb.astro';
 import { GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID } from '@/consts';
+import { BreadCrumbService } from '@/services/BreadCrumbService';
 import '@/styles/global.css';
 import '@/styles/enhanced-search.css';
 
@@ -14,10 +15,11 @@ export interface Props {
   description?: string;
   image?: string;
   articleDate?: string | Date;
-  type?: 'website' | 'article' | 'collection';
+  type?: 'website' | 'article' | 'blog' | 'profile' | 'collection';
   lang?: string;
   author?: string;
   authorUrl?: string;
+  authorSameAs?: string[];
   imageAlt?: string;
   tags?: string[];
   canonical?: string;
@@ -46,13 +48,24 @@ export interface Props {
   }>;
 }
 
-const { lang = 'en' } = Astro.props;
+const { lang = 'en', title: pageTitle } = Astro.props;
+const breadcrumbs = Astro.props.breadcrumbs || BreadCrumbService.getBreadCrumbs(Astro.url.pathname, lang as any).map(b => ({
+  name: b.name,
+  url: b.url ? new URL(b.url, Astro.site || Astro.url.origin).href : ''
+}));
+
+// If we generated breadcrumbs, update the last one with the clean page title
+if (!Astro.props.breadcrumbs && breadcrumbs.length > 1) {
+    const lastItem = breadcrumbs[breadcrumbs.length - 1];
+    const cleanTitle = pageTitle.split(' | ')[0].trim();
+    lastItem.name = cleanTitle;
+}
 ---
 
 <!doctype html>
 <html lang={lang} class="scroll-smooth">
   <head>
-    <BaseHead {...Astro.props} />
+    <BaseHead {...Astro.props} breadcrumbs={breadcrumbs} />
   </head>
   <body
     class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-slate-100"

@@ -44,6 +44,15 @@ export const SITE_UTILS = {
 };
 
 /**
+ * Legal Page Paths.
+ */
+export const LEGAL_PATHS = {
+  privacy: '/privacy/',
+  terms: '/terms/',
+  cookies: '/cookies/',
+};
+
+/**
  * Social Media Links.
  */
 // Social Links
