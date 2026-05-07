@@ -8,6 +8,7 @@ import htmlMinifier from './src/integrations/html-minifier.mjs';
 import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 import { SITE_URL } from './src/consts.ts';
 import partytown from '@astrojs/partytown';
+import seoGraph from '@jdevalk/astro-seo-graph/integration';
 // import sentry from '@sentry/astro';
 // import spotlightjs from '@spotlightjs/astro';
 
@@ -75,6 +76,20 @@ export default defineConfig({
     partytown({
       config: {
         forward: ['dataLayer.push'],
+      },
+    }),
+    seoGraph({
+      validateH1: true,
+      validateUniqueMetadata: true,
+      validateImageAlt: true,
+      validateMetadataLength: true,
+      validateInternalLinks: {
+        skip: (href) => href.startsWith('/api/'),
+      },
+      llmsTxt: {
+        title: 'Astro Batavia',
+        siteUrl: SITE_URL,
+        summary: 'A modern, multilingual blog platform built with Astro.js, featuring advanced SEO and i18n support.',
       },
     }),
   ],

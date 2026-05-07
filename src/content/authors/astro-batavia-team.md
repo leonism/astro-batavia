@@ -7,6 +7,11 @@ social:
   twitter: 'https://twitter.com/astrodotbuild'
   github: 'https://github.com/withastro'
   website: 'https://astro.build'
+sameAs:
+  - 'https://twitter.com/astrodotbuild'
+  - 'https://github.com/withastro'
+  - 'https://astro.build'
+  - 'https://www.linkedin.com/company/astro-build'
 ---
 
 We are a team of passionate developers building the future of the web with Astro.
