@@ -1,6 +1,5 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { seoSchema } from '@jdevalk/astro-seo-graph';
 
 import { SITE_AUTHOR } from '@/consts';
 
@@ -15,8 +14,8 @@ const blog = defineCollection({
    * Type-check frontmatter using a schema.
    * Defines validation rules for blog post metadata.
    */
-  schema: ({ image }) => seoSchema(image)
-    .extend({
+  schema: ({ image: _image }) => z.object({
+
       title: z.string().trim(),
       categories: z.array(z.string()),
       description: z.string().trim(),

@@ -8,17 +8,28 @@ import htmlMinifier from './src/integrations/html-minifier.mjs';
 import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 import { SITE_URL } from './src/consts.ts';
 import partytown from '@astrojs/partytown';
-import seoGraph from '@jdevalk/astro-seo-graph/integration';
-import { createLogger } from 'vite';
 
-// Custom logger to silence persistent sourcemap warnings from third-party libraries
-const customLogger = createLogger();
-const originalWarn = customLogger.warn;
-
-/** @type {import('vite').Logger['warn']} */
-customLogger.warn = (msg, options) => {
-  if (msg.includes('points to missing source files') && msg.includes('@jdevalk/astro-seo-graph')) return;
-  originalWarn(msg, options);
+// Dev-only middleware: respond to /sitemap*.xml with a valid stub so requests
+// don't fall through to the [lang] dynamic router and produce 404 noise.
+/** @type {import('vite').Plugin} */
+const devSitemapStub = {
+  name: 'dev-sitemap-stub',
+  apply: 'serve',
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      if (/\/sitemap.*\.xml($|\?)/.test(req.url ?? '')) {
+        res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
+        res.end(
+          '<?xml version="1.0" encoding="UTF-8"?>' +
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+          '<!-- Sitemap is generated at build time -->' +
+          '</urlset>',
+        );
+        return;
+      }
+      next();
+    });
+  },
 };
 
 // https://astro.build/config
@@ -28,10 +39,6 @@ export default defineConfig({
   trailingSlash: 'ignore',
   prefetch: {
     defaultStrategy: 'viewport',
-  },
-  redirects: {
-    '/sitemap.xml': '/sitemap-index.xml',
-    '/sitemap-index.xml': '/sitemap-0.xml',
   },
   integrations: [
     mdx({
@@ -80,10 +87,7 @@ export default defineConfig({
       filenameBase: 'sitemap',
       entryLimit: 10000,
     }),
-    sitemapStyler(), // sentry({
-    //   telemetry: false,
-    // }),
-    // spotlightjs(),
+    sitemapStyler(),
     htmlMinifier({
       removeComments: true,
       removeAttributeQuotes: true,
@@ -94,20 +98,6 @@ export default defineConfig({
     partytown({
       config: {
         forward: ['dataLayer.push'],
-      },
-    }),
-    seoGraph({
-      validateH1: true,
-      validateUniqueMetadata: true,
-      validateImageAlt: true,
-      validateMetadataLength: true,
-      validateInternalLinks: {
-        skip: (href) => href.startsWith('/api/'),
-      },
-      llmsTxt: {
-        title: 'Astro Batavia',
-        siteUrl: SITE_URL,
-        summary: 'A modern, multilingual blog platform built with Astro.js, featuring advanced SEO and i18n support.',
       },
     }),
   ],
@@ -126,40 +116,12 @@ export default defineConfig({
     remarkPlugins: [remarkReadingTime],
   },
   vite: {
-    customLogger,
     plugins: [
       tailwindcss(),
-      {
-        name: 'silence-sourcemaps',
-        enforce: 'pre',
-        transform(code, id) {
-          if (id.includes('@jdevalk/astro-seo-graph')) {
-            return {
-              code: code.replace(/\/\/[#@] sourceMappingURL=.*/g, '').replace(/\/\*# sourceMappingURL=.*?\*\//g, ''),
-              map: null,
-            };
-          }
-        },
-      },
+      devSitemapStub,
     ],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
-      exclude: ['@jdevalk/astro-seo-graph'],
-    },
-    server: {
-      proxy: {
-        '/apple-touch-icon.png': {
-          target: SITE_URL + '/favicon.svg',
-          changeOrigin: true,
-          ignorePath: true,
-        },
-        // Handle sitemap variations in dev to prevent dynamic route fallthrough
-        '^/sitemap.*\\.xml$': {
-          target: SITE_URL + '/favicon.svg', // Redirecting to any existing asset quiets the router
-          changeOrigin: true,
-          ignorePath: true,
-        },
-      },
     },
     resolve: {
       alias: {

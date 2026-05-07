@@ -53,11 +53,11 @@ export default function sitemapStyler() {
             .catch(() => false);
 
           if (indexExists) {
-            await fs.rename(indexPath, targetPath);
-            console.log('📦 Renamed sitemap-index.xml to sitemap.xml');
+            await fs.copyFile(indexPath, targetPath);
+            console.log('📦 Copied sitemap-index.xml → sitemap.xml');
           } else if (sitemap0Exists) {
-            await fs.rename(sitemap0Path, targetPath);
-            console.log('📦 Renamed sitemap-0.xml to sitemap.xml');
+            await fs.copyFile(sitemap0Path, targetPath);
+            console.log('📦 Copied sitemap-0.xml → sitemap.xml');
           }
         } catch (renameError) {
           console.error('❌ Error renaming sitemap files:', renameError);
