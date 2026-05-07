@@ -11,36 +11,90 @@ interface Heading {
 interface Props {
   headings: Heading[];
   lang: LanguageKey;
+  /** 'sidebar' = desktop aside only | 'mobile' = mobile accordion only | 'both' = both (default) */
+  variant?: 'sidebar' | 'mobile' | 'both';
 }
 
-const { headings, lang } = Astro.props;
+const { headings, lang, variant = 'both' } = Astro.props;
 const t = useTranslations(lang);
 
 // Only include h2 and h3 in the TOC
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+const showSidebar = variant === 'sidebar' || variant === 'both';
+const showMobile  = variant === 'mobile'  || variant === 'both';
 ---
 
 {
   tocHeadings.length > 0 && (
     <>
-      {/* ── Desktop: sticky left sidebar (rendered inside the 2-col grid in BlogPost.astro) ── */}
-      <aside
-        id="toc-sidebar"
-        class="toc-sidebar hidden lg:block"
-        aria-label={t('blog.tableOfContents')}
-      >
-        <div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2 [scrollbar-width:thin]">
-          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-            {t('blog.tableOfContents')}
-          </p>
-          <nav>
+      {/* ── Desktop: sticky right sidebar ── */}
+      {showSidebar && (
+        <aside
+          id="toc-sidebar"
+          class="toc-sidebar hidden lg:block"
+          aria-label={t('blog.tableOfContents')}
+        >
+          <div class="sticky top-24 mt-8 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2 [scrollbar-width:thin]">
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              {t('blog.tableOfContents')}
+            </p>
+            <nav>
+              <ul class="space-y-0.5 border-l border-slate-200 dark:border-slate-700/60">
+                {tocHeadings.map((heading) => (
+                  <li>
+                    <a
+                      href={`#${heading.slug}`}
+                      data-toc-link
+                      class={`toc-link block py-1 text-xs leading-5 text-slate-500 transition-colors duration-150 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 ${
+                        heading.depth === 2
+                          ? 'pl-3 font-medium'
+                          : 'pl-6 font-normal text-slate-400 dark:text-slate-500'
+                      }`}
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </aside>
+      )}
+
+      {/* ── Mobile: collapsible accordion above the content ── */}
+      {showMobile && (
+        <div class="toc-mobile mb-6 lg:hidden">
+          <button
+            type="button"
+            id="toc-mobile-toggle"
+            aria-expanded="false"
+            aria-controls="toc-mobile-list"
+            class="inline-flex items-center gap-2 py-2 text-left"
+          >
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              {t('blog.tableOfContents')}
+            </span>
+            <span class="inline-flex items-center justify-center rounded-full border border-slate-300 p-0.5 dark:border-slate-600">
+              <svg
+                id="toc-mobile-arrow"
+                class="h-3.5 w-3.5 shrink-0 rotate-0 text-slate-400 transition-transform duration-200 dark:text-slate-500"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </button>
+          <nav id="toc-mobile-list" class="hidden pb-3 pt-2">
             <ul class="space-y-0.5 border-l border-slate-200 dark:border-slate-700/60">
               {tocHeadings.map((heading) => (
                 <li>
                   <a
                     href={`#${heading.slug}`}
-                    data-toc-link
-                    class={`toc-link block py-1 text-xs leading-5 text-slate-500 transition-colors duration-150 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 ${
+                    class={`toc-mobile-link block py-1 text-xs leading-5 text-slate-500 transition-colors duration-150 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 ${
                       heading.depth === 2
                         ? 'pl-3 font-medium'
                         : 'pl-6 font-normal text-slate-400 dark:text-slate-500'
@@ -53,50 +107,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
             </ul>
           </nav>
         </div>
-      </aside>
-
-      {/* ── Mobile: collapsible accordion above the content ── */}
-      <div class="toc-mobile mb-6 rounded-xl border border-slate-200 bg-white/90 backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/70 lg:hidden">
-        <button
-          type="button"
-          id="toc-mobile-toggle"
-          aria-expanded="false"
-          aria-controls="toc-mobile-list"
-          class="flex w-full items-center justify-between px-4 py-3 text-left"
-        >
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            {t('blog.tableOfContents')}
-          </span>
-          <svg
-            id="toc-mobile-arrow"
-            class="h-4 w-4 shrink-0 rotate-0 text-slate-400 transition-transform duration-200 dark:text-slate-500"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <nav id="toc-mobile-list" class="hidden border-t border-slate-100 px-4 pb-3 pt-2 dark:border-slate-700/60">
-          <ul class="space-y-0.5 border-l border-slate-200 dark:border-slate-700/60">
-            {tocHeadings.map((heading) => (
-              <li>
-                <a
-                  href={`#${heading.slug}`}
-                  class={`toc-mobile-link block py-1 text-xs leading-5 text-slate-500 transition-colors duration-150 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 ${
-                    heading.depth === 2
-                      ? 'pl-3 font-medium'
-                      : 'pl-6 font-normal text-slate-400 dark:text-slate-500'
-                  }`}
-                >
-                  {heading.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
+      )}
     </>
   )
 }
