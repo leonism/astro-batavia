@@ -64,6 +64,7 @@ export default defineConfig({
         item.lastmod = new Date().toISOString().split('T')[0];
         return item;
       },
+      filenameBase: 'sitemap',
       entryLimit: 10000,
     }),
     sitemapStyler(), // sentry({
