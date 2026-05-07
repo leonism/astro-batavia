@@ -14,10 +14,7 @@ const breadcrumbs = BreadCrumbService.getBreadCrumbs(Astro.url.pathname, lang);
 // Use the page title for the last breadcrumb if it's more descriptive than the slug
 if (pageTitle && breadcrumbs.length > 0) {
   const lastItem = breadcrumbs[breadcrumbs.length - 1];
-  // Only replace if it's the actual content page (not a category/index page that has a translated name)
-  // For now, let's just always use it for the last item if it's not the home page
   if (breadcrumbs.length > 1) {
-    // Clean up the page title for the breadcrumb (e.g., remove " | Blog")
     const cleanTitle = pageTitle.split(' | ')[0].trim();
     lastItem.name = cleanTitle;
   }
@@ -25,7 +22,6 @@ if (pageTitle && breadcrumbs.length > 0) {
 
 // Don't show breadcrumbs on language roots (/es/, /ja/, etc.)
 const isLanguageRoot = lang !== 'en' && (Astro.url.pathname === `/${lang}/` || Astro.url.pathname === `/${lang}`);
-// Only show breadcrumbs if there are more than 1 item (Home + something else) and not on a language root
 const shouldShow = breadcrumbs.length > 1 && !isLanguageRoot;
 ---
 
@@ -36,79 +32,79 @@ const shouldShow = breadcrumbs.length > 1 && !isLanguageRoot;
         <div class="relative">
           <nav
             aria-label="Breadcrumb"
-            class="flex h-11 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            class="flex h-9 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
-            <ol class="inline-flex items-center space-x-1 whitespace-nowrap py-2 sm:space-x-1.5">
+            <ol class="inline-flex items-center space-x-0.5 whitespace-nowrap py-1.5 sm:space-x-1">
               {breadcrumbs.map((item, index) => (
-                <li class="inline-flex items-center">
-                    {index > 0 && (
-                      <svg
-                        class="mx-1 h-3.5 w-3.5 text-slate-300 dark:text-slate-600 sm:mx-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                      >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                      </svg>
-                    )}
+                <li class="inline-flex items-center min-w-0">
+                  {index > 0 && (
+                    <svg
+                      class="mx-1 h-3 w-3 shrink-0 text-slate-300 dark:text-slate-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  )}
 
-                    {item.isLast || !item.url ? (
-                      <span
-                        class={`flex items-center px-1 py-1 text-sm font-medium tracking-tight sm:px-1.5 sm:text-base ${
-                          item.isLast
-                            ? 'max-w-[100px] truncate text-slate-400 dark:text-slate-500 sm:max-w-[250px] md:max-w-xs lg:max-w-md'
-                            : 'text-slate-600 dark:text-slate-400'
-                        }`}
-                        title={item.isLast ? item.name : undefined}
-                      >
-                        {index === 0 && (
-                          <svg
-                            class="h-[1em] w-[1em] text-primary-500/80 dark:text-primary-400/80"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
-                          >
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                          </svg>
-                        )}
+                  {item.isLast || !item.url ? (
+                    <span
+                      class={`flex items-center gap-1 px-1 py-0.5 text-xs font-medium tracking-tight ${
+                        item.isLast
+                          ? 'text-slate-400 dark:text-slate-500 max-w-[140px] truncate sm:max-w-none sm:truncate-none'
+                          : 'text-slate-600 dark:text-slate-400'
+                      }`}
+                      title={item.isLast ? item.name : undefined}
+                    >
+                      {index === 0 && (
+                        <svg
+                          class="h-3 w-3 shrink-0 text-primary-500/80 dark:text-primary-400/80"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                      )}
+                      {index === 0 ? <span class="sr-only">{item.name}</span> : item.name}
+                    </span>
+                  ) : (
+                    <a
+                      href={item.url}
+                      class="group flex items-center gap-1 rounded px-1 py-0.5 text-xs font-medium tracking-tight text-slate-500 transition-all hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
+                    >
+                      {index === 0 && (
+                        <svg
+                          class="h-3 w-3 shrink-0 text-slate-400/80 transition-colors group-hover:text-primary-500/80"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                      )}
+                      <span class="relative">
                         {index === 0 ? <span class="sr-only">{item.name}</span> : item.name}
+                        <span class="absolute -bottom-0.5 left-0 h-px w-0 bg-primary-500/40 transition-all duration-300 group-hover:w-full"></span>
                       </span>
-                    ) : (
-                      <a
-                        href={item.url}
-                        class="group flex items-center rounded-md px-1 py-1 text-sm font-medium tracking-tight text-slate-500 transition-all hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 sm:px-1.5 sm:text-base"
-                      >
-                        {index === 0 && (
-                          <svg
-                            class="h-[1em] w-[1em] text-slate-400/80 transition-colors group-hover:text-primary-500/80"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
-                          >
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                          </svg>
-                        )}
-                        <span class="relative">
-                          {index === 0 ? <span class="sr-only">{item.name}</span> : item.name}
-                          <span class="absolute -bottom-0.5 left-0 h-px w-0 bg-primary-500/40 transition-all duration-300 group-hover:w-full"></span>
-                        </span>
-                      </a>
-                    )}
+                    </a>
+                  )}
                 </li>
               ))}
             </ol>
           </nav>
-          {/* Edge fade-out for scrollable breadcrumbs */}
-          <div class="pointer-events-none absolute right-0 top-0 h-full w-12 bg-linear-to-l from-white/80 to-transparent dark:from-slate-900/90 sm:w-20"></div>
+          {/* Edge fade-out for scrollable breadcrumbs on mobile */}
+          <div class="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white/80 to-transparent dark:from-slate-900/90 sm:hidden"></div>
         </div>
       </div>
     </div>
