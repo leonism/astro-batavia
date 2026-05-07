@@ -32,16 +32,7 @@ export class BreadCrumbService {
       url: '/',
       isLast: false,
     });
-    
-    // 2. Add Language segment (e.g., "En", "Es", "Ja") only if we're not on the root
-    if (pathname !== '/' && pathname !== '') {
-      const langDisplay = lang.charAt(0).toUpperCase() + lang.slice(1);
-      items.push({
-        name: langDisplay,
-        url: getLocalizedPath('/', lang),
-        isLast: false,
-      });
-    }
+
 
     let currentPath = '';
     segments.forEach((segment, index) => {

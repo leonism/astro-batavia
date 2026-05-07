@@ -102,29 +102,38 @@ if (author) {
   creator={creator}
 >
   <main id="main-content">
-    <article role="article" class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+    {/* 2-column grid on desktop: [TOC sidebar | article content] */}
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class={`relative ${headings.length > 0 ? 'lg:grid lg:grid-cols-[220px_1fr] lg:gap-10 xl:grid-cols-[240px_1fr] xl:gap-12' : ''}`}>
 
+        {/* ── Left sidebar: TOC (desktop only — the component renders the mobile accordion inline) ── */}
+        {headings.length > 0 && <BlogTableOfContents {headings} {lang} />}
 
-      <!-- Article header -->
-      <header class="mb-8">
-        <BlogPostHero {heroImage} {heroImageAlt} {title} />
+        {/* ── Main article ── */}
+        <article role="article" class="min-w-0 py-8">
 
-        <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {lang} {t} />
+          {/* Article header */}
+          <header class="mb-8">
+            <BlogPostHero {heroImage} {heroImageAlt} {title} />
+            <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {lang} {t} />
+            <BlogPostTags tags={tags || []} {lang} />
+          </header>
 
-        <BlogPostTags tags={tags || []} {lang} />
-      </header>
+          {/* Mobile TOC accordion — rendered by BlogTableOfContents, shown only on < lg */}
 
-      {headings.length > 0 && <BlogTableOfContents {headings} {lang} />}
+          {/* Article content */}
+          <div class="prose prose-base max-w-none dark:prose-invert">
+            <slot />
+          </div>
 
-      <!-- Article content -->
-      <div class="prose prose-lg max-w-none dark:prose-invert">
-        <slot />
+          {/* Footer elements */}
+          <BlogShareButtons {title} url={Astro.url.href} />
+          <BlogNextPrevNavigation previousPostData={previousPost} nextPostData={nextPost} {lang} />
+          <BlogRelatedArticles {relatedPosts} {lang} />
+        </article>
+
       </div>
-
-      <!-- Footer elements -->
-      <BlogShareButtons {title} url={Astro.url.href} />
-      <BlogNextPrevNavigation previousPostData={previousPost} nextPostData={nextPost} {lang} />
-      <BlogRelatedArticles {relatedPosts} {lang} />
-    </article>
+    </div>
   </main>
 </Layout>
+
