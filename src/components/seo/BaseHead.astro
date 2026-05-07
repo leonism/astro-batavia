@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import SEO from '@/components/seo/SEO.astro';
-import Schema from '@/components/seo/Schema.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import { GoogleTagmanagerNoscript } from '@digi4care/astro-google-tagmanager';
 import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SITE_AUTHOR } from '@/consts';
@@ -16,6 +15,7 @@ interface Props {
   lang?: string;
   author?: string;
   authorUrl?: string;
+  authorSameAs?: string[];
   imageAlt?: string;
   tags?: string[];
   canonical?: string;
@@ -46,6 +46,7 @@ const {
   lang = 'en',
   author,
   authorUrl,
+  authorSameAs,
   imageAlt,
   tags,
   canonical,
@@ -108,24 +109,13 @@ try {
   lang={lang}
   author={author}
   authorUrl={authorUrl}
+  authorSameAs={authorSameAs}
   tags={tags}
   publishedTime={publishedTime || (articleDate ? new Date(articleDate).toISOString() : undefined)}
   modifiedTime={modifiedTime}
   readingTime={readingTime ? String(readingTime) : undefined}
   wordCount={wordCount}
   excerpt={excerpt}
-/>
-
-<Schema
-  type={type}
-  title={title}
-  description={description}
-  image={resolvedImage}
-  imageAlt={imageAlt}
-  date={articleDate}
-  author={author}
-  authorUrl={authorUrl}
-  canonical={canonicalURL}
   breadcrumbs={breadcrumbs}
   organization={organization}
   faqs={faqs}

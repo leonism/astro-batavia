@@ -11,6 +11,7 @@ import BlogPostHero from '@/components/blog/BlogPostHero.astro';
 import { SITE_TITLE, SITE_URL, SOCIAL_LINKS } from '@/consts';
 import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
+import { getEntry } from 'astro:content';
 
 type BlogFrontmatter = CollectionEntry<'blog'>['data'];
 
@@ -48,6 +49,21 @@ const t = useTranslations(lang);
 const allLangPosts = await BlogService.getPostsByLocale(lang);
 const { previousPost, nextPost } = BlogService.getPostNavigation(allLangPosts, slug);
 const relatedPosts = BlogService.getRelatedPosts(allLangPosts, slug, tags);
+
+// Resolve author sameAs links from authors collection
+let authorSameAs: string[] = [];
+if (author) {
+  // Simple lookup by name slug (assuming name matches filename/slug)
+  const authorSlug = author.toLowerCase().replace(/\s+/g, '-');
+  try {
+    const authorEntry = await getEntry('authors', authorSlug);
+    if (authorEntry) {
+      authorSameAs = authorEntry.data.sameAs || [];
+    }
+  } catch (e) {
+    console.warn(`Could not resolve author entry for ${authorSlug}`);
+  }
+}
 ---
 
 <Layout
@@ -56,11 +72,12 @@ const relatedPosts = BlogService.getRelatedPosts(allLangPosts, slug, tags);
   image={heroImage}
   imageAlt={heroImageAlt}
   lang={lang}
-  type="article"
+  type="blog"
   publishedTime={pubDate.toISOString()}
   modifiedTime={updatedDate?.toISOString()}
   author={author}
   authorUrl={authorURL}
+  authorSameAs={authorSameAs}
   articleDate={pubDate}
   tags={tags || []}
   readingTime={readingTime ? parseInt(readingTime.replace(/\D/g, '')) : undefined}
