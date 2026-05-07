@@ -84,7 +84,7 @@ const {
 const siteTitle = SITE_TITLE;
 const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 const siteUrl = (Astro.site?.href || SITE_URL).replace(/\/$/, '');
-const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.svg`;
+const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.png`;
 const canonicalUrl = canonical || Astro.url.href;
 
 // Enhanced meta data
@@ -92,7 +92,7 @@ const finalExcerpt = excerpt || description || SITE_DESCRIPTION;
 const defaultOrganization = {
   name: SITE_TITLE,
   url: siteUrl,
-  logo: `${siteUrl}/images/og-default.svg`,
+  logo: `${siteUrl}/images/og-default.png`,
   sameAs: [SOCIAL_LINKS.X, SOCIAL_LINKS.github, SOCIAL_LINKS.linkedin],
 };
 const orgData = organization || defaultOrganization;
@@ -302,7 +302,8 @@ if (license || acquireLicensePage) {
     entries: Object.entries(alternateUrls).map(([hreflang, href]) => ({ hreflang, href }))
   }}
   extraMeta={[
-    { property: 'og:logo', content: orgData.logo }
+    { property: 'og:logo', content: orgData.logo },
+    { property: 'og:image', content: imageUrl }
   ]}
 />
 
