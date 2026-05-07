@@ -7,6 +7,7 @@ export interface Props {
   title: string;
   description: string;
   image?: string;
+  imageAlt?: string;
   noindex?: boolean;
   canonical?: string;
   lang?: string;
@@ -50,6 +51,7 @@ const {
   title,
   description,
   image,
+  imageAlt,
   noindex = false,
   canonical,
   lang = 'en',
@@ -117,7 +119,12 @@ const twitterHandle = SOCIAL_LINKS.X ? `@${SOCIAL_LINKS.X.split('/').pop()}` : u
 // Robots directive
 const robotsContent = noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
 
-// ── JSON-LD Graph ──────────────────────────────────────────────────────────────
+// ── Standalone ImageObject node (always emitted when there is an image) ─────
+// This is the canonical image node referenced by WebPage and Article.
+// Google's Image rich result requires this structure.
+const primaryImageId = `${canonicalUrl}/#primaryimage`;
+const hasPrimaryImage = !!imageUrl;
+
 const graph: any[] = [
   {
     '@type': 'Organization',
@@ -180,9 +187,38 @@ const graph: any[] = [
     name: fullTitle,
     description: description,
     isPartOf: { '@id': `${siteUrl}/#website` },
+    // Reference the primary image node when available
+    primaryImageOfPage: hasPrimaryImage ? { '@id': primaryImageId } : undefined,
     breadcrumb: breadcrumbs.length > 0 ? { '@id': `${canonicalUrl}/#breadcrumb` } : undefined,
   },
 ];
+
+// ── Always push a rich ImageObject for the hero/OG image ─────────────────────
+if (hasPrimaryImage) {
+  graph.push({
+    '@type': 'ImageObject',
+    '@id': primaryImageId,
+    url: imageUrl,
+    contentUrl: imageUrl,
+    // Google needs a human-readable name / caption for image rich results
+    name: imageAlt || title,
+    caption: imageAlt || title,
+    description: imageAlt || description,
+    // Mark as the representative image for this page
+    representativeOfPage: true,
+    inLanguage: ogLocale,
+    isPartOf: { '@id': `${canonicalUrl}/#webpage` },
+    // Width & height hints — Pexels URLs use w=1260&h=750 params; use standard OG dimensions as fallback
+    width: 1200,
+    height: 630,
+    // License fields (only if explicitly provided via frontmatter)
+    ...(license ? { license } : {}),
+    ...(acquireLicensePage ? { acquireLicensePage } : {}),
+    ...(creditText ? { creditText } : {}),
+    ...(copyrightNotice ? { copyrightNotice } : {}),
+    ...(creator ? { creator: { '@type': 'Person', name: creator } } : {}),
+  });
+}
 
 if (breadcrumbs.length > 0) {
   graph.push({
@@ -223,13 +259,8 @@ if (type === 'article' || type === 'blog') {
       type === 'blog'
         ? [{ '@id': `${canonicalUrl}/#webpage` }, { '@id': `${siteUrl}/blog/#blog` }]
         : { '@id': `${canonicalUrl}/#webpage` },
-    image:
-      license || acquireLicensePage
-        ? { '@id': `${imageUrl}/#primaryimage` }
-        : {
-            '@type': 'ImageObject',
-            url: imageUrl,
-          },
+    // Always reference the primary image node via @id
+    image: hasPrimaryImage ? { '@id': primaryImageId } : undefined,
     publisher: { '@id': `${siteUrl}/#organization` },
     keywords: tags.join(', '),
     articleSection: category,
@@ -279,18 +310,9 @@ if (review) {
   });
 }
 
-if (license || acquireLicensePage) {
-  graph.push({
-    '@type': 'ImageObject',
-    '@id': `${imageUrl}/#primaryimage`,
-    url: imageUrl,
-    license: license,
-    acquireLicensePage: acquireLicensePage,
-    creditText: creditText,
-    copyrightNotice: copyrightNotice,
-    creator: creator ? { '@type': 'Person', name: creator } : undefined,
-  });
-}
+// Legacy standalone ImageObject only when license fields are present AND there's no primary image node yet
+// (Kept for backward compat — the new primary image node above already handles license fields)
+// Intentionally empty — handled by the hasPrimaryImage block above
 
 const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 ---

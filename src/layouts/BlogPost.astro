@@ -104,12 +104,9 @@ if (author) {
   <main id="main-content">
     {/* 2-column grid on desktop: [TOC sidebar | article content] */}
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class={`relative ${headings.length > 0 ? 'lg:grid lg:grid-cols-[220px_1fr] lg:gap-10 xl:grid-cols-[240px_1fr] xl:gap-12' : ''}`}>
+      <div class={`relative ${headings.length > 0 ? 'lg:grid lg:grid-cols-[1fr_220px] lg:gap-10 xl:grid-cols-[1fr_240px] xl:gap-12' : ''}`}>
 
-        {/* ── Left sidebar: TOC (desktop only — the component renders the mobile accordion inline) ── */}
-        {headings.length > 0 && <BlogTableOfContents {headings} {lang} />}
-
-        {/* ── Main article ── */}
+        {/* ── Main article (left) ── */}
         <article role="article" class="min-w-0 py-8">
 
           {/* Article header */}
@@ -119,7 +116,8 @@ if (author) {
             <BlogPostTags tags={tags || []} {lang} />
           </header>
 
-          {/* Mobile TOC accordion — rendered by BlogTableOfContents, shown only on < lg */}
+          {/* Mobile TOC accordion — no border, accordion style, lg:hidden */}
+          {headings.length > 0 && <BlogTableOfContents {headings} {lang} variant="mobile" />}
 
           {/* Article content */}
           <div class="prose prose-base max-w-none dark:prose-invert">
@@ -131,6 +129,9 @@ if (author) {
           <BlogNextPrevNavigation previousPostData={previousPost} nextPostData={nextPost} {lang} />
           <BlogRelatedArticles {relatedPosts} {lang} />
         </article>
+
+        {/* ── Right sidebar: sticky TOC (desktop only) ── */}
+        {headings.length > 0 && <BlogTableOfContents {headings} {lang} variant="sidebar" />}
 
       </div>
     </div>
