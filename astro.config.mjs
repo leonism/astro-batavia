@@ -62,6 +62,10 @@ export default defineConfig({
       provider: fontProviders.google(),
       name: 'Plus Jakarta Sans',
       cssVariable: '--font-plus-jakarta',
+      display: 'swap',
+      weights: [200, 300, 400, 500, 600, 700, 800],
+      subsets: ['latin'],
+      styles: ['normal', 'italic'],
     },
   ],
   integrations: [
