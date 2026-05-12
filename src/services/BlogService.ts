@@ -70,8 +70,7 @@ export class BlogService {
   ): CollectionEntry<'blog'>[] {
     if (!tags || tags.length === 0) return [];
     const relatedPosts = allPosts.filter(
-      (post) =>
-        post.id !== currentSlug && tags.some((tag) => (post.data.tags || []).includes(tag)),
+      (post) => post.id !== currentSlug && tags.some((tag) => (post.data.tags || []).includes(tag)),
     );
     relatedPosts.sort((a, b) => {
       const aCommonTags = (a.data.tags || []).filter((tag) => tags.includes(tag)).length;

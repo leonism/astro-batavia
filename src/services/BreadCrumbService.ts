@@ -33,7 +33,6 @@ export class BreadCrumbService {
       isLast: false,
     });
 
-
     let currentPath = '';
     segments.forEach((segment, index) => {
       currentPath += `/${segment}`;

@@ -21,9 +21,9 @@ const devSitemapStub = {
         res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
         res.end(
           '<?xml version="1.0" encoding="UTF-8"?>' +
-          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-          '<!-- Sitemap is generated at build time -->' +
-          '</urlset>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+            '<!-- Sitemap is generated at build time -->' +
+            '</urlset>',
         );
         return;
       }
@@ -116,10 +116,7 @@ export default defineConfig({
     remarkPlugins: [remarkReadingTime],
   },
   vite: {
-    plugins: [
-      tailwindcss(),
-      devSitemapStub,
-    ],
+    plugins: [tailwindcss(), devSitemapStub],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
     },
