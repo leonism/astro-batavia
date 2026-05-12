@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
-import sitemapStyler from './src/integrations/sitemap-styler.mjs';
+import sitemapHandler from './src/integrations/sitemap-handler.mjs';
 import { SITE_URL } from './src/consts.ts';
 import partytown from '@astrojs/partytown';
 
@@ -112,7 +112,7 @@ export default defineConfig({
       filenameBase: 'sitemap',
       entryLimit: 10000,
     }),
-    sitemapStyler(),
+    sitemapHandler(),
     htmlMinifier({
       removeComments: true,
       removeAttributeQuotes: true,
