@@ -1,0 +1,133 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
+import SEO from '@/components/seo/SEO.astro';
+import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
+import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SITE_AUTHOR } from '@/consts';
+import { SEOService } from '@/services/SEOService';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  articleDate?: string | Date;
+  type?: 'website' | 'article' | 'blog' | 'profile' | 'collection';
+  lang?: string;
+  author?: string;
+  authorUrl?: string;
+  authorSameAs?: string[];
+  imageAlt?: string;
+  tags?: string[];
+  canonical?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  readingTime?: number;
+  wordCount?: number;
+  excerpt?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  organization?: any;
+  faqs?: Array<{ question: string; answer: string }>;
+  review?: any;
+  license?: string;
+  acquireLicensePage?: string;
+  creditText?: string;
+  copyrightNotice?: string;
+  creator?: string;
+  prev?: string;
+  next?: string;
+}
+
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  image,
+  articleDate,
+  type = 'website',
+  lang = 'en',
+  author,
+  authorUrl,
+  authorSameAs,
+  imageAlt,
+  tags,
+  canonical,
+  publishedTime,
+  modifiedTime,
+  readingTime,
+  wordCount,
+  excerpt,
+  breadcrumbs,
+  organization,
+  faqs,
+  review,
+  license,
+  acquireLicensePage,
+  creditText,
+  copyrightNotice,
+  creator,
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.href : SITE_URL;
+
+let canonicalURL = canonical || Astro.url.href;
+// Use SITE_AUTHOR.image as the default fallback for OG image
+let resolvedImage = image || new URL(SITE_AUTHOR.image, siteUrl).href;
+
+try {
+  canonicalURL = canonical || SEOService.getCanonicalURL(Astro.url.pathname, siteUrl);
+  resolvedImage = SEOService.getOpenGraphImage(image, siteUrl);
+} catch (error) {
+  console.error('Error resolving SEO metadata', {
+    error,
+    pathname: Astro.url.pathname,
+    siteUrl,
+  });
+}
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Content Security Policy -->
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://analytics.ahrefs.com blob: data:; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://analytics.ahrefs.com ws://localhost:* http://localhost:* ws://127.0.0.1:* http://127.0.0.1:*; worker-src 'self' blob: data:;"
+/>
+<meta name="generator" content={Astro.generator} />
+<link rel="sitemap" href="/sitemap.xml" />
+<script type="text/partytown" src={`https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`}
+></script>
+<script type="text/partytown">
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+</script>
+
+<SEO
+  title={title}
+  description={description}
+  image={resolvedImage}
+  imageAlt={imageAlt}
+  type={type}
+  canonical={canonicalURL}
+  lang={lang}
+  author={author}
+  authorUrl={authorUrl}
+  authorSameAs={authorSameAs}
+  tags={tags}
+  publishedTime={publishedTime || (articleDate ? new Date(articleDate).toISOString() : undefined)}
+  modifiedTime={modifiedTime}
+  readingTime={readingTime ? String(readingTime) : undefined}
+  wordCount={wordCount}
+  excerpt={excerpt}
+  breadcrumbs={breadcrumbs}
+  organization={organization}
+  faqs={faqs}
+  review={review}
+  license={license}
+  acquireLicensePage={acquireLicensePage}
+  creditText={creditText}
+  copyrightNotice={copyrightNotice}
+  creator={creator}
+/>
+
+<ClientRouter />
+<Font cssVariable="--font-plus-jakarta" />
+<ThemeInitializer />

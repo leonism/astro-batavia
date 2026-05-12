@@ -1,0 +1,314 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.25] - 2026-01-29
+
+### Changed
+
+- **style(ui):** Refactored global color tokens in `global.css`, migrating from HSL to Hex/RGB values for improved compatibility and consistency.
+- **style(ui):** Refined dark mode contrast in `Layout.astro` and standardized specific gray/slate usages in `Footer` and `NavigationMobileMenu`.
+- **docs:** Updated `README.md` to reflect the latest project dependencies (Astro v5.17.0, Tailwind CSS v4.1, Node.js v24+).
+
+## [1.0.24] - 2026-01-15
+
+### Changed
+
+- **refactor(config):** Updated `astro.config.mjs` to dynamically import `SITE_URL` from `src/consts.ts`, replacing hardcoded values for better maintainability.
+- **refactor(ui):** Systematically replaced hardcoded "Astro Batavia" site titles with the `SITE_TITLE` constant in `NavigationHeaderLogo.astro` and homepage layouts (`src/pages/index.astro`, `src/pages/[lang]/index.astro`).
+- **chore(config):** Disabled Sentry telemetry in `astro.config.mjs` to prevent "Sending telemetry data" log messages.
+
+### Fixed
+
+- **style(ui):** Resolved CSS linter warnings in `BlogCard.astro` by adding the standard `line-clamp` property alongside vendor prefixes.
+
+## [1.0.23] - 2026-01-14
+
+### Changed
+
+- **refactor(layout):** Significantly refactored `Layout.astro` for better readability and modularity.
+  - Extracted `<head>` logic into `src/components/seo/BaseHead.astro`.
+  - Extracted global body widgets and scripts into `src/components/ui/GlobalWidgets.astro`.
+  - Simplified the main layout template by delegating head and script management.
+
+## [1.0.22] - 2026-01-14
+
+### Changed
+
+- **refactor(blog):** Significantly refactored `BlogPost.astro` for better readability and maintainability.
+  - Moved complex data fetching and navigation logic to `src/features/blog/blogData.ts`.
+  - Extracted modular UI components: `BlogPostHero`, `BlogPostMeta`, and `BlogPostTags`.
+  - Cleaned up frontmatter and template structure.
+
+## [1.0.21] - 2026-01-14
+
+### Changed
+
+- **style(ui):** Polished the `NewsletterSection` and `NewsletterForm` with improved typography and layout consistency.
+- **refactor(api):** Removed unused `EnterpriseSearchEngine` import in `/api/search-index.ts` to finalize the search architecture migration.
+
+## [1.0.20] - 2026-01-14
+
+### Added
+
+- **feat(blog):** Integrated `remark-reading-time` plugin to automatically calculate and display reading time for all blog posts.
+
+### Changed
+
+- **refactor(seo):** Enhanced `Schema.astro` with generic placeholders and improved attribute handling for better multi-environment flexibility.
+- **refactor(blog):** Standardized formatting and modernized logic in `BlogPost.astro` and blog routing pages.
+- **refactor(layout):** Updated global `Layout.astro` to improve canonical URL resolution and default Open Graph image handling.
+
+### Removed
+
+- **chore(cleanup):** Removed legacy and redundant components (e.g., `BlogStats`, `BlogLoadMoreButton`, `EnterpriseSearchEngine`, `tagFiltering`) following the recent architecture overhaul to reduce technical debt and streamline the codebase.
+
+## [1.0.19] - 2026-01-14
+
+### Added
+
+- **feat(search):** Introduced `EnhancedSearchUI` to modularize search overlay logic and improved client-side initialization.
+
+### Changed
+
+- **refactor(seo):** Relocated `Schema.astro` to `src/components/seo/` to centralize all structured data and meta tag logic.
+- **refactor(seo):** Modularized `SEO.astro` into functional sub-components (`BasicMetaTags`, `OpenGraphMetaTags`, `TwitterMetaTags`, etc.) and relocated to `src/components/seo/`.
+- **refactor(nav):** Renamed and standardized navigation components with `Navigation` prefix (e.g., `NavigationHeader`, `NavigationMobileMenu`) for better consistency.
+- **refactor(blog):** Standardized blog components with `Blog` prefix (e.g., `BlogCard`, `BlogTagFilter`, `BlogTableOfContents`) and moved navigation components to `src/components/blog/`.
+- **refactor(cards):** Standardized Featured Post components and moved them to the root `src/components/cards/` directory.
+- **refactor(ui):** Relocated `BackToTopScript.astro` to `src/components/ui/` and renamed `FeatureCard.astro` to `FeaturedCard.astro`.
+- **refactor(search):** Moved search client scripts to `src/features/search/` and standardized on named exports for better bundling reliability.
+
+### Fixed
+
+- **fix(security):** Updated Content Security Policy (CSP) to allow `unsafe-inline` styles and Ahrefs analytics, resolving blocked resources in dev and production.
+- **fix(search):** Resolved `TypeError` related to missing `getPopularSearches` and fixed search index loading issues by improving script bundling.
+- **fix(i18n):** Corrected several import paths and component definitions across refactored navigation and SEO modules.
+
+## [1.0.18] - 2026-01-13
+
+### Added
+
+- **feat(footer):** Enhanced the footer bottom bar with rounded, hover-responsive buttons for **RSS** (`/rss.xml`) and **Sitemap** (`/sitemap-0.xml`).
+- **feat(i18n):** Added missing `footer.rights_reserved` translation keys across English, Spanish, and Japanese locales.
+
+### Changed
+
+- **refactor(config):** Centralized the Google Tag Manager ID (`GTM_ID`) and all `SOCIAL_LINKS` into `src/consts.ts` for easier management.
+- **refactor(search):** Upgraded the search implementation to utilize the advanced `EnhancedSearchEngine`, enabling semantic clustering and improved relevance scoring.
+- **refactor(seo):** Optimized `SEO.astro` logic to prevent duplicate site titles in the browser tab. Cleaned up redundant site title suffixes from all page components.
+- **build(node):** Upgraded Node.js requirement to version **24** in `.node-version`, `.nvmrc`, and `package.json` to comply with Vercel deployment standards.
+- **style(ui):** Replaced the legacy Twitter icon with the modern **X** icon in `FooterBrand.astro`.
+
+### Fixed
+
+- **fix(footer):** Cleaned up the footer bottom bar by removing redundant social links and ensuring the copyright notice year is dynamically generated.
+- **fix(redirects):** Implemented 308 permanent redirects for trailing slash canonicalization.
+- **fix(seo):** Addressed 404 errors by implementing a 301 redirect for `www` to non-`www` canonicalization.
+
+## [1.0.17] - 2026-01-13
+
+### Added
+
+- **feat(seo):** Implemented advanced JSON-LD structured data support including **Breadcrumbs**, **FAQPage**, and **Review** snippets, directly generated from blog post frontmatter.
+- **feat(seo):** Enhanced `ImageObject` schema with comprehensive metadata support (`license`, `acquireLicensePage`, `creditText`, `creator`, `copyrightNotice`) to maximize visibility in Google Images rich results.
+- **feat(content):** Extended the blog content schema in `src/content/config.ts` to include optional fields for `faqs` and `reviews`.
+
+### Changed
+
+- **refactor(components):** Refactored `src/components/common/Schema.astro` to utilize the JSON-LD `@graph` node structure, enabling modular and efficient stacking of multiple schema types.
+
+## [1.0.16] - 2026-01-13
+
+### Fixed
+
+- **fix(seo):** Resolved "Sitemap could not be read" errors in Google Search Console by creating a `public/_headers` file to enforce `Content-Type: application/xml` for XML artifacts and updating `robots.txt` to point to `sitemap-index.xml`.
+
+## [1.0.15] - 2026-01-12
+
+### Fixed
+
+- **fix(ui):** Resolved an issue where the "Back to Top" button only functioned on the homepage. Updated `BackToTopScript.astro` to correctly handle Astro's View Transitions by re-initializing event listeners on every page load and cleaning them up before swaps.
+- **fix(lint):** Fixed ESLint and Prettier configuration errors by adding missing dependencies (`eslint`, `prettier`, `prettier-plugin-astro`, `prettier-plugin-tailwindcss`), correctly configuring Node.js globals, and removing unused imports in `tailwind.config.mjs`.
+
+## [1.0.14] - 2026-01-11
+
+### Fixed
+
+- **fix(blog):** Resolved a 404 error on tag pages with non-ASCII characters (e.g., Japanese tags). The `slugifyTag` utility was updated to correctly handle Unicode characters, ensuring that tag links generate valid, accessible URLs instead of leading to broken pages.
+
+## [1.0.13] - 2026-01-11
+### Added
+
+- **feat(ci):** Enhanced the GitHub Pages deployment workflow (`.github/workflows/static.yml`) to include proper build steps (`npm install`, `npm run build`), Node.js setup, and caching, ensuring that the Astro project is correctly built before deployment.
+- **feat(ci):** Implemented a comprehensive Pull Request (PR) workflow (`.github/workflows/pr-check.yml`) that automates linting, formatting checks, and build verification for all incoming pull requests, improving code quality and stability.
+- **feat(ci):** Introduced a Link Checker workflow (`.github/workflows/link-checker.yml`) to automatically scan for and report broken links within the codebase on a weekly schedule and on pushes to `main`.
+- **feat(ci):** Configured Dependabot (`.github/dependabot.yml`) to automatically manage and update npm package dependencies and GitHub Actions dependencies, enhancing project security and maintainability.
+
+### Changed
+
+- **build(scripts)::** Added `lint` and `format:check` scripts to `package.json` to standardize code quality checks, supporting the new PR CI workflow.
+
+## [1.0.12] - 2026-01-11
+### Added
+
+- **feat(seo):** Enhanced the JSON-LD schema for blog posts to include `width` and `height` properties for the `heroImage`. This provides more detailed image metadata to search engines, improving the potential for rich snippet representation.
+
+### Changed
+
+- **build(deps):** Added the `image-size` package to `devDependencies` to dynamically read image dimensions during the build process.
+
+## [1.0.11] - 2026-01-11
+### Fixed
+
+- **fix(sitemap):** Resolved an issue where non-ASCII characters in blog tags were incorrectly URL-encoded in the sitemap (e.g., `%E3%82%A2...`). The `slugifyTag` utility now correctly transliterates and sanitizes tags to create clean, readable URLs.
+
+### Added
+
+- **feat(rss):** Added an XSLT stylesheet to the RSS feed (`/rss.xml`), providing a human-readable and styled view in the browser, similar to the sitemap.
+
+## [1.0.10] - 2026-01-11
+
+### Changed
+
+- **refactor(build):** Refactored the compression script (`scripts/compress.js`) to TypeScript (`scripts/compress.ts`) to improve type safety and maintainability.
+
+### Fixed
+
+- **fix(build):** Resolved TypeScript errors in the compression script by adding explicit types, correcting module imports, and ensuring compatibility with the project's TypeScript configuration.
+
+## [1.0.9] - 2026-01-11
+
+### Added
+
+- **feat(rss):** Enhanced the RSS feed to resolve validation errors and improve interoperability.
+  - Added `atom:link` with `rel="self"` to satisfy [W3C validator](https://validator.w3.org/feed/) requirements.
+  - Added support for featured images using the Media RSS (`media:content`) namespace.
+  - Added `<language>` and `<lastBuildDate>` tags for better feed reader support.
+  - Implemented automatic sorting (newest first) and draft filtering for RSS items.
+- **feat(seo):** Improved sitemap technical SEO for better crawling efficiency and priority.
+  - Added `priority` and `changefreq` logic to guide search engines on crawling cadence (Home: 1.0, Blog: 0.8).
+  - Implemented `lastmod` with a search-engine-friendly `YYYY-MM-DD` format.
+  - Added filters to exclude non-HTML API routes from the sitemap.
+  - Optimized the sitemap structure with an increased `entryLimit` to ensure consolidation.
+
+### Fixed
+
+- **fix(seo):** Resolved "Sitemap could not be read" errors in GSC by excluding `/api/` routes and standardizing date formats.
+- **fix(dx):** Suppressed TypeScript Enum assignment warnings in `astro.config.mjs` to maintain a clean development environment.
+
+## [1.0.8] - 2026-01-11
+
+### Added
+
+- **feat(blog):** Added a new comprehensive guide: "Survival of the Fittest: A 2026 Tech Stack Guide to SEO (GA4, GTM, & GSC)" available in English, Spanish, and Japanese.
+
+### Fixed
+
+- **fix(blog):** Corrected `canonicalURL` frontmatter in over 40 Spanish and Japanese blog posts to resolve nested path issues (e.g., stripping redundant `/blog/` segments).
+
+## [1.0.7] - 2026-01-11
+
+### Added
+
+- **feat(authors):** Implemented a dedicated `authors` content collection with schema validation and initial team data.
+- **feat(blog):** Enabled static tag pages for all languages (`/en/blog/tags/[tag]`, `/[lang]/blog/tags/[tag]`) for better SEO and sitemap indexing.
+- **feat(blog):** Implemented client-side "Load More" functionality for the blog index, enabling seamless loading of additional articles without full page reloads.
+
+### Fixed
+
+- **fix(search):** Resolved a duplicate method definition (`stripMarkdown`) in `EnhancedSearchEngine.ts` that was causing build warnings.
+- **fix(search):** Removed unused test file `EnhancedSearchEngine.test.ts`.
+- **fix(blog):** Corrected the blog tags link generation to point to the new static tag pages instead of using query parameters, ensuring distinct URLs for each tag view.
+- **fix(api):** Updated the `/api/get-posts` endpoint to return server-rendered HTML fragments (using `BlogCard`) instead of JSON, aligning with the client-side consumption model.
+- **fix(blog):** Resolved "Missing parameter: tag" build error by enhancing `slugifyTag` to support international characters and ensuring `getStaticPaths` filters out empty slugs.
+## [1.0.6] - 2026-01-10
+
+### Changed
+
+- **refactor(search):** Restructured search page architecture from language-based routing (`/[lang]/search.astro`) to root-level routing (`/search.astro`) for improved accessibility and simplified URL structure.
+- **refactor(search):** Significantly enhanced the `EnhancedSearchClient` with improved error handling, better TypeScript type safety, and optimized performance metrics.
+  - Refactored search initialization flow with better error recovery mechanisms.
+  - Added comprehensive null-safety checks for DOM element access.
+  - Improved voice search integration with better browser compatibility detection.
+  - Enhanced analytics tracking with more granular search insights.
+  - Optimized debouncing and caching mechanisms for better performance.
+- **refactor(search):** Updated `EnhancedSearchEngine` with improved semantic search capabilities and better relevance scoring algorithms.
+- **refactor(search):** Enhanced `EnterpriseSearchEngine` with optimized document indexing and more efficient search result ranking.
+- **refactor(components):** Relocated `Schema.astro` component from `/src/components/` to `/src/components/common/` for better organizational structure and improved component categorization.
+
+### Fixed
+
+- **fix(search):** Resolved TypeScript syntax errors in search overlay by adding `@ts-nocheck` directive to prevent "Unexpected identifier 'as'" errors in browser context.
+- **fix(search):** Fixed search input form accessibility issues by adding proper null-safety checks for DOM element references.
+- **fix(search):** Corrected search filters component to handle optional chaining for dataset properties, preventing runtime errors.
+- **fix(search):** Improved search toggle component keyboard navigation with better focus management.
+- **fix(api):** Removed redundant `EnterpriseSearchEngine` instantiation from `/api/search-index.ts` endpoint to reduce unnecessary processing overhead.
+- **fix(api):** Added `heroImage` field to search index documents for richer search result displays.
+- **fix(i18n):** Enhanced i18n utilities with better type safety and improved URL path generation logic.
+
+### Improved
+
+- **perf(search):** Optimized search client performance by implementing cleanup on page unload to prevent memory leaks.
+- **perf(search):** Enhanced search result rendering with improved DOM manipulation efficiency.
+- **dx(search):** Added developer debugging tools including `window.searchClient` and `window.searchInsights()` for easier troubleshooting.
+- **dx(typescript):** Improved TypeScript type definitions across search components for better development experience.
+
+## [1.0.5] - 2026-01-08
+
+### Added
+
+- **feat(nav):** Overhauled the mobile navigation with a premium enterprise design featuring glassmorphism, decorative gradients, and smooth slide-in animations.
+- **feat(nav):** Integrated high-quality icons into the mobile navigation links for improved visual hierarchy.
+- **feat(nav):** Added a fixed "Start Reading" CTA within the mobile menu to drive user engagement.
+
+### Fixed
+
+- **fix(i18n):** Resolved the "double blog" path nesting issue (e.g., `/blog/blog/`) by refining `getStaticPaths` and the `getPostUrl` utility.
+- **fix(i18n):** Implemented hybrid routing: the homepage remains at the root (`/`) while English contents are correctly prefixed with `/en/`.
+- **fix(i18n):** Centralized URL generation across `BlogCard`, `RelatedArticles`, and `BlogPostNavigation` using the updated `getPostUrl` helper.
+- **fix(search):** Synchronized search results to use pre-calculated API URLs, eliminating client-side path reconstruction errors.
+
+## [1.0.4] - 2026-01-01
+
+### Added
+
+- **feat(search):** Enhanced the search engine with new semantic clusters and added corresponding tests.
+
+## [1.0.3] - 2026-01-01
+
+### Fixed
+
+- **fix(search, back-to-top):** Resolved issues with the production build where search and back-to-top functionalities were conflicting with view transitions.
+
+## [1.0.2] - 2026-01-01
+
+### Changed
+
+- **deps:** Updated Astro to the latest stable version (5.16.6).
+- **feat(mobile-nav):** Prevented the site from scrolling when the mobile navigation is open.
+
+### Fixed
+
+- **fix(mobile-nav):** Ensured the mobile navigation pane closes when clicking anywhere outside of it.
+
+## [1.0.1] - 2025-12-31
+
+### Added
+
+- **feat(build):** Enhanced the `html-minifier` integration to provide more granular control and better reporting.
+  - The integration now accepts custom `html-minifier-terser` options.
+  - Build logs now include detailed statistics on file sizes and compression savings.
+- **docs:** Created a new documentation file for the `html-minifier` integration in `docs/html-minifier-readme.md`.
+
+### Changed
+
+- **docs:** Updated `README.md` to reflect the latest Astro version and improvements to the build process.
+
+### Fixed
+
+- **fix(build):** Corrected a typo in the `<ViewTransitions />` component name in `src/layouts/Layout.astro` that was causing build failures.
+- **fix(build):** Disabled the `removeOptionalTags` option in the `html-minifier` integration to prevent the removal of essential tags like `<head>` from the HTML output.

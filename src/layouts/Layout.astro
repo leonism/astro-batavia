@@ -1,161 +1,96 @@
 ---
-import { ViewTransitions } from "astro:transitions";
-import Header from "@/components/navigation/Header.astro";
-import Footer from "@/components/footer/Footer.astro";
-import SEO from "@/components/common/SEO.astro";
-import BackToTop from "@/components/ui/BackToTop.astro";
-import ThemeInitializer from "@/components/common/ThemeInitializer.astro";
-import BackToTopScript from "@/components/common/BackToTopScript.astro";
-import "@/styles/global.css";
+import BaseHead from '@/components/seo/BaseHead.astro';
+import NavigationHeader from '@/components/navigation/NavigationHeader.astro';
+import Footer from '@/components/footer/Footer.astro';
+import GlobalWidgets from '@/components/ui/GlobalWidgets.astro';
+import BreadCrumb from '@/components/ui/BreadCrumb.astro';
+import '@/styles/global.css';
+import '@/styles/enhanced-search.css';
+import { GTM_ID } from '@/consts';
+import { BreadCrumbService } from '@/services/BreadCrumbService';
 
 export interface Props {
   title: string;
   description?: string;
   image?: string;
-  noindex?: boolean;
+  articleDate?: string | Date;
+  type?: 'website' | 'article' | 'blog' | 'profile' | 'collection';
   lang?: string;
-  canonical?: string;
-  type?: "website" | "article" | "blog";
-  publishedTime?: string;
-  modifiedTime?: string;
   author?: string;
   authorUrl?: string;
-  authorImage?: string;
+  authorSameAs?: string[];
+  imageAlt?: string;
   tags?: string[];
-  category?: string;
+  canonical?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
   readingTime?: number;
   wordCount?: number;
   excerpt?: string;
   breadcrumbs?: Array<{ name: string; url: string }>;
-  organization?: {
-    name: string;
+  organization?: any;
+  faqs?: Array<{ question: string; answer: string }>;
+  review?: any;
+  license?: string;
+  acquireLicensePage?: string;
+  creditText?: string;
+  copyrightNotice?: string;
+  creator?: string;
+  prev?: string;
+  next?: string;
+  noindex?: boolean;
+  collectionPosts?: Array<{
+    title: string;
     url: string;
-    logo: string;
-    sameAs?: string[];
-  };
-  video?: {
-    url: string;
-    thumbnail: string;
     description?: string;
-    duration?: string;
-  };
-  product?: {
-    name: string;
-    brand?: string;
-    price?: string;
-    currency?: string;
-    availability?: string;
-  };
+    date?: string | Date;
+  }>;
 }
 
-const {
-  title,
-  description = "A modern multi-language blog built with Astro.js",
-  image,
-  noindex = false,
-  lang = "en",
-  canonical,
-  type = "website",
-  publishedTime,
-  modifiedTime,
-  author,
-  authorUrl,
-  authorImage,
-  tags = [],
-  category,
-  readingTime,
-  wordCount,
-  excerpt,
-  breadcrumbs = [],
-  organization,
-  video,
-  product,
-} = Astro.props;
+const { lang = 'en', title: pageTitle } = Astro.props;
+const breadcrumbs = Astro.props.breadcrumbs || BreadCrumbService.getBreadCrumbs(Astro.url.pathname, lang as any).map(b => ({
+  name: b.name,
+  url: b.url ? new URL(b.url, Astro.site || Astro.url.origin).href : ''
+}));
+
+// If we generated breadcrumbs, update the last one with the clean page title
+if (!Astro.props.breadcrumbs && breadcrumbs.length > 1) {
+    const lastItem = breadcrumbs[breadcrumbs.length - 1];
+    const cleanTitle = pageTitle.split(' | ')[0].trim();
+    lastItem.name = cleanTitle;
+}
 ---
 
 <!doctype html>
-<html
-  lang={lang}
-  class="scroll-smooth">
+<html lang={lang} class="scroll-smooth">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="description"
-      content={description}
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/favicon.svg"
-    />
-    <meta
-      name="generator"
-      content={Astro.generator}
-    />
-
-    <!-- Preconnect to external domains -->
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
-
-    <!-- Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- SEO Component -->
-    <SEO
-      title={title}
-      description={description}
-      image={image}
-      noindex={noindex}
-      canonical={canonical}
-      lang={lang}
-      type={type}
-      publishedTime={publishedTime}
-      modifiedTime={modifiedTime}
-      author={author}
-      authorUrl={authorUrl}
-      authorImage={authorImage}
-      tags={tags}
-      category={category}
-      readingTime={readingTime?.toString()}
-       wordCount={wordCount}
-      excerpt={excerpt}
-      breadcrumbs={breadcrumbs}
-      organization={organization}
-      video={video}
-      product={product}
-    />
-    <ThemeInitializer />
-    <ViewTransitions />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/favicon.svg"
-    />
+    <BaseHead {...Astro.props} breadcrumbs={breadcrumbs} />
   </head>
   <body
-    class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300">
-    <div class="md:min-h-full lg:min-h-screen flex flex-col">
-      <Header />
-      <main class="flex-1 pt-16">
+    class="bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-slate-100"
+  >
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+    >
+      Skip to content
+    </a>
+    <div id="app" class="flex min-h-screen flex-col">
+      <NavigationHeader />
+      <main role="main" id="main-content" class="flex-1 pt-16">
+        <BreadCrumb title={Astro.props.title} />
         <slot />
       </main>
       <Footer />
     </div>
-    <BackToTop />
-    <BackToTopScript />
+    <GlobalWidgets />
   </body>
 </html>

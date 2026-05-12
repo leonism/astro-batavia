@@ -1,0 +1,185 @@
+---
+import NavigationHeaderNavLinks from '@/components/navigation/NavigationHeaderNavLinks.astro';
+import { getLangFromUrl, useTranslations, getLocalizedPath } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
+
+const lang = getLangFromUrl(Astro.url) as LanguageKey;
+const currentPath = Astro.url.pathname;
+const t = useTranslations(lang);
+---
+
+<div
+  id="mobile-nav-overlay"
+  class="mobile-nav-overlay pointer-events-none fixed inset-0 z-40 bg-gray-900/40 opacity-0 backdrop-blur-sm transition-opacity duration-300 md:hidden"
+  aria-hidden="true"
+  role="presentation"
+>
+</div>
+<div
+  id="mobile-menu"
+  class="fixed inset-x-0 bottom-0 z-50 flex max-h-[92vh] w-full translate-y-full flex-col rounded-t-[2rem] border-t border-white/20 bg-white/95 shadow-[0_-8px_40px_rgba(0,0,0,0.08)] backdrop-blur-2xl transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] dark:border-slate-800/50 dark:bg-slate-900/95 md:hidden"
+  aria-modal="true"
+  aria-label="Mobile menu"
+  role="dialog"
+  aria-hidden="true"
+>
+  <!-- Decorative Header Gradient -->
+  <div
+    class="absolute left-0 top-0 -z-10 h-40 w-full rounded-t-[2rem] bg-linear-to-b from-blue-600/10 via-indigo-600/5 to-transparent dark:from-blue-500/10 dark:via-indigo-500/5"
+  >
+  </div>
+
+  <!-- Drag Handle -->
+  <div class="flex w-full justify-center pb-1 pt-3">
+    <div class="h-1.5 w-12 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+  </div>
+
+  <header
+    class="flex items-center justify-between border-b border-slate-100 px-6 pb-4 pt-2 dark:border-slate-800/60"
+  >
+    <div
+      class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500"
+    >
+      Menu
+    </div>
+    <button
+      id="close-mobile-menu"
+      class="group rounded-full bg-gray-100 p-2 text-gray-500 transition-all duration-300 hover:bg-red-50 hover:text-red-500 dark:bg-slate-800 dark:text-gray-400 dark:hover:bg-red-900/20"
+      aria-label="Close mobile menu"
+    >
+      <svg
+        class="h-6 w-6 transform transition-transform duration-300 group-hover:rotate-90"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        >
+        </path>
+      </svg>
+    </button>
+  </header>
+
+  <nav class="flex flex-1 flex-col gap-2 overflow-y-auto p-6">
+    <NavigationHeaderNavLinks lang={lang} currentPath={currentPath} variant="mobile" />
+  </nav>
+
+  <footer
+    class="border-t border-slate-100 bg-slate-50/50 px-6 pb-8 pt-6 dark:border-slate-800/60 dark:bg-slate-900/30"
+  >
+    <a
+      href={getLocalizedPath('/blog', lang)}
+      class="flex w-full items-center justify-center gap-3 rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 py-4 text-center font-bold text-white shadow-xl shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95"
+      data-astro-prefetch
+    >
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 10V3L4 14h7v7l9-11h-7z"
+        >
+        </path>
+      </svg>
+      {t('home.hero.startReading')}
+    </a>
+  </footer>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+
+    let lastActiveElement: HTMLElement | null = null;
+
+    const openMobileMenu = () => {
+      if (!mobileMenu || !mobileNavOverlay) return;
+      lastActiveElement = document.activeElement as HTMLElement | null;
+      mobileMenu.classList.remove('translate-y-full');
+      mobileNavOverlay.classList.remove('pointer-events-none');
+      mobileNavOverlay.classList.add('opacity-100');
+
+      document.body.classList.add('mobile-nav-open');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      if (mobileMenuButton) {
+        mobileMenuButton.setAttribute('aria-expanded', 'true');
+      }
+
+      const focusableElements = mobileMenu.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      const firstFocusableElement = focusableElements[0];
+      const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+      (firstFocusableElement as HTMLElement).focus();
+
+      mobileMenu.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusableElement) {
+            (lastFocusableElement as HTMLElement).focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastFocusableElement) {
+            (firstFocusableElement as HTMLElement).focus();
+            e.preventDefault();
+          }
+        }
+      });
+    };
+
+    const closeMobileMenu = () => {
+      if (!mobileMenu || !mobileNavOverlay) return;
+      document.body.classList.remove('mobile-nav-open');
+      mobileMenu.classList.add('translate-y-full');
+      mobileNavOverlay.classList.add('pointer-events-none');
+      mobileNavOverlay.classList.remove('opacity-100');
+
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      mobileNavOverlay.setAttribute('aria-hidden', 'true');
+      if (mobileMenuButton) {
+        mobileMenuButton.setAttribute('aria-expanded', 'false');
+      }
+      if (lastActiveElement) {
+        (lastActiveElement as HTMLElement).focus();
+      }
+    };
+
+    if (mobileMenuButton) {
+      mobileMenuButton.addEventListener('click', openMobileMenu);
+    }
+
+    if (closeMobileMenuButton) {
+      closeMobileMenuButton.addEventListener('click', closeMobileMenu);
+    }
+
+    if (mobileNavOverlay) {
+      mobileNavOverlay.addEventListener('click', closeMobileMenu);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (
+        event.key === 'Escape' &&
+        mobileMenu &&
+        !mobileMenu.classList.contains('translate-y-full')
+      ) {
+        closeMobileMenu();
+      }
+    });
+
+    // Close menu when clicking a link
+    mobileMenu?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+  });
+</script>
