@@ -28,10 +28,9 @@ const DEFAULT_DIST_DIR = 'dist';
 // Runs gzip, brotli and zstd in parallel for a single file's data
 async function compressData(data: Buffer, extension: string) {
   const gzipPromise = gzip(data, { level: zlib.constants.Z_BEST_COMPRESSION });
-  
-  const brotliMode = extension === '.wasm' 
-    ? zlib.constants.BROTLI_MODE_GENERIC 
-    : zlib.constants.BROTLI_MODE_TEXT;
+
+  const brotliMode =
+    extension === '.wasm' ? zlib.constants.BROTLI_MODE_GENERIC : zlib.constants.BROTLI_MODE_TEXT;
 
   const brotliPromise = brotliCompress(data, {
     params: {
@@ -44,11 +43,11 @@ async function compressData(data: Buffer, extension: string) {
 
   // zstdCompress from zstd-napi is synchronous but very fast at lower levels.
   // At level 22 it is slow, so we wrap it to keep the async flow.
-  const zstdPromise = Promise.resolve().then(() => 
-    zstdCompress(data, { 
+  const zstdPromise = Promise.resolve().then(() =>
+    zstdCompress(data, {
       compressionLevel: 22,
-      enableLongDistanceMatching: true // Helps with larger files
-    })
+      enableLongDistanceMatching: true, // Helps with larger files
+    }),
   );
 
   // Await all promises to run them in parallel
@@ -129,7 +128,7 @@ async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verb
           if (gzipData.length < data.length) savedExts.push('.gz');
           if (brotliData.length < data.length) savedExts.push('.br');
           if (zstdData.length < data.length) savedExts.push('.zst');
-          
+
           if (savedVariantsForFile > 0) {
             console.log(`✅ Compressed: ${relativePath} (${savedExts.join(', ')})`);
           } else {

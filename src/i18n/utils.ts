@@ -46,7 +46,6 @@ export function useTranslations(lang: keyof typeof ui) {
 export function getLocalizedPath(path: string, lang: string) {
   const cleanPath = path.startsWith('/') ? path : '/' + path;
 
-
   // Handle English (default locale)
   if (lang === DEFAULT_LOCALE) {
     // English homepage is at the root (/)
