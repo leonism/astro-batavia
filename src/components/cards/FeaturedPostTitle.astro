@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getPostUrl } from '@/i18n/utils';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  index: number;
+  lang: string;
+}
+
+const { post, index, lang } = Astro.props;
+---
+
+<h2
+  id={`featured-post-title-${post.id}`}
+  class="mb-3 font-bold leading-tight text-white"
+  class:list={[
+    index === 0
+      ? 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl lg:leading-[1.2]'
+      : 'text-xl sm:text-2xl md:text-xl lg:leading-[1.3]',
+  ]}
+  aria-level={index === 0 ? 1 : 2}
+>
+  <a
+    href={getPostUrl(post.id, lang)}
+    class="line-clamp-2 transition-colors duration-200 hover:text-primary-200 focus:text-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-800 sm:line-clamp-none"
+    aria-describedby={`featured-post-desc-${post.id}`}
+  >
+    {post.data.title}
+  </a>
+</h2>
+

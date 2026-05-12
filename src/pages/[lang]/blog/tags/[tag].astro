@@ -1,0 +1,84 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import BlogCard from '@/components/blog/BlogCard.astro';
+import { useTranslations } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import { BlogService } from '@/services/BlogService';
+import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
+
+export async function getStaticPaths() {
+  return BlogService.getStaticTagPaths();
+}
+
+const { tag } = Astro.props;
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof ui);
+
+// Get blog posts for this language and tag
+const posts = await BlogService.getPostsByTag(lang as string, Astro.params.tag as string);
+const postsPerPage = PAGINATION_POSTS_PER_PAGE;
+const totalPages = Math.ceil(posts.length / postsPerPage);
+const postsToDisplay = posts.slice(0, postsPerPage);
+
+const pageProps = {
+  postsPerPage,
+  totalPages,
+  lang,
+};
+---
+
+<Layout
+  {...pageProps}
+  title={`#${tag} | ${t('nav.blog')}`}
+  description={lang === 'es'
+    ? `Artículos sobre ${tag}`
+    : lang === 'ja'
+      ? `${tag}に関する記事`
+      : `Articles about ${tag}`}
+  lang={lang}
+>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-12 text-center">
+      <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 sm:text-5xl">
+        #{tag}
+      </h1>
+      <p class="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">
+        {
+          lang === 'es'
+            ? `Artículos etiquetados con #${tag}`
+            : lang === 'ja'
+              ? `#${tag} のタグが付いた記事`
+              : `Articles tagged with #${tag}`
+        }
+      </p>
+    </div>
+
+    <!-- Posts Grid -->
+    {
+      postsToDisplay.length > 0 ? (
+        <div
+          id="posts-container"
+          class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+        >
+          {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
+            <div class="post-item animate-fade-in">
+              <BlogCard post={post} lang={lang as 'en' | 'es' | 'ja'} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="py-12 text-center">
+          <p class="text-gray-500 dark:text-gray-400">
+            {lang === 'es'
+              ? 'No se encontraron artículos.'
+              : lang === 'ja'
+                ? '記事が見つかりません。'
+                : 'No articles found.'}
+          </p>
+        </div>
+      )
+    }
+  </div>
+</Layout>

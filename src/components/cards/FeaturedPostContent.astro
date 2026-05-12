@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FeaturedPostMeta from '@/components/cards/FeaturedPostMeta.astro';
+import FeaturedPostTitle from '@/components/cards/FeaturedPostTitle.astro';
+import FeaturedPostDescription from '@/components/cards/FeaturedPostDescription.astro';
+import FeaturedPostTags from '@/components/cards/FeaturedPostTags.astro';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  index: number;
+  lang: string;
+}
+
+const { post, index, lang } = Astro.props;
+---
+
+<div class="relative flex h-full flex-col justify-end p-4 text-white sm:p-8 md:p-10 lg:p-12">
+  <div class="z-10 space-y-2">
+    <FeaturedPostMeta post={post} lang={lang} />
+    <FeaturedPostTitle post={post} index={index} lang={lang} />
+    <FeaturedPostDescription post={post} index={index} />
+    <FeaturedPostTags tags={post.data.tags} lang={lang} />
+  </div>
+</div>

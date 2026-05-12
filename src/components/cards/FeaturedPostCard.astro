@@ -1,41 +1,37 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import FeaturedPostImage from "./FeaturedPostCard/FeaturedPostImage.astro";
-import FeaturedPostOverlay from "./FeaturedPostCard/FeaturedPostOverlay.astro";
-import FeaturedPostContent from "./FeaturedPostCard/FeaturedPostContent.astro";
+import type { CollectionEntry } from 'astro:content';
+import FeaturedPostImage from '@/components/cards/FeaturedPostImage.astro';
+import FeaturedPostOverlay from '@/components/cards/FeaturedPostOverlay.astro';
+import FeaturedPostContent from '@/components/cards/FeaturedPostContent.astro';
+import { getLangFromUrl, getPostUrl } from '@/i18n/utils';
 
 interface Props {
-  post: CollectionEntry<"blog">;
+  post: CollectionEntry<'blog'>;
   index: number;
-  authorImage: string;
-  authorSlug: string;
 }
 
-const { post, index, authorImage, authorSlug } = Astro.props;
+const { post, index } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
 
-// Fix double /blog/ issue - post.slug already contains the full path
-const postUrl = `/${post.slug}`;
+// Fix double /blog/ issue - use helper
+const postUrl = getPostUrl(post.id, lang);
 ---
 
 <article
-  id={`featured-post-${post.slug}`}
-  class="group relative h-64 sm:h-80 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 md:h-[400px] lg:h-[600px]"
-  class:list={[index === 0 && "lg:col-span-2 lg:row-span-2"]}
-  aria-labelledby={`featured-post-title-${post.slug}`}>
-  <FeaturedPostImage
-    heroImage={post.data.heroImage}
-    index={index}
-  />
+  id={`featured-post-${post.id}`}
+  class="group relative h-64 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 sm:h-80 md:h-[400px] lg:h-[600px]"
+  class:list={[index === 0 && 'lg:col-span-2 lg:row-span-2']}
+  aria-labelledby={`featured-post-title-${post.id}`}
+>
+  <FeaturedPostImage heroImage={post.data.heroImage} index={index} />
   <FeaturedPostOverlay />
-  <FeaturedPostContent
-    post={post}
-    index={index}
-    authorImage={authorImage}
-    authorSlug={authorSlug}
-  />
+  <FeaturedPostContent post={post} index={index} lang={lang} />
   <a
     href={postUrl}
     class="absolute inset-0 z-20"
-    aria-labelledby={`featured-post-title-${post.slug}`}
-  ></a>
+    aria-labelledby={`featured-post-title-${post.id}`}
+    data-astro-prefetch
+  >
+  </a>
 </article>
+

@@ -1,0 +1,11 @@
+/sitemap-index.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=3600
+
+/sitemap-0.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=3600
+
+/rss.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=3600

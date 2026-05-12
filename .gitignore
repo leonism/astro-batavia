@@ -4,12 +4,15 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-package-lock.json
 .pnpm-debug.log
 
 # Astro build output
 dist/
 .output/
+.astro/
+
+# frontmatter.json
+.frontmatter.json
 
 # Local env files
 .env
@@ -47,6 +50,10 @@ bun.lockb
 .idea/
 *.sublime-project
 *.sublime-workspace
+GEMINI.md
 
 # System
 Thumbs.db
+
+# docs
+docs/

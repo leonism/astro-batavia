@@ -1,0 +1,379 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SOCIAL_LINKS } from '@/consts';
+import { SEOService } from '@/services/SEOService';
+import FaviconLinks from '@/components/seo/FaviconLinks.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  canonical?: string;
+  lang?: string;
+  type?: 'website' | 'article' | 'blog' | 'profile' | 'collection';
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  authorUrl?: string;
+  authorImage?: string;
+  authorSameAs?: string[];
+  tags?: string[];
+  category?: string;
+  readingTime?: string;
+  wordCount?: number;
+  excerpt?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  organization?: {
+    name: string;
+    url: string;
+    logo: string;
+    sameAs?: string[];
+  };
+  video?: {
+    url: string;
+    thumbnail: string;
+    duration?: string;
+    description?: string;
+  };
+  prev?: string;
+  next?: string;
+  faqs?: Array<{ question: string; answer: string }>;
+  review?: any;
+  license?: string;
+  acquireLicensePage?: string;
+  creditText?: string;
+  copyrightNotice?: string;
+  creator?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  imageAlt,
+  noindex = false,
+  canonical,
+  lang = 'en',
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  author,
+  authorUrl,
+  authorImage,
+  authorSameAs = [],
+  tags = [],
+  category,
+  readingTime,
+  wordCount,
+  excerpt,
+  breadcrumbs = [],
+  organization,
+  video,
+  prev,
+  next,
+  faqs = [],
+  review,
+  license,
+  acquireLicensePage,
+  creditText,
+  copyrightNotice,
+  creator,
+} = Astro.props;
+
+const siteTitle = SITE_TITLE;
+const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
+const siteUrl = (Astro.site?.href || SITE_URL).replace(/\/$/, '');
+const imageUrl = image ? new URL(image, siteUrl).href : `${siteUrl}/images/og-default.png`;
+const canonicalUrl = canonical || Astro.url.href;
+
+const finalExcerpt = excerpt || description || SITE_DESCRIPTION;
+
+const defaultOrganization = {
+  name: SITE_TITLE,
+  url: siteUrl,
+  logo: `${siteUrl}/images/og-default.png`,
+  sameAs: [SOCIAL_LINKS.X, SOCIAL_LINKS.github, SOCIAL_LINKS.linkedin],
+};
+const orgData = organization || defaultOrganization;
+
+// Language mappings
+const hreflangMap: Record<string, string> = {
+  en: 'en-US',
+  es: 'es-ES',
+  ja: 'ja-JP',
+};
+const ogLocale = hreflangMap[lang] ?? lang;
+
+const alternateUrls = SEOService.getAlternateUrls(Astro.url.pathname, siteUrl);
+
+// OG type mapping
+const ogType = (type === 'blog' || type === 'article') ? 'article' : (type === 'profile' ? 'profile' : 'website');
+
+// WebPage subtype mapping
+const webPageType = type === 'collection' ? 'CollectionPage' : (type === 'profile' ? 'ProfilePage' : 'WebPage');
+
+// Twitter handle (strip URL to @handle)
+const twitterHandle = SOCIAL_LINKS.X ? `@${SOCIAL_LINKS.X.split('/').pop()}` : undefined;
+
+// Robots directive
+const robotsContent = noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+
+// ── Standalone ImageObject node (always emitted when there is an image) ─────
+// This is the canonical image node referenced by WebPage and Article.
+// Google's Image rich result requires this structure.
+const primaryImageId = `${canonicalUrl}/#primaryimage`;
+const hasPrimaryImage = !!imageUrl;
+
+const graph: any[] = [
+  {
+    '@type': 'Organization',
+    '@id': `${siteUrl}/#organization`,
+    name: orgData.name,
+    url: orgData.url,
+    logo: {
+      '@type': 'ImageObject',
+      url: orgData.logo,
+    },
+    sameAs: orgData.sameAs || [
+      SOCIAL_LINKS.X,
+      SOCIAL_LINKS.github,
+      SOCIAL_LINKS.linkedin,
+      SOCIAL_LINKS.youtube,
+      SOCIAL_LINKS.instagram,
+      SOCIAL_LINKS.tiktok,
+      SOCIAL_LINKS.telegram,
+      SOCIAL_LINKS.facebook,
+    ],
+    publishingPrinciples: SEOService.getLocalizedLegalLinks(lang, siteUrl),
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        email: 'contact@astrobatavia.com',
+        contactType: 'customer support',
+      },
+    ],
+  },
+  {
+    '@type': 'WebSite',
+    '@id': `${siteUrl}/#website`,
+    url: siteUrl,
+    name: SITE_TITLE,
+    publisher: { '@id': `${siteUrl}/#organization` },
+    description: SITE_DESCRIPTION,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteUrl}/search/?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  },
+  {
+    '@type': 'Blog',
+    '@id': `${siteUrl}/blog/#blog`,
+    name: `Blog | ${SITE_TITLE}`,
+    description: SITE_DESCRIPTION,
+    url: `${siteUrl}/blog/`,
+    publisher: { '@id': `${siteUrl}/#organization` },
+    isPartOf: { '@id': `${siteUrl}/#website` },
+    inLanguage: ogLocale,
+  },
+  {
+    '@type': webPageType,
+    '@id': `${canonicalUrl}/#webpage`,
+    url: canonicalUrl,
+    name: fullTitle,
+    description: description,
+    isPartOf: { '@id': `${siteUrl}/#website` },
+    // Reference the primary image node when available
+    primaryImageOfPage: hasPrimaryImage ? { '@id': primaryImageId } : undefined,
+    breadcrumb: breadcrumbs.length > 0 ? { '@id': `${canonicalUrl}/#breadcrumb` } : undefined,
+  },
+];
+
+// ── Always push a rich ImageObject for the hero/OG image ─────────────────────
+if (hasPrimaryImage) {
+  graph.push({
+    '@type': 'ImageObject',
+    '@id': primaryImageId,
+    url: imageUrl,
+    contentUrl: imageUrl,
+    // Google needs a human-readable name / caption for image rich results
+    name: imageAlt || title,
+    caption: imageAlt || title,
+    description: imageAlt || description,
+    // Mark as the representative image for this page
+    representativeOfPage: true,
+    inLanguage: ogLocale,
+    isPartOf: { '@id': `${canonicalUrl}/#webpage` },
+    // Width & height hints — Pexels URLs use w=1260&h=750 params; use standard OG dimensions as fallback
+    width: 1200,
+    height: 630,
+    // License fields (only if explicitly provided via frontmatter)
+    ...(license ? { license } : {}),
+    ...(acquireLicensePage ? { acquireLicensePage } : {}),
+    ...(creditText ? { creditText } : {}),
+    ...(copyrightNotice ? { copyrightNotice } : {}),
+    ...(creator ? { creator: { '@type': 'Person', name: creator } } : {}),
+  });
+}
+
+if (breadcrumbs.length > 0) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    '@id': `${canonicalUrl}/#breadcrumb`,
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
+  });
+}
+
+if (type === 'article' || type === 'blog') {
+  graph.push({
+    '@type': type === 'blog' ? 'BlogPosting' : 'Article',
+    '@id': `${canonicalUrl}/#article`,
+    author: author
+      ? {
+          '@type': 'Person',
+          name: author,
+          url: authorUrl,
+          sameAs: authorSameAs,
+          image: authorImage
+            ? {
+                '@type': 'ImageObject',
+                url: authorImage,
+              }
+            : undefined,
+        }
+      : { '@id': `${siteUrl}/#organization` },
+    headline: title,
+    datePublished: publishedTime,
+    dateModified: modifiedTime || publishedTime,
+    mainEntityOfPage: { '@id': `${canonicalUrl}/#webpage` },
+    isPartOf:
+      type === 'blog'
+        ? [{ '@id': `${canonicalUrl}/#webpage` }, { '@id': `${siteUrl}/blog/#blog` }]
+        : { '@id': `${canonicalUrl}/#webpage` },
+    // Always reference the primary image node via @id
+    image: hasPrimaryImage ? { '@id': primaryImageId } : undefined,
+    publisher: { '@id': `${siteUrl}/#organization` },
+    keywords: tags.join(', '),
+    articleSection: category,
+    wordCount: wordCount,
+  });
+}
+
+if (faqs && faqs.length > 0) {
+  graph.push({
+    '@type': 'FAQPage',
+    '@id': `${canonicalUrl}/#faq`,
+    isPartOf: { '@id': `${canonicalUrl}/#webpage` },
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  });
+}
+
+if (review) {
+  graph.push({
+    '@type': 'Review',
+    '@id': `${canonicalUrl}/#review`,
+    isPartOf: { '@id': `${canonicalUrl}/#webpage` },
+    itemReviewed: {
+      '@type': 'Thing',
+      name: review.itemReviewed?.name || title,
+      description: review.itemReviewed?.description,
+      image: review.itemReviewed?.image ? new URL(review.itemReviewed.image, siteUrl).href : undefined,
+    },
+    author: {
+      '@type': 'Person',
+      name: review.author || author || orgData.name,
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: review.ratingValue,
+      bestRating: review.bestRating || 5,
+      worstRating: review.worstRating || 1,
+    },
+    datePublished: review.datePublished || publishedTime || new Date().toISOString(),
+    reviewBody: review.reviewBody,
+  });
+}
+
+// Legacy standalone ImageObject only when license fields are present AND there's no primary image node yet
+// (Kept for backward compat — the new primary image node above already handles license fields)
+// Intentionally empty — handled by the hasPrimaryImage block above
+
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+---
+
+<!-- ── Primary Meta ──────────────────────────────────────────── -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robotsContent} />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- ── Open Graph (Facebook, WhatsApp, LinkedIn, Slack, etc.) ── -->
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={finalExcerpt} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:type" content={ogType} />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+{orgData.logo && <meta property="og:logo" content={orgData.logo} />}
+
+<!-- Article-specific OG -->
+{(type === 'article' || type === 'blog') && publishedTime && (
+  <meta property="article:published_time" content={publishedTime} />
+)}
+{(type === 'article' || type === 'blog') && modifiedTime && (
+  <meta property="article:modified_time" content={modifiedTime} />
+)}
+{(type === 'article' || type === 'blog') && author && (
+  <meta property="article:author" content={author} />
+)}
+{(type === 'article' || type === 'blog') && category && (
+  <meta property="article:section" content={category} />
+)}
+{(type === 'article' || type === 'blog') && tags.map((tag) => (
+  <meta property="article:tag" content={tag} />
+))}
+
+<!-- ── Twitter / X Card ─────────────────────────────────────── -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={finalExcerpt} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={title} />
+{twitterHandle && <meta name="twitter:site" content={twitterHandle} />}
+{author && <meta name="twitter:creator" content={author} />}
+
+<!-- ── Hreflang Alternates ──────────────────────────────────── -->
+{Object.entries(alternateUrls).map(([hreflang, href]) => (
+  <link rel="alternate" hreflang={hreflang} href={href} />
+))}
+<link rel="alternate" hreflang="x-default" href={alternateUrls['en'] ?? canonicalUrl} />
+
+<!-- ── Pagination ───────────────────────────────────────────── -->
+{prev && <link rel="prev" href={prev} />}
+{next && <link rel="next" href={next} />}
+
+<!-- ── JSON-LD Structured Data ──────────────────────────────── -->
+<script type="application/ld+json" set:html={jsonLd} />
+
+<!-- ── Favicon ──────────────────────────────────────────────── -->
+<FaviconLinks />

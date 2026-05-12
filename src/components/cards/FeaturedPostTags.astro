@@ -1,0 +1,26 @@
+---
+import { getLocalizedPath, slugifyTag } from '@/i18n/utils';
+
+interface Props {
+  tags?: string[];
+  lang?: string;
+}
+
+const { tags = [], lang = 'en' } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <div class="flex flex-wrap gap-2 pt-3">
+      {tags.slice(0, 3).map((tag: string) => (
+        <a
+          href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
+          class="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-sm transition-colors hover:bg-white/30 sm:px-4 sm:py-2 sm:text-sm"
+          aria-label={`View all posts tagged ${tag}`}
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
+  )
+}

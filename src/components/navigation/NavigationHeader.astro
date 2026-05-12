@@ -1,0 +1,32 @@
+---
+import { getLangFromUrl } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
+
+import NavigationHeaderLogo from '@/components/navigation/NavigationHeaderLogo.astro';
+import NavigationHeaderNavLinks from '@/components/navigation/NavigationHeaderNavLinks.astro';
+import NavigationHeaderUtilities from '@/components/navigation/NavigationHeaderUtilities.astro';
+import NavigationMobileMenu from '@/components/navigation/NavigationMobileMenu.astro';
+import NavigationSearchToggle from '@/components/navigation/NavigationSearchToggle.astro';
+
+const lang = getLangFromUrl(Astro.url) as LanguageKey;
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class="fixed top-0 z-50 w-full border-b border-slate-200/50 bg-white/50 backdrop-blur-xl dark:border-slate-700/50 dark:bg-slate-900/80"
+  aria-label="Main navigation"
+>
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" role="navigation">
+    <div class="flex h-16 items-center justify-between">
+      <NavigationHeaderLogo lang={lang} />
+      <div class="hidden items-center gap-5 md:flex">
+        <NavigationHeaderNavLinks lang={lang} currentPath={currentPath} variant="desktop" />
+      </div>
+      <div class="flex items-center">
+        <NavigationSearchToggle lang={lang} />
+        <NavigationHeaderUtilities />
+      </div>
+    </div>
+  </nav>
+</header>
+<NavigationMobileMenu />
