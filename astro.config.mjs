@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import { fileURLToPath } from 'node:url';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
@@ -57,6 +57,13 @@ export default defineConfig({
   prefetch: {
     defaultStrategy: 'viewport',
   },
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Plus Jakarta Sans',
+      cssVariable: '--font-plus-jakarta',
+    },
+  ],
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',

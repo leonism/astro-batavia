@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
 import SEO from '@/components/seo/SEO.astro';
 import ThemeInitializer from '@/components/common/ThemeInitializer.astro';
 import { GTM_ID, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, SITE_AUTHOR } from '@/consts';
@@ -128,4 +129,5 @@ try {
 />
 
 <ClientRouter />
+<Font cssVariable="--font-plus-jakarta" />
 <ThemeInitializer />
