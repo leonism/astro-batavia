@@ -9,6 +9,22 @@ import sitemapStyler from './src/integrations/sitemap-styler.mjs';
 import { SITE_URL } from './src/consts.ts';
 import partytown from '@astrojs/partytown';
 
+/** @type {import('vite').Plugin} */
+const devPartytownFix = {
+  name: 'dev-partytown-fix',
+  apply: 'serve',
+  enforce: 'pre',
+  configureServer(server) {
+    server.middlewares.use((req, _res, next) => {
+      const url = req.url;
+      if (url?.includes('~partytown') && !url.includes('.')) {
+        req.url = url + '.js';
+      }
+      next();
+    });
+  },
+};
+
 // Dev-only middleware: respond to /sitemap*.xml with a valid stub so requests
 // don't fall through to the [lang] dynamic router and produce 404 noise.
 /** @type {import('vite').Plugin} */
@@ -17,7 +33,8 @@ const devSitemapStub = {
   apply: 'serve',
   configureServer(server) {
     server.middlewares.use((req, res, next) => {
-      if (/\/sitemap.*\.xml($|\?)/.test(req.url ?? '')) {
+      const url = req.url ?? '';
+      if (/\/sitemap.*\.xml($|\?)/.test(url)) {
         res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
         res.end(
           '<?xml version="1.0" encoding="UTF-8"?>' +
@@ -58,25 +75,22 @@ export default defineConfig({
         },
       },
       filter: (page) => !page.includes('/api/'),
+      /** @param {any} item */
       serialize(item) {
         // Remove trailing slash for comparison if it exists
         const url = item.url.endsWith('/') ? item.url.slice(0, -1) : item.url;
         const baseUrl = SITE_URL;
 
         if (url === baseUrl || url === `${baseUrl}/es` || url === `${baseUrl}/ja`) {
-          // @ts-ignore
           item.changefreq = 'daily';
           item.priority = 1.0;
         } else if (url.includes('/blog/')) {
-          // @ts-ignore
           item.changefreq = 'weekly';
           item.priority = 0.8;
         } else if (url.includes('/tags/')) {
-          // @ts-ignore
           item.changefreq = 'weekly';
           item.priority = 0.6;
         } else {
-          // @ts-ignore
           item.changefreq = 'monthly';
           item.priority = 0.5;
         }
@@ -98,6 +112,7 @@ export default defineConfig({
     partytown({
       config: {
         forward: ['dataLayer.push'],
+        debug: false,
       },
     }),
   ],
@@ -119,6 +134,7 @@ export default defineConfig({
     plugins: [
       tailwindcss(),
       devSitemapStub,
+      devPartytownFix,
     ],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],

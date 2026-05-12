@@ -110,7 +110,7 @@ export const ui = {
       "Built with Astro's island architecture for exceptional performance. Zero JavaScript by default, hydrate only when needed.",
     'home.features.fast.fullDescription':
       "Built with Astro's island architecture for exceptional performance. Zero JavaScript by default, hydrate only when needed.",
-    'home.features.multilang.title': 'Multi-language Support',
+    'home.features.multilang.title': 'Multiple Language',
     'home.features.multilang.description':
       'Full internationalization support for English, Spanish, and Japanese. Seamless language switching and localized content.',
     'home.features.multilang.fullDescription':
