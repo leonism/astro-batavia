@@ -9,7 +9,7 @@ import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 import type { GetStaticPaths, MarkdownHeading, Page } from 'astro';
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const languages = ['es', 'ja'];
+  const languages = ['en', 'es', 'ja'];
   const allPaths = [];
 
   // 1. Pagination Paths
@@ -24,8 +24,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 
   // 2. Individual Post Paths
   const allPosts = await BlogService.getAllPosts();
-  const nonEnglishPosts = allPosts.filter((post) => !post.id.startsWith('en/'));
-  const postPaths = nonEnglishPosts.map((post) => {
+  const postPaths = allPosts.map((post) => {
     const [lang, ...slugParts] = post.id.replace(/\.mdx?$/, '').split('/');
     const page = slugParts[0] === 'blog' ? slugParts.slice(1).join('/') : slugParts.join('/');
 
