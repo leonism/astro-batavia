@@ -26,10 +26,10 @@ export class BreadCrumbService {
 
     const items: BreadCrumbItem[] = [];
 
-    // 1. Always add Home as the first item - points to the absolute root /
+    // 1. Always add Home as the first item - points to the localized root
     items.push({
       name: t('nav.home'),
-      url: '/',
+      url: getLocalizedPath('/', lang),
       isLast: false,
     });
 

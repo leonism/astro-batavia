@@ -11,7 +11,7 @@ const { tags, lang } = Astro.props;
 
 {
   tags && tags.length > 0 && (
-    <div class="mt-6" role="group" aria-label="Article tags">
+    <div role="group" aria-label="Article tags">
       <div class="flex flex-wrap gap-2">
         {tags.map((tag: string) => (
           <a

@@ -20,7 +20,7 @@ export class DateService {
 
     return new Intl.DateTimeFormat(locales[lang] || locales.en, {
       year: 'numeric',
-      month: 'long',
+      month: 'short',
       day: 'numeric',
     }).format(date);
   }
