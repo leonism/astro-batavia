@@ -79,6 +79,17 @@ export default defineConfig({
   output: 'static',
   site: SITE_URL,
   trailingSlash: 'ignore',
+  redirects: {
+    '/search': '/en/search',
+    '/blog': '/en/blog',
+    '/services': '/en/services',
+    '/about': '/en/about',
+    '/contact': '/en/contact',
+    '/terms': '/en/terms',
+    '/privacy': '/en/privacy',
+    '/cookies': '/en/cookies',
+    '/en': '/',
+  },
   prefetch: {
     defaultStrategy: 'viewport',
   },

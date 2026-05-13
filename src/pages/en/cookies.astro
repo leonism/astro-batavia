@@ -170,7 +170,7 @@ const lang = LOCALES.en;
           </p>
           <a
             href={getLocalizedPath('/contact', lang)}
-            class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+            class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium !text-white !no-underline transition-colors hover:bg-blue-700 !dark:text-white"
           >
             Contact Our Support Team
             <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,6 +212,6 @@ const lang = LOCALES.en;
   }
 
   .prose a {
-    @apply text-white transition-colors hover:text-white dark:text-blue-400 dark:hover:text-blue-300;
+    @apply text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
   }
 </style>

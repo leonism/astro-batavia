@@ -112,8 +112,10 @@ if (author) {
           {/* Article header */}
           <header class="mb-8">
             <BlogPostHero {heroImage} {heroImageAlt} {title} />
-            <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {lang} {t} />
-            <BlogPostTags tags={tags || []} {lang} />
+            <div class="space-y-6">
+              <BlogPostTags tags={tags || []} {lang} />
+              <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {lang} {t} />
+            </div>
           </header>
 
           {/* Mobile TOC accordion — no border, accordion style, lg:hidden */}
