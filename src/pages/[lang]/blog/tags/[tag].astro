@@ -9,8 +9,7 @@ import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
 
 export async function getStaticPaths() {
   const allPaths = await BlogService.getStaticTagPaths();
-  // Skip 'en' as it is handled by the static /en/blog/tags/[tag].astro route
-  return allPaths.filter(path => path.params.lang !== 'en');
+  return allPaths;
 }
 
 const { tag } = Astro.props;

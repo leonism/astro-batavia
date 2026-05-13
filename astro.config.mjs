@@ -134,7 +134,6 @@ export default defineConfig({
         item.lastmod = new Date().toISOString().split('T')[0];
         return item;
       },
-      filenameBase: 'sitemap-base',
       entryLimit: 10000,
     }),
     sitemapHandler(),

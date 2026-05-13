@@ -17,7 +17,7 @@ export async function GET(context: APIContext) {
   posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   const site = context.site || new URL('https://astro-batavia.pages.dev');
-  const rssUrl = new URL('rss.xml', site).href;
+  const rssUrl = new URL('feed.rss', site).href;
 
   return rss({
     stylesheet: '/rss.xsl',
