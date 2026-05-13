@@ -156,6 +156,7 @@ export default defineConfig({
     locales: ['en', 'es', 'ja'],
     routing: {
       prefixDefaultLocale: true,
+      strategy: 'manual',
     },
   },
   markdown: {
