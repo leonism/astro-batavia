@@ -1,5 +1,6 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import { fileURLToPath } from 'node:url';
+import fs from 'node:fs/promises';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -32,17 +33,41 @@ const devSitemapStub = {
   name: 'dev-sitemap-stub',
   apply: 'serve',
   configureServer(server) {
-    server.middlewares.use((req, res, next) => {
+    server.middlewares.use(async (req, res, next) => {
       const url = req.url ?? '';
       if (/\/sitemap.*\.xml($|\?)/.test(url)) {
-        res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
-        res.end(
-          '<?xml version="1.0" encoding="UTF-8"?>' +
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-            '<!-- Sitemap is generated at build time -->' +
-            '</urlset>',
-        );
-        return;
+        try {
+          const sitemapPath = fileURLToPath(new URL('./dist/sitemap.xml', import.meta.url));
+          let content = await fs.readFile(sitemapPath, 'utf-8');
+
+          // Dynamically replace production URL with local URL for development
+          const host = req.headers.host || 'localhost:5000';
+          const protocol = req.headers['x-forwarded-proto'] || 'http';
+          const localOrigin = `${protocol}://${host}`;
+          
+          content = content.replaceAll(SITE_URL, localOrigin);
+
+          res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
+          res.end(content);
+          return;
+        } catch (e) {
+          // Fallback if no build exists
+          const host = req.headers.host || 'localhost:5000';
+          res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
+          res.end(
+            '<?xml version="1.0" encoding="UTF-8"?>\n' +
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+              '  <!-- Real sitemap is generated during build time -->\n' +
+              '  <url>\n' +
+              '    <loc>http://' + host + '/</loc>\n' +
+              '    <lastmod>' + new Date().toISOString().split('T')[0] + '</lastmod>\n' +
+              '    <changefreq>daily</changefreq>\n' +
+              '    <priority>1.0</priority>\n' +
+              '  </url>\n' +
+              '</urlset>',
+          );
+          return;
+        }
       }
       next();
     });
@@ -109,7 +134,7 @@ export default defineConfig({
         item.lastmod = new Date().toISOString().split('T')[0];
         return item;
       },
-      filenameBase: 'sitemap',
+      filenameBase: 'sitemap-base',
       entryLimit: 10000,
     }),
     sitemapHandler(),
