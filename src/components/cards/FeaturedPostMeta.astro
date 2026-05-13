@@ -28,9 +28,7 @@ const { post, lang } = Astro.props;
       {post.data.author}
     </span>
   </div>
-
   <span class="h-1 w-1 rounded-full bg-blue-200" aria-hidden="true"></span>
-
   <time
     datetime={new Date(post.data.pubDate).toISOString()}
     class="flex items-center gap-1.5 font-light text-blue-200/80"
