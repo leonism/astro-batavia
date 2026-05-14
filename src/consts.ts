@@ -29,7 +29,7 @@ export type LocaleKey = keyof typeof LOCALES;
 // Author Defaults
 export const SITE_AUTHOR = {
   name: `${SITE_TITLE} Team`,
-  image: '/images/og-default.png', // Local fallback
+  image: '/images/og-default.svg', // Local fallback
   url: `${SITE_URL}/about`,
   email: `${SITE_EMAIL}`,
 };
@@ -72,4 +72,5 @@ export const SOCIAL_LINKS = {
  */
 // System Logic
 export const PAGINATION_POSTS_PER_PAGE = 7;
+export const PAGINATION_TAGS_PER_PAGE = 5;
 export const SEARCH_MAX_SUGGESTIONS = 6;
