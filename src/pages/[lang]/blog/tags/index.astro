@@ -1,0 +1,73 @@
+---
+import { BlogService } from '@/services/BlogService';
+import Layout from '@/layouts/Layout.astro';
+import { useTranslations, getLocalizedPath, slugifyTag } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'ja' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as LanguageKey);
+
+// Get popular tags with counts for this language
+const tagsWithCounts = await BlogService.getPopularTags(lang as string, 100);
+
+// Sort tags alphabetically for the main list
+const sortedTags = [...tagsWithCounts].sort((a, b) => a.tag.localeCompare(b.tag));
+---
+
+<Layout
+  title={`${t('nav.tags')} | ${t('nav.blog')}`}
+  description={lang === 'es'
+    ? 'Explora todos los temas de nuestro blog por etiquetas.'
+    : lang === 'ja'
+      ? 'タグでブログのすべてのトピックを探索します。'
+      : 'Explore all topics in our blog by tags.'}
+  lang={lang}
+>
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mb-12 text-center">
+      <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl">
+        {t('nav.tags')}
+      </h1>
+      <p class="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-400 sm:text-xl">
+        {lang === 'es'
+          ? 'Encuentra artículos por tema y categoría.'
+          : lang === 'ja'
+            ? 'トピックやカテゴリー別に記事を見つける。'
+            : 'Find articles by topic and category.'}
+      </p>
+    </div>
+
+    {tagsWithCounts.length > 0 ? (
+      <div class="flex flex-wrap justify-center gap-4">
+        {sortedTags.map(({ tag, count }) => (
+          <a
+            href={getLocalizedPath(`/blog/tags/${slugifyTag(tag)}`, lang)}
+            class="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-slate-200 bg-white px-6 py-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-800"
+          >
+            <span class="text-lg font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+              #{tag}
+            </span>
+            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-sm font-semibold text-slate-600 transition-colors group-hover:bg-blue-100 group-hover:text-blue-600 dark:bg-slate-800 dark:text-slate-400 dark:group-hover:bg-blue-900/30 dark:group-hover:text-blue-400">
+              {count}
+            </span>
+            <div class="absolute inset-x-0 bottom-0 h-1 scale-x-0 bg-linear-to-r from-blue-600 to-indigo-600 transition-transform duration-300 group-hover:scale-x-100"></div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="py-20 text-center">
+        <p class="text-xl text-slate-500">
+          {lang === 'es' ? 'No se encontraron etiquetas.' : lang === 'ja' ? 'タグが見つかりません。' : 'No tags found.'}
+        </p>
+      </div>
+    )}
+  </div>
+</Layout>

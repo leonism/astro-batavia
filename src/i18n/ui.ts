@@ -138,6 +138,7 @@ export const ui = {
     'home.features.community.title': 'Community Support',
     'home.features.community.description':
       'Join an active community of developers. Get help, share ideas, and contribute to the open-source ecosystem.',
+    'home.features.learnMore': 'Learn more',
     'home.latestPosts.title': 'Latest Posts',
     'home.latestPosts.subtitle':
       'Discover insights, tutorials, and stories from our community of developers and creators',
@@ -272,6 +273,7 @@ export const ui = {
     'home.features.community.title': 'Soporte de Comunidad',
     'home.features.community.description':
       'Únete a una comunidad activa de desarrolladores. Obtén ayuda, comparte ideas y contribuye al ecosistema de código abierto.',
+    'home.features.learnMore': 'Leer más',
     'home.latestPosts.title': 'Últimos Artículos',
     'home.latestPosts.subtitle':
       'Descubre perspectivas, tutoriales e historias de nuestra comunidad de desarrolladores y creadores',
@@ -404,6 +406,7 @@ export const ui = {
     'home.features.community.title': 'コミュニティサポート',
     'home.features.community.description':
       '活発な開発者コミュニティに参加。ヘルプを得て、アイデアを共有し、オープンソースエコシステムに貢献。',
+    'home.features.learnMore': '詳細を見る',
     'home.latestPosts.title': '最新記事',
     'home.latestPosts.subtitle':
       '開発者とクリエイターのコミュニティからの洞察、チュートリアル、ストーリーを発見',

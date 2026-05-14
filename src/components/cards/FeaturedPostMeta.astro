@@ -11,10 +11,10 @@ interface Props {
 const { post, lang } = Astro.props;
 ---
 
-<div class="flex items-center gap-3 text-sm text-blue-200 sm:gap-2">
-  <div class="group-author flex items-center gap-2 font-medium">
+<div class="flex items-center gap-4 text-sm text-blue-100/90 sm:gap-3">
+  <div class="group-author flex items-center gap-2.5 font-medium">
     <div
-      class="avatar-gradient relative h-10 w-10 overflow-hidden rounded-full border-2 border-transparent transition-colors duration-300 group-hover/author:border-blue-400"
+      class="relative h-9 w-9 overflow-hidden rounded-full border-2 border-white/20 bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-0.5 transition-all duration-300 group-hover/author:border-blue-400 group-hover/author:scale-105"
     >
       <Picture
         src={post.data.authorImage || '/images/placeholder-hero.svg'}

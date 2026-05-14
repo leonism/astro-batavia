@@ -119,8 +119,13 @@ export class BlogService {
   ): Promise<CollectionEntry<'blog'>[]> {
     const allPosts = await BlogService.getPostsByLocale(lang);
     const { slugifyTag } = await import('@/i18n/utils');
+    const normalizedTag = tagSlugOrName.normalize('NFC');
+    
     return allPosts.filter((post) =>
-      (post.data.tags || []).some((t) => slugifyTag(t) === tagSlugOrName || t === tagSlugOrName),
+      (post.data.tags || []).some((t) => {
+        const sTag = slugifyTag(t);
+        return sTag === normalizedTag || t === normalizedTag || t.normalize('NFC') === normalizedTag;
+      }),
     );
   }
 

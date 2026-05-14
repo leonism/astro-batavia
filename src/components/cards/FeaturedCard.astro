@@ -1,41 +1,74 @@
 ---
+import { useTranslations } from '@/i18n/utils';
+import type { LanguageKey } from '@/i18n/types';
+
 interface Props {
   title: string;
   description: string;
   link?: string;
   iconGradientFrom: string;
   iconGradientTo: string;
+  lang?: LanguageKey;
 }
 
-const { title, description, link, iconGradientFrom, iconGradientTo } = Astro.props;
+const {
+  title,
+  description,
+  link,
+  iconGradientFrom,
+  iconGradientTo,
+  lang = 'en',
+} = Astro.props;
 
+const t = useTranslations(lang);
 const CardElement = link ? 'a' : 'div';
+
+// Style groups for better readability
+const cardClasses = [
+  'group relative block rounded-3xl bg-white p-8 shadow-lg',
+  'transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl',
+  'dark:bg-slate-900',
+];
+
+const iconClasses = [
+  'absolute top-6 right-6 w-12 h-12 rounded-2xl mb-6',
+  'flex items-center justify-center',
+  'bg-linear-to-br',
+  iconGradientFrom,
+  iconGradientTo,
+  'group-hover:scale-110 transition-transform duration-300',
+];
+
+const titleClasses = [
+  'mb-4 text-2xl font-bold text-slate-900 transition-colors',
+  'group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400',
+];
+
+const descriptionClasses = 'leading-relaxed text-slate-600 dark:text-slate-400';
+
+const learnMoreClasses = [
+  'mt-6 flex items-center font-medium text-blue-600',
+  'transition-transform group-hover:translate-x-2 dark:text-blue-400',
+];
 ---
 
-<CardElement
-  href={link}
-  class="group relative block rounded-3xl bg-white p-8 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl dark:bg-slate-900"
->
-  <div
-    class={`absolute top-6 right-6 w-12 h-12 bg-linear-to-br ${iconGradientFrom} ${iconGradientTo} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-    aria-hidden="true"
-  >
+<CardElement href={link} class:list={cardClasses}>
+  <div class:list={iconClasses} aria-hidden="true">
     <slot name="icon" />
   </div>
 
-  <h3
-    class="mb-4 text-2xl font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400"
-  >
+  <h3 class:list={titleClasses}>
     {title}
   </h3>
-  <p class="leading-relaxed text-slate-600 dark:text-slate-400">
+
+  <p class={descriptionClasses}>
     {description}
   </p>
 
   {
     link && (
-      <div class="mt-6 flex items-center font-medium text-blue-600 transition-transform group-hover:translate-x-2 dark:text-blue-400">
-        <span class="text-sm">Learn more</span>
+      <div class:list={learnMoreClasses}>
+        <span class="text-sm">{t('home.features.learnMore')}</span>
         <svg
           class="ml-2 h-4 w-4"
           fill="none"
