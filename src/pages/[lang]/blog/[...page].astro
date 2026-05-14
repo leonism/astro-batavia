@@ -80,7 +80,7 @@ const pagePosts = page?.data || [];
     </BlogPost>
   ) : (
     <Layout
-      title={`${t('nav.blog')} ${page && !isFirstPage ? `| Page ${page.currentPage}` : ''}`}
+      title={`${t('nav.blog')} ${page && !isFirstPage ? `| ${t('pagination.page')} ${page.currentPage}` : ''}`}
       description={
         lang === 'es'
           ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
