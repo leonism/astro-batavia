@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl } from '@/i18n/utils';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 import { BreadCrumbService } from '@/services/BreadCrumbService';
 import type { LanguageKey } from '@/i18n/types';
 
@@ -9,12 +9,17 @@ interface Props {
 
 const { title: pageTitle } = Astro.props;
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
+const t = useTranslations(lang);
 const breadcrumbs = BreadCrumbService.getBreadCrumbs(Astro.url.pathname, lang);
 
 // Use the page title for the last breadcrumb if it's more descriptive than the slug
+// Skip override if the last item is a pagination segment (e.g., "Page 2")
 if (pageTitle && breadcrumbs.length > 0) {
   const lastItem = breadcrumbs[breadcrumbs.length - 1];
-  if (breadcrumbs.length > 1) {
+  const pageLabel = t('pagination.page') || 'Page';
+  const isPagination = lastItem.name.includes(pageLabel) || /^\d+$/.test(lastItem.name);
+  
+  if (breadcrumbs.length > 1 && !isPagination) {
     const cleanTitle = pageTitle.split(' | ')[0].trim();
     lastItem.name = cleanTitle;
   }

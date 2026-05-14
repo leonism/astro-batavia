@@ -42,16 +42,22 @@ export class BreadCrumbService {
       const translationKey = `nav.${segment}` as any;
       let name = segment;
 
-      // Try to translate using the nav key
-      const translated = t(translationKey);
-      if (translated !== translationKey) {
-        name = translated;
+      // Handle pagination segments (e.g., /2, /3)
+      if (/^\d+$/.test(segment)) {
+        const pageLabel = t('pagination.page') || 'Page';
+        name = lang === 'ja' ? `${segment} ${pageLabel}` : `${pageLabel} ${segment}`;
       } else {
-        // Fallback: format slug (e.g., "my-post" -> "My Post")
-        name = segment
-          .split('-')
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
+        // Try to translate using the nav key
+        const translated = t(translationKey);
+        if (translated !== translationKey) {
+          name = translated;
+        } else {
+          // Fallback: format slug (e.g., "my-post" -> "My Post")
+          name = segment
+            .split('-')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+        }
       }
 
       const url = getLocalizedPath(currentPath, lang);

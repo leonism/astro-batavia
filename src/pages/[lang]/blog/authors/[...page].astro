@@ -94,7 +94,7 @@ if (type === 'detail' && authorName) {
 
 <Layout
   title={type === 'index' 
-    ? `${t('blog.authors')} ${page.currentPage > 1 ? `| Page ${page.currentPage}` : ''} | ${t('nav.blog')}`
+    ? `${t('blog.authors')} ${page.currentPage > 1 ? `| ${t('pagination.page')} ${page.currentPage}` : ''} | ${t('nav.blog')}`
     : `${authorName} | ${t('blog.author')} | ${t('nav.blog')}`
   }
   description={type === 'index'
