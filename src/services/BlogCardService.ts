@@ -49,6 +49,7 @@ export interface BlogCardViewModel {
     content: string;
     title: string;
     excerpt: string;
+    metadataContainer: string;
   };
   imageLoading: 'eager' | 'lazy';
   imageDecoding: 'auto' | 'async';
@@ -139,8 +140,8 @@ export class BlogCardService {
           : 'hover:shadow-lg hover:scale-[1.02] min-h-[420px] max-h-[480px]',
       ].join(' '),
       imageContainer: [
-        'overflow-hidden',
-        isFeatured ? 'md:w-1/2 md:aspect-auto h-96 md:h-full' : 'h-52',
+        'overflow-hidden block',
+        isFeatured ? 'md:w-1/2 md:aspect-auto h-96 md:h-full' : 'aspect-video w-full',
       ].join(' '),
       image: [
         'w-full h-full object-cover group-hover:scale-105 transition-transform duration-300',
@@ -154,9 +155,10 @@ export class BlogCardService {
         isFeatured ? 'text-2xl md:text-3xl' : 'text-xl',
       ].join(' '),
       excerpt: [
-        'text-gray-600 dark:text-gray-300 leading-relaxed mb-4',
-        isFeatured ? 'text-base line-clamp-4' : 'text-sm line-clamp-3',
+        'text-gray-600 dark:text-gray-300 leading-relaxed',
+        isFeatured ? 'text-base line-clamp-4 mb-4' : 'text-sm line-clamp-3 mb-2',
       ].join(' '),
+      metadataContainer: ['mt-auto', isFeatured ? 'pt-4' : 'pt-2'].join(' '),
     };
   }
 }
