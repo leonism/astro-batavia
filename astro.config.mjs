@@ -50,7 +50,7 @@ const devSitemapStub = {
           res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
           res.end(content);
           return;
-        } catch (e) {
+        } catch {
           // Fallback if no build exists
           const host = req.headers.host || 'localhost:5000';
           res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
@@ -178,7 +178,7 @@ export default defineConfig({
     remarkPlugins: [remarkReadingTime],
   },
   vite: {
-    plugins: [tailwindcss(), devSitemapStub],
+    plugins: [tailwindcss(), devPartytownFix, devSitemapStub],
     optimizeDeps: {
       include: ['@astrojs/markdown-remark'],
     },
