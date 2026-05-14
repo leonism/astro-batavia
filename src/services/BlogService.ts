@@ -163,6 +163,71 @@ export class BlogService {
   }
 
   /**
+   * Retrieves all unique authors for a specific language based on blog post data.
+   *
+   * @param {string} lang - The language code.
+   * @returns {Promise<string[]>} A promise that resolves to an array of unique author names.
+   */
+  static async getUniqueAuthors(lang: string): Promise<string[]> {
+    const allPosts = await BlogService.getPostsByLocale(lang);
+    const authors = new Set<string>();
+    allPosts.forEach((post) => {
+      if (post.data.author) {
+        authors.add(post.data.author.trim().normalize('NFC'));
+      }
+    });
+    return Array.from(authors).sort();
+  }
+
+  /**
+   * Retrieves all posts for a specific language filtered by an author.
+   *
+   * @param {string} lang - The language code.
+   * @param {string} authorSlugOrName - The author to filter by (slugified or raw).
+   * @returns {Promise<CollectionEntry<'blog'>[]>} A promise that resolves to an array of filtered blog posts.
+   */
+  static async getPostsByAuthor(
+    lang: string,
+    authorSlugOrName: string,
+  ): Promise<CollectionEntry<'blog'>[]> {
+    const allPosts = await BlogService.getPostsByLocale(lang);
+    const { slugifyTag } = await import('@/i18n/utils');
+    const normalizedAuthor = authorSlugOrName.trim().normalize('NFC').toLowerCase();
+    
+    return allPosts.filter((post) => {
+      if (!post.data.author) return false;
+      const normalizedA = post.data.author.normalize('NFC');
+      const sAuthor = slugifyTag(normalizedA).toLowerCase();
+      return (
+        sAuthor === normalizedAuthor || 
+        normalizedA.toLowerCase() === normalizedAuthor
+      );
+    });
+  }
+
+  /**
+   * Retrieves details for a specific author from the 'authors' collection.
+   *
+   * @param {string} authorName - The raw name of the author.
+   * @returns {Promise<CollectionEntry<'authors'> | null>} The author entry or null if not found.
+   */
+  static async getAuthorDetails(authorName: string): Promise<CollectionEntry<'authors'> | null> {
+    const authors = await getCollection('authors');
+    const normalizedName = authorName.trim().normalize('NFC').toLowerCase();
+    
+    // First try direct name match
+    let author = authors.find(a => a.data.name.trim().normalize('NFC').toLowerCase() === normalizedName);
+    
+    // If not found, try slug match
+    if (!author) {
+      const { slugifyTag } = await import('@/i18n/utils');
+      author = authors.find(a => slugifyTag(a.data.name).toLowerCase() === normalizedName || a.id.toLowerCase() === normalizedName);
+    }
+    
+    return author || null;
+  }
+
+  /**
    * Generates static paths for tag pages.
    *
    * @returns {Promise<Array<{ params: { lang: string; tag: string }, props: { tag: string } }>>}

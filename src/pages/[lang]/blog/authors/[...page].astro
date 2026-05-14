@@ -1,0 +1,191 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import BlogCard from '@/components/blog/BlogCard.astro';
+import AuthorCard from '@/components/author/AuthorCard.astro';
+import Pagination from '@/components/common/Pagination.astro';
+import { useTranslations, getLocalizedPath, slugifyTag, isValidLanguage } from '@/i18n/utils';
+import { BlogService } from '@/services/BlogService';
+import { LOCALES, PAGINATION_POSTS_PER_PAGE, PAGINATION_AUTHORS_PER_PAGE } from '@/consts';
+import type { GetStaticPaths, Page } from 'astro';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const languages = Object.keys(LOCALES);
+  const allPaths = [];
+
+  for (const lang of languages) {
+    const locale = lang as any;
+    const posts = await BlogService.getPostsByLocale(locale);
+    
+    // Group posts by author
+    const authorsMap = new Map<string, number>();
+    posts.forEach(post => {
+      if (post.data.author) {
+        const name = post.data.author.trim().normalize('NFC');
+        authorsMap.set(name, (authorsMap.get(name) || 0) + 1);
+      }
+    });
+
+    const authorList = Array.from(authorsMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+
+    // 1. Author Index Paths
+    const indexPaths = paginate(authorList, {
+      params: { lang },
+      pageSize: PAGINATION_AUTHORS_PER_PAGE,
+    });
+
+    allPaths.push(...indexPaths.map(p => {
+      const pageNum = p.params.page;
+      return {
+        ...p,
+        params: { ...p.params, page: pageNum === "1" ? undefined : pageNum },
+        props: { ...p.props, type: 'index' }
+      };
+    }));
+
+    // 2. Author Detail Paths (Paginated posts per author)
+    for (const authorName of Array.from(authorsMap.keys())) {
+      const authorSlug = slugifyTag(authorName);
+      const authorPosts = posts.filter(p => p.data.author === authorName);
+      
+      const detailPaths = paginate(authorPosts, {
+        params: { lang },
+        pageSize: PAGINATION_POSTS_PER_PAGE,
+      });
+
+      allPaths.push(...detailPaths.map(p => {
+        const pageNum = p.params.page;
+        return {
+          ...p,
+          params: { ...p.params, page: pageNum === "1" ? authorSlug : `${authorSlug}/${pageNum}` },
+          props: { ...p.props, type: 'detail', authorName }
+        };
+      }));
+    }
+  }
+
+  return allPaths;
+}) satisfies GetStaticPaths;
+
+type Props = {
+  page: Page<any>;
+  type: 'index' | 'detail';
+  authorName?: string;
+};
+
+const { page, type, authorName } = Astro.props;
+const { lang } = Astro.params;
+
+if (!lang || !isValidLanguage(lang)) {
+  return Astro.redirect('/404');
+}
+
+const locale = lang as any;
+const t = useTranslations(locale);
+
+// Resolve author details if in detail view
+let authorDetails: CollectionEntry<'authors'> | null = null;
+if (type === 'detail' && authorName) {
+  authorDetails = await BlogService.getAuthorDetails(authorName);
+}
+---
+
+<Layout
+  title={type === 'index' 
+    ? `${t('blog.authors')} ${page.currentPage > 1 ? `| Page ${page.currentPage}` : ''} | ${t('nav.blog')}`
+    : `${authorName} | ${t('blog.author')} | ${t('nav.blog')}`
+  }
+  description={type === 'index'
+    ? (locale === 'es' ? 'Conoce a los autores detrás de nuestros artículos.' : locale === 'ja' ? '記事を執筆している著者をご紹介します。' : 'Meet the authors behind our articles.')
+    : authorDetails?.data.bio || (locale === 'es' ? `Artículos escritos por ${authorName}` : locale === 'ja' ? `${authorName}が執筆した記事` : `Articles written by ${authorName}`)
+  }
+  lang={locale}
+>
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    {type === 'index' ? (
+      <>
+        {/* Header */}
+        <div class="mb-16 text-center">
+          <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl">
+            {t('blog.authors')}
+          </h1>
+          <p class="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-400 sm:text-xl">
+            {locale === 'es'
+              ? 'Nuestra comunidad de expertos y creadores.'
+              : locale === 'ja'
+                ? '私たちのエキスパートとクリエイターのコミュニティ。'
+                : 'Our community of experts and creators.'}
+          </p>
+        </div>
+
+        {/* Authors Grid */}
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {page.data.map((item: any) => (
+            <div class="post-item animate-fade-in">
+              <AuthorCard authorName={item.name} lang={locale} postCount={item.count} />
+            </div>
+          ))}
+        </div>
+      </>
+    ) : (
+      <>
+        {/* Author Header */}
+        <div class="mb-16 text-center">
+          <div class="mb-6 flex justify-center">
+            {authorDetails?.data.avatar ? (
+              <img 
+                src={authorDetails.data.avatar} 
+                alt={authorName}
+                class="h-32 w-32 rounded-full object-cover ring-4 ring-blue-500/20"
+              />
+            ) : (
+              <div class="flex h-32 w-32 items-center justify-center rounded-full bg-blue-100 text-5xl font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                {authorName?.charAt(0)}
+              </div>
+            )}
+          </div>
+          <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl">
+            {authorName}
+          </h1>
+          {authorDetails?.data.role && (
+            <p class="mb-4 text-xl font-medium text-blue-600 dark:text-blue-400">
+              {authorDetails.data.role}
+            </p>
+          )}
+          {authorDetails?.data.bio && (
+            <p class="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              {authorDetails.data.bio}
+            </p>
+          )}
+          
+          {/* Social Links */}
+          {authorDetails?.data.social && (
+            <div class="mt-6 flex justify-center gap-4">
+              {Object.entries(authorDetails.data.social).map(([platform, url]) => (
+                url && (
+                  <a href={url} class="text-slate-400 hover:text-blue-500 dark:hover:text-blue-400" target="_blank" rel="noopener noreferrer">
+                    <span class="capitalize">{platform}</span>
+                  </a>
+                )
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Posts Grid */}
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {page.data.map((post, index) => (
+            <div class="post-item animate-fade-in">
+              <BlogCard post={post} lang={locale} loading={index < 3 ? 'eager' : 'lazy'} />
+            </div>
+          ))}
+        </div>
+      </>
+    )}
+
+    {/* Pagination */}
+    {page.lastPage > 1 && <Pagination page={page} lang={locale} />}
+  </div>
+</Layout>
