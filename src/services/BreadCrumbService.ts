@@ -54,9 +54,7 @@ export class BreadCrumbService {
           .join(' ');
       }
 
-      // Avoid 404 for /blog/tags (it should not be clickable since it doesn't have an index page)
-      const isTagsPath = segment === 'tags';
-      const url = isTagsPath ? '' : getLocalizedPath(currentPath, lang);
+      const url = getLocalizedPath(currentPath, lang);
 
       items.push({
         name,
