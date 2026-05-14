@@ -50,6 +50,9 @@ bun.lockb
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+# LLM Agents
+agents.md
 GEMINI.md
 
 # System

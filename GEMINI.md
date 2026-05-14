@@ -31,6 +31,20 @@ The project uses `npm` for dependency management and script execution.
 | `npm run format`     | Formats code using Prettier.                                              |
 | `npm test`           | Runs unit tests using Vitest.                                             |
 
+## Recent Updates
+
+### UI & Layout Consistency
+- **Standardized Aspect Ratios**: Blog cards now use a consistent `aspect-video` for hero images, ensuring perfect grid alignment.
+- **Adaptive Metadata**: Author and timestamp sections in cards utilize `truncate` and `flex-wrap` to handle long names gracefully on all viewports.
+- **Navigation Enhancements**: `BlogPrevNextNavigation` features full-height hero images and double-chevron icons (`chevrons-left`, `chevrons-right`) for better directional clarity.
+- **Back to Top**: Updated to use `chevrons-up` icon for consistency across the site.
+
+### Service Layer Refinements
+- **BlogCardService**: Centralized management of metadata spacing via the `metadataContainer` class, reducing vertical gaps in standard grids while maintaining featured post layouts.
+
+### Build & Config
+- **Analytics Development**: Added `devPartytownFix` to `astro.config.mjs` to resolve local development issues with Partytown and analytics scripts.
+
 ## Development Conventions
 
 ### File Structure
@@ -45,6 +59,12 @@ The project uses `npm` for dependency management and script execution.
   - `api/`: API endpoints.
 - **`src/styles/`**: Global styles and Tailwind configuration.
 - **`public/admin/`**: Decap CMS configuration (`config.yml`).
+
+### Component Design Patterns
+
+- **Standardized Proportions**: Use `aspect-video` for image containers in grid-based cards to ensure vertical alignment.
+- **Metadata Robustness**: Always use `min-w-0` and `truncate` on text elements (like author names) within flex containers to prevent layout overflows.
+- **Iconography**: Prefer double chevrons (`chevrons-up`, `chevrons-right`, etc.) for primary navigation actions to provide stronger visual cues.
 
 ### Internationalization (i18n)
 

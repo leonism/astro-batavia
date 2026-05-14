@@ -26,18 +26,20 @@ const t = useTranslations(lang);
           <a
             href={getPostUrl(previousPostData.id, lang)}
             title={`${t('blog.previousArticle')}: ${previousPostData.data.title}`}
-            class="group flex flex-row items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
+            class="group flex flex-row items-stretch overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
             data-astro-prefetch
           >
             {previousPostData.data.heroImage && (
-              <img
-                src={previousPostData.data.heroImage}
-                loading="lazy"
-                alt={previousPostData.data.heroImageAlt || ''}
-                class="h-20 w-20 shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
-              />
+              <div class="relative w-24 shrink-0 overflow-hidden md:w-32">
+                <img
+                  src={previousPostData.data.heroImage}
+                  loading="lazy"
+                  alt={previousPostData.data.heroImageAlt || ''}
+                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
             )}
-            <div class="flex flex-col">
+            <div class="flex flex-col justify-center p-4">
               <div class="mb-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
                 <svg
                   class="mr-2 h-4 w-4 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400"
@@ -49,7 +51,7 @@ const t = useTranslations(lang);
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M15 19l-7-7 7-7"
+                    d="m11 17-5-5 5-5m7 10-5-5 5-5"
                   />
                 </svg>
                 <span class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400">
@@ -67,13 +69,16 @@ const t = useTranslations(lang);
           <a
             href={getPostUrl(nextPostData.id, lang)}
             title={`${t('blog.nextArticle')}: ${nextPostData.data.title}`}
-            class="group flex flex-row items-center justify-end gap-4 rounded-lg border border-gray-200 bg-white p-4 text-right transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
+            class="group flex flex-row items-stretch justify-between overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
             data-astro-prefetch
           >
-            <div class="flex flex-col items-end">
-              <div class="mb-2 flex items-center text-sm text-gray-500 dark:text-gray-400 md:flex-row-reverse">
+            <div class="flex flex-col justify-center p-4 text-right">
+              <div class="mb-2 flex items-center justify-end text-sm text-gray-500 dark:text-gray-400">
+                <span class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                  {t('blog.nextArticle')}
+                </span>
                 <svg
-                  class="ml-2 h-4 w-4 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400 md:ml-0 md:mr-2"
+                  class="ml-2 h-4 w-4 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -82,24 +87,23 @@ const t = useTranslations(lang);
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M9 5l7 7-7 7"
+                    d="m13 17 5-5-5-5M6 17l5-5-5-5"
                   />
                 </svg>
-                <span class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400">
-                  {t('blog.nextArticle')}
-                </span>
               </div>
               <h3 class="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-400">
                 {nextPostData.data.title}
               </h3>
             </div>
             {nextPostData.data.heroImage && (
-              <img
-                src={nextPostData.data.heroImage}
-                loading="lazy"
-                alt={nextPostData.data.heroImageAlt || ''}
-                class="h-20 w-20 shrink-0 rounded-md object-cover transition-transform duration-300 group-hover:scale-105"
-              />
+              <div class="relative w-24 shrink-0 overflow-hidden md:w-32">
+                <img
+                  src={nextPostData.data.heroImage}
+                  loading="lazy"
+                  alt={nextPostData.data.heroImageAlt || ''}
+                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
             )}
           </a>
         )}
