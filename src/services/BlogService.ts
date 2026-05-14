@@ -1,5 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { slugifyTag } from '@/i18n/utils';
+import { LOCALES } from '@/consts';
+import type { LocaleKey } from '@/consts';
 
 /**
  * Service for handling blog post logic and data fetching.
@@ -91,8 +93,13 @@ export class BlogService {
   static async getUniqueTags(lang: string): Promise<string[]> {
     const allPosts = await BlogService.getPostsByLocale(lang);
     const tags = new Set<string>();
-    allPosts.forEach((post) => (post.data.tags || []).forEach((tag) => tags.add(tag)));
-    return Array.from(tags);
+    allPosts.forEach((post) => 
+      (post.data.tags || []).forEach((tag) => {
+        // Normalize and trim to prevent duplicates due to spacing or unicode variants
+        tags.add(tag.trim().normalize('NFC'));
+      })
+    );
+    return Array.from(tags).sort();
   }
 
   /**
@@ -119,12 +126,16 @@ export class BlogService {
   ): Promise<CollectionEntry<'blog'>[]> {
     const allPosts = await BlogService.getPostsByLocale(lang);
     const { slugifyTag } = await import('@/i18n/utils');
-    const normalizedTag = tagSlugOrName.normalize('NFC');
+    const normalizedTag = tagSlugOrName.trim().normalize('NFC').toLowerCase();
     
     return allPosts.filter((post) =>
       (post.data.tags || []).some((t) => {
-        const sTag = slugifyTag(t);
-        return sTag === normalizedTag || t === normalizedTag || t.normalize('NFC') === normalizedTag;
+        const normalizedT = t.normalize('NFC');
+        const sTag = slugifyTag(normalizedT).toLowerCase();
+        return (
+          sTag === normalizedTag || 
+          normalizedT.toLowerCase() === normalizedTag
+        );
       }),
     );
   }
@@ -160,7 +171,7 @@ export class BlogService {
     Array<{ params: { lang: string; tag: string }; props: { tag: string } }>
   > {
     const { slugifyTag } = await import('@/i18n/utils');
-    const languages = ['en', 'es', 'ja']; // Should ideally come from config
+    const languages = Object.keys(LOCALES);
     const paths = [];
     for (const lang of languages) {
       const uniqueTags = await BlogService.getUniqueTags(lang);
