@@ -1,10 +1,11 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import type { LanguageKey } from '@/i18n/types';
-import Picture from '@/components/ui/Picture.astro';
 import { BlogCardService } from '@/services/BlogCardService';
+import type { HTMLAttributes } from 'astro/types';
+import { Picture } from 'astro:assets';
 
-export interface Props {
+export interface Props extends HTMLAttributes<'article'> {
   post: CollectionEntry<'blog'>;
   lang: LanguageKey;
   showExcerpt?: boolean;
@@ -18,10 +19,15 @@ export interface Props {
   loading?: 'eager' | 'lazy';
 }
 
+const { class: className, ...rest } = Astro.props;
 const vm = BlogCardService.getViewModel(Astro.props);
 ---
 
-<article class={vm.cssClasses.article} aria-labelledby={`blog-post-title-${vm.id}`}>
+<article
+  class:list={[vm.cssClasses.article, className]}
+  aria-labelledby={`blog-post-title-${vm.id}`}
+  {...rest}
+>
   {
     vm.heroImage && (
       <div class={vm.cssClasses.imageContainer}>

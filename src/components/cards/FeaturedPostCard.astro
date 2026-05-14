@@ -5,13 +5,16 @@ import FeaturedPostOverlay from '@/components/cards/FeaturedPostOverlay.astro';
 import FeaturedPostContent from '@/components/cards/FeaturedPostContent.astro';
 import { getLangFromUrl, getPostUrl } from '@/i18n/utils';
 
-interface Props {
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'article'> {
   post: CollectionEntry<'blog'>;
   index: number;
 }
 
-const { post, index } = Astro.props;
+const { post, index, class: className, ...rest } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
+
 
 // Fix double /blog/ issue - use helper
 const postUrl = getPostUrl(post.id, lang);
@@ -19,9 +22,14 @@ const postUrl = getPostUrl(post.id, lang);
 
 <article
   id={`featured-post-${post.id}`}
-  class="group relative h-64 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 sm:h-80 md:h-[400px] lg:h-[600px]"
+  class:list={[
+    "group relative h-64 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 sm:h-80 md:h-[400px] lg:h-[600px]",
+    className
+  ]}
   aria-labelledby={`featured-post-title-${post.id}`}
+  {...rest}
 >
+
   <FeaturedPostImage heroImage={post.data.heroImage} index={index} />
   <FeaturedPostOverlay />
   <FeaturedPostContent post={post} index={index} lang={lang} />

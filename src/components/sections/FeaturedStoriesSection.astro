@@ -34,13 +34,17 @@ const t = useTranslations(lang);
     {
       latestPosts.length > 0 && (
         <div class="mb-12 grid grid-cols-1 gap-4 sm:mb-16 sm:grid-cols-1 sm:gap-6 md:grid-cols-2 md:gap-8">
-          {latestPosts.map((post, index) => {
-            return (
-              <div class={`post-item animate-fade-in ${index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}>
-                <FeaturedPostCard post={post} index={index} />
-              </div>
-            );
-          })}
+          {latestPosts.map((post, index) => (
+            <FeaturedPostCard 
+              post={post} 
+              index={index} 
+              class:list={[
+                "post-item animate-fade-in",
+                index === 0 ? "lg:col-span-2 lg:row-span-2" : ""
+              ]}
+            />
+          ))}
+
         </div>
       )
     }

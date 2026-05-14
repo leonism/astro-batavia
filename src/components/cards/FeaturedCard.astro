@@ -2,7 +2,9 @@
 import { useTranslations } from '@/i18n/utils';
 import type { LanguageKey } from '@/i18n/types';
 
-interface Props {
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
   title: string;
   description: string;
   link?: string;
@@ -18,9 +20,12 @@ const {
   iconGradientFrom,
   iconGradientTo,
   lang = 'en',
+  class: className,
+  ...rest
 } = Astro.props;
 
 const t = useTranslations(lang);
+
 const CardElement = link ? 'a' : 'div';
 
 // Style groups for better readability
@@ -52,7 +57,8 @@ const learnMoreClasses = [
 ];
 ---
 
-<CardElement href={link} class:list={cardClasses}>
+<CardElement href={link} class:list={[cardClasses, className]} {...rest}>
+
   <div class:list={iconClasses} aria-hidden="true">
     <slot name="icon" />
   </div>
