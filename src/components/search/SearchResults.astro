@@ -33,7 +33,9 @@ const { posts, lang, noResultsText, initialStatusText } = Astro.props;
   >
     {
       posts.map((post, index) => (
-        <div
+        <BlogCard
+          post={post}
+          lang={lang}
           class="search-result post-item animate-fade-in rounded-lg p-4 transition-colors duration-200 focus-within:ring-2 focus-within:ring-primary-500 hover:bg-gray-50 dark:hover:bg-gray-800"
           role="option"
           aria-selected="false"
@@ -45,9 +47,7 @@ const { posts, lang, noResultsText, initialStatusText } = Astro.props;
           data-date={post.data.pubDate.toISOString()}
           id={`result-${index}`}
           tabindex="-1"
-        >
-          <BlogCard post={post} lang={lang} />
-        </div>
+        />
       ))
     }
   </div>

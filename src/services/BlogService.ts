@@ -213,18 +213,15 @@ export class BlogService {
    */
   static async getAuthorDetails(authorName: string): Promise<CollectionEntry<'authors'> | null> {
     const authors = await getCollection('authors');
-    const normalizedName = authorName.trim().normalize('NFC').toLowerCase();
+    const { slugifyTag } = await import('@/i18n/utils');
+    const normalizedSlug = slugifyTag(authorName).toLowerCase();
     
-    // First try direct name match
-    let author = authors.find(a => a.data.name.trim().normalize('NFC').toLowerCase() === normalizedName);
-    
-    // If not found, try slug match
-    if (!author) {
-      const { slugifyTag } = await import('@/i18n/utils');
-      author = authors.find(a => slugifyTag(a.data.name).toLowerCase() === normalizedName || a.id.toLowerCase() === normalizedName);
-    }
-    
-    return author || null;
+    return authors.find(a => 
+      slugifyTag(a.data.name).toLowerCase() === normalizedSlug || 
+      a.id.toLowerCase() === normalizedSlug ||
+      a.data.name.trim().toLowerCase() === authorName.trim().toLowerCase()
+    ) || null;
+
   }
 
   /**

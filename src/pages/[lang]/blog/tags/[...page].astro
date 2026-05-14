@@ -155,9 +155,12 @@ if (!isIndex && tag) {
 
                   <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                     {sectionPosts.slice(0, 3).map((post, index) => (
-                      <div class="post-item animate-fade-in">
-                        <BlogCard post={post} lang={locale} loading={index < 3 ? 'eager' : 'lazy'} />
-                      </div>
+                      <BlogCard 
+                        post={post} 
+                        lang={locale} 
+                        loading={index < 3 ? 'eager' : 'lazy'} 
+                        class="post-item animate-fade-in"
+                      />
                     ))}
                   </div>
                 </section>
@@ -200,9 +203,12 @@ if (!isIndex && tag) {
             class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
           >
             {tagPosts.map((post, index) => (
-              <div class="post-item animate-fade-in">
-                <BlogCard post={post} lang={locale} loading={index < 3 ? 'eager' : 'lazy'} />
-              </div>
+              <BlogCard
+                post={post}
+                lang={lang}
+                loading={index < 3 ? 'eager' : 'lazy'}
+                class="post-item animate-fade-in"
+              />
             ))}
           </div>
         ) : (

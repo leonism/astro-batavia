@@ -53,17 +53,12 @@ const relatedPosts = BlogService.getRelatedPosts(allLangPosts, slug, tags);
 // Resolve author sameAs links from authors collection
 let authorSameAs: string[] = [];
 if (author) {
-  // Simple lookup by name slug (assuming name matches filename/slug)
-  const authorSlug = author.toLowerCase().replace(/\s+/g, '-');
-  try {
-    const authorEntry = await getEntry('authors', authorSlug);
-    if (authorEntry) {
-      authorSameAs = authorEntry.data.sameAs || [];
-    }
-  } catch (e) {
-    console.warn(`Could not resolve author entry for ${authorSlug}`);
+  const authorEntry = await BlogService.getAuthorDetails(author);
+  if (authorEntry) {
+    authorSameAs = authorEntry.data.sameAs || [];
   }
 }
+
 ---
 
 <Layout
