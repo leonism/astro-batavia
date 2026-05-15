@@ -248,7 +248,7 @@ if (type === 'detail' && authorName) {
 
         {/* Author Navigation */}
         <div class="mt-16 border-t border-slate-200 pt-8 dark:border-slate-800">
-          <div class={`grid gap-6 ${prevAuthor && nextAuthor ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             {prevAuthor ? (
               <a 
                 href={getLocalizedPath(`/blog/authors/${slugifyTag(prevAuthor.name)}`, locale)}
@@ -272,23 +272,23 @@ if (type === 'detail' && authorName) {
                     <svg class="mr-2 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m11 17-5-5 5-5m7 10-5-5 5-5" />
                     </svg>
-                    &lt;&lt; {t('blog.prevAuthor')}
+                    {t('blog.prevAuthor')}
                   </div>
                   <h3 class="text-base font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:text-lg">
                     {prevAuthor.name}
                   </h3>
                 </div>
               </a>
-            ) : <div />}
+            ) : <div class="hidden md:block" />}
 
             {nextAuthor ? (
               <a 
                 href={getLocalizedPath(`/blog/authors/${slugifyTag(nextAuthor.name)}`, locale)}
-                class="group flex flex-row items-stretch justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-blue-400"
+                class="group flex w-full flex-row items-stretch justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-blue-400 md:ml-auto"
               >
                 <div class="flex flex-col justify-center p-4 text-right">
                   <div class="mb-1 flex items-center justify-end text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    {t('blog.nextAuthor')} &gt;&gt;
+                    {t('blog.nextAuthor')}
                     <svg class="ml-2 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m13 17 5-5-5-5M6 17l5-5-5-5" />
                     </svg>
@@ -311,7 +311,7 @@ if (type === 'detail' && authorName) {
                   )}
                 </div>
               </a>
-            ) : <div />}
+            ) : <div class="hidden md:block" />}
           </div>
         </div>
       </>
