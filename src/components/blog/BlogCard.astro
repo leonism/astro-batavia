@@ -102,7 +102,22 @@ const vm = BlogCardService.getViewModel(Astro.props);
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
               />
             </svg>
-            <span class="truncate" title={vm.author}>{vm.author}</span>
+            {
+              vm.authorUrl ? (
+                <a
+                  href={vm.authorUrl}
+                  class="truncate transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                  title={vm.author}
+                  data-astro-prefetch
+                >
+                  {vm.author}
+                </a>
+              ) : (
+                <span class="truncate" title={vm.author}>
+                  {vm.author}
+                </span>
+              )
+            }
           </div>
 
           <time datetime={vm.isoDate} class="flex shrink-0 items-center whitespace-nowrap">

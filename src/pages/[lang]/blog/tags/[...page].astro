@@ -44,9 +44,10 @@ export const getStaticPaths = (async ({ paginate }) => {
     // Adjust paths so the first page has page: undefined
     const adjustedTagIndexPaths = tagIndexPaths.map(path => {
       const pageNum = path.params.page;
+      const safePageNum = pageNum !== undefined ? String(pageNum) : "1";
       return { 
         ...path, 
-        params: { ...path.params, page: pageNum === "1" ? undefined : pageNum },
+        params: { ...path.params, page: safePageNum === "1" ? undefined : safePageNum },
         props: { ...path.props, isIndex: true }
       };
     });
@@ -70,13 +71,11 @@ export const getStaticPaths = (async ({ paginate }) => {
   return allPaths;
 }) satisfies GetStaticPaths;
 
-type Props = {
-  page?: Page<{ tag: string; posts: CollectionEntry<'blog'>[]; count: number }>;
-  tag?: string;
-  isIndex: boolean;
-};
+type Props = 
+  | { isIndex: true; page: Page<{ tag: string; posts: CollectionEntry<'blog'>[]; count: number }>; tag?: undefined }
+  | { isIndex: false; page?: undefined; tag: string };
 
-const { page, tag, isIndex } = Astro.props;
+const { page, tag, isIndex } = Astro.props as Props;
 const { lang } = Astro.params;
 
 if (!lang || !isValidLanguage(lang)) {
