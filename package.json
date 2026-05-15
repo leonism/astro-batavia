@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest",
     "dev": "astro dev",
-    "build": "astro build && tsx scripts/compress.ts",
+    "build": "astro build && tsx scripts/post-build-sitemap.ts && tsx scripts/compress.ts",
     "build:only": "astro build",
     "compress": "tsx scripts/compress.ts",
     "preview": "astro preview",

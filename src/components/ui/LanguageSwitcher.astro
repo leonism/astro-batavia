@@ -23,7 +23,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
       >
       </path>
     </svg>
-    <span>{languages[lang]}</span>
+    <span class="hidden md:inline">{languages[lang]}</span>
     <svg
       class="h-4 w-4 transition-transform duration-200"
       id="language-chevron"

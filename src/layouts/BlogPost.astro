@@ -18,6 +18,7 @@ type BlogFrontmatter = CollectionEntry<'blog'>['data'];
 export interface Props extends BlogFrontmatter {
   slug: string;
   readingTime?: string;
+  readingTimeMinutes?: number;
   headings: { depth: number; slug: string; text: string }[];
 }
 
@@ -33,6 +34,7 @@ const {
   tags,
   slug,
   readingTime,
+  readingTimeMinutes,
   headings,
   faqs,
   review,
@@ -109,7 +111,7 @@ if (author) {
             <BlogPostHero {heroImage} {heroImageAlt} {title} />
             <div class="space-y-6">
               <BlogPostTags tags={tags || []} {lang} />
-              <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {lang} {t} />
+              <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {readingTimeMinutes} {lang} {t} />
             </div>
           </header>
 

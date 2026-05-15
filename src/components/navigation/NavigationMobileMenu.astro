@@ -100,9 +100,21 @@ const t = useTranslations(lang);
 
     let lastActiveElement: HTMLElement | null = null;
 
+    // --- Touch gesture state ---
+    let touchStartY = 0;
+    let touchCurrentY = 0;
+    let isDragging = false;
+
+    const isMenuOpen = () => {
+      return mobileMenu && !mobileMenu.classList.contains('translate-y-full');
+    };
+
     const openMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
       lastActiveElement = document.activeElement as HTMLElement | null;
+
+      // Reset any inline transform from dragging
+      mobileMenu.style.transform = '';
       mobileMenu.classList.remove('translate-y-full');
       mobileNavOverlay.classList.remove('pointer-events-none');
       mobileNavOverlay.classList.add('opacity-100');
@@ -141,6 +153,9 @@ const t = useTranslations(lang);
     const closeMobileMenu = () => {
       if (!mobileMenu || !mobileNavOverlay) return;
       document.body.classList.remove('mobile-nav-open');
+
+      // Reset inline transform and let CSS class handle the slide-down
+      mobileMenu.style.transform = '';
       mobileMenu.classList.add('translate-y-full');
       mobileNavOverlay.classList.add('pointer-events-none');
       mobileNavOverlay.classList.remove('opacity-100');
@@ -155,8 +170,15 @@ const t = useTranslations(lang);
       }
     };
 
+    // Hamburger button toggles open/close
     if (mobileMenuButton) {
-      mobileMenuButton.addEventListener('click', openMobileMenu);
+      mobileMenuButton.addEventListener('click', () => {
+        if (isMenuOpen()) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      });
     }
 
     if (closeMobileMenuButton) {
@@ -181,5 +203,53 @@ const t = useTranslations(lang);
     mobileMenu?.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', closeMobileMenu);
     });
+
+    // --- Swipe-down-to-close gesture ---
+    if (mobileMenu) {
+      mobileMenu.addEventListener('touchstart', (e) => {
+        if (!isMenuOpen()) return;
+        touchStartY = e.touches[0].clientY;
+        touchCurrentY = touchStartY;
+        isDragging = true;
+        // Disable transition during drag for real-time feel
+        mobileMenu.style.transition = 'none';
+      }, { passive: true });
+
+      mobileMenu.addEventListener('touchmove', (e) => {
+        if (!isDragging || !isMenuOpen()) return;
+        touchCurrentY = e.touches[0].clientY;
+        const deltaY = touchCurrentY - touchStartY;
+
+        // Only allow dragging downward
+        if (deltaY > 0) {
+          mobileMenu.style.transform = `translateY(${deltaY}px)`;
+          // Fade overlay proportionally
+          if (mobileNavOverlay) {
+            const progress = Math.min(deltaY / 300, 1);
+            mobileNavOverlay.style.opacity = String(1 - progress);
+          }
+        }
+      }, { passive: true });
+
+      mobileMenu.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const deltaY = touchCurrentY - touchStartY;
+        // Restore transition for the snap/close animation
+        mobileMenu.style.transition = '';
+
+        if (deltaY > 80) {
+          // Dragged far enough — close the menu
+          closeMobileMenu();
+        } else {
+          // Snap back to open position
+          mobileMenu.style.transform = '';
+          if (mobileNavOverlay) {
+            mobileNavOverlay.style.opacity = '';
+          }
+        }
+      }, { passive: true });
+    }
   });
 </script>

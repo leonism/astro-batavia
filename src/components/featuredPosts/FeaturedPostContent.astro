@@ -14,8 +14,8 @@ interface Props {
 const { post, index, lang } = Astro.props;
 ---
 
-<div class="relative flex h-full flex-col justify-end p-4 text-white sm:p-8 md:p-10 lg:p-12 pointer-events-none">
-  <div class="z-30 space-y-4">
+<div class="relative z-30 flex h-full flex-col justify-end p-4 text-white sm:p-8 md:p-10 lg:p-12 pointer-events-none">
+  <div class="mt-2 space-y-3 sm:mt-0 sm:space-y-4">
     <FeaturedPostTitle post={post} index={index} lang={lang} />
     <FeaturedPostTags tags={post.data.tags} lang={lang} />
     <FeaturedPostMeta post={post} lang={lang} />

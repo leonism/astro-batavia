@@ -11,17 +11,14 @@ interface Props extends HTMLAttributes<'a'> {
   postCount: number;
 }
 
+import { BlogService } from '@/services/BlogService';
+
 const { authorName, lang, postCount, class: className, ...rest } = Astro.props;
 
 // Try to get more details from the authors collection
-let authorDetails: CollectionEntry<'authors'> | null = null;
+const authorDetails = await BlogService.getAuthorDetails(authorName);
 const authorSlug = slugifyTag(authorName);
 
-try {
-  authorDetails = await getEntry('authors', authorSlug);
-} catch (e) {
-  // Ignore if not found
-}
 
 const authorUrl = getLocalizedPath(`/blog/authors/${authorSlug}`, lang);
 const t = useTranslations(lang as any);

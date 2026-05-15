@@ -1,36 +1,63 @@
 ---
+import { BlogService } from '@/services/BlogService';
 import { DateService } from '@/services/DateService';
+import { getLocalizedPath, slugifyTag } from '@/i18n/utils';
 
 interface Props {
   author: string;
   pubDate: Date;
   updatedDate?: Date;
   readingTime?: string;
+  readingTimeMinutes?: number;
   lang: string;
   t: (key: any) => string;
 }
 
-const { author, pubDate, updatedDate, readingTime, lang, t } = Astro.props;
+const { author, pubDate, updatedDate, readingTime, readingTimeMinutes, lang, t } = Astro.props;
+
+// Fetch author details for the avatar
+const authorDetails = await BlogService.getAuthorDetails(author);
+// Fallback hierarchy: Author collection avatar -> Blog post authorImage -> Default icon
+const authorAvatar = authorDetails?.data.avatar || (Astro.props as any).authorImage;
+
+// Localize reading time (e.g., "5 min read" -> "5 min de lectura")
+const minutes = readingTimeMinutes || (readingTime ? parseInt(readingTime.replace(/\D/g, '')) : 0);
+const localizedReadingTime = minutes > 0 
+  ? `${minutes} ${t('blog.readTime')}` 
+  : readingTime;
+
 ---
 
 <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
   <div class="flex items-center">
-    <svg
-      class="mr-2 h-4 w-4"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+    {authorAvatar ? (
+      <img 
+        src={authorAvatar} 
+        alt={author} 
+        class="mr-2 h-6 w-6 rounded-full object-cover ring-1 ring-gray-200 dark:ring-gray-700" 
+      />
+    ) : (
+      <svg
+        class="mr-2 h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
       >
-      </path>
-    </svg>
-    <span>{author}</span>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+        />
+      </svg>
+    )}
+    <a
+      href={getLocalizedPath(`/blog/authors/${slugifyTag(author)}`, lang)}
+      class="transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+    >
+      {author}
+    </a>
   </div>
 
   <div class="flex items-center">
@@ -46,8 +73,7 @@ const { author, pubDate, updatedDate, readingTime, lang, t } = Astro.props;
         stroke-linejoin="round"
         stroke-width="2"
         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-      >
-      </path>
+      />
     </svg>
     <time datetime={pubDate.toISOString()}>
       {t('blog.publishedOn')}
@@ -73,14 +99,14 @@ const { author, pubDate, updatedDate, readingTime, lang, t } = Astro.props;
           />
         </svg>
         <time datetime={updatedDate.toISOString()}>
-          Updated {DateService.format(updatedDate, lang)}
+          {t('blog.updated')} {DateService.format(updatedDate, lang)}
         </time>
       </div>
     )
   }
 
   {
-    readingTime && (
+    localizedReadingTime && (
       <div class="flex items-center">
         <svg
           class="mr-2 h-4 w-4"
@@ -96,7 +122,7 @@ const { author, pubDate, updatedDate, readingTime, lang, t } = Astro.props;
             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <span>{readingTime}</span>
+        <span>{localizedReadingTime}</span>
       </div>
     )
   }

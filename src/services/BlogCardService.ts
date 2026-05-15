@@ -39,6 +39,8 @@ export interface BlogCardViewModel {
   }[];
   remainingTagsCount: number;
   author: string;
+  authorUrl?: string;
+  authorAvatar?: string;
   pubDate: string;
   isoDate: string;
   readingTime?: string;
@@ -68,9 +70,9 @@ export class BlogCardService {
    * Generates the view model for the BlogCard component.
    *
    * @param {BlogCardProps} props - The component props.
-   * @returns {BlogCardViewModel} The processed view model containing all data needed for rendering.
+   * @returns {Promise<BlogCardViewModel>} The processed view model containing all data needed for rendering.
    */
-  static getViewModel(props: BlogCardProps): BlogCardViewModel {
+  static async getViewModel(props: BlogCardProps): Promise<BlogCardViewModel> {
     const {
       post,
       lang,
@@ -98,6 +100,22 @@ export class BlogCardService {
     // CSS Classes generation
     const cssClasses = this.generateCssClasses(isFeatured);
 
+    // Get author avatar properly
+    let authorAvatar: string | undefined = undefined;
+    if (post.data.author) {
+      const { BlogService } = await import('./BlogService');
+      const authorEntry = await BlogService.getAuthorDetails(post.data.author);
+      authorAvatar = authorEntry?.data.avatar;
+    }
+
+    // Localize reading time
+    let readingTime: string | undefined = undefined;
+    if ('readingTimeMinutes' in post.data && post.data.readingTimeMinutes) {
+      readingTime = `${post.data.readingTimeMinutes} ${t('blog.readTime')}`;
+    } else if ('readingTime' in post.data) {
+      readingTime = (post.data.readingTime as string).replace('min read', t('blog.readTime'));
+    }
+
     return {
       id: post.id,
       postUrl,
@@ -112,9 +130,11 @@ export class BlogCardService {
       tags: displayTags,
       remainingTagsCount,
       author: post.data.author,
+      authorUrl: post.data.author ? getLocalizedPath(`/blog/authors/${slugifyTag(post.data.author)}`, lang) : undefined,
+      authorAvatar,
       pubDate: DateService.format(post.data.pubDate, lang),
       isoDate: post.data.pubDate.toISOString(),
-      readingTime: 'readingTime' in post.data ? (post.data.readingTime as string) : undefined,
+      readingTime,
       cssClasses,
       imageLoading: loading,
       imageDecoding: isFeatured ? 'auto' : 'async',
