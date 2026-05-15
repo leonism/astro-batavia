@@ -1,10 +1,11 @@
 ---
-avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=256&h=256&auto=format&fit=crop"
+avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=256&h=256&auto=format&fit=crop"
 name: "Michael Rodriguez"
-bio: "Michael Rodriguez is a contributor to Astro Batavia, sharing insights and expertise on modern web development and digital trends."
-role: "Contributor"
+bio: "Michael is a cybersecurity analyst who's passionate about privacy and online security. He writes about threat modeling, encryption, and safe browsing."
+role: "Cybersecurity Analyst"
 social:
-  twitter: "https://x.com/michael-rodriguez"
+  website: "https://michael-rodriguez.com"
+  twitter: "https://x.com/mrodriguez_sec"
   github: "https://github.com/michael-rodriguez"
   linkedin: "https://linkedin.com/in/michael-rodriguez"
 ---

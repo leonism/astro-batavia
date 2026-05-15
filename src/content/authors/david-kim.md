@@ -4,6 +4,7 @@ name: "David Kim"
 bio: "David Kim is a contributor to Astro Batavia, sharing insights and expertise on modern web development and digital trends."
 role: "Contributor"
 social:
+  website: "https://david-kim.com"
   twitter: "https://x.com/david-kim"
   github: "https://github.com/david-kim"
   linkedin: "https://linkedin.com/in/david-kim"

@@ -4,6 +4,7 @@ name: "Dr. James Wilson"
 bio: "Dr. James Wilson is a contributor to Astro Batavia, sharing insights and expertise on modern web development and digital trends."
 role: "Contributor"
 social:
+  website: "https://dr-james-wilson.com"
   twitter: "https://x.com/dr-james-wilson"
   github: "https://github.com/dr-james-wilson"
   linkedin: "https://linkedin.com/in/dr-james-wilson"

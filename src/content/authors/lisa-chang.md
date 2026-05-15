@@ -4,6 +4,7 @@ name: "Lisa Chang"
 bio: "Lisa Chang is a contributor to Astro Batavia, sharing insights and expertise on modern web development and digital trends."
 role: "Contributor"
 social:
+  website: "https://lisa-chang.com"
   twitter: "https://x.com/lisa-chang"
   github: "https://github.com/lisa-chang"
   linkedin: "https://linkedin.com/in/lisa-chang"

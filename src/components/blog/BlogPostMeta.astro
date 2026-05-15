@@ -8,20 +8,24 @@ interface Props {
   pubDate: Date;
   updatedDate?: Date;
   readingTime?: string;
+  readingTimeMinutes?: number;
   lang: string;
   t: (key: any) => string;
 }
 
-const { author, pubDate, updatedDate, readingTime, lang, t } = Astro.props;
+const { author, pubDate, updatedDate, readingTime, readingTimeMinutes, lang, t } = Astro.props;
 
 // Fetch author details for the avatar
 const authorDetails = await BlogService.getAuthorDetails(author);
-const authorAvatar = authorDetails?.data.avatar;
+// Fallback hierarchy: Author collection avatar -> Blog post authorImage -> Default icon
+const authorAvatar = authorDetails?.data.avatar || (Astro.props as any).authorImage;
 
 // Localize reading time (e.g., "5 min read" -> "5 min de lectura")
-const localizedReadingTime = readingTime 
-  ? readingTime.replace('min read', t('blog.readTime'))
-  : undefined;
+const minutes = readingTimeMinutes || (readingTime ? parseInt(readingTime.replace(/\D/g, '')) : 0);
+const localizedReadingTime = minutes > 0 
+  ? `${minutes} ${t('blog.readTime')}` 
+  : readingTime;
+
 ---
 
 <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">

@@ -1,10 +1,11 @@
 ---
 avatar: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=256&h=256&auto=format&fit=crop"
 name: "Amanda Foster"
-bio: "Amanda Foster is a contributor to Astro Batavia, sharing insights and expertise on modern web development and digital trends."
-role: "Contributor"
+bio: "Amanda is a content strategist and technical writer with a knack for making complex topics easy to understand. She loves storytelling and digital marketing."
+role: "Content Strategist"
 social:
-  twitter: "https://x.com/amanda-foster"
+  website: "https://amanda-foster.com"
+  twitter: "https://x.com/amanda_writes"
   github: "https://github.com/amanda-foster"
   linkedin: "https://linkedin.com/in/amanda-foster"
 ---
