@@ -219,8 +219,8 @@ if (type === 'detail' && authorName) {
                       </svg>
                     )}
                     {platform === 'website' && (
-                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                       </svg>
                     )}
                     {/* Fallback for other platforms */}
@@ -272,7 +272,7 @@ if (type === 'detail' && authorName) {
                     <svg class="mr-2 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m11 17-5-5 5-5m7 10-5-5 5-5" />
                     </svg>
-                    {t('blog.previousArticle')}
+                    &lt;&lt; {t('blog.prevAuthor')}
                   </div>
                   <h3 class="text-base font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:text-lg">
                     {prevAuthor.name}
@@ -288,7 +288,7 @@ if (type === 'detail' && authorName) {
               >
                 <div class="flex flex-col justify-center p-4 text-right">
                   <div class="mb-1 flex items-center justify-end text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    {t('blog.nextArticle')}
+                    {t('blog.nextAuthor')} &gt;&gt;
                     <svg class="ml-2 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m13 17 5-5-5-5M6 17l5-5-5-5" />
                     </svg>

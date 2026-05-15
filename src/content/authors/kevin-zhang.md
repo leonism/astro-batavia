@@ -4,6 +4,7 @@ name: "Kevin Zhang"
 bio: "Kevin Zhang is a contributor to Astro Batavia, sharing insights and expertise on modern web development and digital trends."
 role: "Contributor"
 social:
+  website: "https://kevin-zhang.com"
   twitter: "https://x.com/kevin-zhang"
   github: "https://github.com/kevin-zhang"
   linkedin: "https://linkedin.com/in/kevin-zhang"

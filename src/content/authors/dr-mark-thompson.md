@@ -1,10 +1,11 @@
 ---
-avatar: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?q=80&w=256&h=256&auto=format&fit=crop"
+avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=256&h=256&auto=format&fit=crop"
 name: "Dr. Mark Thompson"
-bio: "Dr. Mark Thompson is a contributor to Astro Batavia, sharing insights and expertise on modern web development and digital trends."
-role: "Contributor"
+bio: "Dr. Mark Thompson is a research scientist specializing in quantum computing and advanced algorithms. He shares his findings on the future of computation."
+role: "Quantum Research Scientist"
 social:
-  twitter: "https://x.com/dr-mark-thompson"
-  github: "https://github.com/dr-mark-thompson"
-  linkedin: "https://linkedin.com/in/dr-mark-thompson"
+  website: "https://dr-mark-thompson.com"
+  twitter: "https://x.com/drmarkthompson"
+  github: "https://github.com/mthompson-quantum"
+  linkedin: "https://linkedin.com/in/mark-thompson"
 ---

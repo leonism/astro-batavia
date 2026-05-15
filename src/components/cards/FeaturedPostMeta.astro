@@ -1,8 +1,8 @@
----
 import type { CollectionEntry } from 'astro:content';
 import Picture from '../ui/Picture.astro';
 import { DateService } from '../../services/DateService';
 import { getLocalizedPath, slugifyTag } from '../../i18n/utils';
+import { BlogService } from '../../services/BlogService';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -10,6 +10,11 @@ interface Props {
 }
 
 const { post, lang } = Astro.props;
+
+// Fetch author details for the avatar
+const authorDetails = await BlogService.getAuthorDetails(post.data.author);
+// Fallback hierarchy: Author collection avatar -> Blog post authorImage -> Default icon
+const authorAvatar = authorDetails?.data.avatar || post.data.authorImage;
 ---
 
 <div class="flex items-center gap-4 text-sm text-blue-100/90 sm:gap-3">
@@ -21,7 +26,7 @@ const { post, lang } = Astro.props;
       class="relative h-9 w-9 overflow-hidden rounded-full border-2 border-white/20 bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-0.5 transition-all duration-300 group-hover/author:border-blue-400 group-hover/author:scale-105"
     >
       <Picture
-        src={post.data.authorImage || '/images/placeholder-hero.svg'}
+        src={authorAvatar || '/images/placeholder-hero.svg'}
         alt={post.data.author}
         class="absolute inset-0 h-full w-full rounded-full object-cover"
         width={40}

@@ -53,16 +53,17 @@ if (!lang || !isValidLanguage(lang)) {
   return Astro.redirect('/404');
 }
 
-// Prepare data for rendering
 let Content: any;
 let headings: MarkdownHeading[] = [];
 let readingTime;
+let readingTimeMinutes;
 
 if (post) {
   const rendered = await render(post);
   Content = rendered.Content;
   headings = rendered.headings;
   readingTime = rendered.remarkPluginFrontmatter?.readingTime;
+  readingTimeMinutes = rendered.remarkPluginFrontmatter?.readingTimeMinutes;
 }
 
 const t = useTranslations(lang);
@@ -75,7 +76,7 @@ const pagePosts = page?.data || [];
 
 {
   post ? (
-    <BlogPost {...post.data} slug={post.id} headings={headings} readingTime={readingTime}>
+    <BlogPost {...post.data} slug={post.id} headings={headings} readingTime={readingTime} readingTimeMinutes={readingTimeMinutes}>
       {Content && <Content />}
     </BlogPost>
   ) : (
