@@ -32,6 +32,17 @@
 
   --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --animate-aurora: aurora 8s linear infinite;
+
+  @keyframes aurora {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: -200% 0%;
+    }
+  }
 }
 
 /* Custom CSS Properties */

@@ -1,0 +1,10 @@
+---
+interface Props {
+  class?: string;
+  [x: string]: any;
+}
+const { class: className = '', ...rest } = Astro.props;
+---
+<p class:list={["leading-7 [&:not(:first-child)]:mt-6", className]} {...rest}>
+  <slot />
+</p>
