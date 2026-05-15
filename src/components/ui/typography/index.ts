@@ -1,0 +1,13 @@
+export { default as TypographyH1 } from './TypographyH1.astro';
+export { default as TypographyH2 } from './TypographyH2.astro';
+export { default as TypographyH3 } from './TypographyH3.astro';
+export { default as TypographyH4 } from './TypographyH4.astro';
+export { default as TypographyP } from './TypographyP.astro';
+export { default as TypographyBlockquote } from './TypographyBlockquote.astro';
+export { default as TypographyTable } from './TypographyTable.astro';
+export { default as TypographyList } from './TypographyList.astro';
+export { default as TypographyInlineCode } from './TypographyInlineCode.astro';
+export { default as TypographyLead } from './TypographyLead.astro';
+export { default as TypographyLarge } from './TypographyLarge.astro';
+export { default as TypographySmall } from './TypographySmall.astro';
+export { default as TypographyMuted } from './TypographyMuted.astro';
