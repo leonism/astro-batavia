@@ -1,7 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import Picture from '@/components/ui/Picture.astro';
-import { DateService } from '@/services/DateService';
+import Picture from '../ui/Picture.astro';
+import { DateService } from '../../services/DateService';
+import { getLocalizedPath, slugifyTag } from '../../i18n/utils';
+import { BlogService } from '../../services/BlogService';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -9,15 +11,23 @@ interface Props {
 }
 
 const { post, lang } = Astro.props;
+
+// Fetch author details for the avatar
+const authorDetails = await BlogService.getAuthorDetails(post.data.author);
+// Fallback hierarchy: Author collection avatar -> Blog post authorImage -> Default icon
+const authorAvatar = authorDetails?.data.avatar || post.data.authorImage;
 ---
 
 <div class="flex items-center gap-4 text-sm text-blue-100/90 sm:gap-3">
-  <div class="group-author flex items-center gap-2.5 font-medium">
+  <a
+    href={getLocalizedPath(`/blog/authors/${slugifyTag(post.data.author)}`, lang)}
+    class="group/author relative z-30 flex items-center gap-2.5 font-medium pointer-events-auto"
+  >
     <div
       class="relative h-9 w-9 overflow-hidden rounded-full border-2 border-white/20 bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-0.5 transition-all duration-300 group-hover/author:border-blue-400 group-hover/author:scale-105"
     >
       <Picture
-        src={post.data.authorImage || '/images/placeholder-hero.svg'}
+        src={authorAvatar || '/images/placeholder-hero.svg'}
         alt={post.data.author}
         class="absolute inset-0 h-full w-full rounded-full object-cover"
         width={40}
@@ -27,7 +37,7 @@ const { post, lang } = Astro.props;
     <span class="truncate transition-colors duration-300 group-hover/author:text-blue-300">
       {post.data.author}
     </span>
-  </div>
+  </a>
   <span class="h-1 w-1 rounded-full bg-blue-200" aria-hidden="true"></span>
   <time
     datetime={new Date(post.data.pubDate).toISOString()}

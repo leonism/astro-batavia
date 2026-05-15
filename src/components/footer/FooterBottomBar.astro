@@ -1,5 +1,5 @@
 ---
-import { useTranslations } from '@/i18n/utils';
+import { useTranslations, getLocalizedPath } from '@/i18n/utils';
 import type { LanguageKey } from '@/i18n/types';
 import { SITE_TITLE, SITE_UTILS } from '@/consts';
 
@@ -20,6 +20,14 @@ const t = useTranslations(lang);
           &copy; {currentYear}
           {SITE_TITLE}. {t('footer.rights_reserved')}
         </p>
+        <div class="flex items-center gap-4 border-l border-gray-200 pl-4 dark:border-gray-700">
+          <a 
+            href={getLocalizedPath('/blog/authors', lang)}
+            class="text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
+          >
+            {t('nav.authors')}
+          </a>
+        </div>
         <a
           href={SITE_UTILS.sitemap}
           target="_blank"

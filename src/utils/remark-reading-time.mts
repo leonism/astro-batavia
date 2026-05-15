@@ -14,5 +14,6 @@ export function remarkReadingTime() {
 
     // readingTime.text will give us "3 min read"
     data.astro.frontmatter.readingTime = readingTime.text;
+    data.astro.frontmatter.readingTimeMinutes = Math.ceil(readingTime.minutes);
   };
 }
