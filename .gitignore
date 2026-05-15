@@ -54,6 +54,8 @@ bun.lockb
 # LLM Agents
 agents.md
 GEMINI.md
+.agent
+.agents
 
 # System
 Thumbs.db

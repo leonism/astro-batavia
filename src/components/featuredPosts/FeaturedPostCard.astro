@@ -15,7 +15,6 @@ interface Props extends HTMLAttributes<'article'> {
 const { post, index, class: className, ...rest } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 
-
 // Fix double /blog/ issue - use helper
 const postUrl = getPostUrl(post.id, lang);
 ---
@@ -23,13 +22,12 @@ const postUrl = getPostUrl(post.id, lang);
 <article
   id={`featured-post-${post.id}`}
   class:list={[
-    "group relative h-80 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 sm:h-80 md:h-[400px] lg:h-[600px]",
-    className
+    'group relative h-80 overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-800/50 sm:h-80 md:h-[400px] lg:h-[600px]',
+    className,
   ]}
   aria-labelledby={`featured-post-title-${post.id}`}
   {...rest}
 >
-
   <FeaturedPostImage heroImage={post.data.heroImage} index={index} />
   <FeaturedPostOverlay />
   <FeaturedPostContent post={post} index={index} lang={lang} />
