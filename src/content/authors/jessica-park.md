@@ -5,4 +5,6 @@ avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=256
 role: "Product Designer"
 social:
   linkedin: "https://linkedin.com/in/jessicapark"
+  twitter: "https://x.com/jessicapark"
+  github: "https://github.com/jessicapark"
 ---
