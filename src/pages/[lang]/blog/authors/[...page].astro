@@ -38,9 +38,10 @@ export const getStaticPaths = (async ({ paginate }) => {
 
     allPaths.push(...indexPaths.map(p => {
       const pageNum = p.params.page;
+      const safePageNum = pageNum !== undefined ? String(pageNum) : "1";
       return {
         ...p,
-        params: { ...p.params, page: pageNum === "1" ? undefined : pageNum },
+        params: { ...p.params, page: safePageNum === "1" ? undefined : safePageNum },
         props: { ...p.props, type: 'index' }
       };
     }));
@@ -48,6 +49,8 @@ export const getStaticPaths = (async ({ paginate }) => {
     // 2. Author Detail Paths (Paginated posts per author)
     for (const authorName of Array.from(authorsMap.keys())) {
       const authorSlug = slugifyTag(authorName);
+      if (!authorSlug) continue;
+
       const authorPosts = posts.filter(p => p.data.author === authorName);
       
       const detailPaths = paginate(authorPosts, {
@@ -57,9 +60,10 @@ export const getStaticPaths = (async ({ paginate }) => {
 
       allPaths.push(...detailPaths.map(p => {
         const pageNum = p.params.page;
+        const safePageNum = pageNum !== undefined ? String(pageNum) : "1";
         return {
           ...p,
-          params: { ...p.params, page: pageNum === "1" ? authorSlug : `${authorSlug}/${pageNum}` },
+          params: { ...p.params, page: safePageNum === "1" ? authorSlug : `${authorSlug}/${safePageNum}` },
           props: { ...p.props, type: 'detail', authorName }
         };
       }));
@@ -69,13 +73,11 @@ export const getStaticPaths = (async ({ paginate }) => {
   return allPaths;
 }) satisfies GetStaticPaths;
 
-type Props = {
-  page: Page<any>; // Could be author stats or blog posts
-  type: 'index' | 'detail';
-  authorName?: string;
-};
+type Props = 
+  | { type: 'index'; page: Page<{ name: string; count: number }>; authorName?: undefined }
+  | { type: 'detail'; page: Page<CollectionEntry<'blog'>>; authorName: string };
 
-const { page, type, authorName } = Astro.props;
+const { page, type, authorName } = Astro.props as Props;
 const { lang } = Astro.params;
 
 if (!lang || !isValidLanguage(lang)) {
@@ -122,7 +124,7 @@ if (type === 'detail' && authorName) {
 
         {/* Authors Grid */}
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {page.data.map((item: any) => (
+          {page.data.map((item) => (
             <AuthorCard 
               authorName={item.name} 
               lang={locale} 

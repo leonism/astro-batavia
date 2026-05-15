@@ -1,5 +1,6 @@
 ---
 import { DateService } from '@/services/DateService';
+import { getLocalizedPath, slugifyTag } from '@/i18n/utils';
 
 interface Props {
   author: string;
@@ -30,7 +31,12 @@ const { author, pubDate, updatedDate, readingTime, lang, t } = Astro.props;
       >
       </path>
     </svg>
-    <span>{author}</span>
+    <a
+      href={getLocalizedPath(`/blog/authors/${slugifyTag(author)}`, lang)}
+      class="transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+    >
+      {author}
+    </a>
   </div>
 
   <div class="flex items-center">

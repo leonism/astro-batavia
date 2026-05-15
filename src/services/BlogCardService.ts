@@ -39,6 +39,7 @@ export interface BlogCardViewModel {
   }[];
   remainingTagsCount: number;
   author: string;
+  authorUrl?: string;
   pubDate: string;
   isoDate: string;
   readingTime?: string;
@@ -112,6 +113,7 @@ export class BlogCardService {
       tags: displayTags,
       remainingTagsCount,
       author: post.data.author,
+      authorUrl: post.data.author ? getLocalizedPath(`/blog/authors/${slugifyTag(post.data.author)}`, lang) : undefined,
       pubDate: DateService.format(post.data.pubDate, lang),
       isoDate: post.data.pubDate.toISOString(),
       readingTime: 'readingTime' in post.data ? (post.data.readingTime as string) : undefined,
