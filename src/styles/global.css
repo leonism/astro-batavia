@@ -227,7 +227,28 @@ html {
 }
 
 .prose pre {
-  @apply overflow-x-auto rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800;
+  @apply overflow-x-auto rounded-lg border border-gray-200 p-4 dark:border-gray-700;
+  /* Shiki dual-theme configuration */
+  background-color: var(--shiki-light-bg, #f6f8fa) !important;
+  color: var(--shiki-light, #24292e) !important;
+}
+
+.dark .prose pre {
+  background-color: var(--shiki-dark-bg, #24292e) !important;
+  color: var(--shiki-dark, #e1e4e8) !important;
+}
+
+.prose pre span {
+  color: var(--shiki-light, inherit);
+}
+
+.dark .prose pre span {
+  color: var(--shiki-dark, inherit);
+}
+
+/* Fix for languages without syntax token scopes (like bash) */
+.prose pre > code > span > span {
+  color: inherit;
 }
 
 .prose code {

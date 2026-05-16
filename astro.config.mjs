@@ -25,21 +25,20 @@ const devPartytownFix = {
   },
 };
 
-
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
   site: SITE_URL,
   trailingSlash: 'ignore',
   redirects: {
-    '/search': '/en/search',
-    '/blog': '/en/blog',
-    '/services': '/en/services',
-    '/about': '/en/about',
-    '/contact': '/en/contact',
-    '/terms': '/en/terms',
-    '/privacy': '/en/privacy',
-    '/cookies': '/en/cookies',
+    '/search/': '/en/search/',
+    '/blog/': '/en/blog/',
+    '/services/': '/en/services/',
+    '/about/': '/en/about/',
+    '/contact/': '/en/contact/',
+    '/terms/': '/en/terms/',
+    '/privacy/': '/en/privacy/',
+    '/cookies/': '/en/cookies/  ',
     '/en': '/',
     '/sitemap.xml': '/sitemap-index.xml',
   },
@@ -61,7 +60,11 @@ export default defineConfig({
     mdx({
       syntaxHighlight: 'shiki',
       shikiConfig: {
-        theme: 'github-dark',
+        themes: {
+          light: 'github-light',
+          dark: 'github-dark',
+        },
+        defaultColor: false,
       },
       remarkPlugins: [remarkReadingTime],
     }),
@@ -98,7 +101,11 @@ export default defineConfig({
   },
   markdown: {
     shikiConfig: {
-      theme: 'github-dark',
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      defaultColor: false,
       wrap: true,
     },
     remarkPlugins: [remarkReadingTime],

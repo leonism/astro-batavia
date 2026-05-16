@@ -47,7 +47,6 @@ const {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
 const allLangPosts = await BlogService.getPostsByLocale(lang);
 const { previousPost, nextPost } = BlogService.getPostNavigation(allLangPosts, slug);
 const relatedPosts = BlogService.getRelatedPosts(allLangPosts, slug, tags);
@@ -60,7 +59,6 @@ if (author) {
     authorSameAs = authorEntry.data.sameAs || [];
   }
 }
-
 ---
 
 <Layout
@@ -79,6 +77,7 @@ if (author) {
   tags={tags || []}
   readingTime={readingTime ? parseInt(readingTime.replace(/\D/g, '')) : undefined}
   excerpt={description}
+  headings={headings}
   breadcrumbs={[
     { name: t('nav.home'), url: new URL(getLocalizedPath('/', lang), Astro.site).href },
     { name: t('nav.blog'), url: new URL(getLocalizedPath('/blog', lang), Astro.site).href },
@@ -101,22 +100,27 @@ if (author) {
   <main id="main-content">
     {/* 2-column grid on desktop: [TOC sidebar | article content] */}
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class={`relative ${headings.length > 0 ? 'lg:grid lg:grid-cols-[1fr_220px] lg:gap-10 xl:grid-cols-[1fr_240px] xl:gap-12' : ''}`}>
-
+      <div
+        class={`relative ${headings.length > 0 ? 'lg:grid lg:grid-cols-[1fr_220px] lg:gap-10 xl:grid-cols-[1fr_240px] xl:gap-12' : ''}`}
+      >
         {/* ── Main article (left) ── */}
         <article role="article" class="min-w-0 py-8">
-
           {/* Article header */}
           <header class="mb-8">
             <BlogPostHero {heroImage} {heroImageAlt} {title} />
             <div class="space-y-6">
               <BlogPostTags tags={tags || []} {lang} />
-              <BlogPostMeta {author} {pubDate} {updatedDate} {readingTime} {readingTimeMinutes} {lang} {t} />
+              <BlogPostMeta
+                {author}
+                {pubDate}
+                {updatedDate}
+                {readingTime}
+                {readingTimeMinutes}
+                {lang}
+                {t}
+              />
             </div>
           </header>
-
-          {/* Mobile TOC accordion — no border, accordion style, lg:hidden */}
-          {headings.length > 0 && <BlogTableOfContents {headings} {lang} variant="mobile" />}
 
           {/* Article content */}
           <div class="prose prose-base max-w-none dark:prose-invert">
@@ -131,9 +135,7 @@ if (author) {
 
         {/* ── Right sidebar: sticky TOC (desktop only) ── */}
         {headings.length > 0 && <BlogTableOfContents {headings} {lang} variant="sidebar" />}
-
       </div>
     </div>
   </main>
 </Layout>
-

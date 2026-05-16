@@ -22,7 +22,7 @@ const t = useTranslations(lang);
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 const showSidebar = variant === 'sidebar' || variant === 'both';
-const showMobile  = variant === 'mobile'  || variant === 'both';
+const showMobile = variant === 'mobile' || variant === 'both';
 ---
 
 {
@@ -64,40 +64,42 @@ const showMobile  = variant === 'mobile'  || variant === 'both';
 
       {/* ── Mobile: collapsible accordion above the content ── */}
       {showMobile && (
-        <div class="toc-mobile mb-6 lg:hidden">
+        <div class="toc-mobile relative flex items-center lg:hidden">
           <button
             type="button"
             id="toc-mobile-toggle"
             aria-expanded="false"
             aria-controls="toc-mobile-list"
-            class="inline-flex items-center gap-2 py-2 text-left"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-primary-600 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-primary-400"
           >
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              {t('blog.tableOfContents')}
-            </span>
-            <span class="inline-flex items-center justify-center rounded-full border border-slate-300 p-0.5 dark:border-slate-600">
-              <svg
-                id="toc-mobile-arrow"
-                class="h-3.5 w-3.5 shrink-0 rotate-0 text-slate-400 transition-transform duration-200 dark:text-slate-500"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </span>
+            <span class="sr-only">{t('blog.tableOfContents')}</span>
+            <svg
+              class="h-5 w-5 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
           </button>
-          <nav id="toc-mobile-list" class="hidden pb-3 pt-2">
-            <ul class="space-y-0.5 border-l border-slate-200 dark:border-slate-700/60">
+
+          <nav
+            id="toc-mobile-list"
+            class="hidden absolute right-0 top-full mt-3 w-64 max-h-[60vh] overflow-y-auto rounded-lg border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900"
+          >
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              {t('blog.tableOfContents')}
+            </p>
+            <ul class="space-y-1 border-l border-slate-200 dark:border-slate-700/60">
               {tocHeadings.map((heading) => (
                 <li>
                   <a
                     href={`#${heading.slug}`}
-                    class={`toc-mobile-link block py-1 text-xs leading-5 text-slate-500 transition-colors duration-150 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400 ${
+                    class={`toc-mobile-link block py-1 text-sm leading-5 text-slate-600 transition-colors duration-150 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400 ${
                       heading.depth === 2
                         ? 'pl-3 font-medium'
-                        : 'pl-6 font-normal text-slate-400 dark:text-slate-500'
+                        : 'pl-6 font-normal text-slate-500 dark:text-slate-400'
                     }`}
                   >
                     {heading.text}
@@ -127,7 +129,7 @@ const showMobile  = variant === 'mobile'  || variant === 'both';
   }
 
   /* Depth-3 active stays indented */
-  .toc-link.is-active[class*="pl-6"] {
+  .toc-link.is-active[class*='pl-6'] {
     padding-left: calc(1.5rem - 2px);
   }
 
@@ -146,10 +148,9 @@ const showMobile  = variant === 'mobile'  || variant === 'both';
   const initToc = () => {
     // ── Mobile toggle ──
     const mobileToggle = document.getElementById('toc-mobile-toggle');
-    const mobileList   = document.getElementById('toc-mobile-list');
-    const mobileArrow  = document.getElementById('toc-mobile-arrow');
+    const mobileList = document.getElementById('toc-mobile-list');
 
-    if (mobileToggle && mobileList && mobileArrow) {
+    if (mobileToggle && mobileList) {
       // Avoid re-init on SPA navigation
       if (!mobileToggle.dataset.tocInit) {
         mobileToggle.dataset.tocInit = 'true';
@@ -157,7 +158,6 @@ const showMobile  = variant === 'mobile'  || variant === 'both';
           const isOpen = mobileToggle.getAttribute('aria-expanded') === 'true';
           mobileToggle.setAttribute('aria-expanded', String(!isOpen));
           mobileList.classList.toggle('hidden', isOpen);
-          mobileArrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
         });
 
         // Close accordion when a link is tapped on mobile
@@ -165,8 +165,18 @@ const showMobile  = variant === 'mobile'  || variant === 'both';
           link.addEventListener('click', () => {
             mobileToggle.setAttribute('aria-expanded', 'false');
             mobileList.classList.add('hidden');
-            mobileArrow.style.transform = 'rotate(0deg)';
           });
+        });
+
+        // Close accordion when clicking outside
+        document.addEventListener('click', (event) => {
+          const isClickInside =
+            mobileToggle.contains(event.target as Node) ||
+            mobileList.contains(event.target as Node);
+          if (!isClickInside && mobileToggle.getAttribute('aria-expanded') === 'true') {
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            mobileList.classList.add('hidden');
+          }
         });
       }
     }

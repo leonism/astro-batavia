@@ -28,6 +28,7 @@ export interface Props {
   wordCount?: number;
   excerpt?: string;
   breadcrumbs?: Array<{ name: string; url: string }>;
+  headings?: { depth: number; slug: string; text: string }[];
   organization?: any;
   faqs?: Array<{ question: string; answer: string }>;
   review?: any;
@@ -48,16 +49,18 @@ export interface Props {
 }
 
 const { lang = 'en', title: pageTitle } = Astro.props;
-const breadcrumbs = Astro.props.breadcrumbs || BreadCrumbService.getBreadCrumbs(Astro.url.pathname, lang as any).map(b => ({
-  name: b.name,
-  url: b.url ? new URL(b.url, Astro.site || Astro.url.origin).href : ''
-}));
+const breadcrumbs =
+  Astro.props.breadcrumbs ||
+  BreadCrumbService.getBreadCrumbs(Astro.url.pathname, lang as any).map((b) => ({
+    name: b.name,
+    url: b.url ? new URL(b.url, Astro.site || Astro.url.origin).href : '',
+  }));
 
 // If we generated breadcrumbs, update the last one with the clean page title
 if (!Astro.props.breadcrumbs && breadcrumbs.length > 1) {
-    const lastItem = breadcrumbs[breadcrumbs.length - 1];
-    const cleanTitle = pageTitle.split(' | ')[0].trim();
-    lastItem.name = cleanTitle;
+  const lastItem = breadcrumbs[breadcrumbs.length - 1];
+  const cleanTitle = pageTitle.split(' | ')[0].trim();
+  lastItem.name = cleanTitle;
 }
 ---
 
@@ -75,7 +78,8 @@ if (!Astro.props.breadcrumbs && breadcrumbs.length > 1) {
         height="0"
         width="0"
         style="display:none;visibility:hidden"
-      ></iframe>
+      >
+      </iframe>
     </noscript>
     <a
       href="#main-content"
@@ -86,7 +90,7 @@ if (!Astro.props.breadcrumbs && breadcrumbs.length > 1) {
     <div id="app" class="flex min-h-screen flex-col">
       <NavigationHeader />
       <main role="main" id="main-content" class="flex-1 pt-16">
-        <BreadCrumb title={Astro.props.title} />
+        <BreadCrumb title={Astro.props.title} headings={Astro.props.headings} />
         <slot />
       </main>
       <Footer />
