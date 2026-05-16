@@ -61,10 +61,10 @@ export default defineConfig({
       syntaxHighlight: 'shiki',
       shikiConfig: {
         themes: {
-          light: 'github-light',
+          light: 'github-dark',
           dark: 'github-dark',
         },
-        defaultColor: false,
+        wrap: true,
       },
       remarkPlugins: [remarkReadingTime],
     }),
@@ -102,10 +102,9 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       themes: {
-        light: 'github-light',
+        light: 'github-dark',
         dark: 'github-dark',
       },
-      defaultColor: false,
       wrap: true,
     },
     remarkPlugins: [remarkReadingTime],

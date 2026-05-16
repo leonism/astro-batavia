@@ -32,7 +32,6 @@
 
   --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-
   --animate-aurora: aurora 8s linear infinite;
 
   @keyframes aurora {
@@ -226,37 +225,44 @@ html {
   @apply max-w-none;
 }
 
-.prose pre {
-  @apply overflow-x-auto rounded-lg border border-gray-200 p-4 dark:border-gray-700;
-  /* Shiki dual-theme configuration */
-  background-color: var(--shiki-light-bg, #f6f8fa) !important;
-  color: var(--shiki-light, #24292e) !important;
+/* Syntax Highlighting Base (Always Dark Theme via Astro Dual-Theme Trick) */
+.prose pre.astro-code {
+  @apply relative overflow-x-auto rounded-lg border border-gray-200 p-4 dark:border-gray-700;
+  background-color: #24292e !important;
+  color: #e1e4e8 !important;
 }
 
-.dark .prose pre {
-  background-color: var(--shiki-dark-bg, #24292e) !important;
-  color: var(--shiki-dark, #e1e4e8) !important;
+/* Ensure tokens always use the variables provided by Astro/Shiki */
+.prose pre.astro-code span {
+  color: var(--shiki-light, inherit) !important;
+  font-style: var(--shiki-light-font-style, inherit) !important;
+  font-weight: var(--shiki-light-font-weight, inherit) !important;
 }
 
-.prose pre span {
-  color: var(--shiki-light, inherit);
+html.dark .prose pre.astro-code span {
+  color: var(--shiki-dark, inherit) !important;
+  font-style: var(--shiki-dark-font-style, inherit) !important;
+  font-weight: var(--shiki-dark-font-weight, inherit) !important;
 }
 
-.dark .prose pre span {
-  color: var(--shiki-dark, inherit);
+/* Fix for languages without syntax token scopes */
+.prose pre.astro-code code {
+  @apply bg-transparent p-0;
+  background-color: transparent !important;
 }
 
-/* Fix for languages without syntax token scopes (like bash) */
-.prose pre > code > span > span {
-  color: inherit;
-}
-
-.prose code {
+/* Restore inline code styles */
+.prose :not(pre) > code {
   @apply rounded-sm bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-800;
 }
 
-.prose pre code {
-  @apply bg-transparent p-0;
+/* --- Code Copy Button Styles --- */
+.copy-code-button {
+  @apply absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800 text-slate-400 opacity-100 transition-all duration-200 hover:bg-slate-700 hover:text-white;
+}
+
+.copy-code-button.copied {
+  @apply border-green-500/50 bg-green-900/20 text-green-400 opacity-100;
 }
 
 .prose blockquote {

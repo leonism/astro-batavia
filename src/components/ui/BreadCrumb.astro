@@ -43,7 +43,7 @@ const shouldShow = breadcrumbs.length > 1 && !isLanguageRoot;
             aria-label="Breadcrumb"
             class="flex flex-1 h-11 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
-            <ol class="inline-flex items-center space-x-2 whitespace-nowrap font-stretch-normal py-3 sm:space-x-2">
+            <ol class="inline-flex items-center space-x-2 whitespace-nowrap font-stretch-semi-expanded py-3 sm:space-x-2">
               {breadcrumbs.map((item, index) => (
                 <li class="inline-flex items-center min-w-0">
                   {index > 0 && (
