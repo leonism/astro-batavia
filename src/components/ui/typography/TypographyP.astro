@@ -5,6 +5,10 @@ interface Props {
 }
 const { class: className = '', ...rest } = Astro.props;
 ---
-<p class:list={["leading-7 [&:not(:first-child)]:mt-6", className]} {...rest}>
+
+<p
+  class:list={['leading-7 font-stretch-semi-expanded [&:not(:first-child)]:mt-6', className]}
+  {...rest}
+>
   <slot />
 </p>

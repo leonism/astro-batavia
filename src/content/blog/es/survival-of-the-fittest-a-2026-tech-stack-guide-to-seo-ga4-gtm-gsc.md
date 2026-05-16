@@ -115,7 +115,7 @@ Para monitorear con precisión la visibilidad en IA, debes crear un canal dedica
 2. **Crea un Nuevo Canal:** Nómbralo **"Búsqueda por IA"**.
 3. **Define la Regla:** Establece la condición como "La fuente coincide con regex", usa este:
 
-```nix
+```bash
 Regex:*^(chatgpt|openai|bing\.com\/chat|gemini|bard|perplexity|claude|anthropic|copilot|you\.com|neeva|jasper|writesonic|character\.ai|phind|andi)$*
 ```
 
