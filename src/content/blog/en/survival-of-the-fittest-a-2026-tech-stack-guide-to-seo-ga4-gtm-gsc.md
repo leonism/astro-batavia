@@ -64,7 +64,7 @@ To accurately measure the “**AI Tax**” on your organic traffic, you must iso
 2.  Create a new **Query** filter and select **Custom (Regex)**.
 3.  Apply the following pattern to isolate “**AI-Vulnerable**”
 
-```nix
+```bash
 queries:*^(who|what|where|when|why|how|which|can|does|do|will|is|are|vs|versus|best|top|review|guide|tutorial|difference|between|define|definition|meaning|examples)$*
 ```
 

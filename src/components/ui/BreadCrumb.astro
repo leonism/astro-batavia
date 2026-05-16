@@ -3,11 +3,14 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils';
 import { BreadCrumbService } from '@/services/BreadCrumbService';
 import type { LanguageKey } from '@/i18n/types';
 
+import BlogTableOfContents from '@/components/blog/BlogTableOfContents.astro';
+
 interface Props {
   title?: string;
+  headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title: pageTitle } = Astro.props;
+const { title: pageTitle, headings = [] } = Astro.props;
 const lang = getLangFromUrl(Astro.url) as LanguageKey;
 const t = useTranslations(lang);
 const breadcrumbs = BreadCrumbService.getBreadCrumbs(Astro.url.pathname, lang);
@@ -33,12 +36,12 @@ const shouldShow = breadcrumbs.length > 1 && !isLanguageRoot;
 
 {
   shouldShow && (
-    <div class="sticky tracking-wide top-16 z-40 w-full border-b border-slate-100/60 bg-white/90 backdrop-blur-md transition-all duration-500 animate-in fade-in slide-in-from-top-1 dark:border-slate-800/40 dark:bg-slate-900/80 dark:shadow-none">
+    <div class="sticky tracking-wide top-16 z-40 w-full border-b border-slate-100/95 bg-white/90 backdrop-blur-lg transition-all duration-500 animate-in fade-in slide-in-from-top-1 dark:border-slate-800/40 dark:bg-slate-900/80 dark:shadow-none">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="relative">
+        <div class="relative flex items-center justify-between">
           <nav
             aria-label="Breadcrumb"
-            class="flex h-11 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            class="flex flex-1 h-11 items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             <ol class="inline-flex items-center space-x-2 whitespace-nowrap font-stretch-normal py-3 sm:space-x-2">
               {breadcrumbs.map((item, index) => (
@@ -119,6 +122,13 @@ const shouldShow = breadcrumbs.length > 1 && !isLanguageRoot;
           </nav>
           {/* Edge fade-out for scrollable breadcrumbs on mobile */}
           <div class="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white/80 to-transparent dark:from-slate-900/90 sm:hidden" />
+
+          {/* ── Mobile TOC accordion (inside breadcrumbs) ── */}
+          {headings.length > 0 && (
+            <div class="toc-mobile-container lg:hidden flex-none ml-2 border-l border-slate-200 dark:border-slate-700/60 pl-2">
+              <BlogTableOfContents {headings} {lang} variant="mobile" />
+            </div>
+          )}
         </div>
       </div>
     </div>

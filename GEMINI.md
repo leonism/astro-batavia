@@ -38,6 +38,8 @@ The project uses `npm` for dependency management and script execution.
 - **Adaptive Metadata**: Author and timestamp sections in cards utilize `truncate` and `flex-wrap` to handle long names gracefully on all viewports.
 - **Navigation Enhancements**: `BlogPrevNextNavigation` features full-height hero images and double-chevron icons (`chevrons-left`, `chevrons-right`) for better directional clarity.
 - **Back to Top**: Updated to use `chevrons-up` icon for consistency across the site.
+- **Typography System**: Implemented shadcn/ui-inspired typography components (e.g., `TypographyH1`, `TypographyP`) located in `src/components/ui/typography/` for standardized text styling.
+- **Animations & Responsive Adjustments**: Added Aurora text animation (`animate-aurora`) to the hero section. Improved newsletter form input borders for better visibility across themes, and adjusted mobile heading sizes in blog posts to prevent layout overflow.
 
 ### Service Layer Refinements
 - **BlogCardService**: Centralized management of metadata spacing via the `metadataContainer` class, reducing vertical gaps in standard grids while maintaining featured post layouts.
@@ -65,6 +67,7 @@ The project uses `npm` for dependency management and script execution.
 - **Standardized Proportions**: Use `aspect-video` for image containers in grid-based cards to ensure vertical alignment.
 - **Metadata Robustness**: Always use `min-w-0` and `truncate` on text elements (like author names) within flex containers to prevent layout overflows.
 - **Iconography**: Prefer double chevrons (`chevrons-up`, `chevrons-right`, etc.) for primary navigation actions to provide stronger visual cues.
+- **Typography System**: When building custom elements or writing long-form content outside the `prose` scope, utilize the shadcn/ui typography components (`src/components/ui/typography/`) to guarantee consistent scaling, spacing, and font weights.
 
 ### Internationalization (i18n)
 
