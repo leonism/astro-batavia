@@ -127,7 +127,7 @@ To accurately monitor AI visibility, you must create a dedicated “AI Search & 
 2. **Create New Channel:** Name it **“AI Search”**.
 3. **Define Rule:** Set the condition to Source matches regex, use this :
 
-```nix
+```bash
 Regex:*^(chatgpt|openai|bing\.com\/chat|gemini|bard|perplexity|claude|anthropic|copilot|you\.com|neeva|jasper|writesonic|character\.ai|phind|andi)$*
 ```
 
