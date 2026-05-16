@@ -5,6 +5,7 @@ interface Props {
 }
 const { class: className = '', ...rest } = Astro.props;
 ---
-<p class:list={["text-sm text-muted-foreground", className]} {...rest}>
+
+<p class:list={['text-sm font-stretch-semi-expanded text-muted-foreground', className]} {...rest}>
   <slot />
 </p>
