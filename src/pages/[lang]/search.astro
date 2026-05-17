@@ -73,7 +73,13 @@ const initialPosts: any[] = [];
       </details>
     </header>
 
-    <SearchInputForm placeholder={t('search.inputPlaceholder')} />
+    <SearchInputForm 
+      placeholder={t('search.inputPlaceholder')}
+      readyMessage={t('search.ready')}
+      foundMessage={t('search.found')}
+      clearedMessage={t('search.cleared')}
+      noResultsMessage={t('search.no-results')}
+    />
 
     <SearchFilters tags={allTags} />
 
