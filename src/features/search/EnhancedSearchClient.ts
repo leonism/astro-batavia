@@ -107,7 +107,8 @@ export class EnhancedSearchClient {
     try {
       this.setLoadingState(true, 'Initializing search...');
       await this.searchEngine.indexDocuments(documents);
-      this.setLoadingState(false, `Ready to search ${documents.length} articles.`);
+      const readyTemplate = this.elements.searchInput?.getAttribute('data-ready-message') || 'Ready to search {count} articles.';
+      this.setLoadingState(false, readyTemplate.replace('{count}', documents.length.toString()));
       console.log('Enhanced search client initialized successfully');
     } catch (error) {
       console.error('Failed to initialize search client:', error);
@@ -1002,7 +1003,8 @@ export class EnhancedSearchClient {
     this.clearSuggestions();
     this.state.currentQuery = '';
     this.updateClearButtonVisibility('');
-    this.announceToScreenReader('Search cleared');
+    const clearedMessage = this.elements.searchInput?.getAttribute('data-cleared-message') || 'Search cleared';
+    this.announceToScreenReader(clearedMessage);
   }
 
   /**
@@ -1056,18 +1058,29 @@ export class EnhancedSearchClient {
   private updateSearchStatus(query: string, count: number, time: number, error?: string): void {
     if (!this.elements.statusElement) return;
 
+    this.elements.statusElement.classList.remove(
+      'text-red-600', 'dark:text-red-400',
+      'text-primary-600', 'dark:text-primary-400',
+      'text-gray-600', 'dark:text-gray-400'
+    );
+
     if (error) {
       this.elements.statusElement.textContent = error;
-      this.elements.statusElement.className = 'text-red-600 dark:text-red-400';
+      this.elements.statusElement.classList.add('text-red-600', 'dark:text-red-400');
       return;
     }
 
+    this.elements.statusElement.classList.add('text-gray-600', 'dark:text-gray-400');
+
     if (query && count > 0) {
-      this.elements.statusElement.textContent = `Found ${count} results for "${query}" (${time.toFixed(1)}ms)`;
-      this.elements.statusElement.className = 'text-gray-600 dark:text-gray-400';
+      const foundTemplate = this.elements.searchInput?.getAttribute('data-found-message') || 'Found {count} results for "{query}" ({time}ms)';
+      this.elements.statusElement.textContent = foundTemplate
+        .replace('{count}', count.toString())
+        .replace('{query}', query)
+        .replace('{time}', time.toFixed(1));
     } else if (query && count === 0) {
-      this.elements.statusElement.textContent = `No results found for "${query}"`;
-      this.elements.statusElement.className = 'text-gray-600 dark:text-gray-400';
+      const noResultsTemplate = this.elements.searchInput?.getAttribute('data-no-results-message') || 'No results found for "{query}"';
+      this.elements.statusElement.textContent = noResultsTemplate.replace('{query}', query);
     } else {
       this.elements.statusElement.textContent = '';
     }
@@ -1085,9 +1098,17 @@ export class EnhancedSearchClient {
 
     if (this.elements.statusElement) {
       this.elements.statusElement.textContent = message;
-      this.elements.statusElement.className = loading
-        ? 'text-primary-600 dark:text-primary-400'
-        : 'text-gray-600 dark:text-gray-400';
+      this.elements.statusElement.classList.remove(
+        'text-red-600', 'dark:text-red-400',
+        'text-primary-600', 'dark:text-primary-400',
+        'text-gray-600', 'dark:text-gray-400'
+      );
+      
+      if (loading) {
+        this.elements.statusElement.classList.add('text-primary-600', 'dark:text-primary-400');
+      } else {
+        this.elements.statusElement.classList.add('text-gray-600', 'dark:text-gray-400');
+      }
     }
 
     if (this.elements.searchInput) {

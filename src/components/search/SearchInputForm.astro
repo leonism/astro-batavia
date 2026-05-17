@@ -1,8 +1,18 @@
 ---
 interface Props {
   placeholder: string;
+  readyMessage?: string;
+  foundMessage?: string;
+  clearedMessage?: string;
+  noResultsMessage?: string;
 }
-const { placeholder } = Astro.props;
+const { 
+  placeholder, 
+  readyMessage = 'Ready to search {count} articles.',
+  foundMessage = 'Found {count} results for "{query}" ({time}ms)',
+  clearedMessage = 'Search cleared',
+  noResultsMessage = 'No results found for "{query}"'
+} = Astro.props;
 ---
 
 <div class="mx-auto mb-12 max-w-2xl">
@@ -42,6 +52,10 @@ const { placeholder } = Astro.props;
       aria-describedby="search-help search-status"
       data-initial-prompt="Enter a search term or select a topic to find articles."
       data-showing-all-prompt="Showing all articles. Enter a search term or select a topic to refine."
+      data-ready-message={readyMessage}
+      data-found-message={foundMessage}
+      data-cleared-message={clearedMessage}
+      data-no-results-message={noResultsMessage}
     />
 
     <!-- Right Side Controls -->
