@@ -233,12 +233,7 @@ html {
 }
 
 /* Ensure tokens always use the variables provided by Astro/Shiki */
-.prose pre.astro-code span {
-  color: var(--shiki-light, inherit) !important;
-  font-style: var(--shiki-light-font-style, inherit) !important;
-  font-weight: var(--shiki-light-font-weight, inherit) !important;
-}
-
+/* Removed light mode override because Shiki outputs inline `color` for the light/default theme */
 html.dark .prose pre.astro-code span {
   color: var(--shiki-dark, inherit) !important;
   font-style: var(--shiki-dark-font-style, inherit) !important;
