@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agentskills.io/v0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "astro-batavia",
+      "type": "markdown",
+      "description": "Core instructions and capabilities for interacting with the Astro Batavia blog platform.",
+      "url": "/.well-known/agent-skills/astro-batavia.md",
+      "sha256": "ac5cbf11ef7589f1c47598252d8fb0a7c9b9485a8f4420e24d3258ce59211ec0"
+    }
+  ]
+}
