@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest",
     "dev": "astro dev",
-    "build": "astro build && tsx scripts/post-build-sitemap.ts && tsx scripts/compress.ts",
+    "build": "astro build && tsx scripts/post-build-sitemap.ts && tsx scripts/generate-markdown.ts && tsx scripts/compress.ts",
     "build:only": "astro build",
     "compress": "tsx scripts/compress.ts",
     "preview": "astro preview",
@@ -39,6 +39,8 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@types/html-minifier-terser": "^7.0.2",
+    "@types/jsdom": "^28.0.3",
+    "@types/turndown": "^5.0.6",
     "csso": "^5.0.5",
     "eslint": "^9.39.2",
     "glob": "^11.0.3",
@@ -59,6 +61,7 @@
     "rollup-plugin-gzip": "^4.1.1",
     "terser": "^5.43.1",
     "tsx": "^4.21.0",
+    "turndown": "^7.2.4",
     "vite-plugin-imagemin": "^0.6.1",
     "vitest": "^4.0.17",
     "zstd-napi": "^0.0.12"
