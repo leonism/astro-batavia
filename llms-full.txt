@@ -97,6 +97,11 @@ The build process includes custom integrations for:
 - **Languages**: English (`en`), Spanish (`es`), Japanese (`ja`)
 - **Adding a New Language**: Update `src/i18n/ui.ts` (languages, translations) and `astro.config.mjs` (locales array).
 
+### Agent Discovery & Web Bot Auth
+- **Link Headers**: RFC 8288 headers are defined in `public/_headers` for agent discovery (`llms.txt`, `llms-full.txt`, sitemaps).
+- **Web Bot Auth**: The site publishes its public signing keys (JWKS) at `/.well-known/http-message-signatures-directory`. This allows receiving sites to verify requests sent by this site if it acts as a bot or agent.
+- **Markdown for Agents**: Content negotiation is enabled via middleware (`src/middleware.ts`). Agents requesting `Accept: text/markdown` will receive a clean, token-efficient Markdown version of the page.
+
 ### Scripts
 - `npm run dev` - Start development server (port 5000)
 - `npm run build` - Build for production with compression

@@ -30,11 +30,13 @@
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.3.1",
     "autoprefixer": "^10.4.23",
+    "jsdom": "^29.1.1",
     "mdast-util-to-string": "^4.0.0",
     "postcss": "^8.5.6",
     "reading-time": "^1.5.0",
     "rollup": "^4.40.0",
-    "tailwindcss": "^4.2.4"
+    "tailwindcss": "^4.2.4",
+    "turndown": "^7.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -53,7 +55,6 @@
     "imagemin-pngquant": "^10.0.0",
     "imagemin-svgo": "^11.0.1",
     "imagemin-webp": "^8.0.0",
-    "jsdom": "^27.4.0",
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
@@ -61,7 +62,6 @@
     "rollup-plugin-gzip": "^4.1.1",
     "terser": "^5.43.1",
     "tsx": "^4.21.0",
-    "turndown": "^7.2.4",
     "vite-plugin-imagemin": "^0.6.1",
     "vitest": "^4.0.17",
     "zstd-napi": "^0.0.12"
