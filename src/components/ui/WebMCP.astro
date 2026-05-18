@@ -1,0 +1,127 @@
+---
+/**
+ * WebMCP (Web Model Context Protocol) Integration.
+ * Exposes site tools and context to AI agents via the browser.
+ */
+---
+
+<script>
+  /**
+   * Initializes WebMCP tools if the API is available.
+   */
+  async function initWebMCP() {
+    // @ts-ignore - WebMCP is a proposal and might not be in types yet
+    if (!navigator.modelContext || !navigator.modelContext.provideContext) {
+      console.log('WebMCP not supported in this browser.');
+      return;
+    }
+
+    try {
+      // @ts-ignore
+      navigator.modelContext.provideContext({
+        tools: [
+          {
+            name: 'search_blog',
+            description: 'Search for articles on Astro Batavia across all supported languages (en, es, ja).',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                query: {
+                  type: 'string',
+                  description: 'The search term or topic to look for.'
+                },
+                lang: {
+                  type: 'string',
+                  enum: ['all', 'en', 'es', 'ja'],
+                  description: 'Optional language filter.'
+                }
+              },
+              required: ['query']
+            },
+            execute: async ({ query, lang = 'all' }: { query: string, lang?: string }) => {
+              try {
+                const response = await fetch('/api/search-index');
+                if (!response.ok) throw new Error('Failed to fetch search index');
+                const documents = await response.json();
+                
+                // Simple search logic for the tool
+                const results = documents
+                  .filter((doc: any) => {
+                    const matchesQuery = 
+                      doc.title.toLowerCase().includes(query.toLowerCase()) || 
+                      doc.description.toLowerCase().includes(query.toLowerCase()) ||
+                      doc.content?.toLowerCase().includes(query.toLowerCase()) ||
+                      doc.tags.some((tag: string) => tag.toLowerCase().includes(query.toLowerCase()));
+                    
+                    const matchesLang = lang === 'all' || doc.lang === lang;
+                    return matchesQuery && matchesLang;
+                  })
+                  .slice(0, 5)
+                  .map((doc: any) => ({
+                    title: doc.title,
+                    description: doc.description,
+                    url: doc.url,
+                    author: doc.author,
+                    pubDate: doc.pubDate
+                  }));
+
+                return {
+                  results,
+                  total: results.length,
+                  message: results.length > 0 
+                    ? `Found ${results.length} articles matching "${query}".`
+                    : `No articles found for "${query}".`
+                };
+              } catch (error) {
+                return { error: 'Search failed', details: (error as Error).message };
+              }
+            }
+          },
+          {
+            name: 'open_search_overlay',
+            description: 'Opens the search interface on the website for the user to see.',
+            inputSchema: { type: 'object', properties: {} },
+            execute: async () => {
+              const searchButton = document.querySelector('[data-search-trigger]') as HTMLButtonElement;
+              if (searchButton) {
+                searchButton.click();
+                return { success: true, message: 'Search overlay opened.' };
+              }
+              // Fallback to searching for the search input in the header
+              const navSearch = document.querySelector('#nav-search-toggle') as HTMLButtonElement;
+              if (navSearch) {
+                navSearch.click();
+                return { success: true, message: 'Navigation search opened.' };
+              }
+              return { success: false, message: 'Could not find search trigger on the page.' };
+            }
+          },
+          {
+            name: 'toggle_theme',
+            description: 'Toggles between light and dark mode.',
+            inputSchema: { type: 'object', properties: {} },
+            execute: async () => {
+              const themeToggle = document.querySelector('#theme-toggle') as HTMLButtonElement;
+              if (themeToggle) {
+                themeToggle.click();
+                const isDark = document.documentElement.classList.contains('dark');
+                return { success: true, theme: isDark ? 'dark' : 'light' };
+              }
+              return { success: false, message: 'Theme toggle not found.' };
+            }
+          }
+        ]
+      });
+      console.log('WebMCP tools provided successfully.');
+    } catch (error) {
+      console.error('Failed to provide WebMCP context:', error);
+    }
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWebMCP);
+  } else {
+    initWebMCP();
+  }
+</script>

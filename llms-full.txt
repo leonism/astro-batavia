@@ -103,6 +103,7 @@ The build process includes custom integrations for:
 - **Agent Skills**: An Agent Skills discovery index is published at `/.well-known/agent-skills/index.json`. This provides agents with specific instructions and capabilities for the Astro Batavia platform.
 - **Web Bot Auth**: The site publishes its public signing keys (JWKS) at `/.well-known/http-message-signatures-directory`. This allows receiving sites to verify requests sent by this site if it acts as a bot or agent.
 - **Markdown for Agents**: Content negotiation is enabled via middleware (`src/middleware.ts`). Agents requesting `Accept: text/markdown` will receive a clean, token-efficient Markdown version of the page.
+- **WebMCP Support**: The site exposes programmatic tools to browser-based AI agents via the WebMCP API. Available tools include `search_blog`, `open_search_overlay`, and `toggle_theme`.
 
 ### Scripts
 - `npm run dev` - Start development server (port 5000)
