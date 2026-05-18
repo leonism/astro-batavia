@@ -1,0 +1,40 @@
+# Astro Batavia
+
+> A modern, multilingual blog platform built with Astro.js
+
+## Project Overview
+Astro Batavia is a static-site generated (SSG) blog that prioritizes:
+1. **Multilingual Content**: Native support for `en`, `es`, and `ja`.
+2. **Performance**: Sub-second load times via Astro and asset compression.
+3. **Type Safety**: End-to-end TypeScript and Zod schema validation.
+
+## Tech Stack
+- **Framework:** Astro 6.2.2
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **Content:** MDX (Markdown with JSX), Decap CMS
+- **Validation:** Zod (Schema validation)
+- **Testing:** Vitest
+- **Analytics/SEO:** Google Tag Manager (via Partytown), Sentry, Sitemap generation
+
+## Architectural Landmarks
+1. **The i18n Engine (`src/i18n/`)**: Everything in `src/pages/[lang]/` relies on i18n utilities. Use `getLocalizedPath` for all internal links.
+2. **Content Services (`src/services/`)**: View Model pattern for complex components. (e.g. `BlogCardService.ts`).
+3. **Styling (`src/styles/`)**: Tailwind CSS v4. Global styles in `src/styles/global.css`. Config is CSS-first.
+4. **Build Pipeline**: Custom integrations for HTML Minification, Sitemap generation with language support, and post-build asset compression (`scripts/compress.ts`).
+
+## Development Conventions
+- **Atomic Components**: Place reusable UI in `src/components/`.
+- **Type Definitions**: Add shared types to relevant directories or `src/types/`.
+- **Content Changes**: Modify MDX files in `src/content/blog/` or use Decap CMS.
+- **Port**: 5000 (Dev)
+- **Primary Layout**: `src/layouts/Layout.astro`
+
+## Key Commands
+- `npm run dev`: Starts the local development server at `http://localhost:5000`.
+- `npm run build`: Builds the project for production (includes compression).
+- `npm run lint`: Runs ESLint to check for code quality issues.
+- `npm run format`: Formats code using Prettier.
+- `npm test`: Runs unit tests using Vitest.
+
+For full guidelines on UI/UX, routing, building, and agent instructions, refer to `llms-full.txt`.
