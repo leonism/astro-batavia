@@ -1,0 +1,24 @@
+{
+  "linkset": [
+    {
+      "anchor": "/api/search-index",
+      "service-doc": [
+        {
+          "href": "/llms-full.txt",
+          "title": "Agent Documentation"
+        }
+      ],
+      "title": "Search Index API"
+    },
+    {
+      "anchor": "/rss.xml",
+      "service-doc": [
+        {
+          "href": "/llms-full.txt",
+          "title": "Content Feed Documentation"
+        }
+      ],
+      "title": "RSS Content Feed"
+    }
+  ]
+}

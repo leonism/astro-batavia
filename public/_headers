@@ -3,18 +3,21 @@
   Link: </llms-full.txt>; rel="service-doc"
   Link: </sitemap-index.xml>; rel="sitemap"
   Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
+  Link: </.well-known/api-catalog>; rel="api-catalog"
 
 /es/
   Link: </llms.txt>; rel="help"
   Link: </llms-full.txt>; rel="service-doc"
   Link: </sitemap-index.xml>; rel="sitemap"
   Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
+  Link: </.well-known/api-catalog>; rel="api-catalog"
 
 /ja/
   Link: </llms.txt>; rel="help"
   Link: </llms-full.txt>; rel="service-doc"
   Link: </sitemap-index.xml>; rel="sitemap"
   Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
+  Link: </.well-known/api-catalog>; rel="api-catalog"
 
 /sitemap-index.xml
   Content-Type: application/xml
@@ -30,5 +33,10 @@
 
 /.well-known/http-message-signatures-directory
   Content-Type: application/json
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
   Cache-Control: public, max-age=3600
   Access-Control-Allow-Origin: *
