@@ -1,3 +1,21 @@
+/
+  Link: </llms.txt>; rel="help"
+  Link: </llms-full.txt>; rel="service-doc"
+  Link: </sitemap-index.xml>; rel="sitemap"
+  Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
+
+/es/
+  Link: </llms.txt>; rel="help"
+  Link: </llms-full.txt>; rel="service-doc"
+  Link: </sitemap-index.xml>; rel="sitemap"
+  Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
+
+/ja/
+  Link: </llms.txt>; rel="help"
+  Link: </llms-full.txt>; rel="service-doc"
+  Link: </sitemap-index.xml>; rel="sitemap"
+  Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
+
 /sitemap-index.xml
   Content-Type: application/xml
   Cache-Control: public, max-age=3600
@@ -9,3 +27,8 @@
 /rss.xml
   Content-Type: application/xml
   Cache-Control: public, max-age=3600
+
+/.well-known/http-message-signatures-directory
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
