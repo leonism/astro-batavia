@@ -4,6 +4,7 @@
   Link: </sitemap-index.xml>; rel="sitemap"
   Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
   Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </.well-known/agent-skills/index.json>; rel="agent-skills"
 
 /es/
   Link: </llms.txt>; rel="help"
@@ -11,6 +12,7 @@
   Link: </sitemap-index.xml>; rel="sitemap"
   Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
   Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </.well-known/agent-skills/index.json>; rel="agent-skills"
 
 /ja/
   Link: </llms.txt>; rel="help"
@@ -18,6 +20,7 @@
   Link: </sitemap-index.xml>; rel="sitemap"
   Link: </rss.xml>; rel="alternate"; type="application/rss+xml"
   Link: </.well-known/api-catalog>; rel="api-catalog"
+  Link: </.well-known/agent-skills/index.json>; rel="agent-skills"
 
 /sitemap-index.xml
   Content-Type: application/xml
@@ -38,5 +41,15 @@
 
 /.well-known/api-catalog
   Content-Type: application/linkset+json
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+
+/.well-known/agent-skills/index.json
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+
+/.well-known/agent-skills/*.md
+  Content-Type: text/markdown
   Cache-Control: public, max-age=3600
   Access-Control-Allow-Origin: *
