@@ -40,7 +40,6 @@ export default defineConfig({
     '/privacy/': '/en/privacy/',
     '/cookies/': '/en/cookies/  ',
     '/en': '/',
-    '/sitemap.xml': '/sitemap-index.xml',
   },
   prefetch: {
     defaultStrategy: 'viewport',

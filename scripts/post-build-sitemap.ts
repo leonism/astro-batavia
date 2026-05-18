@@ -10,8 +10,10 @@ async function processSitemaps() {
   console.log('📄 Processing sitemaps for browser presentation...');
   
   try {
-    const files = await fs.readdir(DIST_DIR);
-    const sitemapFiles = files.filter(f => f.startsWith('sitemap') && f.endsWith('.xml'));
+    const files = await fs.readdir(DIST_DIR, { withFileTypes: true });
+    const sitemapFiles = files
+      .filter(dirent => dirent.isFile() && dirent.name.startsWith('sitemap') && dirent.name.endsWith('.xml'))
+      .map(dirent => dirent.name);
 
     for (const file of sitemapFiles) {
       const filePath = path.join(DIST_DIR, file);
@@ -35,11 +37,13 @@ async function processSitemaps() {
 
     try {
       await fs.access(indexFile);
+      await fs.rm(mainSitemap, { recursive: true, force: true });
       await fs.copyFile(indexFile, mainSitemap);
       console.log('✅ Created sitemap.xml as a copy of sitemap-index.xml');
     } catch {
       try {
         await fs.access(zeroFile);
+        await fs.rm(mainSitemap, { recursive: true, force: true });
         await fs.copyFile(zeroFile, mainSitemap);
         console.log('✅ Created sitemap.xml as a copy of sitemap-0.xml');
       } catch (err) {
