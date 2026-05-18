@@ -1,0 +1,120 @@
+# Astro Batavia - Full Project Documentation
+
+This document contains the complete context, design guidelines, agent rules, and technical instructions for working on the Astro Batavia project.
+
+---
+
+## 1. Project Overview & Rules
+
+### Core Mission
+Astro Batavia is a static-site generated (SSG) blog that prioritizes:
+1. **Multilingual Content**: Native support for `en`, `es`, and `ja`.
+2. **Performance**: Sub-second load times via Astro and asset compression.
+3. **Type Safety**: End-to-end TypeScript and Zod schema validation.
+
+### Architectural Landmarks
+#### 1. The i18n Engine (`src/i18n/`)
+Everything in the `src/pages/[lang]/` directory relies on the i18n utilities. Use `getLocalizedPath` for all internal links.
+
+#### 2. Content Services (`src/services/`)
+We use a **View Model** pattern for complex components. 
+- `BlogCardService.ts`: The source of truth for how blog data is presented in cards.
+- `DateService.ts`: Standardized date formatting across languages.
+
+#### 3. Styling (`src/styles/`)
+We use **Tailwind CSS v4**. 
+- Global styles: `src/styles/global.css`.
+- Config is CSS-first (variables in `global.css`).
+
+#### 4. Build Pipeline
+The build process includes custom integrations for:
+- HTML Minification (`src/integrations/html-minifier.mjs`).
+- Sitemap generation with language support.
+- Post-build asset compression (`scripts/compress.ts`).
+
+### Working Protocols
+- **Atomic Components**: Place reusable UI in `src/components/`. 
+- **Type Definitions**: Add shared types to relevant directories or `src/types/`.
+- **Content Changes**: Modify MDX files in `src/content/blog/` or use Decap CMS.
+
+### Quick Reference
+- **Framework**: Astro 6.2.2
+- **Port**: 5000 (Dev)
+- **Primary Layout**: `src/layouts/Layout.astro`
+
+### Component Design Patterns
+- **Standardized Proportions**: Use `aspect-video` for image containers in grid-based cards to ensure vertical alignment.
+- **Metadata Robustness**: Always use `min-w-0` and `truncate` on text elements (like author names) within flex containers to prevent layout overflows.
+- **Iconography**: Prefer double chevrons (`chevrons-up`, `chevrons-right`, etc.) for primary navigation actions to provide stronger visual cues.
+- **Typography System**: When building custom elements or writing long-form content outside the `prose` scope, utilize the shadcn/ui typography components (`src/components/ui/typography/`) to guarantee consistent scaling, spacing, and font weights.
+
+---
+
+## 2. Design System
+
+### Design Philosophy
+- **Dual-theme first:** Every color decision must work in both light and dark mode.
+- **Glassmorphism navigation:** The header uses `backdrop-blur-xl` with semi-transparent backgrounds.
+- **Smooth transitions:** All interactive elements use `transition-all duration-300` as baseline.
+- **shadcn/ui-inspired typography:** Standalone typography components mirror shadcn conventions for headings, paragraphs, and utility text.
+- **Accessibility:** Focus rings (`ring-2 ring-primary-500 ring-offset-2`), skip links, screen-reader utilities, ARIA landmarks on all major sections.
+
+### Key Conventions for Agents
+1. **Always use the primary HSL scale** (`primary-50` through `primary-900`). Never use raw blue/indigo outside of gradients.
+2. **Use `gray-*` tokens** (Slate scale) for all neutral colors. Do not introduce new gray shades.
+3. **Font family** must always be `var(--font-sans)` for body and `var(--font-mono)` for code.
+4. **Dark mode**: Use `dark:` prefix variants. The dark class is toggled on `<html>`.
+5. **Border radius**: Cards use `rounded-lg` or `rounded-3xl` (featured). Buttons use `rounded-2xl` (CTA) or `rounded-lg` (small). Tags/pills always `rounded-full`.
+6. **Transitions**: Default `transition-all duration-300`. Use `duration-200` for small color changes, `duration-500` for large layout shifts.
+7. **Container**: Always wrap page content in `mx-auto max-w-7xl px-4 sm:px-6 lg:px-8`.
+8. **Typography components** should be used for standalone text elements outside of markdown prose scope. Within prose, rely on the `@tailwindcss/typography` plugin styles.
+9. **Images in card grids** must use `aspect-video` for consistent vertical alignment.
+10. **Metadata text** (author, date) should use `min-w-0` and `truncate` inside flex containers.
+
+### Component Patterns
+- **Blog Card**:
+  - Background: `bg-white dark:bg-gray-800`
+  - Border: `border border-gray-200 dark:border-gray-700`
+  - Image hover: `group-hover:scale-105 transition-transform duration-300`
+  - Title hover: `group-hover:text-primary-600 dark:group-hover:text-primary-400`
+  - Metadata container: `mt-auto` (pushes to bottom via flex)
+- **Tag Pills**: `rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-800`
+- **Primary CTA**: `text-white bg-linear-to-r from-blue-600 to-indigo-600 rounded-2xl font-semibold hover:scale-105 hover:shadow-2xl`
+- **Secondary CTA**: `text-slate-700 dark:text-slate-300 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-slate-200 dark:border-slate-700 rounded-2xl`
+
+---
+
+## 3. General Project Information
+
+### Tech Stack
+- **Core Framework**: Astro 6.2.2, TypeScript, MDX
+- **Styling**: Tailwind CSS 4.2.4, `@tailwindcss/typography`
+- **Content & CMS**: Decap CMS, Zod
+- **SEO & Analytics**: `@astrojs/sitemap`, Sentry, Spotlight.js
+- **Build & Optimization**: Vite, HTML/CSS/JS Minification, Image Optimization, Gzip/Brotli
+
+### Internationalization
+- **Languages**: English (`en`), Spanish (`es`), Japanese (`ja`)
+- **Adding a New Language**: Update `src/i18n/ui.ts` (languages, translations) and `astro.config.mjs` (locales array).
+
+### Scripts
+- `npm run dev` - Start development server (port 5000)
+- `npm run build` - Build for production with compression
+- `npm run build:only` - Build without compression
+- `npm run compress` - Compress existing build
+- `npm run lint` - Run ESLint
+- `npm run format` - Format with Prettier
+- `npm test` - Run unit tests
+
+### Directory Structure
+- `public/admin/`: Decap CMS config (`config.yml`).
+- `src/components/`: Reusable components (blog, cards, common, footer, home, navigation, search, sections, ui).
+- `src/content/blog/`: MDX posts organized by locale (`en`, `es`, `ja`).
+- `src/i18n/`: i18n TS types, translations (`ui.ts`), utilities.
+- `src/layouts/`: Base and blog post layouts.
+- `src/pages/`: File-based routes. Note: language subdirectories for localized pages.
+- `src/styles/`: Global styles (`global.css`, `enhanced-search.css`).
+- `src/utils/`: Utility functions (search, seo, reading-time).
+- `scripts/`: Custom build scripts.
+
+---
