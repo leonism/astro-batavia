@@ -58,8 +58,18 @@ async function compressData(data: Buffer, extension: string) {
 async function getCompressibleFiles(dir: string) {
   const extensions = Array.from(SUPPORTED_EXTENSIONS).map((ext) => ext.substring(1));
   const pattern = `**/*.{${extensions.join(',')}}`;
+  
   // Use glob for faster file discovery
-  return glob(pattern, { cwd: dir, absolute: true, nodir: true });
+  const files = await glob(pattern, { cwd: dir, absolute: true, nodir: true });
+  
+  // Specifically look for search-index if it has no extension (Astro static API output)
+  const apiSearchIndex = await glob('api/search-index', { cwd: dir, absolute: true, nodir: true });
+  
+  if (apiSearchIndex.length > 0) {
+    console.log(`🔍 Specifically targeting search index: ${path.relative(process.cwd(), apiSearchIndex[0])}`);
+  }
+
+  return [...new Set([...files, ...apiSearchIndex])];
 }
 
 async function runCompressionEngine(distDir = DEFAULT_DIST_DIR, options = { verbose: false }) {

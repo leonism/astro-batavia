@@ -1,9 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import Picture from '../ui/Picture.astro';
 import { DateService } from '../../services/DateService';
 import { getLocalizedPath, slugifyTag } from '../../i18n/utils';
 import { BlogService } from '../../services/BlogService';
+import Avatar from '../ui/Avatar.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -23,17 +23,12 @@ const authorAvatar = authorDetails?.data.avatar || post.data.authorImage;
     href={getLocalizedPath(`/blog/authors/${slugifyTag(post.data.author)}`, lang)}
     class="group/author relative z-30 flex items-center gap-2.5 font-medium pointer-events-auto"
   >
-    <div
-      class="relative h-9 w-9 overflow-hidden rounded-full border-2 border-white/20 bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-0.5 transition-all duration-300 group-hover/author:border-blue-400 group-hover/author:scale-105"
-    >
-      <Picture
-        src={authorAvatar || '/images/placeholder-hero.svg'}
-        alt={post.data.author}
-        class="absolute inset-0 h-full w-full rounded-full object-cover"
-        width={40}
-        height={40}
-      />
-    </div>
+    <Avatar
+      src={authorAvatar}
+      alt={post.data.author}
+      size="sm"
+      class="transition-all duration-300 group-hover/author:scale-105"
+    />
     <span class="truncate transition-colors duration-300 group-hover/author:text-blue-300">
       {post.data.author}
     </span>

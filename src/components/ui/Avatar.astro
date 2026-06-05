@@ -6,9 +6,10 @@ interface Props extends HTMLAttributes<'div'> {
   alt?: string;
   fallback?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'gradient' | 'plain';
 }
 
-const { src, alt = '', fallback, size = 'md', class: className, ...rest } = Astro.props;
+const { src, alt = '', fallback, size = 'md', variant = 'gradient', class: className, ...rest } = Astro.props;
 
 const sizeClasses = {
   xs: 'h-6 w-6 text-[10px]',
@@ -18,7 +19,9 @@ const sizeClasses = {
   xl: 'h-24 w-24 text-3xl',
 };
 
-const strokeClasses = "rounded-full p-[2px] bg-linear-to-br from-blue-600 to-indigo-600";
+const strokeClasses = variant === 'gradient' 
+  ? "rounded-full p-[2px] bg-linear-to-br from-blue-600 to-indigo-600"
+  : "rounded-full p-0 bg-transparent";
 ---
 
 <div class:list={[strokeClasses, sizeClasses[size], className]} {...rest}>

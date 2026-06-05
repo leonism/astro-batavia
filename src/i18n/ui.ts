@@ -115,7 +115,7 @@ export const ui = {
     'home.hero.exploreButton': 'Explore Articles',
     'home.hero.searchButton': 'Search Content',
     'home.hero.mainTitle':
-      'Beautiful <span class="block animate-aurora bg-[length:200%_auto] bg-[linear-gradient(to_right,#FF0080,#7928CA,#0070F3,#38bdf8,#FF0080)] bg-clip-text text-transparent leading-tight">Multi-Language</span> Blog',
+      'Beautiful <span class="block animate-aurora bg-size-[200%_auto] bg-[linear-gradient(to_right,#FF0080,#7928CA,#0070F3,#38bdf8,#FF0080)] bg-clip-text text-transparent leading-tight">Multi-Language</span> Blog',
     'home.hero.description':
       'Built with Astro.js, featuring lightning-fast performance, seamless content management, and beautiful design.',
     'home.features.sectionTitle': 'Why Choose Our Platform',
@@ -265,7 +265,7 @@ export const ui = {
     'home.newsletter.emailPlaceholder': 'Ingresa tu email',
     'home.newsletter.subscribeButton': 'Suscribirse',
     'home.hero.mainTitle':
-      'Hermoso <span class="block animate-aurora bg-[length:200%_auto] bg-[linear-gradient(to_right,#FF0080,#7928CA,#0070F3,#38bdf8,#FF0080)] bg-clip-text text-transparent leading-tight">Blog Multiidioma</span>',
+      'Hermoso <span class="block animate-aurora bg-size-[200%_auto] bg-[linear-gradient(to_right,#FF0080,#7928CA,#0070F3,#38bdf8,#FF0080)] bg-clip-text text-transparent leading-tight">Blog Multiidioma</span>',
     'home.hero.description':
       'Experimenta el futuro del blogging con nuestra plataforma ultrarrápida y bellamente diseñada construida con Astro.js',
     'home.features.sectionTitle': 'Por Qué Elegir Nuestra Plataforma',
@@ -413,7 +413,7 @@ export const ui = {
     'home.newsletter.emailPlaceholder': 'メールアドレスを入力',
     'home.newsletter.subscribeButton': '購読',
     'home.hero.mainTitle':
-      '美しい<span class="block animate-aurora bg-[length:200%_auto] bg-[linear-gradient(to_right,#FF0080,#7928CA,#0070F3,#38bdf8,#FF0080)] bg-clip-text text-transparent leading-tight">多言語ブログ</span>',
+      '美しい<span class="block animate-aurora `bg-size-[200%_auto] bg-[linear-gradient(to_right,#FF0080,#7928CA,#0070F3,#38bdf8,#FF0080)] bg-clip-text text-transparent leading-tight">多言語ブログ</span>',
     'home.hero.description':
       'Astro.jsで構築された超高速で美しくデザインされたプラットフォームで、ブログの未来を体験してください',
     'home.features.sectionTitle': '私たちのプラットフォームを選ぶ理由',

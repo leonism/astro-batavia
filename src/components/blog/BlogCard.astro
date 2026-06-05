@@ -4,6 +4,7 @@ import type { LanguageKey } from '@/i18n/types';
 import { BlogCardService } from '@/services/BlogCardService';
 import type { HTMLAttributes } from 'astro/types';
 import { Picture } from 'astro:assets';
+import Avatar from '@/components/ui/Avatar.astro';
 
 export interface Props extends HTMLAttributes<'article'> {
   post: CollectionEntry<'blog'>;
@@ -88,30 +89,12 @@ const vm = await BlogCardService.getViewModel(Astro.props);
       <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm text-gray-500 transition-colors duration-300 dark:text-gray-400 lg:text-xs xl:text-sm">
         <div class="flex min-w-0 items-center gap-x-3 gap-y-1">
           <div class="flex min-w-0 items-center">
-            {
-              vm.authorAvatar ? (
-                <img
-                  src={vm.authorAvatar}
-                  alt={vm.author}
-                  class="mr-2 h-5 w-5 rounded-full object-cover lg:h-4.5 lg:w-4.5 xl:h-5 xl:w-5"
-                />
-              ) : (
-                <svg
-                  class="mr-1 h-4 w-4 shrink-0 lg:h-3.5 lg:w-3.5 xl:h-4 xl:w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              )
-            }
+            <Avatar
+              src={vm.authorAvatar}
+              alt={vm.author}
+              size="xs"
+              class="mr-2"
+            />
             {
               vm.authorUrl ? (
                 <a

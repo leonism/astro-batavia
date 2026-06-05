@@ -7,6 +7,8 @@ interface Props {
   lang: LanguageKey;
 }
 
+import { TypographyH2, TypographyP } from '@/components/ui/typography';
+
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
@@ -14,15 +16,15 @@ const t = useTranslations(lang);
 <section class="bg-slate-50 py-24 dark:bg-slate-800" aria-labelledby="features-title">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <header class="mb-16 text-center">
-      <h2
+      <TypographyH2
         id="features-title"
-        class="mb-4 text-5xl font-bold text-slate-900 dark:text-white sm:text-5xl"
+        class="mb-4 border-b-0 pb-0 text-5xl sm:text-5xl"
       >
         {t('home.features.sectionTitle')}
-      </h2>
-      <p class="mx-auto max-w-2xl text-xl text-slate-600 dark:text-slate-400">
+      </TypographyH2>
+      <TypographyP class="mx-auto max-w-2xl text-xl not-first:mt-0">
         {t('home.features.sectionSubtitle')}
-      </p>
+      </TypographyP>
     </header>
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -34,7 +36,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -61,7 +62,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -88,7 +88,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -115,7 +114,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -142,7 +140,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -169,7 +166,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -196,7 +192,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -223,7 +218,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"
@@ -250,7 +244,6 @@ const t = useTranslations(lang);
         lang={lang}
         class="animate-fade-in"
       >
-
         <svg
           slot="icon"
           class="h-6 w-6 text-white"

@@ -1,4 +1,6 @@
 ---
+import { TypographyH1, TypographyLead } from '@/components/ui/typography';
+
 interface Props {
   title: string; // Can be HTML
   subtitle?: string;
@@ -78,8 +80,8 @@ const iconBaseClass = 'w-5 h-5 transition-transform';
 
   <div class:list={[containerClass]}>
     <div class="space-y-6">
-      {title && <h1 id="hero-title" class:list={[titleClass]} set:html={title} />}
-      {subtitle && <p class:list={[subtitleClass]} set:html={subtitle} />}
+      {title && <TypographyH1 id="hero-title" class:list={[titleClass]} set:html={title} />}
+      {subtitle && <TypographyLead class:list={[subtitleClass]} set:html={subtitle} />}
     </div>
 
     {
