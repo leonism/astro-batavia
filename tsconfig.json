@@ -14,10 +14,9 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "isolatedModules": true,
-    "baseUrl": ".",
     "types": ["node", "astro/client"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*", "astro.config.mjs", "scripts/**/*", "eslint.config.js"]

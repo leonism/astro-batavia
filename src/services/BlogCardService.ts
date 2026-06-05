@@ -86,7 +86,7 @@ export class BlogCardService {
 
     // Generate excerpt
     const excerpt = showExcerpt
-      ? ContentService.getExcerpt(post.body, post.data.description, isFeatured ? 300 : 150)
+      ? ContentService.getExcerpt(post.body || '', post.data.description, isFeatured ? 300 : 150)
       : '';
 
     // Format tags
