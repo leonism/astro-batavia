@@ -4,38 +4,69 @@ import Layout from '@/layouts/Layout.astro';
 import BlogPost from '@/layouts/BlogPost.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
 import Pagination from '@/components/common/Pagination.astro';
-import { useTranslations, isValidLanguage } from '@/i18n/utils';
+import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils';
 import { BlogService } from '@/services/BlogService';
-import { PAGINATION_POSTS_PER_PAGE } from '@/consts';
+import { PAGINATION_POSTS_PER_PAGE, LOCALES } from '@/consts';
 import type { GetStaticPaths, MarkdownHeading, Page } from 'astro';
 
-export const getStaticPaths = (async ({ paginate }) => {
-  const languages = ['en', 'es', 'ja'];
+export const getStaticPaths = (async () => {
+  const languages = Object.keys(LOCALES);
   const allPaths = [];
 
-  // 1. Pagination Paths
+  // 1. Pagination Paths (Pages 2+)
   for (const lang of languages) {
-    const posts = await BlogService.getPostsByLocale(lang);
-    const paths = paginate(posts, {
-      params: { lang },
-      pageSize: PAGINATION_POSTS_PER_PAGE,
-    });
-    allPaths.push(...paths);
+    const locale = lang as any;
+    const posts = await BlogService.getPostsByLocale(locale);
+    const totalPosts = posts.length;
+    const lastPage = Math.ceil(totalPosts / PAGINATION_POSTS_PER_PAGE);
+
+    for (let currentPage = 2; currentPage <= lastPage; currentPage++) {
+      const start = (currentPage - 1) * PAGINATION_POSTS_PER_PAGE;
+      const end = Math.min(start + PAGINATION_POSTS_PER_PAGE, totalPosts);
+      const data = posts.slice(start, end);
+
+      allPaths.push({
+        params: { lang, slug: String(currentPage) },
+        props: {
+          page: {
+            data,
+            start,
+            end: end - 1,
+            total: totalPosts,
+            currentPage,
+            size: PAGINATION_POSTS_PER_PAGE,
+            lastPage,
+            url: {
+              current: getLocalizedPath(`/blog/${currentPage}`, locale),
+              prev: currentPage === 2 
+                ? getLocalizedPath('/blog', locale) 
+                : getLocalizedPath(`/blog/${currentPage - 1}`, locale),
+              next: currentPage < lastPage 
+                ? getLocalizedPath(`/blog/${currentPage + 1}`, locale) 
+                : undefined,
+              first: getLocalizedPath('/blog', locale),
+              last: getLocalizedPath(`/blog/${lastPage}`, locale),
+            }
+          }
+        }
+      });
+    }
   }
 
   // 2. Individual Post Paths
   const allPosts = await BlogService.getAllPosts();
-  const postPaths = allPosts.filter(p => { const pts = p.id.split("/"); return pts[1] !== "tags" && pts[1] !== "authors"; }).map((post) => {
+  allPosts.forEach((post) => {
     const [lang, ...slugParts] = post.id.replace(/\.mdx?$/, '').split('/');
-    const page = slugParts[0] === 'blog' ? slugParts.slice(1).join('/') : slugParts.join('/');
-
-    return {
-      params: { lang, page },
-      props: { post },
-    };
+    const postSlug = slugParts[0] === 'blog' ? slugParts.slice(1).join('/') : slugParts.join('/');
+    
+    // Safety check: ensure slug is not a reserved word (though it shouldn't be for 1-segment slugs)
+    if (postSlug !== 'tags' && postSlug !== 'authors') {
+      allPaths.push({
+        params: { lang, slug: postSlug },
+        props: { post },
+      });
+    }
   });
-
-  allPaths.push(...postPaths);
 
   return allPaths;
 }) satisfies GetStaticPaths;
@@ -46,9 +77,8 @@ type Props = {
 };
 
 const { post, page } = Astro.props as Props;
-const { lang } = Astro.params;
+const { lang, slug } = Astro.params;
 
-// Validate language
 if (!lang || !isValidLanguage(lang)) {
   return Astro.redirect('/404');
 }
@@ -67,11 +97,6 @@ if (post) {
 }
 
 const t = useTranslations(lang);
-const allTags = await BlogService.getUniqueTags(lang);
-
-// Determine if we are on the first page
-const isFirstPage = page?.currentPage === 1;
-const pagePosts = page?.data || [];
 ---
 
 {
@@ -79,9 +104,9 @@ const pagePosts = page?.data || [];
     <BlogPost {...post.data} slug={post.id} headings={headings} readingTime={readingTime} readingTimeMinutes={readingTimeMinutes}>
       {Content && <Content />}
     </BlogPost>
-  ) : (
+  ) : page ? (
     <Layout
-      title={`${t('nav.blog')} ${page && !isFirstPage ? `| ${t('pagination.page')} ${page.currentPage}` : ''}`}
+      title={`${t('nav.blog')} | ${t('pagination.page')} ${page.currentPage}`}
       description={
         lang === 'es'
           ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
@@ -106,27 +131,11 @@ const pagePosts = page?.data || [];
           </p>
         </div>
 
-        {/* Featured Post - Only on first page */}
-        {isFirstPage && pagePosts.length > 0 && (
-          <BlogCard 
-            post={pagePosts[0]} 
-            isFeatured={true} 
-            lang={lang} 
-            class="mb-16 post-item animate-fade-in"
-          />
-        )}
-
         {/* Blog Grid */}
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {/*
-            Render posts grid.
-            Optimization: We eagerly load images for the first 3 posts in the grid
-            to ensure LCP (Largest Contentful Paint) is optimized for the first row,
-            preventing "unoptimized loading attribute" warnings and layout shifts.
-          */}
-          {pagePosts.slice(isFirstPage ? 1 : 0).map((post, index) => (
+          {page.data.map((p, index) => (
             <BlogCard
-              post={post}
+              post={p}
               lang={lang}
               loading={index < 3 ? 'eager' : 'lazy'}
               class="post-item animate-fade-in"
@@ -135,8 +144,13 @@ const pagePosts = page?.data || [];
         </div>
 
         {/* Pagination */}
-        {page && page.lastPage > 1 && <Pagination page={page} lang={lang} />}
+        {page.lastPage > 1 && <Pagination page={page} lang={lang} />}
       </div>
     </Layout>
+  ) : (
+    // Fallback/Error - Should not happen given getStaticPaths
+    <div class="flex items-center justify-center min-h-[50vh]">
+        <p class="text-xl text-slate-500">Post not found.</p>
+    </div>
   )
 }

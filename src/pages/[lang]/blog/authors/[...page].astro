@@ -61,10 +61,24 @@ export const getStaticPaths = (async ({ paginate }) => {
       ...indexPaths.map((p) => {
         const pageNum = p.params.page;
         const safePageNum = pageNum !== undefined ? String(pageNum) : '1';
+        const currentPage = p.props.page.currentPage;
+        
+        // Fix URLs for the page object
+        const page = { ...p.props.page };
+        page.url = { 
+          ...page.url,
+          prev: currentPage === 2 
+            ? getLocalizedPath('/blog/authors', locale) 
+            : page.url.prev?.replace(/\/1$/, ''),
+          next: page.url.next,
+          current: page.url.current.replace(/\/1$/, ''),
+          first: getLocalizedPath('/blog/authors', locale),
+        };
+
         return {
           ...p,
           params: { ...p.params, page: safePageNum === '1' ? undefined : safePageNum },
-          props: { ...p.props, type: 'index' },
+          props: { ...p.props, page, type: 'index' },
         };
       }),
     );
@@ -89,13 +103,28 @@ export const getStaticPaths = (async ({ paginate }) => {
         ...detailPaths.map((p) => {
           const pageNum = p.params.page;
           const safePageNum = pageNum !== undefined ? String(pageNum) : '1';
+          const currentPage = p.props.page.currentPage;
+
+          // Fix URLs for the page object
+          const page = { ...p.props.page };
+          const authorBasePath = `/blog/authors/${authorSlug}`;
+          page.url = {
+            ...page.url,
+            prev: currentPage === 2
+              ? getLocalizedPath(authorBasePath, locale)
+              : page.url.prev?.replace(/\/1$/, ''),
+            next: page.url.next,
+            current: page.url.current.replace(/\/1$/, ''),
+            first: getLocalizedPath(authorBasePath, locale),
+          };
+
           return {
             ...p,
             params: {
               ...p.params,
               page: safePageNum === '1' ? authorSlug : `${authorSlug}/${safePageNum}`,
             },
-            props: { ...p.props, type: 'detail', authorName, prevAuthor, nextAuthor },
+            props: { ...p.props, page, type: 'detail', authorName, prevAuthor, nextAuthor },
           };
         }),
       );

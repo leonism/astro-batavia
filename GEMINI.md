@@ -6,9 +6,9 @@
 
 ### Key Technologies
 
-- **Framework:** [Astro](https://astro.build) (v6.2.2)
+- **Framework:** [Astro](https://astro.build) (v6.4)
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com) (v4)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com) (v4) - **CSS-only configuration**
 - **Content:** MDX (Markdown with JSX), Decap CMS
 - **Validation:** [Zod](https://zod.dev/) (Schema validation)
 - **Testing:** [Vitest](https://vitest.dev/)
@@ -32,6 +32,11 @@ The project uses `npm` for dependency management and script execution.
 | `npm test`           | Runs unit tests using Vitest.                                             |
 
 ## Recent Updates
+
+### Architecture & Performance
+- **Tailwind CSS v4 CSS-Only Config**: Refactored styling to use the modern Tailwind v4 approach. All theme configurations, typography overrides, and custom animations are now centralized in `src/styles/global.css` using the `@theme` block and CSS variables. `tailwind.config.mjs` has been removed.
+- **Manual Pagination Strategy**: To avoid the `PageNumberParamNotFound` error in Astro, pages that use `paginate()` but do not have `[page]` or `[...page]` in their filename (like `index.astro` or `[slug].astro`) have been refactored to handle pagination logic manually.
+- **Pagination URL Consistency**: Enhanced `[...page].astro` routes to correctly handle `Page` object URL generation, ensuring that the first page correctly links to the root folder (e.g., `/blog/authors/` instead of `/blog/authors/1`).
 
 ### UI & Layout Consistency
 - **Standardized Aspect Ratios**: Blog cards now use a consistent `aspect-video` for hero images, ensuring perfect grid alignment.
@@ -68,6 +73,7 @@ The project uses `npm` for dependency management and script execution.
 - **Metadata Robustness**: Always use `min-w-0` and `truncate` on text elements (like author names) within flex containers to prevent layout overflows.
 - **Iconography**: Prefer double chevrons (`chevrons-up`, `chevrons-right`, etc.) for primary navigation actions to provide stronger visual cues.
 - **Typography System**: When building custom elements or writing long-form content outside the `prose` scope, utilize the shadcn/ui typography components (`src/components/ui/typography/`) to guarantee consistent scaling, spacing, and font weights.
+- **Manual Pagination**: If a paginated list is needed on a page without `[page]` in its filename, avoid `paginate()`. Instead, manually slice the data and construct a `Page`-like object to maintain compatibility with the `Pagination.astro` component.
 
 ### Internationalization (i18n)
 
@@ -87,9 +93,9 @@ Content is managed using Astro's Content Collections API.
 
 ### Styling
 
-- **Tailwind CSS:** Primary method for styling.
-- **Dark Mode:** Supported via class-based toggling and system preference.
-- **Global Styles:** Located in `src/styles/global.css`.
+- **Tailwind CSS v4**: Do NOT create a `tailwind.config.js` or `tailwind.config.mjs` file. All theme extensions and overrides must be added to the `@theme` block in `src/styles/global.css`.
+- **Dark Mode**: Supported via class-based toggling and system preference.
+- **Global Styles**: Located in `src/styles/global.css`.
 
 ### Testing
 

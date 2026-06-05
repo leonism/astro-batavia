@@ -58,9 +58,6 @@
   // Plugin configurations
   "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
 
-  // Tailwind CSS plugin configuration (optional)
-  "tailwindConfig": "./tailwind.config.js",
-
   // Editor integration hints
   "editorconfig": true
 }

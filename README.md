@@ -97,10 +97,10 @@
 
 ### **Styling & UI**
 
-- **[Tailwind CSS 4.2.4](https://tailwindcss.com)** - Utility-first CSS framework
+- **[Tailwind CSS 4](https://tailwindcss.com)** - Utility-first CSS framework with **CSS-only configuration**
 - **[@tailwindcss/vite](https://tailwindcss.com)** - Native Vite integration for Tailwind CSS
 - **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)** - Beautiful typographic defaults
-- **Custom Design System** - Consistent color palette and spacing
+- **Custom Design System** - Centralized in `src/styles/global.css` using the `@theme` block
 
 ### **Content & CMS**
 
@@ -140,6 +140,7 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 - **Content Collections**: Type-safe content management with Zod validation
 - **Internationalization**: Route-based language switching with shared components
 - **Component Composition**: Atomic design principles with reusable UI components
+- **Manual Pagination**: High-performance manual pagination for custom routes (e.g., `/blog/`, `/blog/[slug]`) to bypass standard routing constraints and ensure sub-100ms response times.
 
 ## 🚀 Getting Started
 
@@ -314,17 +315,15 @@ canonical: 'https://yourdomain.com/en/blog/your-post-slug'
 
 ### **Design System**
 
-The project uses a custom design system built on Tailwind CSS:
+The project uses a custom design system built on Tailwind CSS v4, configured entirely within the CSS entry point:
 
-```javascript
-// tailwind.config.mjs
-colors: {
-  primary: {
-    50: 'hsl(210 100% 98%)',
-    500: 'hsl(210 100% 60%)',
-    600: 'hsl(210 100% 50%)', // Main brand color
-    900: 'hsl(210 100% 20%)',
-  }
+```css
+/* src/styles/global.css */
+@theme {
+  --color-primary-50: hsl(210 100% 98%);
+  --color-primary-500: hsl(210 100% 60%);
+  --color-primary-600: hsl(210 100% 50%); /* Main brand color */
+  --color-primary-900: hsl(210 100% 20%);
 }
 ```
 
@@ -547,7 +546,7 @@ astro-batavia/
 │   │   ├── 404.astro             # 404 error page
 │   │   └── index.astro           # Root redirect
 │   ├── 📁 styles/                # Global styles
-│   │   └── global.css            # CSS custom properties
+│   │   └── global.css            # Tailwind v4 configuration & theme
 │   ├── 📁 utils/                 # Utility functions
 │   │   ├── remark-reading-time.mjs # Reading time plugin
 │   │   ├── search.ts             # Search utilities
@@ -557,7 +556,6 @@ astro-batavia/
 │   └── compress.js               # Asset compression
 ├── astro.config.mjs              # Astro configuration
 ├── package.json                  # Dependencies & scripts
-├── tailwind.config.mjs           # Tailwind configuration
 ├── tsconfig.json                 # TypeScript configuration
 └── README.md                     # Project documentation
 ```

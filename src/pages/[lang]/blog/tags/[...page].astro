@@ -45,10 +45,24 @@ export const getStaticPaths = (async ({ paginate }) => {
     const adjustedTagIndexPaths = tagIndexPaths.map(path => {
       const pageNum = path.params.page;
       const safePageNum = pageNum !== undefined ? String(pageNum) : "1";
+      const currentPage = path.props.page.currentPage;
+      
+      // Fix URLs
+      const page = { ...path.props.page };
+      page.url = {
+        ...page.url,
+        prev: currentPage === 2 
+          ? getLocalizedPath('/blog/tags', locale) 
+          : page.url.prev?.replace(/\/1$/, ''),
+        next: page.url.next,
+        current: page.url.current.replace(/\/1$/, ''),
+        first: getLocalizedPath('/blog/tags', locale),
+      };
+
       return { 
         ...path, 
         params: { ...path.params, page: safePageNum === "1" ? undefined : safePageNum },
-        props: { ...path.props, isIndex: true }
+        props: { ...path.props, page, isIndex: true }
       };
     });
     
