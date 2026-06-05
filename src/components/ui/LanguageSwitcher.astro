@@ -14,6 +14,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
     aria-haspopup="true"
     aria-expanded="false"
   >
+    <!-- the language switcher svg -->
     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         stroke-linecap="round"
@@ -24,6 +25,7 @@ const currentPath = removeLocaleFromPath(Astro.url.pathname);
       </path>
     </svg>
     <span class="hidden md:inline">{languages[lang]}</span>
+    <!-- the bottom pointing arrow chevron svg -->
     <svg
       class="h-4 w-4 transition-transform duration-200"
       id="language-chevron"

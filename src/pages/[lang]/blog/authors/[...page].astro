@@ -1,13 +1,15 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import Layout from '@/layouts/Layout.astro';
-import BlogCard from '@/components/blog/BlogCard.astro';
-import AuthorCard from '@/components/author/AuthorCard.astro';
-import Pagination from '@/components/common/Pagination.astro';
-import { useTranslations, getLocalizedPath, slugifyTag, isValidLanguage } from '@/i18n/utils';
-import { BlogService } from '@/services/BlogService';
-import { LOCALES, PAGINATION_POSTS_PER_PAGE, PAGINATION_AUTHORS_PER_PAGE } from '@/consts';
-import type { GetStaticPaths, Page } from 'astro';
+import { type CollectionEntry, getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import BlogCard from "@/components/blog/BlogCard.astro";
+import AuthorCard from "@/components/author/AuthorCard.astro";
+import Pagination from "@/components/common/Pagination.astro";
+import { useTranslations, getLocalizedPath, slugifyTag, isValidLanguage } from "@/i18n/utils";
+import { BlogService } from "@/services/BlogService";
+import { LOCALES, PAGINATION_POSTS_PER_PAGE, PAGINATION_AUTHORS_PER_PAGE } from "@/consts";
+import type { GetStaticPaths, Page } from "astro";
+import Avatar from "@/components/ui/Avatar.astro";
+import { TypographyH1, TypographyP } from "@/components/ui/typography";
 
 interface AuthorItem {
   name: string;
@@ -27,11 +29,10 @@ export const getStaticPaths = (async ({ paginate }) => {
     const locale = lang as any;
     const posts = await BlogService.getPostsByLocale(locale);
 
-    // Group posts by author
     const authorsMap = new Map<string, number>();
     posts.forEach((post) => {
       if (post.data.author) {
-        const name = post.data.author.trim().normalize('NFC');
+        const name = post.data.author.trim().normalize("NFC");
         authorsMap.set(name, (authorsMap.get(name) || 0) + 1);
       }
     });
@@ -51,7 +52,6 @@ export const getStaticPaths = (async ({ paginate }) => {
       }),
     );
 
-    // 1. Author Index Paths
     const indexPaths = paginate(authorList, {
       params: { lang },
       pageSize: PAGINATION_AUTHORS_PER_PAGE,
@@ -60,30 +60,28 @@ export const getStaticPaths = (async ({ paginate }) => {
     allPaths.push(
       ...indexPaths.map((p) => {
         const pageNum = p.params.page;
-        const safePageNum = pageNum !== undefined ? String(pageNum) : '1';
+        const safePageNum = pageNum !== undefined ? String(pageNum) : "1";
         const currentPage = p.props.page.currentPage;
         
-        // Fix URLs for the page object
         const page = { ...p.props.page };
         page.url = { 
           ...page.url,
           prev: currentPage === 2 
-            ? getLocalizedPath('/blog/authors', locale) 
-            : page.url.prev?.replace(/\/1$/, ''),
+            ? getLocalizedPath("/blog/authors", locale) 
+            : page.url.prev?.replace(/\/1$/, ""),
           next: page.url.next,
-          current: page.url.current.replace(/\/1$/, ''),
-          first: getLocalizedPath('/blog/authors', locale),
+          current: page.url.current.replace(/\/1$/, ""),
+          first: getLocalizedPath("/blog/authors", locale),
         };
 
         return {
           ...p,
-          params: { ...p.params, page: safePageNum === '1' ? undefined : safePageNum },
-          props: { ...p.props, page, type: 'index' },
+          params: { ...p.params, page: safePageNum === "1" ? undefined : safePageNum },
+          props: { ...p.props, page, type: "index" },
         };
       }),
     );
 
-    // 2. Author Detail Paths (Paginated posts per author)
     authorDetailsList.forEach((author, i) => {
       const authorName = author.name;
       const authorSlug = slugifyTag(authorName);
@@ -102,19 +100,18 @@ export const getStaticPaths = (async ({ paginate }) => {
       allPaths.push(
         ...detailPaths.map((p) => {
           const pageNum = p.params.page;
-          const safePageNum = pageNum !== undefined ? String(pageNum) : '1';
+          const safePageNum = pageNum !== undefined ? String(pageNum) : "1";
           const currentPage = p.props.page.currentPage;
 
-          // Fix URLs for the page object
           const page = { ...p.props.page };
           const authorBasePath = `/blog/authors/${authorSlug}`;
           page.url = {
             ...page.url,
             prev: currentPage === 2
               ? getLocalizedPath(authorBasePath, locale)
-              : page.url.prev?.replace(/\/1$/, ''),
+              : page.url.prev?.replace(/\/1$/, ""),
             next: page.url.next,
-            current: page.url.current.replace(/\/1$/, ''),
+            current: page.url.current.replace(/\/1$/, ""),
             first: getLocalizedPath(authorBasePath, locale),
           };
 
@@ -122,9 +119,9 @@ export const getStaticPaths = (async ({ paginate }) => {
             ...p,
             params: {
               ...p.params,
-              page: safePageNum === '1' ? authorSlug : `${authorSlug}/${safePageNum}`,
+              page: safePageNum === "1" ? authorSlug : `${authorSlug}/${safePageNum}`,
             },
-            props: { ...p.props, page, type: 'detail', authorName, prevAuthor, nextAuthor },
+            props: { ...p.props, page, type: "detail", authorName, prevAuthor, nextAuthor },
           };
         }),
       );
@@ -136,15 +133,15 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 type Props =
   | {
-      type: 'index';
+      type: "index";
       page: Page<AuthorItem>;
       authorName?: undefined;
       prevAuthor?: undefined;
       nextAuthor?: undefined;
     }
   | {
-      type: 'detail';
-      page: Page<CollectionEntry<'blog'>>;
+      type: "detail";
+      page: Page<CollectionEntry<"blog">>;
       authorName: string;
       prevAuthor: AuthorNavInfo | null;
       nextAuthor: AuthorNavInfo | null;
@@ -154,56 +151,53 @@ const { page, type, authorName, prevAuthor, nextAuthor } = Astro.props as Props;
 const { lang } = Astro.params;
 
 if (!lang || !isValidLanguage(lang)) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 const locale = lang as any;
 const t = useTranslations(locale);
 
-// Resolve author details if in detail view
-let authorDetails: CollectionEntry<'authors'> | null = null;
-if (type === 'detail' && authorName) {
+let authorDetails: CollectionEntry<"authors"> | null = null;
+if (type === "detail" && authorName) {
   authorDetails = await BlogService.getAuthorDetails(authorName);
 }
 ---
 
 <Layout
-  title={type === 'index'
-    ? `${t('blog.authors')} ${page.currentPage > 1 ? `| ${t('pagination.page')} ${page.currentPage}` : ''} | ${t('nav.blog')}`
-    : `${authorName} | ${t('blog.author')} | ${t('nav.blog')}`}
-  description={type === 'index'
-    ? locale === 'es'
-      ? 'Conoce a los autores detrás de nuestros artículos.'
-      : locale === 'ja'
-        ? '記事を執筆している著者をご紹介します。'
-        : 'Meet the authors behind our articles.'
+  title={type === "index"
+    ? `${t("blog.authors")} ${page.currentPage > 1 ? `| ${t("pagination.page")} ${page.currentPage}` : ""} | ${t("nav.blog")}`
+    : `${authorName} | ${t("blog.author")} | ${t("nav.blog")}`}
+  description={type === "index"
+    ? locale === "es"
+      ? "Conoce a los autores detrás de nuestros artículos."
+      : locale === "ja"
+        ? "記事を執筆している著者をご紹介します。"
+        : "Meet the authors behind our articles."
     : authorDetails?.data.bio ||
-      (locale === 'es'
+      (locale === "es"
         ? `Artículos escritos por ${authorName}`
-        : locale === 'ja'
+        : locale === "ja"
           ? `${authorName}が執筆した記事`
           : `Articles written by ${authorName}`)}
   lang={locale}
 >
   <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     {
-      type === 'index' ? (
+      type === "index" ? (
         <>
-          {/* Header */}
           <div class="mb-16 text-center">
-            <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl">
-              {t('blog.authors')}
-            </h1>
-            <p class="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-400 sm:text-xl">
-              {locale === 'es'
-                ? 'Nuestra comunidad de expertos y creadores.'
-                : locale === 'ja'
-                  ? '私たちのエキスパートとクリエイターのコミュニティ。'
-                  : 'Our community of experts and creators.'}
-            </p>
+            <TypographyH1 class="mb-4">
+              {t("blog.authors")}
+            </TypographyH1>
+            <TypographyP class="mx-auto max-w-2xl text-lg sm:text-xl">
+              {locale === "es"
+                ? "Nuestra comunidad de expertos y creadores."
+                : locale === "ja"
+                  ? "私たちのエキスパートとクリエイターのコミュニティ。"
+                  : "Our community of experts and creators."}
+            </TypographyP>
           </div>
 
-          {/* Authors Grid */}
           <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {page.data.map((item) => (
               <AuthorCard
@@ -217,36 +211,29 @@ if (type === 'detail' && authorName) {
         </>
       ) : (
         <>
-          {/* Author Header */}
           <div class="mb-16 text-center animate-fade-in">
             <div class="mb-6 flex justify-center">
-              {authorDetails?.data.avatar ? (
-                <img
-                  src={authorDetails.data.avatar}
-                  alt={authorName}
-                  class="h-32 w-32 rounded-full object-cover ring-4 ring-blue-500/20"
-                />
-              ) : (
-                <div class="flex h-32 w-32 items-center justify-center rounded-full bg-blue-100 text-5xl font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                  {authorName?.charAt(0)}
-                </div>
-              )}
+              <Avatar
+                src={authorDetails?.data.avatar}
+                alt={authorName}
+                size="xl"
+                class="ring-4 ring-blue-500/20"
+              />
             </div>
-            <h1 class="mb-4 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl">
+            <TypographyH1 class="mb-4">
               {authorName}
-            </h1>
+            </TypographyH1>
             {authorDetails?.data.role && (
               <p class="mb-4 text-xl font-medium text-blue-600 dark:text-blue-400">
                 {authorDetails.data.role}
               </p>
             )}
             {authorDetails?.data.bio && (
-              <p class="mx-auto max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <TypographyP class="mx-auto max-w-2xl text-lg sm:text-xl">
                 {authorDetails.data.bio}
-              </p>
+              </TypographyP>
             )}
 
-            {/* Social Links */}
             {authorDetails?.data.social && (
               <div class="mt-8 flex justify-center gap-6">
                 {Object.entries(authorDetails.data.social).map(([platform, url]) => {
@@ -259,58 +246,19 @@ if (type === 'detail' && authorName) {
                       rel="noopener noreferrer"
                       aria-label={platform}
                     >
-                      {platform === 'twitter' && (
-                        <svg
-                          class="h-5 w-5"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61756L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.7998L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31398 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
-                        </svg>
+                      {platform === "twitter" && (
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61756L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.7998L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31398 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" /></svg>
                       )}
-                      {platform === 'github' && (
-                        <svg
-                          class="h-5 w-5"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
+                      {platform === "github" && (
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
                       )}
-                      {platform === 'linkedin' && (
-                        <svg
-                          class="h-5 w-5"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                        </svg>
+                      {platform === "linkedin" && (
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
                       )}
-                      {platform === 'website' && (
-                        <svg
-                          class="h-5 w-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <line x1="2" y1="12" x2="22" y2="12" />
-                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                        </svg>
+                      {platform === "website" && (
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
                       )}
-                      {/* Fallback for other platforms */}
-                      {!['twitter', 'github', 'linkedin', 'website'].includes(platform) && (
+                      {!["twitter", "github", "linkedin", "website"].includes(platform) && (
                         <span class="text-xs font-bold uppercase">{platform.charAt(0)}</span>
                       )}
                     </a>
@@ -320,27 +268,25 @@ if (type === 'detail' && authorName) {
             )}
           </div>
 
-          {/* Posts Grid */}
           <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in">
             {page.data.map((post, index) => (
               <BlogCard
                 post={post}
                 lang={locale}
-                loading={index < 3 ? 'eager' : 'lazy'}
+                loading={index < 3 ? "eager" : "lazy"}
                 class="post-item animate-fade-in"
               />
             ))}
           </div>
 
-          {/* Author Navigation */}
           <div class="mt-16 border-t border-slate-200 pt-8 dark:border-slate-800">
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div class={`grid gap-6 ${prevAuthor && nextAuthor ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2"}`}>
               {prevAuthor ? (
                 <a
                   href={getLocalizedPath(`/blog/authors/${slugifyTag(prevAuthor.name)}`, locale)}
-                  class="group flex flex-row items-stretch overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-blue-400"
+                  class="group flex flex-row items-stretch overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
                 >
-                  <div class="relative w-20 shrink-0 overflow-hidden sm:w-24">
+                  <div class="relative w-24 shrink-0 overflow-hidden md:w-32">
                     {prevAuthor.avatar ? (
                       <img
                         src={prevAuthor.avatar}
@@ -354,23 +300,13 @@ if (type === 'detail' && authorName) {
                     )}
                   </div>
                   <div class="flex flex-col justify-center p-4">
-                    <div class="mb-1 flex items-center text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                      <svg
-                        class="mr-2 h-3 w-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m11 17-5-5 5-5m7 10-5-5 5-5"
-                        />
-                      </svg>
-                      {t('blog.prevAuthor')}
+                    <div class="mb-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
+                      <svg class="mr-2 h-4 w-4 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m11 17-5-5 5-5m7 10-5-5 5-5" /></svg>
+                      <span class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                        {t("blog.prevAuthor")}
+                      </span>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:text-lg">
+                    <h3 class="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-400">
                       {prevAuthor.name}
                     </h3>
                   </div>
@@ -382,30 +318,20 @@ if (type === 'detail' && authorName) {
               {nextAuthor ? (
                 <a
                   href={getLocalizedPath(`/blog/authors/${slugifyTag(nextAuthor.name)}`, locale)}
-                  class="group flex w-full flex-row items-stretch justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-blue-400 md:ml-auto"
+                  class="group flex flex-row items-stretch justify-between overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-300 hover:scale-[1.02] hover:border-primary-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600"
                 >
                   <div class="flex flex-1 flex-col justify-center p-4 text-right">
-                    <div class="mb-1 flex items-center justify-end text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                      {t('blog.nextAuthor')}
-                      <svg
-                        class="ml-2 h-3 w-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m13 17 5-5-5-5M6 17l5-5-5-5"
-                        />
-                      </svg>
+                    <div class="mb-2 flex items-center justify-end text-sm text-gray-500 dark:text-gray-400">
+                      <span class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                        {t("blog.nextAuthor")}
+                      </span>
+                      <svg class="ml-2 h-4 w-4 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m13 17 5-5-5-5M6 17l5-5-5-5" /></svg>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:text-lg">
+                    <h3 class="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-gray-100 dark:group-hover:text-primary-400">
                       {nextAuthor.name}
                     </h3>
                   </div>
-                  <div class="relative w-20 shrink-0 overflow-hidden sm:w-24">
+                  <div class="relative w-24 shrink-0 overflow-hidden md:w-32">
                     {nextAuthor.avatar ? (
                       <img
                         src={nextAuthor.avatar}
@@ -428,7 +354,6 @@ if (type === 'detail' && authorName) {
       )
     }
 
-    {/* Pagination */}
     {page.lastPage > 1 && <Pagination page={page} lang={locale} />}
   </div>
 </Layout>
