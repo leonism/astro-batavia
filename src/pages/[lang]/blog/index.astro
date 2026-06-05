@@ -1,0 +1,115 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import BlogCard from '@/components/blog/BlogCard.astro';
+import Pagination from '@/components/common/Pagination.astro';
+import { useTranslations, isValidLanguage, getLocalizedPath } from '@/i18n/utils';
+import { BlogService } from '@/services/BlogService';
+import { PAGINATION_POSTS_PER_PAGE, LOCALES } from '@/consts';
+import type { GetStaticPaths, Page } from 'astro';
+
+export const getStaticPaths = (async () => {
+  const languages = Object.keys(LOCALES);
+  const allPaths = [];
+
+  for (const lang of languages) {
+    const locale = lang as any;
+    const posts = await BlogService.getPostsByLocale(locale);
+    
+    const totalPosts = posts.length;
+    const lastPage = Math.ceil(totalPosts / PAGINATION_POSTS_PER_PAGE);
+    const data = posts.slice(0, PAGINATION_POSTS_PER_PAGE);
+    
+    allPaths.push({
+      params: { lang },
+      props: { 
+        page: {
+          data,
+          start: 0,
+          end: Math.min(data.length - 1, PAGINATION_POSTS_PER_PAGE - 1),
+          total: totalPosts,
+          currentPage: 1,
+          size: PAGINATION_POSTS_PER_PAGE,
+          lastPage,
+          url: {
+            current: getLocalizedPath('/blog', locale),
+            prev: undefined,
+            next: lastPage > 1 ? getLocalizedPath('/blog/2', locale) : undefined,
+            first: undefined,
+            last: getLocalizedPath(`/blog/${lastPage}`, locale),
+          }
+        }
+      }
+    });
+  }
+
+  return allPaths;
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>;
+}
+
+const { page } = Astro.props;
+const { lang } = Astro.params;
+
+if (!lang || !isValidLanguage(lang)) {
+  return Astro.redirect('/404');
+}
+
+const t = useTranslations(lang);
+const pagePosts = page.data;
+---
+
+<Layout
+  title={t('nav.blog')}
+  description={
+    lang === 'es'
+      ? 'Explora nuestra colección de artículos sobre desarrollo web, tendencias tecnológicas y perspectivas.'
+      : lang === 'ja'
+        ? 'ウェブ開発、技術トレンド、洞察をカバーする記事のコレクションをご覧ください。'
+        : 'Explore our collection of articles covering web development, technology trends, and insights.'
+  }
+  lang={lang}
+>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    {/* Header */}
+    <div class="mb-12 text-center">
+      <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 sm:text-5xl">
+        {t('nav.blog')}
+      </h1>
+      <p class="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">
+        {lang === 'es'
+          ? 'Últimas noticias, tutoriales y actualizaciones de nuestro equipo'
+          : lang === 'ja'
+            ? 'チームからの最新ニュース、チュートリアル、アップデート'
+            : 'Latest news, tutorials, and updates from our team'}
+      </p>
+    </div>
+
+    {/* Featured Post */}
+    {pagePosts.length > 0 && (
+      <BlogCard 
+        post={pagePosts[0]} 
+        isFeatured={true} 
+        lang={lang} 
+        class="mb-16 post-item animate-fade-in"
+      />
+    )}
+
+    {/* Blog Grid */}
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {pagePosts.slice(1).map((post, index) => (
+        <BlogCard
+          post={post}
+          lang={lang}
+          loading={index < 3 ? 'eager' : 'lazy'}
+          class="post-item animate-fade-in"
+        />
+      ))}
+    </div>
+
+    {/* Pagination */}
+    {page.lastPage > 1 && <Pagination page={page} lang={lang} />}
+  </div>
+</Layout>

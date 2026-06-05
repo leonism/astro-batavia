@@ -8,6 +8,7 @@
 }
 
 @theme {
+  /* Color Palette - Standardized with tailwind.config.mjs */
   --color-primary-50: hsl(210 100% 98%);
   --color-primary-100: hsl(210 100% 95%);
   --color-primary-200: hsl(210 100% 90%);
@@ -32,6 +33,7 @@
 
   --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
   --animate-aurora: aurora 8s linear infinite;
 
   @keyframes aurora {
@@ -44,79 +46,112 @@
   }
 }
 
-/* Custom CSS Properties */
-:root {
-  /* Light theme colors */
-  --background: 0 0% 100%; /* #FFFFFF */
-  --foreground: 34 40 49; /* #222831 */
-  --muted: 248 250 252; /* #F8FAFC */
-  --muted-foreground: 100 116 139; /* #64748B */
-  --popover: 255 255 255; /* #FFFFFF */
-  --popover-foreground: 34 40 49; /* #222831 */
-  --card: 255 255 255; /* #FFFFFF */
-  --card-foreground: 34 40 49; /* #222831 */
-  --border: 226 232 240; /* #E2E8F0 */
-  --input: 226 232 240; /* #E2E8F0 */
-  --primary: 14 165 233; /* #0EA5E9 */
-  --primary-foreground: 255 255 255; /* #FFFFFF */
-  --secondary: 241 245 249; /* #F1F5F9 */
-  --secondary-foreground: 34 40 49; /* #222831 */
-  --accent: 210 20% 95%; /* #F1F5F9 */
-  --accent-foreground: 210 11% 15%; /* #222831 */
-  --destructive: 0 84% 60%; /* #EF4444 */
-  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
-  --ring: 210 100% 50%; /* #0EA5E9 */
-  --radius: 0.5rem;
-}
-
-.dark {
-  /* Dark theme colors */
-  --background: 15 23 42; /* #0f172a */
-  --foreground: 241 245 249; /* #f1f5f9 */
-  --muted: 30 41 59; /* #1e293b */
-  --muted-foreground: 148 163 184; /* #94a3b8 */
-  --popover: 15 23 42; /* #0f172a */
-  --popover-foreground: 241 245 249; /* #f1f5f9 */
-  --card: 15 23 42; /* #0f172a */
-  --card-foreground: 241 245 249; /* #f1f5f9 */
-  --border: 51 65 85; /* #334155 */
-  --input: 51 65 85; /* #334155 */
-  --primary: 210 100% 60%; /* #3B82F6 */
-  --primary-foreground: 0 0% 100%; /* #FFFFFF */
-  --secondary: 210 10% 23%; /* #334155 */
-  --secondary-foreground: 210 20% 95%; /* #F8FAFC */
-  --accent: 210 10% 23%; /* #334155 */
-  --accent-foreground: 210 20% 95%; /* #F8FAFC */
-  --destructive: 0 63% 31%; /* #DC2626 */
-  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
-  --ring: 210 100% 60%; /* #3B82F6 */
-}
-
 /* Base styles */
-body {
-  @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100;
-  font-family: var(--font-sans);
-  font-feature-settings:
-    'rlig' 1,
-    'calt' 1;
+@layer base {
+  :root {
+    /* Theme Colors (Astro/Shadcn style) */
+    --background: 0 0% 100%;
+    --foreground: 34 40 49;
+    --muted: 248 250 252;
+    --muted-foreground: 100 116 139;
+    --popover: 255 255 255;
+    --popover-foreground: 34 40 49;
+    --card: 255 255 255;
+    --card-foreground: 34 40 49;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --primary: 14 165 233;
+    --primary-foreground: 255 255 255;
+    --secondary: 241 245 249;
+    --secondary-foreground: 34 40 49;
+    --accent: 210 20% 95%;
+    --accent-foreground: 210 11% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 210 100% 50%;
+    --radius: 0.5rem;
+
+    /* Typography Tokens from tailwind.config.mjs */
+    --tw-prose-body: rgb(55 65 81);
+    --tw-prose-headings: rgb(17 24 39);
+    --tw-prose-lead: rgb(107 114 128);
+    --tw-prose-links: hsl(210 100% 50%);
+    --tw-prose-bold: rgb(17 24 39);
+    --tw-prose-counters: rgb(107 114 128);
+    --tw-prose-bullets: rgb(209 213 219);
+    --tw-prose-hr: rgb(229 231 235);
+    --tw-prose-quotes: rgb(17 24 39);
+    --tw-prose-quote-borders: rgb(229 231 235);
+    --tw-prose-captions: rgb(107 114 128);
+    --tw-prose-code: rgb(17 24 39);
+    --tw-prose-pre-code: rgb(229 231 235);
+    --tw-prose-pre-bg: rgb(17 24 39);
+    --tw-prose-th-borders: rgb(209 213 219);
+    --tw-prose-td-borders: rgb(229 231 235);
+  }
+
+  .dark {
+    --background: 15 23 42;
+    --foreground: 241 245 249;
+    --muted: 30 41 59;
+    --muted-foreground: 148 163 184;
+    --popover: 15 23 42;
+    --popover-foreground: 241 245 249;
+    --card: 15 23 42;
+    --card-foreground: 241 245 249;
+    --border: 51 65 85;
+    --input: 51 65 85;
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 10% 23%;
+    --secondary-foreground: 210 20% 95%;
+    --accent: 210 10% 23%;
+    --accent-foreground: 210 20% 95%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 210 100% 60%;
+
+    /* Dark Mode Typography Tokens from tailwind.config.mjs invert section */
+    --tw-prose-body: rgb(209 213 219);
+    --tw-prose-headings: rgb(255 255 255);
+    --tw-prose-lead: rgb(156 163 175);
+    --tw-prose-links: hsl(210 100% 60%);
+    --tw-prose-bold: rgb(255 255 255);
+    --tw-prose-counters: rgb(156 163 175);
+    --tw-prose-bullets: rgb(75 85 99);
+    --tw-prose-hr: rgb(55 65 81);
+    --tw-prose-quotes: rgb(243 244 246);
+    --tw-prose-quote-borders: rgb(55 65 81);
+    --tw-prose-captions: rgb(156 163 175);
+    --tw-prose-code: rgb(255 255 255);
+    --tw-prose-pre-code: rgb(209 213 219);
+    --tw-prose-pre-bg: rgb(0 0 0 / 50%);
+    --tw-prose-th-borders: rgb(75 85 99);
+    --tw-prose-td-borders: rgb(55 65 81);
+  }
+
+  body {
+    @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100;
+    font-family: var(--font-sans);
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Focus styles */
+/* Custom UI Components */
 *:focus-visible {
   @apply outline-none ring-2 ring-primary-500 ring-offset-2;
 }
 
-/* Selection styles */
 ::selection {
   @apply bg-primary-100 text-primary-800;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -133,7 +168,7 @@ html {
   @apply bg-gray-500 dark:bg-gray-500;
 }
 
-/* Print styles */
+/* Print Styles */
 @media print {
   .no-print {
     display: none !important;
@@ -154,7 +189,7 @@ html {
   }
 }
 
-/* Reduced motion */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -166,7 +201,7 @@ html {
   }
 }
 
-/* High contrast mode */
+/* High Contrast Mode */
 @media (prefers-contrast: high) {
   :root {
     --primary: 210 100% 40%;
@@ -179,7 +214,7 @@ html {
   }
 }
 
-/* Utility classes */
+/* Utility Classes */
 .text-balance {
   text-wrap: balance;
 }
@@ -188,7 +223,7 @@ html {
   text-wrap: pretty;
 }
 
-/* Loading animations */
+/* Loading Animations */
 @keyframes shimmer {
   0% {
     background-position: -200px 0;
@@ -208,7 +243,7 @@ html {
   background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
 }
 
-/* Glass morphism effect */
+/* Glass Morphism */
 .glass {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
@@ -220,20 +255,142 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Prose improvements for markdown content */
+/* Typography / Prose Customization (Merged from tailwind.config.mjs) */
 .prose {
   @apply max-w-none;
+  color: var(--tw-prose-body);
+}
+
+.prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  @apply decoration-2 underline-offset-4 transition-colors;
+  color: var(--tw-prose-links);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  @apply decoration-primary-600;
+}
+
+.prose :where(strong):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--tw-prose-bold);
+  font-weight: 600;
+}
+
+.prose :where(ol):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  @apply list-none pl-0;
+}
+
+.prose :where(ol > li):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  @apply relative pl-6;
+}
+
+.prose :where(ol > li):not(:where([class~='not-prose'], [class~='not-prose'] *))::before {
+  content: counter(list-item, var(--list-counter-style, decimal)) '.';
+  position: absolute;
+  left: 0;
+  font-weight: 400;
+  color: var(--tw-prose-counters);
+}
+
+.prose :where(ul):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  @apply list-none pl-0;
+}
+
+.prose :where(ul > li):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  @apply relative pl-6;
+}
+
+.prose :where(ul > li):not(:where([class~='not-prose'], [class~='not-prose'] *))::before {
+  content: '';
+  position: absolute;
+  background-color: var(--tw-prose-bullets);
+  border-radius: 50%;
+  width: 0.375em;
+  height: 0.375em;
+  top: calc(0.875em - 0.1875em);
+  left: 0;
+}
+
+.prose :where(hr):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  border-color: var(--tw-prose-hr);
+  border-top-width: 1px;
+  @apply mt-12 mb-12;
+}
+
+.prose :where(blockquote):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--tw-prose-quotes);
+  border-left-width: 0.25rem;
+  border-left-color: var(--tw-prose-quote-borders);
+  quotes: '\201C' '\201D' '\2018' '\2019';
+  @apply mt-6 mb-6 pl-4;
+}
+
+.prose :where(h1):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 800;
+  font-size: 2.25em;
+  line-height: 1.1111111;
+  @apply mt-0 mb-8 scroll-mt-32;
+}
+
+.prose :where(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 1.3333333;
+  @apply mt-12 mb-4 scroll-mt-32;
+}
+
+.prose :where(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 600;
+  font-size: 1.25em;
+  line-height: 1.6;
+  @apply mt-8 mb-2 scroll-mt-32;
+}
+
+.prose :where(h4):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 600;
+  line-height: 1.5;
+  @apply mt-6 mb-2 scroll-mt-32;
+}
+
+.prose :where(img):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  @apply mt-8 mb-8 rounded-lg shadow-sm;
+}
+
+.prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--tw-prose-code);
+  font-weight: 600;
+  font-size: 0.875em;
+}
+
+.prose :where(:not(pre) > code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  @apply rounded-sm bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-800;
+}
+
+.prose
+  :where(:not(pre) > code):not(:where([class~='not-prose'], [class~='not-prose'] *))::before,
+.prose
+  :where(:not(pre) > code):not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
+  content: '`';
 }
 
 /* Syntax Highlighting Base (Always Dark Theme via Astro Dual-Theme Trick) */
 .prose pre.astro-code {
   @apply relative overflow-x-auto rounded-lg border border-gray-200 p-4 dark:border-gray-700;
-  background-color: #24292e !important;
-  color: #e1e4e8 !important;
+  background-color: var(--tw-prose-pre-bg) !important;
+  color: var(--tw-prose-pre-code) !important;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+  @apply mt-8 mb-8;
 }
 
 /* Ensure tokens always use the variables provided by Astro/Shiki */
-/* Removed light mode override because Shiki outputs inline `color` for the light/default theme */
 html.dark .prose pre.astro-code span {
   color: var(--shiki-dark, inherit) !important;
   font-style: var(--shiki-dark-font-style, inherit) !important;
@@ -244,11 +401,16 @@ html.dark .prose pre.astro-code span {
 .prose pre.astro-code code {
   @apply bg-transparent p-0;
   background-color: transparent !important;
+  font-weight: inherit;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
 }
 
-/* Restore inline code styles */
-.prose :not(pre) > code {
-  @apply rounded-sm bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-800;
+.prose pre.astro-code code::before,
+.prose pre.astro-code code::after {
+  content: none;
 }
 
 /* --- Code Copy Button Styles --- */
@@ -260,65 +422,47 @@ html.dark .prose pre.astro-code span {
   @apply border-green-500/50 bg-green-900/20 text-green-400 opacity-100;
 }
 
-.prose blockquote {
-  @apply border-l-4 border-primary-500 pl-4 italic text-gray-600 dark:text-gray-300;
-}
-
-.prose img {
-  @apply rounded-lg shadow-sm;
-}
-
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  @apply scroll-mt-32;
-}
-
-.prose h1 {
-  @apply text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl;
-}
-
 /* Table styles */
-.prose table {
+.prose :where(table):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
   @apply w-full border-collapse border border-gray-200 dark:border-gray-700;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  font-size: 0.875em;
+  line-height: 1.7142857;
 }
 
-.prose th,
-.prose td {
+.prose :where(th, td):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
   @apply border border-gray-200 px-4 py-2 text-left dark:border-gray-700;
 }
 
-.prose th {
+.prose :where(thead):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  border-bottom-width: 1px;
+  border-bottom-color: var(--tw-prose-th-borders);
+}
+
+.prose :where(thead th):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
   @apply bg-gray-50 font-semibold dark:bg-gray-800;
+  color: var(--tw-prose-headings);
+  vertical-align: bottom;
+  padding-right: 0.5714286em;
+  padding-bottom: 0.5714286em;
+  padding-left: 0.5714286em;
 }
 
-/* Link hover effects */
-.prose a {
-  @apply decoration-2 underline-offset-4 transition-colors;
+.prose :where(tbody tr):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  border-bottom-width: 1px;
+  border-bottom-color: var(--tw-prose-td-borders);
 }
 
-.prose a:hover {
-  @apply decoration-primary-600;
+.prose :where(tbody tr:last-child):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  border-bottom-width: 0;
 }
 
-/* Code syntax highlighting improvements */
-.prose pre[class*='language-'] {
-  @apply text-sm;
-}
-
-.prose :not(pre) > code[class*='language-'] {
-  @apply rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-800;
-}
-
-/* Skip link for accessibility */
+/* Accessibility Helpers */
 .skip-link {
   @apply absolute left-4 top-4 z-50 -translate-y-12 rounded bg-primary-600 px-4 py-2 text-white transition-transform focus:translate-y-0;
 }
 
-/* Screen reader only content */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -342,18 +486,16 @@ html.dark .prose pre.astro-code span {
   white-space: normal;
 }
 
-/* Spinner animation */
+/* Animations */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
 .animate-spin {
   animation: spin 1s linear infinite;
 }
 
-/* Fade in animation */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -364,12 +506,10 @@ html.dark .prose pre.astro-code span {
     transform: translateY(0);
   }
 }
-
 .animate-fade-in {
   animation: fade-in 0.5s ease-out;
 }
 
-/* Pulse animation for loading states */
 @keyframes pulse {
   0%,
   100% {
@@ -379,12 +519,10 @@ html.dark .prose pre.astro-code span {
     opacity: 0.5;
   }
 }
-
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Bounce animation */
 @keyframes bounce {
   0%,
   100% {
@@ -396,12 +534,11 @@ html.dark .prose pre.astro-code span {
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
-
 .animate-bounce {
   animation: bounce 1s infinite;
 }
 
-/* Prevent scroll when mobile nav is open */
+/* Navigation State */
 body.mobile-nav-open {
   overflow: hidden;
 }
