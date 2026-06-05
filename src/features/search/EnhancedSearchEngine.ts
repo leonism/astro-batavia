@@ -871,11 +871,12 @@ class EnhancedSearchEngine {
         case 'semantic':
           comparison = (b.semanticScore || 0) - (a.semanticScore || 0);
           break;
-        case 'hybrid':
+        case 'hybrid': {
           const aHybrid = a.relevanceScore * 0.6 + (a.semanticScore || 0) * 0.4;
           const bHybrid = b.relevanceScore * 0.6 + (b.semanticScore || 0) * 0.4;
           comparison = bHybrid - aHybrid;
           break;
+        }
         case 'date':
           comparison = new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
           break;

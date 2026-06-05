@@ -2,8 +2,8 @@
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
 
-[![Astro](https://img.shields.io/badge/Astro-6.2.2.0-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Astro](https://img.shields.io/badge/Astro-6.4.4-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
@@ -40,6 +40,7 @@
 ### 🌍 **Multilingual Support**
 
 - **3 Languages**: English, Spanish, and Japanese
+- **Native i18n APIs**: Leverages `Astro.currentLocale` and stable routing
 - **Smart Routing**: Language-prefixed URLs with fallback handling
 - **Localized Content**: Date formatting, UI translations, and content management
 - **SEO Optimized**: Language-specific meta tags and hreflang attributes
@@ -54,7 +55,8 @@
 ### 📝 **Content Management**
 
 - **Decap CMS**: Git-based headless CMS for easy content editing
-- **MDX Support**: Rich markdown with React components
+- **MDX Support**: Rich markdown with inherited global configurations
+- **Advanced Processing**: Powered by the new unified markdown processor API
 - **Reading Time**: Automatic calculation for better UX
 - **Tag System**: Categorization and filtering capabilities
 - **Draft Support**: Preview unpublished content
@@ -70,17 +72,18 @@
 
 - **Advanced SEO**: Open Graph, Twitter Cards, JSON-LD structured data
 - **Sitemap**: Automatic generation with i18n support
-- **Analytics Ready**: Sentry integration for error tracking
-- **Performance**: Lighthouse-optimized with compression
+- **Analytics Ready**: Google Tag Manager (via Partytown) and Sentry integration
+- **Performance**: Lighthouse-optimized with Gzip/Brotli/Zstd compression
 
 ### 🎯 **Developer Experience**
 
 - **TypeScript**: Full type safety across the codebase
 - **Component Architecture**: Modular and reusable components
-- **Hot Reload**: Fast development with Astro's dev server
+- **Client-Side Prerendering**: Instant navigation via experimental Speculation Rules API
+- **Stable Prefetching**: Configurable viewport-based background loading
 - **Advanced Build Optimization**:
   - **Enterprise-Grade HTML Minification**: Custom integration with `html-minifier-terser` using multi-core processing.
-  - **Asset Compression**: Automatic Gzip and Brotli compression for production builds.
+  - **Asset Compression**: Automatic Gzip, Brotli, and Zstandard compression for production builds.
   - **Granular Control**: Configurable build tools for fine-tuning optimization settings.
   - **Detailed Build Reports**: Comprehensive reports on file sizes and compression savings.
 
@@ -88,13 +91,14 @@
 
 ### **Core Framework**
 
-- **[Astro 5.17.0](https://astro.build)** - Static site generator with islands architecture
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript development
-- **[MDX 4.3.0](https://mdxjs.com/)** - Markdown with JSX components
+- **[Astro 6.4.4](https://astro.build)** - Static site generator with islands architecture
+- **[TypeScript 5.7+](https://www.typescriptlang.org/)** - Type-safe JavaScript development
+- **[MDX 6.0.2](https://mdxjs.com/)** - Markdown with JSX components
 
 ### **Styling & UI**
 
-- **[Tailwind CSS 4.1.18](https://tailwindcss.com)** - Utility-first CSS framework
+- **[Tailwind CSS 4.2.4](https://tailwindcss.com)** - Utility-first CSS framework
+- **[@tailwindcss/vite](https://tailwindcss.com)** - Native Vite integration for Tailwind CSS
 - **[@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin)** - Beautiful typographic defaults
 - **Custom Design System** - Consistent color palette and spacing
 
@@ -102,20 +106,20 @@
 
 - **[Decap CMS](https://decapcms.org/)** - Git-based content management
 - **[Zod](https://zod.dev/)** - Schema validation for content types
-- **Reading Time Calculation** - Automatic reading time estimation
+- **[@astrojs/markdown-remark](https://docs.astro.build)** - Pluggable unified processor API
 
 ### **SEO & Analytics**
 
 - **[@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)** - Automatic sitemap generation
+- **[@astrojs/partytown](https://docs.astro.build/en/guides/integrations-guide/partytown/)** - Off-main-thread third-party scripts
 - **[Sentry](https://sentry.io/)** - Error tracking and performance monitoring
-- **[Spotlight.js](https://spotlightjs.com/)** - Development debugging tools
 
 ### **Build & Optimization**
 
-- **Vite** - Fast build tool and dev server
+- **Vite 6** - Fast build tool and dev server
 - **HTML, CSS, & JS Minification** - Automatic minification for optimized delivery
 - **Image Optimization** - Automatic image compression and format conversion
-- **Compression** - Gzip and Brotli compression for production builds
+- **Compression** - Gzip, Brotli, and Zstd compression for production builds
 
 ## 🏗️ Architecture
 
@@ -125,9 +129,9 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 ┌─ 🌐 Multi-language Routing (/en, /es, /ja)
 ├─ 📄 Static Site Generation (Astro Islands)
 ├─ 🎨 Component Library (Modular & Reusable)
-├─ 📝 Content Layer (MDX + Decap CMS)
+├─ 📝 Content Layer (MDX + Unified Processor)
 ├─ 🔍 SEO Layer (Structured Data + Meta)
-└─ ⚡ Performance Layer (Compression + Optimization)
+└─ ⚡ Performance Layer (Client-Prerender + Compression)
 ```
 
 ### **Key Architectural Decisions**

@@ -5,9 +5,10 @@ import SearchOverlaySuggestions from '@/components/search/SearchOverlaySuggestio
 import SearchOverlayResults from '@/components/search/SearchOverlayResults.astro';
 import SearchOverlayNoResults from '@/components/search/SearchOverlayNoResults.astro';
 import SearchOverlayFooter from '@/components/search/SearchOverlayFooter.astro';
+import type { LanguageKey } from '@/i18n/types';
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const t = useTranslations(lang as any);
 ---
 
 <section

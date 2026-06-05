@@ -25,7 +25,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 
   // 2. Individual Post Paths
   const allPosts = await BlogService.getAllPosts();
-  const postPaths = allPosts.map((post) => {
+  const postPaths = allPosts.filter(p => { const pts = p.id.split("/"); return pts[1] !== "tags" && pts[1] !== "authors"; }).map((post) => {
     const [lang, ...slugParts] = post.id.replace(/\.mdx?$/, '').split('/');
     const page = slugParts[0] === 'blog' ? slugParts.slice(1).join('/') : slugParts.join('/');
 

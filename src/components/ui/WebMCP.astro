@@ -10,14 +10,14 @@
    * Initializes WebMCP tools if the API is available.
    */
   async function initWebMCP() {
-    // @ts-ignore - WebMCP is a proposal and might not be in types yet
+    // @ts-expect-error - WebMCP is a proposal and might not be in types yet
     if (!navigator.modelContext || !navigator.modelContext.provideContext) {
       console.log('WebMCP not supported in this browser.');
       return;
     }
 
     try {
-      // @ts-ignore
+      // @ts-expect-error - WebMCP is a proposal and might not be in types yet
       navigator.modelContext.provideContext({
         tools: [
           {

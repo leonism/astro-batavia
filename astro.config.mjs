@@ -1,6 +1,5 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import { fileURLToPath } from 'node:url';
-import fs from 'node:fs/promises';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -8,6 +7,7 @@ import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
 import htmlMinifier from './src/integrations/html-minifier.mjs';
 import { SITE_URL } from './src/consts.ts';
 import partytown from '@astrojs/partytown';
+import { unified } from '@astrojs/markdown-remark';
 
 /** @type {import('vite').Plugin} */
 const devPartytownFix = {
@@ -44,6 +44,9 @@ export default defineConfig({
   prefetch: {
     defaultStrategy: 'viewport',
   },
+  experimental: {
+    clientPrerender: true,
+  },
   fonts: [
     {
       provider: fontProviders.google(),
@@ -56,17 +59,7 @@ export default defineConfig({
     },
   ],
   integrations: [
-    mdx({
-      syntaxHighlight: 'shiki',
-      shikiConfig: {
-        themes: {
-          light: 'github-dark',
-          dark: 'github-dark',
-        },
-        wrap: true,
-      },
-      remarkPlugins: [remarkReadingTime],
-    }),
+    mdx(),
     sitemap({
       i18n: {
         defaultLocale: 'en',
@@ -106,7 +99,9 @@ export default defineConfig({
       },
       wrap: true,
     },
-    remarkPlugins: [remarkReadingTime],
+    processor: unified({
+      remarkPlugins: [remarkReadingTime],
+    }),
   },
   vite: {
     plugins: [tailwindcss(), devPartytownFix],
