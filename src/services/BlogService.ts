@@ -126,18 +126,31 @@ export class BlogService {
   ): Promise<CollectionEntry<'blog'>[]> {
     const allPosts = await BlogService.getPostsByLocale(lang);
     const { slugifyTag } = await import('@/i18n/utils');
-    const normalizedTag = tagSlugOrName.trim().normalize('NFC').toLowerCase();
+    const { tagMappings } = await import('@/i18n/tag-mappings');
     
-    return allPosts.filter((post) =>
+    let normalizedTag = tagSlugOrName.trim().normalize('NFC').toLowerCase();
+
+    // Helper to find posts
+    const findPosts = (tag: string) => allPosts.filter((post) =>
       (post.data.tags || []).some((t) => {
         const normalizedT = t.normalize('NFC');
         const sTag = slugifyTag(normalizedT).toLowerCase();
         return (
-          sTag === normalizedTag || 
-          normalizedT.toLowerCase() === normalizedTag
+          sTag === tag || 
+          normalizedT.toLowerCase() === tag
         );
       }),
     );
+
+    let posts = findPosts(normalizedTag);
+
+    // If no posts found and there is a mapping, try the mapped tag
+    if (posts.length === 0 && tagMappings[normalizedTag] && tagMappings[normalizedTag][lang]) {
+        const mappedTag = tagMappings[normalizedTag][lang].toLowerCase();
+        posts = findPosts(mappedTag);
+    }
+    
+    return posts;
   }
 
   /**
