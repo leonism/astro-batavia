@@ -6,7 +6,7 @@
 // Core Site Data
 export const SITE_TITLE = 'Astro Batavia';
 export const SITE_DESCRIPTION = 'A modern multi-language blog built with Astro.js';
-export const SITE_URL = 'https://astro-batavia.pages.dev/'; // Production URL
+export const SITE_URL = ''; // Production URL, don't add any trailing slash
 export const SITE_EMAIL = 'contact@astrobatavia.com';
 export const GTM_ID = 'GTM-5BH6SQST';
 
