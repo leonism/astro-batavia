@@ -40,7 +40,9 @@ export async function GET(context: APIContext) {
 
       if (heroImage) {
         const imageUrl = heroImage.startsWith('http') ? heroImage : new URL(heroImage, site).href;
-        mediaContent = `<media:content url="${imageUrl}" medium="image" />`;
+        // Escape & to &amp; for XML validity
+        const escapedImageUrl = imageUrl.replace(/&/g, '&amp;');
+        mediaContent = `<media:content url="${escapedImageUrl}" medium="image" />`;
       }
 
       return {
