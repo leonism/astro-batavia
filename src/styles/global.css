@@ -30,10 +30,8 @@
   --color-gray-700: #334155;
   --color-gray-800: #1e293b;
   --color-gray-900: #0f172a;
-
   --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-
   --animate-aurora: aurora 8s linear infinite;
 
   @keyframes aurora {
@@ -70,6 +68,7 @@
     --destructive-foreground: 0 0% 100%;
     --ring: 210 100% 50%;
     --radius: 0.5rem;
+    --hero-grid-color: #80808030;
 
     /* Typography Tokens from tailwind.config.mjs */
     --tw-prose-body: rgb(55 65 81);
@@ -110,6 +109,7 @@
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 100%;
     --ring: 210 100% 60%;
+    --hero-grid-color: #ffffff12;
 
     /* Dark Mode Typography Tokens from tailwind.config.mjs invert section */
     --tw-prose-body: rgb(209 213 219);
@@ -373,10 +373,8 @@
   @apply rounded-sm bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-800;
 }
 
-.prose
-  :where(:not(pre) > code):not(:where([class~='not-prose'], [class~='not-prose'] *))::before,
-.prose
-  :where(:not(pre) > code):not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
+.prose :where(:not(pre) > code):not(:where([class~='not-prose'], [class~='not-prose'] *))::before,
+.prose :where(:not(pre) > code):not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
   content: '`';
 }
 
@@ -538,7 +536,7 @@ html.dark .prose pre.astro-code span {
   animation: bounce 1s infinite;
 }
 
-/* Navigation State */
-body.mobile-nav-open {
-  overflow: hidden;
+.bg-hero-gradient {
+  background: linear-gradient(to right, var(--color-primary-600), #4f46e5); /* blue-600 to indigo-600 */
 }
+

@@ -1,6 +1,5 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-
 import { SITE_AUTHOR } from '@/consts';
 
 /**
@@ -14,7 +13,7 @@ const blog = defineCollection({
    * Type-check frontmatter using a schema.
    * Defines validation rules for blog post metadata.
    */
-  schema: ({ image: _image }) =>
+  schema: () =>
     z
       .object({
         title: z.string().trim(),

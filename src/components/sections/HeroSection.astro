@@ -25,7 +25,7 @@ const cta2Link = getLocalizedPath('/search/', lang);
   <!-- Grid Background -->
   <div class="absolute inset-0 z-0">
     <div
-      class="absolute inset-0 h-full w-full bg-[linear-gradient(to_right,#80808030_1px,transparent_1px),linear-gradient(to_bottom,#80808030_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] dark:bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)]"
+      class="absolute inset-0 h-full w-full bg-[linear-gradient(to_right,var(--hero-grid-color)_1px,transparent_1px),linear-gradient(to_bottom,var(--hero-grid-color)_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"
     >
     </div>
   </div>
@@ -46,7 +46,7 @@ const cta2Link = getLocalizedPath('/search/', lang);
     <div class="flex flex-col items-center justify-center gap-4 pt-12 sm:flex-row md:pt-16">
       <a
         href={cta1Link}
-        class="group inline-flex items-center rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 focus:outline-none focus:ring-4 focus:ring-blue-500/50"
+        class="group inline-flex items-center rounded-2xl bg-hero-gradient px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 focus:outline-none focus:ring-4 focus:ring-blue-500/50"
       >
         <span set:html={cta1Text} />
         <svg
