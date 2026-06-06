@@ -1,13 +1,13 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import { fileURLToPath } from 'node:url';
+import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
+import { SITE_URL } from './src/consts.ts';
+import { unified } from '@astrojs/markdown-remark';
+import htmlMinifier from './src/integrations/html-minifier.mjs';
 import mdx from '@astrojs/mdx';
+import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
-import { remarkReadingTime } from './src/utils/remark-reading-time.mts';
-import htmlMinifier from './src/integrations/html-minifier.mjs';
-import { SITE_URL } from './src/consts.ts';
-import partytown from '@astrojs/partytown';
-import { unified } from '@astrojs/markdown-remark';
 
 /** @type {import('vite').Plugin} */
 const devPartytownFix = {
