@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from '@/consts';
+import { DEFAULT_LOCALE, DATE_FORMAT_OPTIONS, LOCALE_MAP } from '@/consts';
 
 /**
  * Service for handling date formatting and manipulation.
@@ -12,16 +12,6 @@ export class DateService {
    * @returns {string} The formatted date string.
    */
   static format(date: Date, lang: string = DEFAULT_LOCALE): string {
-    const locales: Record<string, string> = {
-      en: 'en-US',
-      es: 'es-ES',
-      ja: 'ja-JP',
-    };
-
-    return new Intl.DateTimeFormat(locales[lang] || locales.en, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(date);
+    return new Intl.DateTimeFormat(LOCALE_MAP[lang] || LOCALE_MAP[DEFAULT_LOCALE], DATE_FORMAT_OPTIONS).format(date);
   }
 }

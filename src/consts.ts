@@ -75,3 +75,18 @@ export const PAGINATION_POSTS_PER_PAGE = 7;
 export const PAGINATION_TAGS_PER_PAGE = 5;
 export const PAGINATION_AUTHORS_PER_PAGE = 6;
 export const SEARCH_MAX_SUGGESTIONS = 6;
+
+/**
+ * Date Formatting Configuration.
+ */
+export const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+};
+
+export const LOCALE_MAP: Record<string, string> = {
+  en: 'en-US',
+  es: 'es-ES',
+  ja: 'ja-JP',
+};
