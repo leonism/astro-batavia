@@ -47,7 +47,9 @@ const t = useTranslations(lang);
     border: none;
     cursor: pointer;
     background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      background 0.3s ease,
+      box-shadow 0.3s ease;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     margin: 0 0.25rem;
@@ -55,7 +57,9 @@ const t = useTranslations(lang);
   }
 
   .theme-switch:hover {
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(99, 102, 241, 0.15);
+    box-shadow:
+      inset 0 1px 3px rgba(0, 0, 0, 0.15),
+      0 0 0 3px rgba(99, 102, 241, 0.15);
   }
 
   .theme-switch:focus-visible {
@@ -70,7 +74,9 @@ const t = useTranslations(lang);
   }
 
   :global(.dark) .theme-switch:hover {
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(99, 102, 241, 0.2);
+    box-shadow:
+      inset 0 1px 3px rgba(0, 0, 0, 0.3),
+      0 0 0 3px rgba(99, 102, 241, 0.2);
   }
 
   /* Icons — absolutely positioned, sized to match knob */
@@ -84,13 +90,15 @@ const t = useTranslations(lang);
     width: 20px;
     height: 20px;
     z-index: 1;
-    transition: opacity 0.3s ease, color 0.3s ease;
+    transition:
+      opacity 0.3s ease,
+      color 0.3s ease;
   }
 
   /* Sun icon — pinned left */
   .theme-switch__icon--sun {
     left: 2px;
-    color: #f59e0b;
+    color: #374151;
     opacity: 0;
   }
 
@@ -120,8 +128,13 @@ const t = useTranslations(lang);
     height: 20px;
     border-radius: 50%;
     background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.2),
+      0 1px 2px rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      background 0.3s ease,
+      box-shadow 0.3s ease;
     z-index: 2;
   }
 
@@ -129,7 +142,9 @@ const t = useTranslations(lang);
   :global(.dark) .theme-switch__knob {
     transform: translateX(24px);
     background: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.3),
+      0 1px 2px rgba(0, 0, 0, 0.15);
   }
 
   @media (prefers-reduced-motion: reduce) {
