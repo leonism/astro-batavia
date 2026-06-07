@@ -213,7 +213,7 @@ const t = useTranslations(lang);
         isDragging = true;
         // Disable transition during drag for real-time feel
         mobileMenu.style.transition = 'none';
-      }, { passive: true });
+      }, { passive: false });
 
       mobileMenu.addEventListener('touchmove', (e) => {
         if (!isDragging || !isMenuOpen()) return;
@@ -222,6 +222,7 @@ const t = useTranslations(lang);
 
         // Only allow dragging downward
         if (deltaY > 0) {
+          e.preventDefault(); // Prevent scrolling while dragging
           mobileMenu.style.transform = `translateY(${deltaY}px)`;
           // Fade overlay proportionally
           if (mobileNavOverlay) {
@@ -229,7 +230,7 @@ const t = useTranslations(lang);
             mobileNavOverlay.style.opacity = String(1 - progress);
           }
         }
-      }, { passive: true });
+      }, { passive: false });
 
       mobileMenu.addEventListener('touchend', () => {
         if (!isDragging) return;
@@ -249,7 +250,7 @@ const t = useTranslations(lang);
             mobileNavOverlay.style.opacity = '';
           }
         }
-      }, { passive: true });
+      }, { passive: false });
     }
   });
 </script>
