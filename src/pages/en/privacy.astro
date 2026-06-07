@@ -1,4 +1,5 @@
 ---
+import GridBackground from '@/components/ui/GridBackground.astro';
 import Layout from '@/layouts/Layout.astro';
 import { getLocalizedPath } from '@/i18n/utils';
 import { SITE_TITLE, LOCALES } from '@/consts';
@@ -15,7 +16,8 @@ const lang = LOCALES.en;
   <section
     class="relative bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
   >
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <GridBackground />
+    <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="text-center">
         <h1 class="mb-6 text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
           Privacy <span

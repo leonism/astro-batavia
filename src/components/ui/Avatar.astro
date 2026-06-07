@@ -1,5 +1,6 @@
 ---
-import type { HTMLAttributes } from 'astro:types';
+import { Picture } from 'astro:assets';
+import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<'div'> {
   src?: string | null;
@@ -7,9 +8,18 @@ interface Props extends HTMLAttributes<'div'> {
   fallback?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   variant?: 'gradient' | 'plain';
+  class?: string;
 }
 
 const { src, alt = '', fallback, size = 'md', variant = 'gradient', class: className, ...rest } = Astro.props;
+
+const sizeMap = {
+  xs: 24,
+  sm: 32,
+  md: 40,
+  lg: 64,
+  xl: 96,
+};
 
 const sizeClasses = {
   xs: 'h-6 w-6 text-[10px]',
@@ -22,17 +32,25 @@ const sizeClasses = {
 const strokeClasses = variant === 'gradient' 
   ? "rounded-full p-[2px] bg-linear-to-br from-blue-600 to-indigo-600"
   : "rounded-full p-0 bg-transparent";
+
+const pixelSize = sizeMap[size];
 ---
 
 <div class:list={[strokeClasses, sizeClasses[size], className]} {...rest}>
   <div class="h-full w-full rounded-full bg-white dark:bg-slate-900 overflow-hidden flex items-center justify-center">
     {src ? (
-      <img
+      <Picture
         src={src}
         alt={alt}
+        formats={['avif', 'webp']}
+        width={pixelSize}
+        height={pixelSize}
         class="h-full w-full object-cover rounded-full"
         loading="lazy"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        pictureAttributes={{
+          class: "h-full w-full",
+          onerror: "this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        }}
       />
       <span class="hidden font-bold text-blue-600 dark:text-blue-400">
         {fallback || (alt ? alt.charAt(0) : "?")}

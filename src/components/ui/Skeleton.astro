@@ -1,0 +1,34 @@
+---
+interface Props {
+  className?: string;
+  variant?: 'rectangle' | 'circle' | 'text';
+  width?: string | number;
+  height?: string | number;
+}
+
+const { 
+  className = '', 
+  variant = 'rectangle', 
+  width, 
+  height 
+} = Astro.props;
+
+const baseClasses = "relative overflow-hidden bg-gray-200 dark:bg-gray-800 before:absolute before:inset-0 before:-translate-x-full before:bg-linear-to-r before:from-transparent before:via-white/20 before:to-transparent before:animate-shimmer";
+
+const variantClasses = {
+  rectangle: "rounded-md",
+  circle: "rounded-full",
+  text: "rounded h-4 w-full mb-2 last:mb-0"
+};
+
+const style = {
+  width: typeof width === 'number' ? `${width}px` : width,
+  height: typeof height === 'number' ? `${height}px` : height,
+};
+---
+
+<div 
+  class:list={[baseClasses, variantClasses[variant], className]} 
+  style={style}
+  aria-hidden="true"
+/>

@@ -1,5 +1,9 @@
 ---
-
+import Skeleton from './Skeleton.astro';
+import HeaderSkeleton from './skeletons/HeaderSkeleton.astro';
+import HeroSkeleton from './skeletons/HeroSkeleton.astro';
+import FeaturedStoriesSkeleton from './skeletons/FeaturedStoriesSkeleton.astro';
+import NewsletterSkeleton from './skeletons/NewsletterSkeleton.astro';
 ---
 
 <div
@@ -8,39 +12,23 @@
   class="pointer-events-none fixed inset-0 z-9999 hidden bg-white opacity-0 transition-opacity duration-300 dark:bg-slate-900"
   aria-hidden="true"
 >
-  <div class="mx-auto max-w-7xl animate-pulse px-4 py-12 pt-24 sm:px-6 lg:px-8">
-    <!-- Header Skeleton -->
-    <div class="mb-8 h-8 w-48 rounded bg-gray-200 dark:bg-gray-800"></div>
+  <div class="mx-auto max-w-7xl px-4 py-12 pt-24 sm:px-6 lg:px-8">
+    
+    <HeaderSkeleton />
 
-    <!-- Hero Section Skeleton -->
-    <div class="mb-12 h-64 w-full rounded-xl bg-gray-200 dark:bg-gray-800 md:h-96"></div>
+    <div class="mt-24">
+        <HeroSkeleton />
+    </div>
 
-    <!-- Content Grid Skeleton -->
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-      <!-- Sidebar/Left Col -->
-      <div class="col-span-1 hidden space-y-4 md:block">
-        <div class="h-4 w-full rounded bg-gray-200 dark:bg-gray-800"></div>
-        <div class="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-800"></div>
-        <div class="h-4 w-5/6 rounded bg-gray-200 dark:bg-gray-800"></div>
-        <div class="mt-8 h-4 w-full rounded bg-gray-200 dark:bg-gray-800"></div>
-        <div class="h-4 w-2/3 rounded bg-gray-200 dark:bg-gray-800"></div>
-      </div>
-
-      <!-- Main Content -->
-      <div class="col-span-1 space-y-6 md:col-span-2">
-        <div class="mb-4 h-8 w-3/4 rounded bg-gray-200 dark:bg-gray-800"></div>
-        <div class="space-y-3">
-          <div class="h-4 w-full rounded bg-gray-200 dark:bg-gray-800"></div>
-          <div class="h-4 w-full rounded bg-gray-200 dark:bg-gray-800"></div>
-          <div class="h-4 w-5/6 rounded bg-gray-200 dark:bg-gray-800"></div>
+    <div class="mt-24">
+        <FeaturedStoriesSkeleton />
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <FeaturedStoriesSkeleton />
         </div>
-        <div class="mt-6 h-48 w-full rounded-lg bg-gray-200 dark:bg-gray-800"></div>
-        <div class="mt-6 space-y-3">
-          <div class="h-4 w-full rounded bg-gray-200 dark:bg-gray-800"></div>
-          <div class="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-800"></div>
-          <div class="h-4 w-full rounded bg-gray-200 dark:bg-gray-800"></div>
-        </div>
-      </div>
+    </div>
+
+    <div class="mt-24 border-t border-gray-100 dark:border-slate-800 pt-16">
+        <NewsletterSkeleton />
     </div>
   </div>
 </div>

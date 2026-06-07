@@ -32,7 +32,9 @@
   --color-gray-900: #0f172a;
   --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
   --animate-aurora: aurora 8s linear infinite;
+  --animate-shimmer: skeleton-shimmer 2s infinite linear;
 
   @keyframes aurora {
     from {
@@ -40,6 +42,12 @@
     }
     to {
       background-position: -200% 0%;
+    }
+  }
+
+  @keyframes skeleton-shimmer {
+    100% {
+      transform: translateX(100%);
     }
   }
 }

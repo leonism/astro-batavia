@@ -1,0 +1,14 @@
+---
+import Skeleton from '@/components/ui/Skeleton.astro';
+---
+
+<header class="flex items-center justify-between">
+    <Skeleton className="h-8 w-32" />
+    <div class="hidden md:flex gap-6">
+        {[1,2,3].map(() => <Skeleton className="h-4 w-16" />)}
+    </div>
+    <div class="flex gap-4">
+        <Skeleton variant="circle" className="h-8 w-8" />
+        <Skeleton variant="circle" className="h-8 w-8" />
+    </div>
+</header>
