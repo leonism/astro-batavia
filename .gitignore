@@ -57,6 +57,7 @@ GEMINI.md
 .agent
 .agents
 .web-bot-auth-private.key
+.gemini
 
 # System
 Thumbs.db

@@ -136,7 +136,7 @@ Astro Batavia follows a modern, component-based architecture designed for scalab
 
 ### **Key Architectural Decisions**
 
-- **Islands Architecture**: Minimal JavaScript with selective hydration
+- **HTML-First Architecture**: Prioritizes server-side rendering for static HTML to maximize performance, using optimized vanilla JavaScript only where necessary.
 - **Content Collections**: Type-safe content management with Zod validation
 - **Internationalization**: Route-based language switching with shared components
 - **Component Composition**: Atomic design principles with reusable UI components
@@ -553,7 +553,7 @@ astro-batavia/
 │   │   └── seo.ts                # SEO utilities
 │   └── env.d.ts                  # Environment types
 ├── 📁 scripts/                   # Build scripts
-│   └── compress.js               # Asset compression
+│   └── compress.ts               # Asset compression
 ├── astro.config.mjs              # Astro configuration
 ├── package.json                  # Dependencies & scripts
 ├── tsconfig.json                 # TypeScript configuration
