@@ -1,7 +1,6 @@
 ---
 import { useTranslations } from '@/i18n/utils';
 import type { LanguageKey } from '@/i18n/types';
-
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<'div'> {
@@ -58,7 +57,6 @@ const learnMoreClasses = [
 ---
 
 <CardElement href={link} class:list={[cardClasses, className]} {...rest}>
-
   <div class:list={iconClasses} aria-hidden="true">
     <slot name="icon" />
   </div>
