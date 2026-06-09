@@ -8,14 +8,14 @@ const t = useTranslations(lang);
 
 <button
   id="theme-toggle"
-  class="theme-switch"
+  class="theme-toggle"
   role="switch"
   aria-checked="false"
   aria-label={t('theme.toggle')}
   title={t('theme.toggle')}
 >
   {/* Sun icon — fixed left */}
-  <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
+  <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
       <path
         fill-rule="evenodd"
@@ -27,133 +27,15 @@ const t = useTranslations(lang);
   </span>
 
   {/* Moon icon — fixed right */}
-  <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
+  <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">
     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
       <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
     </svg>
   </span>
 
   {/* Sliding knob */}
-  <span class="theme-switch__knob" aria-hidden="true"></span>
+  <span class="theme-toggle-knob" aria-hidden="true"></span>
 </button>
-
-<style>
-  .theme-switch {
-    position: relative;
-    display: inline-block;
-    width: 48px;
-    height: 24px;
-    border-radius: 9999px;
-    border: none;
-    cursor: pointer;
-    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-    transition:
-      background 0.3s ease,
-      box-shadow 0.3s ease;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    flex-shrink: 0;
-    margin: 0 0.25rem;
-    padding: 0;
-  }
-
-  .theme-switch:hover {
-    box-shadow:
-      inset 0 1px 3px rgba(0, 0, 0, 0.15),
-      0 0 0 3px rgba(99, 102, 241, 0.15);
-  }
-
-  .theme-switch:focus-visible {
-    outline: 2px solid var(--color-primary-500, #6366f1);
-    outline-offset: 2px;
-  }
-
-  /* Dark mode track */
-  :global(.dark) .theme-switch {
-    background: linear-gradient(135deg, #1e293b, #334155);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-
-  :global(.dark) .theme-switch:hover {
-    box-shadow:
-      inset 0 1px 3px rgba(0, 0, 0, 0.3),
-      0 0 0 3px rgba(99, 102, 241, 0.2);
-  }
-
-  /* Icons — absolutely positioned, sized to match knob */
-  .theme-switch__icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    z-index: 1;
-    transition:
-      opacity 0.3s ease,
-      color 0.3s ease;
-  }
-
-  /* Sun icon — pinned left */
-  .theme-switch__icon--sun {
-    left: 2px;
-    color: #374151;
-    opacity: 0;
-  }
-
-  /* Moon icon — pinned right */
-  .theme-switch__icon--moon {
-    right: 2px;
-    color: #374151; /* matches search & language icons (gray-700) */
-    opacity: 1;
-  }
-
-  /* Dark mode: show sun (white), hide moon */
-  :global(.dark) .theme-switch__icon--sun {
-    opacity: 1;
-    color: #ffffff;
-  }
-
-  :global(.dark) .theme-switch__icon--moon {
-    opacity: 0;
-  }
-
-  /* Sliding knob */
-  .theme-switch__knob {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: white;
-    box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.2),
-      0 1px 2px rgba(0, 0, 0, 0.1);
-    transition:
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      background 0.3s ease,
-      box-shadow 0.3s ease;
-    z-index: 2;
-  }
-
-  /* Dark mode — knob slides right, white */
-  :global(.dark) .theme-switch__knob {
-    transform: translateX(24px);
-    background: #ffffff;
-    box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.3),
-      0 1px 2px rgba(0, 0, 0, 0.15);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .theme-switch__knob,
-    .theme-switch__icon {
-      transition: none;
-    }
-  }
-</style>
 
 <script>
   document.addEventListener('astro:page-load', () => {
