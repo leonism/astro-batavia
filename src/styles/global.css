@@ -2,11 +2,13 @@
 @plugin "@tailwindcss/typography";
 
 /**
- * THEME CONFIGURATION
- * Tailwind CSS v4 custom theme tokens.
+ * ==========================================================================
+ * 1. THEME CONFIGURATION
+ * Tailwind CSS v4 custom theme tokens & structural definitions.
+ * ==========================================================================
  */
 @theme {
-  /* Color Palette - Standardized with tailwind.config.mjs */
+  /* --- Colors --- */
   --color-primary-50: hsl(210 100% 98%);
   --color-primary-100: hsl(210 100% 95%);
   --color-primary-200: hsl(210 100% 90%);
@@ -18,7 +20,6 @@
   --color-primary-800: hsl(210 100% 30%);
   --color-primary-900: hsl(210 100% 20%);
 
-  /* Slate-based Grays */
   --color-gray-50: #f8fafc;
   --color-gray-100: #f1f5f9;
   --color-gray-200: #e2e8f0;
@@ -30,20 +31,19 @@
   --color-gray-800: #1e293b;
   --color-gray-900: #0f172a;
 
-  /* Semantic Theme Tokens mapping to CSS Variables */
+  /* Semantic Interface Tokens Map */
   --color-surface-hover: var(--surface-hover);
   --color-surface-active: var(--surface-active);
   --color-surface-selected: var(--surface-selected);
   --color-surface-selected-strong: var(--surface-selected-strong);
-  
   --color-search-highlight-bg: var(--search-highlight-bg);
   --color-search-highlight-text: var(--search-highlight-text);
 
-  /* Typography */
+  /* --- Typography --- */
   --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Animations */
+  /* --- Motion Systems --- */
   --animate-aurora: aurora 8s linear infinite;
   --animate-shimmer: skeleton-shimmer 2s infinite linear;
   --animate-fade-in: fade-in 0.5s ease-out;
@@ -53,43 +53,77 @@
   --animate-spin-fast: spin 0.8s linear infinite;
 
   @keyframes aurora {
-    from { background-position: 0% 0%; }
-    to { background-position: -200% 0%; }
+    from {
+      background-position: 0% 0%;
+    }
+
+    to {
+      background-position: -200% 0%;
+    }
   }
 
   @keyframes skeleton-shimmer {
-    100% { transform: translateX(100%); }
+    100% {
+      transform: translateX(100%);
+    }
   }
 
   @keyframes fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  
+
   @keyframes fade-in-up {
-    from { opacity: 0; transform: scale(0.95) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
   }
 
   @keyframes bounce-custom {
-    0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
-    50% { transform: none; animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+
+    0%,
+    100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+
+    50% {
+      transform: none;
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
   }
-  
+
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 }
 
-/**
- * BASE STYLES
- * Global resets and base element styling.
- */
 @variant dark (&:where(.dark, .dark *));
 
+/**
+ * ==========================================================================
+ * 2. CORE BASE DESIGNS & SYSTEM ROOT
+ * Functional tokens mapping for global element behaviors.
+ * ==========================================================================
+ */
 @layer base {
   :root {
-    /* Functional Tokens (Shadcn-like) */
+    /* Shadcn Context Core Mapping */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --muted: 210 40% 96.1%;
@@ -102,7 +136,15 @@
     --radius: 0.5rem;
     --hero-grid-color: #80808030;
 
-    /* Prose Tokens */
+    /* Semantic UI Tokens variables */
+    --surface-hover: var(--color-gray-50);
+    --surface-active: var(--color-gray-100);
+    --surface-selected: var(--color-primary-50);
+    --surface-selected-strong: var(--color-primary-100);
+    --search-highlight-bg: #fef08a;
+    --search-highlight-text: #92400e;
+
+    /* Prose Tokens Initialization */
     --tw-prose-body: rgb(55 65 81);
     --tw-prose-headings: rgb(17 24 39);
     --tw-prose-links: hsl(210 100% 50%);
@@ -114,16 +156,6 @@
     --tw-prose-code: rgb(17 24 39);
     --tw-prose-pre-bg: rgb(17 24 39);
     --tw-prose-pre-code: rgb(229 231 235);
-    
-    /* Interactive Surface Tokens */
-    --surface-hover: var(--color-gray-50);
-    --surface-active: var(--color-gray-100);
-    --surface-selected: var(--color-primary-50);
-    --surface-selected-strong: var(--color-primary-100);
-    
-    /* Search Specific Tokens */
-    --search-highlight-bg: #fef08a;
-    --search-highlight-text: #92400e;
   }
 
   .dark {
@@ -138,7 +170,15 @@
     --ring: 212.7 26.8% 83.9%;
     --hero-grid-color: #ffffff12;
 
-    /* Dark Mode Prose Tokens */
+    /* Contextual Updates for Dark UI Tokens */
+    --surface-hover: var(--color-gray-700);
+    --surface-active: var(--color-gray-600);
+    --surface-selected: color-mix(in srgb, var(--color-primary-900) 20%, transparent);
+    --surface-selected-strong: color-mix(in srgb, var(--color-primary-900) 30%, transparent);
+    --search-highlight-bg: #fbbf24;
+    --search-highlight-text: #92400e;
+
+    /* Dark Mode Prose Sync */
     --tw-prose-body: rgb(209 213 219);
     --tw-prose-headings: rgb(255 255 255);
     --tw-prose-links: hsl(210 100% 60%);
@@ -150,16 +190,6 @@
     --tw-prose-code: rgb(255 255 255);
     --tw-prose-pre-bg: rgb(0 0 0 / 50%);
     --tw-prose-pre-code: rgb(209 213 219);
-    
-    /* Interactive Surface Tokens */
-    --surface-hover: var(--color-gray-700);
-    --surface-active: var(--color-gray-600);
-    --surface-selected: color-mix(in srgb, var(--color-primary-900) 20%, transparent);
-    --surface-selected-strong: color-mix(in srgb, var(--color-primary-900) 30%, transparent);
-    
-    /* Search Specific Tokens */
-    --search-highlight-bg: #fbbf24;
-    --search-highlight-text: #92400e;
   }
 
   html {
@@ -174,22 +204,32 @@
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { @apply bg-gray-100 dark:bg-gray-800; }
-  ::-webkit-scrollbar-thumb { @apply rounded-full bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500; }
+  /* Core UI Webkit Components */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gray-400 dark:bg-gray-600 hover:bg-gray-500;
+  }
 }
 
 /**
- * COMPONENT STYLES
- * Reusable UI component logic.
+ * ==========================================================================
+ * 3. CORE INTERACTIVE COMPONENTS
+ * Base structural building blocks & state layouts.
+ * ==========================================================================
  */
 @layer components {
-  /* Theme Toggle Switch */
+
+  /* --- Theme System Switching Toggle --- */
   .theme-toggle {
-    @apply relative inline-block w-12 h-6 rounded-full border-none cursor-pointer shrink-0 mx-1 p-0 transition-all duration-300;
+    @apply relative inline-block w-12 h-6 rounded-full border-none cursor-pointer shrink-0 mx-1 p-0 transition-all duration-300 shadow-inner;
     background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 
     &:hover {
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15), 0 0 0 3px color-mix(in srgb, var(--color-primary-500) 15%, transparent);
@@ -201,7 +241,6 @@
 
     .dark & {
       background: linear-gradient(135deg, var(--color-gray-800), var(--color-gray-700));
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 
       &:hover {
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 3px color-mix(in srgb, var(--color-primary-500) 20%, transparent);
@@ -215,191 +254,260 @@
 
   .theme-toggle-sun {
     @apply left-0.5 opacity-0 text-gray-700;
-    .dark & { @apply opacity-100 text-white; }
+
+    .dark & {
+      @apply opacity-100 text-white;
+    }
   }
 
   .theme-toggle-moon {
     @apply right-0.5 opacity-100 text-gray-700;
-    .dark & { @apply opacity-0; }
-  }
-
-  .theme-toggle-knob {
-    @apply absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-all duration-300 z-20;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
 
     .dark & {
-      @apply translate-x-6 bg-white;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
+      @apply opacity-0;
     }
   }
 
-  /* Glassmorphism */
-  .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
-    .dark & { @apply bg-black/5 border-white/5; }
+  .theme-toggle-knob {
+    @apply absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300 z-20;
+
+    .dark & {
+      @apply translate-x-6;
+    }
   }
 
-  /* Loading State */
+  /* --- Presentation Modifiers & Layout Extras --- */
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+
+    .dark & {
+      @apply bg-black/5 border-white/5;
+    }
+  }
+
   .shimmer {
     @apply animate-shimmer bg-linear-to-r from-gray-100 via-gray-200 to-gray-100 bg-size-[200px_100%] dark:from-gray-800 dark:via-gray-700 dark:to-gray-800;
   }
 
-  /* Code Copy Button */
   .copy-code-button {
     @apply absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800 text-slate-400 transition-all duration-200 hover:bg-slate-700 hover:text-white;
-    &.copied { @apply border-green-500/50 bg-green-900/20 text-green-400; }
+
+    &.copied {
+      @apply border-green-500/50 bg-green-900/20 text-green-400;
+    }
   }
 
-  /* Line Clamps */
-  .line-clamp-2 { @apply line-clamp-2; }
-  .line-clamp-3 { @apply line-clamp-3; }
-  .line-clamp-4 { @apply line-clamp-4; }
-
-  /* ==========================================================================
-     Enhanced Search Component Tokens
-     ========================================================================== */
-  
+  /* --- Interactive Search System Components --- */
   #search-overlay {
     @apply animate-fade-in-fast;
   }
 
+  #search-results {
+    @apply scroll-smooth;
+
+    &[role='listbox'] {
+      @apply focus:outline-none;
+    }
+  }
+
+  #main-search-input {
+    @apply transition-all duration-200 ease-in-out;
+
+    &:focus {
+      @apply scale-[1.02] shadow-lg;
+    }
+
+    &[aria-busy='true'] {
+      @apply cursor-wait opacity-75;
+    }
+  }
+
   .search-highlight {
-    @apply bg-search-highlight-bg text-search-highlight-text rounded-sm px-1 py-0.5 font-medium transition-colors duration-150;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
+    @apply bg-search-highlight-bg text-search-highlight-text rounded-sm px-1 py-0.5 font-medium transition-colors duration-150 [box-decoration-break:clone];
   }
 
-  /* Custom scrollbar for results */
-  #search-results-container::-webkit-scrollbar,
-  #search-results::-webkit-scrollbar {
-    width: 6px;
-  }
-  #search-results-container::-webkit-scrollbar-track,
-  #search-results::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  #search-results-container::-webkit-scrollbar-thumb,
-  #search-results::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-600 rounded-[3px];
+  #search-results-container,
+  #search-results {
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply bg-gray-300 dark:bg-gray-600 rounded-[3px];
+    }
   }
 
-  /* Search Result Items */
   .search-result {
     @apply transform transition-all duration-200 ease-in-out relative animate-fade-in-up;
+
+    &[role='option'] {
+      @apply cursor-pointer;
+    }
+
+    &:hover {
+      @apply scale-[1.01] shadow-lg -translate-y-0.5;
+    }
+
+    &:focus-within {
+      @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
+    }
+
+    &.selected {
+      @apply bg-surface-selected ring-2 ring-primary-500 ring-offset-2 scale-[1.02] shadow-lg border-l-4 border-primary-500 -translate-y-px;
+    }
+
+    &[aria-selected='true'] {
+      @apply bg-surface-selected-strong ring-2 ring-primary-600 ring-offset-2 shadow-xl;
+    }
   }
 
-  .search-result:hover {
-    @apply scale-[1.01] shadow-lg -translate-y-0.5;
-  }
-
-  .search-result:focus-within,
-  .suggestion-item:focus {
-    @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
-  }
-
-  .search-result.selected {
-    @apply bg-surface-selected ring-2 ring-primary-500 ring-offset-2 scale-[1.02] shadow-lg border-l-4 border-primary-500 -translate-y-px;
-  }
-
-  .search-result[aria-selected='true'] {
-    @apply bg-surface-selected-strong ring-2 ring-primary-600 ring-offset-2 shadow-xl;
-  }
-
-  #search-results { @apply scroll-smooth; }
-  #search-results[role='listbox'] { @apply focus:outline-none; }
-  .search-result[role='option'] { @apply cursor-pointer; }
-
-  /* Search Suggestion Dropdown */
   .search-suggestions {
     @apply absolute left-0 right-0 top-full z-50 border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 max-h-96 overflow-y-auto rounded-b-lg shadow-lg pointer-events-none scale-95 opacity-0 transition-all duration-200 ease-out;
+
+    &.show {
+      @apply pointer-events-auto scale-100 opacity-100;
+    }
   }
-  .search-suggestions.show { @apply pointer-events-auto scale-100 opacity-100; }
 
   .suggestion-item {
     @apply cursor-pointer px-4 py-3 hover:bg-surface-hover focus:bg-surface-hover focus:outline-none transition-colors duration-150 border-b border-gray-100 last:border-b-0 dark:border-gray-700;
+
+    &:focus {
+      @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
+    }
+
+    &[aria-selected='true'] {
+      @apply bg-surface-selected text-primary-900 dark:text-primary-100;
+    }
+
+    &:active {
+      @apply bg-surface-selected-strong;
+    }
   }
 
-  .suggestion-item[aria-selected='true'] {
-    @apply bg-surface-selected text-primary-900 dark:text-primary-100;
+  .search-loading {
+    @apply inline-block;
+
+    ::after {
+      content: '';
+      @apply ml-2 inline-block h-4 w-4 rounded-full border-2 border-primary-500 border-t-transparent animate-spin-fast;
+    }
   }
 
-  .suggestion-item:active {
-    @apply bg-surface-selected-strong;
+  .search-status {
+    @apply transition-all duration-300 ease-in-out;
+
+    &.updating {
+      @apply scale-95 opacity-50;
+    }
   }
 
-  /* Search Input Enhancements */
-  #main-search-input { @apply transition-all duration-200 ease-in-out; }
-  #main-search-input:focus { @apply scale-[1.02] transform shadow-lg; }
-  #main-search-input[aria-busy='true'] { @apply cursor-wait opacity-75; }
+  .no-results {
+    @apply py-12 text-center animate-fade-in;
 
-  .search-loading { @apply inline-block; }
-  .search-loading::after {
-    content: '';
-    @apply ml-2 inline-block h-4 w-4 rounded-full border-2 border-primary-500 border-t-transparent animate-spin-fast;
+    svg {
+      @apply mx-auto mb-4 text-gray-300 dark:text-gray-600 animate-bounce-twice;
+    }
   }
 
-  .search-status { @apply transition-all duration-300 ease-in-out; }
-  .search-status.updating { @apply scale-95 transform opacity-50; }
-
-  .no-results { @apply py-12 text-center animate-fade-in; }
-  .no-results svg { @apply mx-auto mb-4 text-gray-300 dark:text-gray-600 animate-bounce-twice; }
-
-  /* Search Filters */
   .tag-filter {
     @apply rounded-full px-3 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 ease-in-out cursor-pointer select-none;
+
+    &.active {
+      @apply border-primary-500 bg-primary-500 text-white dark:border-primary-600 dark:bg-primary-600 scale-105 shadow-md;
+    }
+
+    &:hover:not(.active) {
+      @apply scale-105 shadow-sm;
+    }
   }
 
-  .tag-filter.active {
-    @apply border-primary-500 bg-primary-500 text-white dark:border-primary-600 dark:bg-primary-600 scale-105 transform shadow-md;
-  }
-
-  .tag-filter:hover:not(.active) { @apply scale-105 transform shadow-sm; }
-
-  /* Sort Controls */
   #sort-select {
-    @apply appearance-none bg-white dark:bg-gray-800 rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200;
+    @apply appearance-none bg-white dark:bg-gray-800 rounded-lg border border-gray-300 pl-3 pr-10 py-2 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
     background-position: right 0.5rem center;
     background-repeat: no-repeat;
     background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
   }
 
-  .voice-search-btn { @apply opacity-75 hover:opacity-100 transition-all duration-200 hover:scale-110 transform; }
-  .voice-search-btn.recording { @apply animate-pulse text-red-500; }
+  .voice-search-btn {
+    @apply opacity-75 hover:opacity-100 transition-all duration-200 hover:scale-110;
 
-  #search-clear-button { @apply pointer-events-none scale-95 opacity-0 transition-all duration-200; }
-  #main-search-input:not(:placeholder-shown) + div #search-clear-button { @apply pointer-events-auto scale-100 opacity-100; }
+    &.recording {
+      @apply animate-pulse text-red-500;
+    }
+  }
+
+  #search-clear-button {
+    @apply pointer-events-none scale-95 opacity-0 transition-all duration-200;
+  }
+
+  #main-search-input:not(:placeholder-shown)+div #search-clear-button {
+    @apply pointer-events-auto scale-100 opacity-100;
+  }
 
   .search-result-item.keyboard-focused,
   .suggestion-item.keyboard-focused {
     @apply ring-2 ring-primary-500/50;
   }
+
+  /* --- Blog Sidebar Table Of Contents --- */
+  .toc-link.is-active {
+    color: var(--color-primary-600, #2563eb);
+    border-left: 2px solid var(--color-primary-500, #3b82f6);
+    padding-left: calc(0.75rem - 2px);
+    font-weight: 600;
+
+    &[class*='pl-6'] {
+      padding-left: calc(1.5rem - 2px);
+    }
+  }
+
+  .dark .toc-link.is-active {
+    color: var(--color-primary-400, #60a5fa);
+    border-left-color: var(--color-primary-400, #60a5fa);
+  }
+
+  .toc-sidebar [scrollbar-width~='thin'] {
+    scrollbar-width: thin;
+    scrollbar-color: #e2e8f0 transparent;
+
+    .dark & {
+      scrollbar-color: #334155 transparent;
+    }
+  }
 }
 
 /**
- * TYPOGRAPHY / PROSE
- * Content area styling and Markdown overrides.
+ * ==========================================================================
+ * 4. TYPOGRAPHY / PROSE ELEMENTS
+ * Content area layouts and global typographic engine configuration.
+ * ==========================================================================
  */
 .prose {
-  @apply max-w-none text-pretty;
-  color: var(--tw-prose-body);
+  @apply max-w-none text-pretty text-(--tw-prose-body);
 
   :where(a):not(:where([class~='not-prose'] *)) {
-    @apply font-medium underline decoration-2 underline-offset-4 transition-colors;
-    color: var(--tw-prose-links);
-    &:hover { @apply decoration-primary-600; }
+    @apply font-medium underline decoration-2 underline-offset-4 transition-colors text-(--tw-prose-links) hover:decoration-primary-600;
   }
 
   :where(strong):not(:where([class~='not-prose'] *)) {
-    @apply font-semibold;
-    color: var(--tw-prose-bold);
+    @apply font-semibold text-(--tw-prose-bold);
   }
 
-  /* Lists */
-  :where(ol, ul):not(:where([class~='not-prose'] *)) { @apply list-none pl-0; }
-  :where(li):not(:where([class~='not-prose'] *)) { @apply relative pl-6; }
-  
+  /* List Architecture */
+  :where(ol, ul):not(:where([class~='not-prose'] *)) {
+    @apply list-none pl-0;
+  }
+
+  :where(li):not(:where([class~='not-prose'] *)) {
+    @apply relative pl-6;
+  }
+
   :where(ol > li):not(:where([class~='not-prose'] *))::before {
     content: counter(list-item) ".";
     @apply absolute left-0 text-gray-500;
@@ -407,33 +515,41 @@
 
   :where(ul > li):not(:where([class~='not-prose'] *))::before {
     content: "";
-    @apply absolute left-0 top-[0.6875em] h-1.5 w-1.5 rounded-full;
-    background-color: var(--tw-prose-bullets);
+    @apply absolute left-0 top-[0.6875em] h-1.5 w-1.5 rounded-full bg-(--tw-prose-bullets);
   }
 
-  /* Headings */
+  /* Structural Headings */
   :where(h1, h2, h3, h4):not(:where([class~='not-prose'] *)) {
-    @apply scroll-mt-32 font-bold;
-    color: var(--tw-prose-headings);
+    @apply scroll-mt-32 font-bold text-(--tw-prose-headings);
   }
-  
-  :where(h1):not(:where([class~='not-prose'] *)) { @apply text-4xl mb-8 font-extrabold leading-tight; }
-  :where(h2):not(:where([class~='not-prose'] *)) { @apply text-2xl mt-12 mb-4 leading-snug; }
-  :where(h3):not(:where([class~='not-prose'] *)) { @apply text-xl mt-8 mb-2; }
 
-  /* Code Blocks */
+  :where(h1):not(:where([class~='not-prose'] *)) {
+    @apply text-4xl mb-8 font-extrabold leading-tight;
+  }
+
+  :where(h2):not(:where([class~='not-prose'] *)) {
+    @apply text-2xl mt-12 mb-4 leading-snug;
+  }
+
+  :where(h3):not(:where([class~='not-prose'] *)) {
+    @apply text-xl mt-8 mb-2;
+  }
+
+  /* Development / Code Styling blocks */
   pre.astro-code {
-    @apply relative my-8 overflow-x-auto rounded-lg border border-gray-200 p-4 text-sm leading-relaxed dark:border-gray-700;
-    background-color: var(--tw-prose-pre-bg) !important;
-    color: var(--tw-prose-pre-code) !important;
+    @apply relative my-8 overflow-x-auto rounded-lg border border-gray-200 p-4 text-sm leading-relaxed dark:border-gray-700 !bg-(--tw-prose-pre-bg) !text-(--tw-prose-pre-code);
   }
 
   :where(:not(pre) > code):not(:where([class~='not-prose'] *)) {
     @apply rounded-sm bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-800;
-    &::before, &::after { content: "`"; }
+
+    &::before,
+    &::after {
+      content: "`";
+    }
   }
 
-  /* Tables */
+  /* Data Layout Modules (Tables) */
   :where(table):not(:where([class~='not-prose'] *)) {
     @apply w-full border-collapse border border-gray-200 my-8 text-sm dark:border-gray-700;
   }
@@ -448,16 +564,15 @@
 }
 
 /**
- * UTILITIES & HELPERS
+ * ==========================================================================
+ * 5. CONTEXTUAL UTILITIES & ACCESSIBILITY MEDIA OVERRIDES
+ * ==========================================================================
  */
 .bg-hero-gradient {
   background: linear-gradient(to right, var(--color-primary-600), #4f46e5);
 }
 
-.text-balance { text-wrap: balance; }
-.text-pretty { text-wrap: pretty; }
-
-/* Accessibility */
+/* Global Accessibility Hooks */
 .sr-only {
   @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
   clip: rect(0, 0, 0, 0);
@@ -468,28 +583,67 @@
 }
 
 .sr-only-focusable:focus {
-  @apply static m-0 h-auto w-auto overflow-visible p-1 rounded border border-gray-300 bg-white text-black;
+  @apply static m-0 h-auto w-auto overflow-visible p-1 rounded border border-gray-300 bg-white text-black whitespace-normal;
   clip: auto;
-  white-space: normal;
 }
 
-/* Accessibility & Motion */
+/* System Overrides: Motion, Printing and High Contrast Media profiles */
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    @apply transition-none! animate-none! scroll-auto!;
+
+  *,
+  ::before,
+  ::after {
+    @apply !transition-none !animate-none scroll-auto;
   }
-  
+
   .search-result:hover {
     transform: none;
   }
 }
 
+@media (prefers-contrast: high) {
+  .search-highlight {
+    @apply bg-yellow-300 text-black;
+  }
+
+  .search-result {
+    @apply border-2 border-gray-800 dark:border-gray-200;
+  }
+}
+
+@media (max-width: 640px) {
+  .search-result {
+    @apply p-3;
+  }
+
+  .suggestion-item {
+    @apply px-3 py-2;
+  }
+
+  .tag-filter {
+    @apply px-2 py-1 text-xs;
+  }
+}
+
 @media print {
-  .no-print { display: none !important; }
-  body { @apply bg-white text-black; }
-  a { @apply underline; }
-  a[href^='http']:after { content: ' (' attr(href) ')'; font-size: 0.8em; color: #666; }
-  
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    @apply bg-white text-black;
+  }
+
+  a {
+    @apply underline;
+
+    &:after {
+      content: ' (' attr(href) ')';
+      font-size: 0.8em;
+      color: #666;
+    }
+  }
+
   .search-suggestions,
   .tag-filter,
   #sort-select,
@@ -504,62 +658,5 @@
 
   .search-highlight {
     @apply bg-gray-200 text-black;
-  }
-}
-
-@layer components {
-  /* Consolidated from BlogTableOfContents.astro */
-  /* Active link highlight */
-  .toc-link.is-active {
-    color: var(--color-primary-600, #2563eb);
-    border-left: 2px solid var(--color-primary-500, #3b82f6);
-    padding-left: calc(0.75rem - 2px); /* compensate for the border */
-    font-weight: 600;
-  }
-
-  .dark .toc-link.is-active {
-    color: var(--color-primary-400, #60a5fa);
-    border-left-color: var(--color-primary-400, #60a5fa);
-  }
-
-  /* Depth-3 active stays indented */
-  .toc-link.is-active[class*='pl-6'] {
-    padding-left: calc(1.5rem - 2px);
-  }
-
-  /* Thin scrollbar for sidebar */
-  .toc-sidebar [scrollbar-width~='thin'] {
-    scrollbar-width: thin;
-    scrollbar-color: #e2e8f0 transparent;
-  }
-
-  .dark .toc-sidebar [scrollbar-width~='thin'] {
-    scrollbar-color: #334155 transparent;
-  }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .search-highlight {
-    @apply bg-yellow-300 text-black;
-  }
-
-  .search-result {
-    @apply border-2 border-gray-800 dark:border-gray-200;
-  }
-}
-
-/* Responsive design */
-@media (max-width: 640px) {
-  .search-result {
-    @apply p-3;
-  }
-
-  .suggestion-item {
-    @apply px-3 py-2;
-  }
-
-  .tag-filter {
-    @apply px-2 py-1 text-xs;
   }
 }
