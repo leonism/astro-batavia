@@ -114,35 +114,7 @@ const showMobile = variant === 'mobile' || variant === 'both';
   )
 }
 
-<style is:global>
-  /* Active link highlight */
-  .toc-link.is-active {
-    color: var(--color-primary-600, #2563eb);
-    border-left: 2px solid var(--color-primary-500, #3b82f6);
-    padding-left: calc(0.75rem - 2px); /* compensate for the border */
-    font-weight: 600;
-  }
 
-  .dark .toc-link.is-active {
-    color: var(--color-primary-400, #60a5fa);
-    border-left-color: var(--color-primary-400, #60a5fa);
-  }
-
-  /* Depth-3 active stays indented */
-  .toc-link.is-active[class*='pl-6'] {
-    padding-left: calc(1.5rem - 2px);
-  }
-
-  /* Thin scrollbar for sidebar */
-  .toc-sidebar [scrollbar-width~='thin'] {
-    scrollbar-width: thin;
-    scrollbar-color: #e2e8f0 transparent;
-  }
-
-  .dark .toc-sidebar [scrollbar-width~='thin'] {
-    scrollbar-color: #334155 transparent;
-  }
-</style>
 
 <script>
   const initToc = () => {
