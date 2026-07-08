@@ -145,17 +145,17 @@
     --search-highlight-text: #92400e;
 
     /* Prose Tokens Initialization */
-    --tw-prose-body: rgb(55 65 81);
-    --tw-prose-headings: rgb(17 24 39);
-    --tw-prose-links: hsl(210 100% 50%);
-    --tw-prose-bold: rgb(17 24 39);
-    --tw-prose-bullets: rgb(209 213 219);
-    --tw-prose-hr: rgb(229 231 235);
-    --tw-prose-quotes: rgb(17 24 39);
-    --tw-prose-quote-borders: rgb(229 231 235);
-    --tw-prose-code: rgb(17 24 39);
-    --tw-prose-pre-bg: rgb(17 24 39);
-    --tw-prose-pre-code: rgb(229 231 235);
+    --tw-prose-body: var(--color-gray-700);
+    --tw-prose-headings: var(--color-gray-900);
+    --tw-prose-links: var(--color-primary-600);
+    --tw-prose-bold: var(--color-gray-900);
+    --tw-prose-bullets: var(--color-gray-300);
+    --tw-prose-hr: var(--color-gray-200);
+    --tw-prose-quotes: var(--color-gray-900);
+    --tw-prose-quote-borders: var(--color-gray-200);
+    --tw-prose-code: var(--color-gray-900);
+    --tw-prose-pre-bg: var(--color-gray-900);
+    --tw-prose-pre-code: var(--color-gray-200);
   }
 
   .dark {
@@ -179,17 +179,17 @@
     --search-highlight-text: #92400e;
 
     /* Dark Mode Prose Sync */
-    --tw-prose-body: rgb(209 213 219);
-    --tw-prose-headings: rgb(255 255 255);
-    --tw-prose-links: hsl(210 100% 60%);
-    --tw-prose-bold: rgb(255 255 255);
-    --tw-prose-bullets: rgb(75 85 99);
-    --tw-prose-hr: rgb(55 65 81);
-    --tw-prose-quotes: rgb(243 244 246);
-    --tw-prose-quote-borders: rgb(55 65 81);
-    --tw-prose-code: rgb(255 255 255);
+    --tw-prose-body: var(--color-gray-300);
+    --tw-prose-headings: #ffffff;
+    --tw-prose-links: var(--color-primary-500);
+    --tw-prose-bold: #ffffff;
+    --tw-prose-bullets: var(--color-gray-600);
+    --tw-prose-hr: var(--color-gray-700);
+    --tw-prose-quotes: var(--color-gray-100);
+    --tw-prose-quote-borders: var(--color-gray-700);
+    --tw-prose-code: #ffffff;
     --tw-prose-pre-bg: rgb(0 0 0 / 50%);
-    --tw-prose-pre-code: rgb(209 213 219);
+    --tw-prose-pre-code: var(--color-gray-300);
   }
 
   html {
