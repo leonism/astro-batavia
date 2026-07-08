@@ -64,40 +64,49 @@ Matches the **Tailwind Slate** scale. Used for text, borders, backgrounds, and s
 
 ### 2.3 Semantic CSS Custom Properties
 
-Defined as raw RGB/HSL channel values on `:root` and `.dark` for composability.
+Defined as raw HSL channels on `:root` and `.dark` for composability.
 
 #### Light Theme (`:root`)
 
-| Property               | RGB/HSL Channels | Hex       | Role                  |
-| ---------------------- | ---------------- | --------- | --------------------- |
-| `--background`         | `0 0% 100%`      | `#FFFFFF` | Page background       |
-| `--foreground`         | `34 40 49`       | `#222831` | Primary text          |
-| `--muted`              | `248 250 252`    | `#F8FAFC` | Muted surfaces        |
-| `--muted-foreground`   | `100 116 139`    | `#64748B` | Secondary text        |
-| `--card`               | `255 255 255`    | `#FFFFFF` | Card surface          |
-| `--card-foreground`    | `34 40 49`       | `#222831` | Card text             |
-| `--border`             | `226 232 240`    | `#E2E8F0` | Default borders       |
-| `--input`              | `226 232 240`    | `#E2E8F0` | Input borders         |
-| `--primary`            | `14 165 233`     | `#0EA5E9` | Primary accent        |
-| `--primary-foreground` | `255 255 255`    | `#FFFFFF` | Text on primary       |
-| `--secondary`          | `241 245 249`    | `#F1F5F9` | Secondary surface     |
-| `--accent`             | `210 20% 95%`    | `#F1F5F9` | Accent surface        |
-| `--destructive`        | `0 84% 60%`      | `#EF4444` | Error/danger          |
-| `--ring`               | `210 100% 50%`   | `#0066FF` | Focus ring            |
-| `--radius`             | `0.5rem`         | —         | Default border-radius |
+| Property               | HSL Channels        | Hex       | Role                  |
+| ---------------------- | ------------------- | --------- | --------------------- |
+| `--background`         | `0 0% 100%`         | `#FFFFFF` | Page background       |
+| `--foreground`         | `222.2 84% 4.9%`    | `#020817` | Primary text          |
+| `--muted`              | `210 40% 96.1%`     | `#F1F5F9` | Muted surfaces        |
+| `--muted-foreground`   | `215.4 16.3% 46.9%` | `#64748B` | Secondary text        |
+| `--border`             | `214.3 31.8% 91.4%` | `#E2E8F0` | Default borders       |
+| `--input`              | `214.3 31.8% 91.4%` | `#E2E8F0` | Input borders         |
+| `--primary`            | `222.2 47.4% 11.2%` | `#0F172A` | Primary accent        |
+| `--primary-foreground` | `210 40% 98%`       | `#F8FAFC` | Text on primary       |
+| `--ring`               | `222.2 84% 4.9%`    | `#020817` | Focus ring            |
+| `--radius`             | `0.5rem`            | —         | Default border-radius |
+| `--hero-grid-color`    | `#80808030`         | —         | Hero grid decoration  |
 
 #### Dark Theme (`.dark`)
 
-| Property             | RGB/HSL Channels | Hex       | Role              |
-| -------------------- | ---------------- | --------- | ----------------- |
-| `--background`       | `15 23 42`       | `#0F172A` | Page background   |
-| `--foreground`       | `241 245 249`    | `#F1F5F9` | Primary text      |
-| `--muted`            | `30 41 59`       | `#1E293B` | Muted surfaces    |
-| `--muted-foreground` | `148 163 184`    | `#94A3B8` | Secondary text    |
-| `--border`           | `51 65 85`       | `#334155` | Default borders   |
-| `--primary`          | `210 100% 60%`   | `#3B82F6` | Primary accent    |
-| `--secondary`        | `210 10% 23%`    | `#334155` | Secondary surface |
-| `--ring`             | `210 100% 60%`   | `#3B82F6` | Focus ring        |
+| Property             | HSL Channels        | Hex       | Role                 |
+| -------------------- | ------------------- | --------- | -------------------- |
+| `--background`       | `222.2 84% 4.9%`    | `#020817` | Page background      |
+| `--foreground`       | `210 40% 98%`       | `#F8FAFC` | Primary text         |
+| `--muted`            | `217.2 32.6% 17.5%` | `#1E293B` | Muted surfaces       |
+| `--muted-foreground` | `215 20.2% 65.1%`   | `#94A3B8` | Secondary text       |
+| `--border`           | `217.2 32.6% 17.5%` | `#1E293B` | Default borders      |
+| `--input`            | `217.2 32.6% 17.5%` | `#1E293B` | Input borders        |
+| `--primary`          | `210 40% 98%`       | `#F8FAFC` | Primary accent       |
+| `--primary-foreground`| `222.2 47.4% 11.2%` | `#020817` | Text on primary      |
+| `--ring`             | `212.7 26.8% 83.9%` | `#CBD5E1` | Focus ring           |
+| `--hero-grid-color`  | `#ffffff12`         | —         | Hero grid decoration |
+
+#### Semantic UI Tokens (Light & Dark)
+
+| Property                          | Light Value                  | Dark Value                                                   |
+| --------------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| `--surface-hover`                 | `var(--color-gray-50)`       | `var(--color-gray-700)`                                      |
+| `--surface-active`                | `var(--color-gray-100)`      | `var(--color-gray-600)`                                      |
+| `--surface-selected`              | `var(--color-primary-50)`    | `color-mix(in srgb, var(--color-primary-900) 20%, transparent)` |
+| `--surface-selected-strong`       | `var(--color-primary-100)`   | `color-mix(in srgb, var(--color-primary-900) 30%, transparent)` |
+| `--search-highlight-bg`           | `#fef08a`                    | `#fbbf24`                                                    |
+| `--search-highlight-text`         | `#92400e`                    | `#92400e`                                                    |
 
 ### 2.4 Gradient Tokens
 
@@ -117,7 +126,7 @@ Defined as raw RGB/HSL channel values on `:root` and `.dark` for composability.
 | Context             | Light                                                | Dark                               |
 | ------------------- | ---------------------------------------------------- | ---------------------------------- |
 | Text selection      | `bg-primary-100 text-primary-800`                    | (inherits)                         |
-| Search highlight    | `bg-yellow-200 text-yellow-900`                      | `bg-yellow-800/50 text-yellow-100` |
+| Search highlight    | `bg-[var(--search-highlight-bg)] text-[var(--search-highlight-text)]` | Same |
 | Copy button success | `border-green-500/50 bg-green-900/20 text-green-400` | Same                               |
 
 ---
@@ -154,7 +163,7 @@ shadcn/ui-inspired Astro components for consistent text styling outside prose sc
 
 ### 3.3 Prose Typography (Markdown/MDX Content)
 
-Applied via `prose prose-base dark:prose-invert` on article content containers.
+Applied via `prose prose-base dark:prose-invert` on article content containers. `global.css` overrides the prose text colors for light and dark modes to use specific RGB values mapping to the theme's slate colors.
 
 | Element      | Size              | Weight | Line Height    | Margins                                |
 | ------------ | ----------------- | ------ | -------------- | -------------------------------------- |
@@ -318,15 +327,15 @@ Hero section uses two `w-80 h-80 rounded-full blur-3xl` elements with gradient f
 
 ### 7.2 Keyframe Animations
 
-| Name       | Duration      | Easing                                  | Description                                 |
-| ---------- | ------------- | --------------------------------------- | ------------------------------------------- |
-| `aurora`   | `8s`          | `linear infinite`                       | Background position shift for gradient text |
-| `shimmer`  | `2s`          | `linear infinite`                       | Loading skeleton sweep                      |
-| `fade-in`  | `0.5s`        | `ease-out`                              | Element entrance (opacity + translateY)     |
-| `fadeInUp` | `0.3s`        | `ease-out forwards`                     | Search result entrance                      |
-| `spin`     | `1s` / `0.8s` | `linear infinite`                       | Loading spinners                            |
-| `pulse`    | `2s`          | `cubic-bezier(0.4, 0, 0.6, 1) infinite` | Loading state opacity                       |
-| `bounce`   | `1s`          | `cubic-bezier`                          | Scroll indicator, no-results icon           |
+| Token                    | Animation Definition                            | Description                                 |
+| ------------------------ | ----------------------------------------------- | ------------------------------------------- |
+| `--animate-aurora`       | `aurora 8s linear infinite`                     | Background position shift for gradient text |
+| `--animate-shimmer`      | `skeleton-shimmer 2s infinite linear`           | Loading skeleton sweep                      |
+| `--animate-fade-in`      | `fade-in 0.5s ease-out`                         | Element entrance (opacity + translateY)     |
+| `--animate-fade-in-fast` | `fade-in 0.3s ease-out forwards`                | Fast element entrance                       |
+| `--animate-fade-in-up`   | `fade-in-up 0.3s ease-out forwards`             | Search result entrance                      |
+| `--animate-bounce-twice` | `bounce-custom 1s ease-in-out 2`                | No-results icon bounce                      |
+| `--animate-spin-fast`    | `spin 0.8s linear infinite`                     | Loading spinners                            |
 
 ### 7.3 Interaction Micro-Animations
 
