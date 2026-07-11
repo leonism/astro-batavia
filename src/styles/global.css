@@ -3,7 +3,110 @@
 
 /**
  * ==========================================================================
- * 1. THEME CONFIGURATION
+ * 1. CORE BASE DESIGNS & SYSTEM ROOT
+ * Functional tokens mapping for global element behaviors.
+ * ==========================================================================
+ */
+@layer base {
+  :root {
+    /* Shadcn Context Core Mapping */
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --hero-grid-color: #80808030;
+
+    /* Semantic UI Tokens variables */
+    --surface-hover: var(--color-gray-50);
+    --surface-active: var(--color-gray-100);
+    --surface-selected: var(--color-primary-50);
+    --surface-selected-strong: var(--color-primary-100);
+    --search-highlight-bg: #fef08a;
+    --search-highlight-text: #92400e;
+
+    /* Prose Tokens Initialization */
+    --tw-prose-body: var(--color-gray-700);
+    --tw-prose-headings: var(--color-gray-900);
+    --tw-prose-links: var(--color-primary-600);
+    --tw-prose-bold: var(--color-gray-900);
+    --tw-prose-bullets: var(--color-gray-300);
+    --tw-prose-hr: var(--color-gray-200);
+    --tw-prose-quotes: var(--color-gray-900);
+    --tw-prose-quote-borders: var(--color-gray-200);
+    --tw-prose-code: var(--color-gray-900);
+    --tw-prose-pre-bg: var(--color-gray-900);
+    --tw-prose-pre-code: var(--color-gray-200);
+  }
+
+  .dark {
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --hero-grid-color: #ffffff12;
+
+    /* Contextual Updates for Dark UI Tokens */
+    --surface-hover: var(--color-gray-700);
+    --surface-active: var(--color-gray-600);
+    --surface-selected: color-mix(in srgb, var(--color-primary-900) 20%, transparent);
+    --surface-selected-strong: color-mix(in srgb, var(--color-primary-900) 30%, transparent);
+    --search-highlight-bg: #fbbf24;
+    --search-highlight-text: #AAA310;
+
+    /* Dark Mode Prose Sync */
+    --tw-prose-body: var(--color-gray-300);
+    --tw-prose-headings: #ffffff;
+    --tw-prose-links: var(--color-primary-500);
+    --tw-prose-bold: #ffffff;
+    --tw-prose-bullets: var(--color-gray-600);
+    --tw-prose-hr: var(--color-gray-700);
+    --tw-prose-quotes: var(--color-gray-100);
+    --tw-prose-quote-borders: var(--color-gray-700);
+    --tw-prose-code: #ffffff;
+    --tw-prose-pre-bg: rgb(0 0 0 / 50%);
+    --tw-prose-pre-code: var(--color-gray-300);
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply antialiased transition-colors duration-300;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* Core UI Webkit Components */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gray-400 dark:bg-gray-600 hover:bg-gray-500;
+  }
+}
+
+/**
+ * ==========================================================================
+ * 2. THEME CONFIGURATION
  * Tailwind CSS v4 custom theme tokens & structural definitions.
  * ==========================================================================
  */
@@ -114,109 +217,6 @@
 }
 
 @variant dark (&:where(.dark, .dark *));
-
-/**
- * ==========================================================================
- * 2. CORE BASE DESIGNS & SYSTEM ROOT
- * Functional tokens mapping for global element behaviors.
- * ==========================================================================
- */
-@layer base {
-  :root {
-    /* Shadcn Context Core Mapping */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --hero-grid-color: #80808030;
-
-    /* Semantic UI Tokens variables */
-    --surface-hover: var(--color-gray-50);
-    --surface-active: var(--color-gray-100);
-    --surface-selected: var(--color-primary-50);
-    --surface-selected-strong: var(--color-primary-100);
-    --search-highlight-bg: #fef08a;
-    --search-highlight-text: #92400e;
-
-    /* Prose Tokens Initialization */
-    --tw-prose-body: var(--color-gray-700);
-    --tw-prose-headings: var(--color-gray-900);
-    --tw-prose-links: var(--color-primary-600);
-    --tw-prose-bold: var(--color-gray-900);
-    --tw-prose-bullets: var(--color-gray-300);
-    --tw-prose-hr: var(--color-gray-200);
-    --tw-prose-quotes: var(--color-gray-900);
-    --tw-prose-quote-borders: var(--color-gray-200);
-    --tw-prose-code: var(--color-gray-900);
-    --tw-prose-pre-bg: var(--color-gray-900);
-    --tw-prose-pre-code: var(--color-gray-200);
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --ring: 212.7 26.8% 83.9%;
-    --hero-grid-color: #ffffff12;
-
-    /* Contextual Updates for Dark UI Tokens */
-    --surface-hover: var(--color-gray-700);
-    --surface-active: var(--color-gray-600);
-    --surface-selected: color-mix(in srgb, var(--color-primary-900) 20%, transparent);
-    --surface-selected-strong: color-mix(in srgb, var(--color-primary-900) 30%, transparent);
-    --search-highlight-bg: #fbbf24;
-    --search-highlight-text: #92400e;
-
-    /* Dark Mode Prose Sync */
-    --tw-prose-body: var(--color-gray-300);
-    --tw-prose-headings: #ffffff;
-    --tw-prose-links: var(--color-primary-500);
-    --tw-prose-bold: #ffffff;
-    --tw-prose-bullets: var(--color-gray-600);
-    --tw-prose-hr: var(--color-gray-700);
-    --tw-prose-quotes: var(--color-gray-100);
-    --tw-prose-quote-borders: var(--color-gray-700);
-    --tw-prose-code: #ffffff;
-    --tw-prose-pre-bg: rgb(0 0 0 / 50%);
-    --tw-prose-pre-code: var(--color-gray-300);
-  }
-
-  html {
-    @apply scroll-smooth;
-  }
-
-  body {
-    @apply antialiased transition-colors duration-300;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: var(--font-sans);
-    font-feature-settings: 'rlig' 1, 'calt' 1;
-  }
-
-  /* Core UI Webkit Components */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-gray-400 dark:bg-gray-600 hover:bg-gray-500;
-  }
-}
 
 /**
  * ==========================================================================
