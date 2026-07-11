@@ -3,94 +3,291 @@
 
 /**
  * ==========================================================================
- * 1. CORE BASE DESIGNS & SYSTEM ROOT
- * Functional tokens mapping for global element behaviors.
+ * DESIGN TOKEN SYSTEM — Astro Batavia
+ * --------------------------------------------------------------------------
+ * Architecture follows a strict 3-tier token hierarchy:
+ *
+ *   TIER 1 — Brand Primitives  (@theme)
+ *     Raw, scale-based values. Never referenced in components directly.
+ *     Examples: --primitive-blue-500, --primitive-gray-900
+ *
+ *   TIER 2 — Semantic Aliases  (:root / .dark)
+ *     Purpose-driven names that map to primitives and respond to theme.
+ *     Examples: --color-bg-base, --color-text-primary, --color-accent
+ *
+ *   TIER 3 — Component Tokens  (@layer components)
+ *     Scoped to a specific UI pattern. Consume Tier-2 only.
+ *     Examples: --search-highlight-bg, --toc-active-color
+ *
+ * Rule: Components reference Tier-2/3. Never reference Tier-1 directly in
+ * component CSS. This keeps themes swappable by only changing Tier-2.
+ * ==========================================================================
+ */
+
+/**
+ * ==========================================================================
+ * TIER 1 — BRAND PRIMITIVES & MOTION REGISTRY
+ * Raw scale. Not consumed by components; only mapped in Tier-2.
+ * ==========================================================================
+ */
+@theme {
+  /* --- Primitive Color Scale: Blue (Primary Brand) --- */
+  --primitive-blue-50:  hsl(210 100% 98%);
+  --primitive-blue-100: hsl(210 100% 95%);
+  --primitive-blue-200: hsl(210 100% 90%);
+  --primitive-blue-300: hsl(210 100% 80%);
+  --primitive-blue-400: hsl(210 100% 70%);
+  --primitive-blue-500: hsl(210 100% 60%);
+  --primitive-blue-600: hsl(210 100% 50%);
+  --primitive-blue-700: hsl(210 100% 40%);
+  --primitive-blue-800: hsl(210 100% 30%);
+  --primitive-blue-900: hsl(210 100% 20%);
+
+  /* --- Primitive Color Scale: Slate (Neutral) --- */
+  --primitive-slate-50:  #f8fafc;
+  --primitive-slate-100: #f1f5f9;
+  --primitive-slate-200: #e2e8f0;
+  --primitive-slate-300: #cbd5e1;
+  --primitive-slate-400: #94a3b8;
+  --primitive-slate-500: #64748b;
+  --primitive-slate-600: #475569;
+  --primitive-slate-700: #334155;
+  --primitive-slate-800: #1e293b;
+  --primitive-slate-900: #0f172a;
+
+  /* --- Primitive Color Scale: Amber (Warning / Highlight) --- */
+  --primitive-amber-300: #fcd34d;
+  --primitive-amber-400: #fbbf24;
+  --primitive-amber-600: #d97706;
+  --primitive-amber-700: #b45309;
+  --primitive-amber-900: #92400e;
+
+  /* --- Primitive Color Scale: Green (Success) --- */
+  --primitive-green-400: #4ade80;
+  --primitive-green-500: #22c55e;
+  --primitive-green-900: #14532d;
+
+  /* --- Primitive Color Scale: Red (Destructive) --- */
+  --primitive-red-500: #ef4444;
+
+  /* --- Tailwind Aliases: expose primitives under Tailwind's --color-* namespace --- */
+  /* Primary */
+  --color-primary-50:  var(--primitive-blue-50);
+  --color-primary-100: var(--primitive-blue-100);
+  --color-primary-200: var(--primitive-blue-200);
+  --color-primary-300: var(--primitive-blue-300);
+  --color-primary-400: var(--primitive-blue-400);
+  --color-primary-500: var(--primitive-blue-500);
+  --color-primary-600: var(--primitive-blue-600);
+  --color-primary-700: var(--primitive-blue-700);
+  --color-primary-800: var(--primitive-blue-800);
+  --color-primary-900: var(--primitive-blue-900);
+
+  /* Neutral (Gray → Slate) */
+  --color-gray-50:  var(--primitive-slate-50);
+  --color-gray-100: var(--primitive-slate-100);
+  --color-gray-200: var(--primitive-slate-200);
+  --color-gray-300: var(--primitive-slate-300);
+  --color-gray-400: var(--primitive-slate-400);
+  --color-gray-500: var(--primitive-slate-500);
+  --color-gray-600: var(--primitive-slate-600);
+  --color-gray-700: var(--primitive-slate-700);
+  --color-gray-800: var(--primitive-slate-800);
+  --color-gray-900: var(--primitive-slate-900);
+
+  /* --- Tailwind Semantic Aliases: expose Tier-2 tokens for @apply usage --- */
+  --color-surface-hover:          var(--ds-surface-hover);
+  --color-surface-active:         var(--ds-surface-active);
+  --color-surface-selected:       var(--ds-surface-selected);
+  --color-surface-selected-strong:var(--ds-surface-selected-strong);
+  --color-search-highlight-bg:    var(--ds-search-highlight-bg);
+  --color-search-highlight-text:  var(--ds-search-highlight-text);
+
+  /* --- Typography --- */
+  --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* --- Spacing / Shape --- */
+  --radius-sm: calc(var(--ds-radius) - 4px);
+  --radius-md: calc(var(--ds-radius) - 2px);
+  --radius-lg: var(--ds-radius);
+  --radius-full: 9999px;
+
+  /* --- Motion: Animation Presets --- */
+  --animate-aurora:      aurora 8s linear infinite;
+  --animate-shimmer:     skeleton-shimmer 2s infinite linear;
+  --animate-fade-in:     fade-in 0.5s ease-out;
+  --animate-fade-in-fast:fade-in 0.3s ease-out forwards;
+  --animate-fade-in-up:  fade-in-up 0.3s ease-out forwards;
+  --animate-bounce-twice:bounce-custom 1s ease-in-out 2;
+  --animate-spin-fast:   spin 0.8s linear infinite;
+
+  @keyframes aurora {
+    from { background-position: 0% 0%; }
+    to   { background-position: -200% 0%; }
+  }
+
+  @keyframes skeleton-shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  @keyframes bounce-custom {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: none;
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+}
+
+/**
+ * ==========================================================================
+ * TIER 2 — SEMANTIC ALIASES (Light Mode)
+ * Maps purpose → Tier-1 primitives. Consumed by Tier-3 & utilities.
+ * Shadcn-compatible naming maintained for interop.
  * ==========================================================================
  */
 @layer base {
   :root {
-    /* Shadcn Context Core Mapping */
-    --primary: 222.2 47.4% 11.2%;
+    /* --- Shape --- */
+    --ds-radius: 0.5rem;
+
+    /* --- Shadcn/Radix Interop Tokens (HSL raw values for hsl() wrapping) --- */
+    --primary:            222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --hero-grid-color: #80808030;
+    --background:         0 0% 100%;
+    --foreground:         222.2 84% 4.9%;
+    --muted:              210 40% 96.1%;
+    --muted-foreground:   215.4 16.3% 46.9%;
+    --border:             214.3 31.8% 91.4%;
+    --input:              214.3 31.8% 91.4%;
+    --ring:               222.2 84% 4.9%;
 
-    /* Semantic UI Tokens variables */
-    --surface-hover: var(--color-gray-50);
-    --surface-active: var(--color-gray-100);
-    --surface-selected: var(--color-primary-50);
-    --surface-selected-strong: var(--color-primary-100);
-    --search-highlight-bg: #fef08a;
-    --search-highlight-text: #92400e;
+    /* --- Semantic Surface Tokens --- */
+    --ds-surface-base:            hsl(var(--background));
+    --ds-surface-hover:           var(--primitive-slate-50);
+    --ds-surface-active:          var(--primitive-slate-100);
+    --ds-surface-selected:        var(--primitive-blue-50);
+    --ds-surface-selected-strong: var(--primitive-blue-100);
 
-    /* Prose Tokens Initialization */
-    --tw-prose-body: var(--color-gray-700);
-    --tw-prose-headings: var(--color-gray-900);
-    --tw-prose-links: var(--color-primary-600);
-    --tw-prose-bold: var(--color-gray-900);
-    --tw-prose-bullets: var(--color-gray-300);
-    --tw-prose-hr: var(--color-gray-200);
-    --tw-prose-quotes: var(--color-gray-900);
-    --tw-prose-quote-borders: var(--color-gray-200);
-    --tw-prose-code: var(--color-gray-900);
-    --tw-prose-pre-bg: var(--color-gray-900);
-    --tw-prose-pre-code: var(--color-gray-200);
+    /* --- Semantic Text Tokens --- */
+    --ds-text-primary:   hsl(var(--foreground));
+    --ds-text-secondary: var(--primitive-slate-500);
+    --ds-text-muted:     var(--primitive-slate-400);
+    --ds-text-inverted:  var(--primitive-slate-50);
+    --ds-text-link:      var(--primitive-blue-600);
+    --ds-text-link-hover:var(--primitive-blue-700);
+
+    /* --- Semantic Border / Decorative Tokens --- */
+    --ds-border-subtle:  hsl(var(--border));
+    --ds-border-strong:  var(--primitive-slate-300);
+    --ds-hero-grid-color:#80808030;
+
+    /* --- Semantic Feedback Tokens --- */
+    --ds-search-highlight-bg:   #fef08a;
+    --ds-search-highlight-text: var(--primitive-amber-900);
+
+    /* --- Prose Token Set (Light) --- */
+    --tw-prose-body:         var(--primitive-slate-700);
+    --tw-prose-headings:     var(--primitive-slate-900);
+    --tw-prose-links:        var(--primitive-blue-600);
+    --tw-prose-bold:         var(--primitive-slate-900);
+    --tw-prose-bullets:      var(--primitive-slate-300);
+    --tw-prose-hr:           var(--primitive-slate-200);
+    --tw-prose-quotes:       var(--primitive-slate-900);
+    --tw-prose-quote-borders:var(--primitive-slate-200);
+    --tw-prose-code:         var(--primitive-slate-900);
+    --tw-prose-pre-bg:       var(--primitive-slate-900);
+    --tw-prose-pre-code:     var(--primitive-slate-200);
   }
 
+  /**
+   * ==========================================================================
+   * TIER 2 — SEMANTIC ALIASES (Dark Mode)
+   * Only overrides change; token names remain identical.
+   * ==========================================================================
+   */
   .dark {
-    --primary: 210 40% 98%;
+    /* --- Shadcn/Radix Interop Tokens (Dark) --- */
+    --primary:            210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --hero-grid-color: #ffffff12;
+    --background:         222.2 84% 4.9%;
+    --foreground:         210 40% 98%;
+    --muted:              217.2 32.6% 17.5%;
+    --muted-foreground:   215 20.2% 65.1%;
+    --border:             217.2 32.6% 17.5%;
+    --input:              217.2 32.6% 17.5%;
+    --ring:               212.7 26.8% 83.9%;
 
-    /* Contextual Updates for Dark UI Tokens */
-    --surface-hover: var(--color-gray-700);
-    --surface-active: var(--color-gray-600);
-    --surface-selected: color-mix(in srgb, var(--color-primary-900) 20%, transparent);
-    --surface-selected-strong: color-mix(in srgb, var(--color-primary-900) 30%, transparent);
-    --search-highlight-bg: #fbbf24;
-    --search-highlight-text: #AAA310;
+    /* --- Semantic Surface Tokens (Dark) --- */
+    --ds-surface-base:            hsl(var(--background));
+    --ds-surface-hover:           var(--primitive-slate-700);
+    --ds-surface-active:          var(--primitive-slate-600);
+    --ds-surface-selected:        color-mix(in srgb, var(--primitive-blue-900) 20%, transparent);
+    --ds-surface-selected-strong: color-mix(in srgb, var(--primitive-blue-900) 30%, transparent);
 
-    /* Dark Mode Prose Sync */
-    --tw-prose-body: var(--color-gray-300);
-    --tw-prose-headings: #ffffff;
-    --tw-prose-links: var(--color-primary-500);
-    --tw-prose-bold: #ffffff;
-    --tw-prose-bullets: var(--color-gray-600);
-    --tw-prose-hr: var(--color-gray-700);
-    --tw-prose-quotes: var(--color-gray-100);
-    --tw-prose-quote-borders: var(--color-gray-700);
-    --tw-prose-code: #ffffff;
-    --tw-prose-pre-bg: rgb(0 0 0 / 50%);
-    --tw-prose-pre-code: var(--color-gray-300);
+    /* --- Semantic Text Tokens (Dark) --- */
+    --ds-text-primary:   hsl(var(--foreground));
+    --ds-text-secondary: var(--primitive-slate-400);
+    --ds-text-muted:     var(--primitive-slate-500);
+    --ds-text-inverted:  var(--primitive-slate-900);
+    --ds-text-link:      var(--primitive-blue-400);
+    --ds-text-link-hover:var(--primitive-blue-300);
+
+    /* --- Semantic Border / Decorative Tokens (Dark) --- */
+    --ds-border-subtle:  hsl(var(--border));
+    --ds-border-strong:  var(--primitive-slate-600);
+    --ds-hero-grid-color:#ffffff12;
+
+    /* --- Semantic Feedback Tokens (Dark) --- */
+    --ds-search-highlight-bg:   var(--primitive-amber-400);
+    --ds-search-highlight-text: #aaa310;
+
+    /* --- Prose Token Set (Dark) --- */
+    --tw-prose-body:         var(--primitive-slate-300);
+    --tw-prose-headings:     #ffffff;
+    --tw-prose-links:        var(--primitive-blue-400);
+    --tw-prose-bold:         #ffffff;
+    --tw-prose-bullets:      var(--primitive-slate-600);
+    --tw-prose-hr:           var(--primitive-slate-700);
+    --tw-prose-quotes:       var(--primitive-slate-100);
+    --tw-prose-quote-borders:var(--primitive-slate-700);
+    --tw-prose-code:         #ffffff;
+    --tw-prose-pre-bg:       rgb(0 0 0 / 50%);
+    --tw-prose-pre-code:     var(--primitive-slate-300);
   }
 
+  /* --- Global Element Resets --- */
   html {
     @apply scroll-smooth;
   }
 
   body {
     @apply antialiased transition-colors duration-300;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: var(--ds-surface-base);
+    color: var(--ds-text-primary);
     font-family: var(--font-sans);
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 
-  /* Core UI Webkit Components */
+  /* --- Scrollbar Chrome --- */
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -104,135 +301,25 @@
   }
 }
 
-/**
- * ==========================================================================
- * 2. THEME CONFIGURATION
- * Tailwind CSS v4 custom theme tokens & structural definitions.
- * ==========================================================================
- */
-@theme {
-  /* --- Colors --- */
-  --color-primary-50: hsl(210 100% 98%);
-  --color-primary-100: hsl(210 100% 95%);
-  --color-primary-200: hsl(210 100% 90%);
-  --color-primary-300: hsl(210 100% 80%);
-  --color-primary-400: hsl(210 100% 70%);
-  --color-primary-500: hsl(210 100% 60%);
-  --color-primary-600: hsl(210 100% 50%);
-  --color-primary-700: hsl(210 100% 40%);
-  --color-primary-800: hsl(210 100% 30%);
-  --color-primary-900: hsl(210 100% 20%);
-
-  --color-gray-50: #f8fafc;
-  --color-gray-100: #f1f5f9;
-  --color-gray-200: #e2e8f0;
-  --color-gray-300: #cbd5e1;
-  --color-gray-400: #94a3b8;
-  --color-gray-500: #64748b;
-  --color-gray-600: #475569;
-  --color-gray-700: #334155;
-  --color-gray-800: #1e293b;
-  --color-gray-900: #0f172a;
-
-  /* Semantic Interface Tokens Map */
-  --color-surface-hover: var(--surface-hover);
-  --color-surface-active: var(--surface-active);
-  --color-surface-selected: var(--surface-selected);
-  --color-surface-selected-strong: var(--surface-selected-strong);
-  --color-search-highlight-bg: var(--search-highlight-bg);
-  --color-search-highlight-text: var(--search-highlight-text);
-
-  /* --- Typography --- */
-  --font-sans: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-
-  /* --- Motion Systems --- */
-  --animate-aurora: aurora 8s linear infinite;
-  --animate-shimmer: skeleton-shimmer 2s infinite linear;
-  --animate-fade-in: fade-in 0.5s ease-out;
-  --animate-fade-in-fast: fade-in 0.3s ease-out forwards;
-  --animate-fade-in-up: fade-in-up 0.3s ease-out forwards;
-  --animate-bounce-twice: bounce-custom 1s ease-in-out 2;
-  --animate-spin-fast: spin 0.8s linear infinite;
-
-  @keyframes aurora {
-    from {
-      background-position: 0% 0%;
-    }
-
-    to {
-      background-position: -200% 0%;
-    }
-  }
-
-  @keyframes skeleton-shimmer {
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: scale(0.95) translateY(10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
-
-  @keyframes bounce-custom {
-
-    0%,
-    100% {
-      transform: translateY(-25%);
-      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    }
-
-    50% {
-      transform: none;
-      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    }
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-}
-
 @variant dark (&:where(.dark, .dark *));
 
 /**
  * ==========================================================================
- * 3. CORE INTERACTIVE COMPONENTS
- * Base structural building blocks & state layouts.
+ * TIER 3 — COMPONENT TOKENS & INTERACTIVE COMPONENTS
+ * All values sourced from Tier-2 semantic aliases only.
  * ==========================================================================
  */
 @layer components {
 
-  /* --- Theme System Switching Toggle --- */
+  /* --- Theme Toggle --- */
   .theme-toggle {
     @apply relative inline-block w-12 h-6 rounded-full border-none cursor-pointer shrink-0 mx-1 p-0 transition-all duration-300 shadow-inner;
     background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
 
     &:hover {
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15), 0 0 0 3px color-mix(in srgb, var(--color-primary-500) 15%, transparent);
+      box-shadow:
+        inset 0 1px 3px rgb(0 0 0 / 15%),
+        0 0 0 3px color-mix(in srgb, var(--color-primary-500) 15%, transparent);
     }
 
     &:focus-visible {
@@ -243,7 +330,9 @@
       background: linear-gradient(135deg, var(--color-gray-800), var(--color-gray-700));
 
       &:hover {
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 3px color-mix(in srgb, var(--color-primary-500) 20%, transparent);
+        box-shadow:
+          inset 0 1px 3px rgb(0 0 0 / 30%),
+          0 0 0 3px color-mix(in srgb, var(--color-primary-500) 20%, transparent);
       }
     }
   }
@@ -254,110 +343,88 @@
 
   .theme-toggle-sun {
     @apply left-0.5 opacity-0 text-gray-700;
-
-    .dark & {
-      @apply opacity-100 text-white;
-    }
+    .dark & { @apply opacity-100 text-white; }
   }
 
   .theme-toggle-moon {
     @apply right-0.5 opacity-100 text-gray-700;
-
-    .dark & {
-      @apply opacity-0;
-    }
+    .dark & { @apply opacity-0; }
   }
 
   .theme-toggle-knob {
     @apply absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300 z-20;
-
-    .dark & {
-      @apply translate-x-6;
-    }
+    .dark & { @apply translate-x-6; }
   }
 
-  /* --- Presentation Modifiers & Layout Extras --- */
+  /* --- Glass Surface --- */
   .glass {
     @apply bg-white/5 backdrop-blur-md border border-white/10;
-
-    .dark & {
-      @apply bg-black/5 border-white/5;
-    }
+    .dark & { @apply bg-black/5 border-white/5; }
   }
 
+  /* --- Skeleton Shimmer --- */
   .shimmer {
     @apply animate-shimmer bg-linear-to-r from-gray-100 via-gray-200 to-gray-100 bg-size-[200px_100%] dark:from-gray-800 dark:via-gray-700 dark:to-gray-800;
   }
 
+  /* --- Code Block Copy Button --- */
   .copy-code-button {
-    @apply absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800 text-slate-400 transition-all duration-200 hover:bg-slate-700 hover:text-white;
+    @apply absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-md
+           border border-slate-700 bg-slate-800 text-slate-400
+           transition-all duration-200 hover:bg-slate-700 hover:text-white;
 
     &.copied {
       @apply border-green-500/50 bg-green-900/20 text-green-400;
     }
   }
 
-  /* --- Interactive Search System Components --- */
+  /* --- Hero Background --- */
+  .bg-hero-gradient {
+    background: linear-gradient(to right, var(--primitive-blue-600), #4f46e5);
+  }
+
+  /* --- Search System --- */
   #search-overlay {
     @apply animate-fade-in-fast;
   }
 
   #search-results {
     @apply scroll-smooth;
-
-    &[role='listbox'] {
-      @apply focus:outline-none;
-    }
+    &[role='listbox'] { @apply focus:outline-none; }
   }
 
   #main-search-input {
     @apply transition-all duration-200 ease-in-out;
 
-    &:focus {
-      @apply scale-[1.02] shadow-lg;
-    }
-
-    &[aria-busy='true'] {
-      @apply cursor-wait opacity-75;
-    }
+    &:focus { @apply scale-[1.02] shadow-lg; }
+    &[aria-busy='true'] { @apply cursor-wait opacity-75; }
   }
 
   .search-highlight {
-    @apply bg-search-highlight-bg text-search-highlight-text rounded-sm px-1 py-0.5 font-medium transition-colors duration-150 [box-decoration-break:clone];
+    @apply bg-search-highlight-bg text-search-highlight-text rounded-sm px-1 py-0.5
+           font-medium transition-colors duration-150 [box-decoration-break:clone];
   }
 
   #search-results-container,
   #search-results {
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      @apply bg-gray-300 dark:bg-gray-600 rounded-[3px];
-    }
+    &::-webkit-scrollbar       { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { @apply bg-gray-300 dark:bg-gray-600 rounded-[3px]; }
   }
 
   .search-result {
     @apply transform transition-all duration-200 ease-in-out relative animate-fade-in-up;
 
-    &[role='option'] {
-      @apply cursor-pointer;
-    }
-
-    &:hover {
-      @apply scale-[1.01] shadow-lg -translate-y-0.5;
-    }
+    &[role='option'] { @apply cursor-pointer; }
+    &:hover          { @apply scale-[1.01] shadow-lg -translate-y-0.5; }
 
     &:focus-within {
       @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
     }
 
     &.selected {
-      @apply bg-surface-selected ring-2 ring-primary-500 ring-offset-2 scale-[1.02] shadow-lg border-l-4 border-primary-500 -translate-y-px;
+      @apply bg-surface-selected ring-2 ring-primary-500 ring-offset-2
+             scale-[1.02] shadow-lg border-l-4 border-primary-500 -translate-y-px;
     }
 
     &[aria-selected='true'] {
@@ -366,27 +433,21 @@
   }
 
   .search-suggestions {
-    @apply absolute left-0 right-0 top-full z-50 border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 max-h-96 overflow-y-auto rounded-b-lg shadow-lg pointer-events-none scale-95 opacity-0 transition-all duration-200 ease-out;
+    @apply absolute left-0 right-0 top-full z-50 border border-gray-300 bg-white
+           dark:border-gray-600 dark:bg-gray-800 max-h-96 overflow-y-auto rounded-b-lg
+           shadow-lg pointer-events-none scale-95 opacity-0 transition-all duration-200 ease-out;
 
-    &.show {
-      @apply pointer-events-auto scale-100 opacity-100;
-    }
+    &.show { @apply pointer-events-auto scale-100 opacity-100; }
   }
 
   .suggestion-item {
-    @apply cursor-pointer px-4 py-3 hover:bg-surface-hover focus:bg-surface-hover focus:outline-none transition-colors duration-150 border-b border-gray-100 last:border-b-0 dark:border-gray-700;
+    @apply cursor-pointer px-4 py-3 hover:bg-surface-hover focus:bg-surface-hover
+           focus:outline-none transition-colors duration-150
+           border-b border-gray-100 last:border-b-0 dark:border-gray-700;
 
-    &:focus {
-      @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
-    }
-
-    &[aria-selected='true'] {
-      @apply bg-surface-selected text-primary-900 dark:text-primary-100;
-    }
-
-    &:active {
-      @apply bg-surface-selected-strong;
-    }
+    &:focus           { @apply ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900; }
+    &[aria-selected='true'] { @apply bg-surface-selected text-primary-900 dark:text-primary-100; }
+    &:active          { @apply bg-surface-selected-strong; }
   }
 
   .search-loading {
@@ -400,34 +461,34 @@
 
   .search-status {
     @apply transition-all duration-300 ease-in-out;
-
-    &.updating {
-      @apply scale-95 opacity-50;
-    }
+    &.updating { @apply scale-95 opacity-50; }
   }
 
   .no-results {
     @apply py-12 text-center animate-fade-in;
-
-    svg {
-      @apply mx-auto mb-4 text-gray-300 dark:text-gray-600 animate-bounce-twice;
-    }
+    svg { @apply mx-auto mb-4 text-gray-300 dark:text-gray-600 animate-bounce-twice; }
   }
 
   .tag-filter {
-    @apply rounded-full px-3 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 ease-in-out cursor-pointer select-none;
+    @apply rounded-full px-3 py-2 text-sm font-medium
+           border border-gray-300 dark:border-gray-600
+           bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-300
+           hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-primary-500
+           focus:ring-offset-2 transition-all duration-200 ease-in-out cursor-pointer select-none;
 
     &.active {
-      @apply border-primary-500 bg-primary-500 text-white dark:border-primary-600 dark:bg-primary-600 scale-105 shadow-md;
+      @apply border-primary-500 bg-primary-500 text-white
+             dark:border-primary-600 dark:bg-primary-600 scale-105 shadow-md;
     }
 
-    &:hover:not(.active) {
-      @apply scale-105 shadow-sm;
-    }
+    &:hover:not(.active) { @apply scale-105 shadow-sm; }
   }
 
   #sort-select {
-    @apply appearance-none bg-white dark:bg-gray-800 rounded-lg border border-gray-300 pl-3 pr-10 py-2 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200;
+    @apply appearance-none bg-white dark:bg-gray-800 rounded-lg border border-gray-300
+           pl-3 pr-10 py-2 dark:border-gray-600 text-gray-900 dark:text-gray-100
+           focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500
+           transition-all duration-200;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
     background-position: right 0.5rem center;
     background-repeat: no-repeat;
@@ -436,17 +497,14 @@
 
   .voice-search-btn {
     @apply opacity-75 hover:opacity-100 transition-all duration-200 hover:scale-110;
-
-    &.recording {
-      @apply animate-pulse text-red-500;
-    }
+    &.recording { @apply animate-pulse text-red-500; }
   }
 
   #search-clear-button {
     @apply pointer-events-none scale-95 opacity-0 transition-all duration-200;
   }
 
-  #main-search-input:not(:placeholder-shown)+div #search-clear-button {
+  #main-search-input:not(:placeholder-shown) + div #search-clear-button {
     @apply pointer-events-auto scale-100 opacity-100;
   }
 
@@ -455,44 +513,40 @@
     @apply ring-2 ring-primary-500/50;
   }
 
-  /* --- Blog Sidebar Table Of Contents --- */
+  /* --- Blog TOC Sidebar --- */
   .toc-link.is-active {
-    color: var(--color-primary-600, #2563eb);
-    border-left: 2px solid var(--color-primary-500, #3b82f6);
+    color: var(--ds-text-link);
+    border-left: 2px solid var(--color-primary-500);
     padding-left: calc(0.75rem - 2px);
     font-weight: 600;
 
-    &[class*='pl-6'] {
-      padding-left: calc(1.5rem - 2px);
-    }
+    &[class*='pl-6'] { padding-left: calc(1.5rem - 2px); }
   }
 
   .dark .toc-link.is-active {
-    color: var(--color-primary-400, #60a5fa);
-    border-left-color: var(--color-primary-400, #60a5fa);
+    color: var(--ds-text-link);
+    border-left-color: var(--color-primary-400);
   }
 
   .toc-sidebar [scrollbar-width~='thin'] {
     scrollbar-width: thin;
-    scrollbar-color: #e2e8f0 transparent;
+    scrollbar-color: var(--ds-border-strong) transparent;
 
-    .dark & {
-      scrollbar-color: #334155 transparent;
-    }
+    .dark & { scrollbar-color: var(--primitive-slate-700) transparent; }
   }
 }
 
 /**
  * ==========================================================================
- * 4. TYPOGRAPHY / PROSE ELEMENTS
- * Content area layouts and global typographic engine configuration.
+ * 4. TYPOGRAPHY / PROSE ENGINE
  * ==========================================================================
  */
 .prose {
   @apply max-w-none text-pretty text-(--tw-prose-body);
 
   :where(a):not(:where([class~='not-prose'] *)) {
-    @apply font-medium underline decoration-2 underline-offset-4 transition-colors text-(--tw-prose-links) hover:decoration-primary-600;
+    @apply font-medium underline decoration-2 underline-offset-4 transition-colors
+           text-(--tw-prose-links) hover:decoration-primary-600;
   }
 
   :where(strong):not(:where([class~='not-prose'] *)) {
@@ -500,13 +554,8 @@
   }
 
   /* List Architecture */
-  :where(ol, ul):not(:where([class~='not-prose'] *)) {
-    @apply list-none pl-0;
-  }
-
-  :where(li):not(:where([class~='not-prose'] *)) {
-    @apply relative pl-6;
-  }
+  :where(ol, ul):not(:where([class~='not-prose'] *)) { @apply list-none pl-0; }
+  :where(li):not(:where([class~='not-prose'] *))     { @apply relative pl-6; }
 
   :where(ol > li):not(:where([class~='not-prose'] *))::before {
     content: counter(list-item) ".";
@@ -523,33 +572,22 @@
     @apply scroll-mt-32 font-bold text-(--tw-prose-headings);
   }
 
-  :where(h1):not(:where([class~='not-prose'] *)) {
-    @apply text-4xl mb-8 font-extrabold leading-tight;
-  }
+  :where(h1):not(:where([class~='not-prose'] *)) { @apply text-4xl mb-8 font-extrabold leading-tight; }
+  :where(h2):not(:where([class~='not-prose'] *)) { @apply text-2xl mt-12 mb-4 leading-snug; }
+  :where(h3):not(:where([class~='not-prose'] *)) { @apply text-xl mt-8 mb-2; }
 
-  :where(h2):not(:where([class~='not-prose'] *)) {
-    @apply text-2xl mt-12 mb-4 leading-snug;
-  }
-
-  :where(h3):not(:where([class~='not-prose'] *)) {
-    @apply text-xl mt-8 mb-2;
-  }
-
-  /* Development / Code Styling blocks */
+  /* Code Blocks */
   pre.astro-code {
-    @apply relative my-8 overflow-x-auto rounded-lg border border-gray-200 p-4 text-sm leading-relaxed dark:border-gray-700 !bg-(--tw-prose-pre-bg) !text-(--tw-prose-pre-code);
+    @apply relative my-8 overflow-x-auto rounded-lg border border-gray-200 p-4 text-sm
+           leading-relaxed dark:border-gray-700 !bg-(--tw-prose-pre-bg) !text-(--tw-prose-pre-code);
   }
 
   :where(:not(pre) > code):not(:where([class~='not-prose'] *)) {
     @apply rounded-sm bg-gray-100 px-1.5 py-0.5 font-mono text-sm dark:bg-gray-800;
-
-    &::before,
-    &::after {
-      content: "`";
-    }
+    &::before, &::after { content: "`"; }
   }
 
-  /* Data Layout Modules (Tables) */
+  /* Tables */
   :where(table):not(:where([class~='not-prose'] *)) {
     @apply w-full border-collapse border border-gray-200 my-8 text-sm dark:border-gray-700;
   }
@@ -565,14 +603,9 @@
 
 /**
  * ==========================================================================
- * 5. CONTEXTUAL UTILITIES & ACCESSIBILITY MEDIA OVERRIDES
+ * 5. GLOBAL ACCESSIBILITY UTILITIES
  * ==========================================================================
  */
-.bg-hero-gradient {
-  background: linear-gradient(to right, var(--color-primary-600), #4f46e5);
-}
-
-/* Global Accessibility Hooks */
 .sr-only {
   @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
   clip: rect(0, 0, 0, 0);
@@ -587,76 +620,51 @@
   clip: auto;
 }
 
-/* System Overrides: Motion, Printing and High Contrast Media profiles */
-@media (prefers-reduced-motion: reduce) {
+/**
+ * ==========================================================================
+ * 6. MEDIA OVERRIDES — Motion, Contrast, Responsive, Print
+ * ==========================================================================
+ */
 
-  *,
-  ::before,
-  ::after {
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
     @apply !transition-none !animate-none scroll-auto;
   }
 
-  .search-result:hover {
-    transform: none;
-  }
+  .search-result:hover { transform: none; }
 }
 
+/* High Contrast */
 @media (prefers-contrast: high) {
-  .search-highlight {
-    @apply bg-yellow-300 text-black;
-  }
-
-  .search-result {
-    @apply border-2 border-gray-800 dark:border-gray-200;
-  }
+  .search-highlight { @apply bg-yellow-300 text-black; }
+  .search-result    { @apply border-2 border-gray-800 dark:border-gray-200; }
 }
 
+/* Small Screens */
 @media (max-width: 640px) {
-  .search-result {
-    @apply p-3;
-  }
-
-  .suggestion-item {
-    @apply px-3 py-2;
-  }
-
-  .tag-filter {
-    @apply px-2 py-1 text-xs;
-  }
+  .search-result   { @apply p-3; }
+  .suggestion-item { @apply px-3 py-2; }
+  .tag-filter      { @apply px-2 py-1 text-xs; }
 }
 
+/* Print */
 @media print {
-  .no-print {
-    display: none !important;
-  }
+  .no-print { display: none !important; }
 
-  body {
-    @apply bg-white text-black;
-  }
+  body { @apply bg-white text-black; }
 
   a {
     @apply underline;
-
-    &:after {
-      content: ' (' attr(href) ')';
-      font-size: 0.8em;
-      color: #666;
-    }
+    &:after { content: ' (' attr(href) ')'; font-size: 0.8em; color: #666; }
   }
 
   .search-suggestions,
   .tag-filter,
   #sort-select,
   .voice-search-btn,
-  #search-clear-button {
-    @apply hidden;
-  }
+  #search-clear-button { @apply hidden; }
 
-  .search-result {
-    @apply mb-4 break-inside-avoid border border-gray-300;
-  }
-
-  .search-highlight {
-    @apply bg-gray-200 text-black;
-  }
+  .search-result  { @apply mb-4 break-inside-avoid border border-gray-300; }
+  .search-highlight { @apply bg-gray-200 text-black; }
 }
