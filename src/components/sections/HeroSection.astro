@@ -1,5 +1,6 @@
 ---
 import { TypographyH1, TypographyLead } from '@/components/ui/typography';
+import GridBackground from '@/components/ui/GridBackground.astro';
 import { useTranslations, getLocalizedPath } from '@/i18n/utils';
 import type { LanguageKey } from '@/i18n/types';
 
@@ -23,12 +24,7 @@ const cta2Link = getLocalizedPath('/search/', lang);
   class="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-900"
 >
   <!-- Grid Background -->
-  <div class="absolute inset-0 z-0">
-    <div
-      class="absolute inset-0 h-full w-full bg-[linear-gradient(to_right,var(--hero-grid-color)_1px,transparent_1px),linear-gradient(to_bottom,var(--hero-grid-color)_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"
-    >
-    </div>
-  </div>
+  <GridBackground />
 
   <!-- Content -->
   <div class="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">

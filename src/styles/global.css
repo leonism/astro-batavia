@@ -201,6 +201,7 @@
     --ds-border-subtle:  hsl(var(--border));
     --ds-border-strong:  var(--primitive-slate-300);
     --ds-hero-grid-color:#80808030;
+    --hero-grid-color:   var(--ds-hero-grid-color);
 
     /* --- Semantic Feedback Tokens --- */
     --ds-search-highlight-bg:   #fef08a;
@@ -276,6 +277,7 @@
     --ds-border-subtle:  hsl(var(--border));
     --ds-border-strong:  var(--primitive-slate-600);
     --ds-hero-grid-color:#ffffff12;
+    --hero-grid-color:   var(--ds-hero-grid-color);
 
     /* --- Semantic Feedback Tokens (Dark) --- */
     --ds-search-highlight-bg:   var(--primitive-amber-400);
