@@ -2,8 +2,8 @@
   <h1>🚀 Astro Batavia</h1>
   <p><strong>A modern, multilingual blog platform built with Astro.js</strong></p>
 
-[![Astro](https://img.shields.io/badge/Astro-7.3.8-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Astro](https://img.shields.io/badge/Astro-7.4.0-FF5D01?style=flat&logo=astro&logoColor=white)](https://astro.build)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7.0.2-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
@@ -92,7 +92,7 @@
 ### **Core Framework**
 
 - **[Astro 7.1.6](https://astro.build)** - Static site generator with islands architecture
-- **[TypeScript 5.7+](https://www.typescriptlang.org/)** - Type-safe JavaScript development
+- **[TypeScript 7.0.2](https://www.typescriptlang.org/)** - Type-safe JavaScript development
 - **[MDX 6.0.2](https://mdxjs.com/)** - Markdown with JSX components
 
 ### **Styling & UI**
