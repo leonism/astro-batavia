@@ -8,7 +8,131 @@ const { class: className } = Astro.props;
 
 <div class:list={['absolute inset-0 z-0 pointer-events-none', className]} aria-hidden="true">
   <div
+    data-grid-beams
     class="absolute inset-0 h-full w-full bg-[linear-gradient(to_right,var(--hero-grid-color)_1px,transparent_1px),linear-gradient(to_bottom,var(--hero-grid-color)_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"
   >
   </div>
 </div>
+
+<script>
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const GRID = 40; // must match bg-size-[40px_40px] above
+  const BEAM_LENGTH = 110; // px
+  const BEAM_THICKNESS = 1; // px, same as Magic UI's default pathWidth
+  const MIN_DURATION = 40000; // ms per full cycle (travel + idle)
+  const MAX_DURATION = 80000;
+
+  const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+  function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string> = {}) {
+    const node = document.createElementNS(SVG_NS, tag);
+    Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+    return node;
+  }
+
+  // Same colors as Magic UI's AnimatedBeam. Head = purple, tail = orange.
+  function addGradient(defs: SVGDefsElement, id: string, horizontal: boolean, reverse: boolean) {
+    const from = reverse ? '1' : '0';
+    const to = reverse ? '0' : '1';
+    const grad = el('linearGradient', {
+      id,
+      x1: horizontal ? from : '0',
+      x2: horizontal ? to : '0',
+      y1: horizontal ? '0' : from,
+      y2: horizontal ? '0' : to,
+    });
+    [
+      ['0', '#ffaa40', '0'],
+      ['0.3', '#ffaa40', '1'],
+      ['0.9', '#9c40ff', '1'],
+      ['1', '#9c40ff', '0'],
+    ].forEach(([offset, color, opacity]) => {
+      grad.appendChild(el('stop', { offset, 'stop-color': color, 'stop-opacity': opacity }));
+    });
+    defs.appendChild(grad);
+  }
+
+  function addBeam(
+    svg: SVGSVGElement,
+    horizontal: boolean,
+    linePos: number, // grid line coordinate (multiple of GRID)
+    lineLength: number, // length of the line (container width or height)
+    animate: boolean,
+  ) {
+    const reverse = Math.random() > 0.5;
+    const gradId = `grid-beam-${horizontal ? 'h' : 'v'}${reverse ? 'r' : 'f'}`;
+
+    // The 1px grid line sits at linePos..linePos+1, so a 2px beam is centred with -0.5
+    const cross = linePos - (BEAM_THICKNESS - 1) / 2;
+    const start = reverse ? lineLength : -BEAM_LENGTH;
+
+    const beam = el('rect', {
+      x: String(horizontal ? start : cross),
+      y: String(horizontal ? cross : start),
+      width: String(horizontal ? BEAM_LENGTH : BEAM_THICKNESS),
+      height: String(horizontal ? BEAM_THICKNESS : BEAM_LENGTH),
+      fill: `url(#${gradId})`,
+      opacity: '0.9',
+    });
+    svg.appendChild(beam);
+
+    if (!animate) return;
+
+    const distance = (lineLength + BEAM_LENGTH) * (reverse ? -1 : 1);
+    const axis = horizontal ? 'translateX' : 'translateY';
+    const duration = rand(MIN_DURATION, MAX_DURATION);
+
+    beam.animate(
+      [
+        { transform: `${axis}(0px)`, offset: 0, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+        { transform: `${axis}(${distance}px)`, offset: 0.5 },
+        { transform: `${axis}(${distance}px)`, offset: 1 }, // idle off-screen until the next loop
+      ],
+      {
+        duration,
+        delay: -rand(0, duration), // negative delay so beams are already spread out on load
+        iterations: Infinity,
+      },
+    );
+  }
+
+  function initGridBeams(root: HTMLElement) {
+    if (root.dataset.ready === '1') return;
+    root.dataset.ready = '1';
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return; // static grid only
+
+    const svg = el('svg', { class: 'absolute inset-0 h-full w-full' });
+    svg.setAttribute('aria-hidden', 'true');
+    root.appendChild(svg);
+
+    const render = () => {
+      const { width, height } = root.getBoundingClientRect();
+      if (!width || !height) return;
+
+      svg.replaceChildren();
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+      const defs = el('defs');
+      addGradient(defs, 'grid-beam-hf', true, false);
+      addGradient(defs, 'grid-beam-hr', true, true);
+      addGradient(defs, 'grid-beam-vf', false, false);
+      addGradient(defs, 'grid-beam-vr', false, true);
+      svg.appendChild(defs);
+
+      // One independent beam per grid line (works the same on desktop and mobile)
+      for (let x = 0; x <= width; x += GRID) addBeam(svg, false, x, height, true);
+      for (let y = 0; y <= height; y += GRID) addBeam(svg, true, y, width, true);
+    };
+
+    render();
+    new ResizeObserver(render).observe(root);
+  }
+
+  const initAll = () =>
+    document.querySelectorAll<HTMLElement>('[data-grid-beams]').forEach(initGridBeams);
+
+  initAll();
+  document.addEventListener('astro:after-swap', initAll); // view transitions
+</script>
