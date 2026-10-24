@@ -18,9 +18,6 @@ dist/
 .env
 .env.*.local
 
-# VSCode settings
-.vscode/
-
 # MacOS metadata
 .DS_Store
 
@@ -50,6 +47,9 @@ bun.lockb
 .idea/
 *.sublime-project
 *.sublime-workspace
+.vscode/
+.zed/
+
 
 # LLM Agents
 agents.md

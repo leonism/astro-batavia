@@ -91,9 +91,9 @@
 
 ### **Core Framework**
 
-- **[Astro 7.1.6](https://astro.build)** - Static site generator with islands architecture
+- **[Astro 7.4.0](https://astro.build)** - Static site generator with islands architecture
 - **[TypeScript 7.0.2](https://www.typescriptlang.org/)** - Type-safe JavaScript development
-- **[MDX 6.0.2](https://mdxjs.com/)** - Markdown with JSX components
+- **[MDX 8.1.0](https://mdxjs.com/)** - Markdown with JSX components
 
 ### **Styling & UI**
 
